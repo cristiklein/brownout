@@ -23,22 +23,21 @@ public class BeanConfig
    * JOnAS looks like: JTCF
    * JBoss looks like: RMIConnectionFactory
    */
-  public static final String TopicConnectionFactoryName = "RMIConnectionFactory";
+  public static final String TopicConnectionFactoryName = "JTCF";
 
   /**
    * Return the prefix to add to the topic name at lookup time
    * JOnAS looks like: 
    * JBoss looks like: topic/
    */
-  public static final String PrefixTopicName = "topic/";
+  public static final String PrefixTopicName = "";
 
   /**
    * Return the UserTransaction name to look for since JBoss does not support full class names
    * JOnAS looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("java:comp/UserTransaction");
    * JBoss looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("UserTransaction");
    */
-  public static final String UserTransaction = "UserTransaction";
-
+  public static final String UserTransaction = "java:comp/UserTransaction";
 
   /**
    * Returns the context used by the web container for html files and servlets (this is the name of the war file).

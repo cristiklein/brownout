@@ -146,7 +146,7 @@ public class MDB_PutBid implements MessageDrivenBean, MessageListener
           // create a connection
           itemConnection = connectionFactory.createTopicConnection();
           // lookup the destination
-          itemTopic = (Topic) initialContext.lookup("topic/topicViewItem");
+          itemTopic = (Topic) initialContext.lookup(BeanConfig.PrefixTopicName+"topicViewItem");
           // create a session
           itemSession  = itemConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
         } 

@@ -25,7 +25,7 @@ import javax.transaction.UserTransaction;
 
 public class MDB_StoreComment implements MessageDrivenBean, MessageListener 
 {
-  private UserTransaction utx = null;
+  //  private UserTransaction utx = null;
 
   private DataSource dataSource;
   private MessageDrivenContext messageDrivenContext;
@@ -77,10 +77,10 @@ public class MDB_StoreComment implements MessageDrivenBean, MessageListener
     ResultSet rs           = null;
     Connection conn        = null;
 
-    utx = messageDrivenContext.getUserTransaction(); //bean managed transaction
+      //    utx = messageDrivenContext.getUserTransaction(); //bean managed transaction
     try
     {
-      utx.begin();
+       //     utx.begin();
       try 
       {
         // create new comment
@@ -126,20 +126,20 @@ public class MDB_StoreComment implements MessageDrivenBean, MessageListener
         throw new RemoteException("Error while updating user's rating (got exception: " +e+")<br>");
       }
       if (conn != null) conn.close();
-      utx.commit();
+       //     utx.commit();
     }
     catch (Exception e)
     {
       try { conn.close(); } catch (Exception ignore) {}
-      try
-      {
-        utx.rollback();
+      //      try
+       //     {
+       //       utx.rollback();
         throw new RemoteException("Error while storing the comment (got exception: " +e+")<br>");
-      }
-      catch (Exception se) 
-      {
-        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
-      }
+       //     }
+       //     catch (Exception se) 
+       //     {
+       //       throw new RemoteException("Transaction rollback failed: " + e +"<br>");
+       //     }
     }
   }
 

@@ -66,13 +66,13 @@ public class BrowseCategories extends HttpServlet
     {
       // lookup the connection factory
       topicFactory = (TopicConnectionFactory)initialContext.lookup(Config.TopicConnectionFactoryName);
-      // create a connection to the JMS provider
+       // create a connection to the JMS provider
       connection = topicFactory.createTopicConnection();
-      // lookup the destination
+       // lookup the destination
       topic = (Topic) initialContext.lookup(Config.PrefixTopicName+"topicBrowseCategories");
-      // create a session
+       // create a session
       session  = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
-    } 
+     } 
     catch (Exception e)
     {
       sp.printHTML("Cannot connect to message bean MDB_BrowseCategories : " +e+"<br>");
@@ -82,26 +82,26 @@ public class BrowseCategories extends HttpServlet
     {
       // create a requestor to receive the reply
       TopicRequestor requestor = new TopicRequestor(session, topic);
-      // create a message
+       // create a message
       MapMessage message = session.createMapMessage();
-      // set parameters
+       // set parameters
       if (region != null)
         message.setString("region", region);
       if (username != null)
         message.setString("nickname", username);
        if (password != null)
         message.setString("password", password);
-      message.setJMSCorrelationID("category");
+       message.setJMSCorrelationID("category");
       // send the message and receive the reply
       connection.start(); // allows message to be delivered (default is connection stopped)
       TextMessage reply = (TextMessage)requestor.request(message);
-      connection.stop();
+       connection.stop();
       // read the reply
       html = reply.getText();
-      // close connection and session
+       // close connection and session
       requestor.close(); // also close the session
       connection.close();
-    } 
+     } 
     catch (Exception e)
     {
       sp.printHTML("Cannot get the list of categories: " +e+"<br>");

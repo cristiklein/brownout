@@ -53,10 +53,8 @@ public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
 
         // Retrieve the connection factory
         connectionFactory = (TopicConnectionFactory) initialContext.lookup(BeanConfig.TopicConnectionFactoryName);
-
       // get the list of categories
       String html = getCategories(region, nickname, password);
-
       // send the reply
       TemporaryTopic temporaryTopic = (TemporaryTopic) request.getJMSReplyTo();
       if (temporaryTopic != null)

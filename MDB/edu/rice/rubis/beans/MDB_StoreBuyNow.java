@@ -25,7 +25,7 @@ import javax.transaction.UserTransaction;
 
 public class MDB_StoreBuyNow implements MessageDrivenBean, MessageListener
 {
-  private UserTransaction utx = null;
+      //  private UserTransaction utx = null;
 
   private DataSource dataSource;
   private MessageDrivenContext messageDrivenContext;
@@ -73,10 +73,10 @@ public class MDB_StoreBuyNow implements MessageDrivenBean, MessageListener
     ResultSet rs           = null;
     Connection conn        = null;
 
-    utx = messageDrivenContext.getUserTransaction();
+      //    utx = messageDrivenContext.getUserTransaction();
     try
     {
-      utx.begin();
+       //     utx.begin();
       // Try to find the Item corresponding to the Item ID
       String now = TimeManagement.currentDateToString();
       int quantity;
@@ -140,22 +140,22 @@ public class MDB_StoreBuyNow implements MessageDrivenBean, MessageListener
       }
       if (stmt != null) stmt.close();
       if (conn != null) conn.close();
-      utx.commit();
+       //     utx.commit();
 
     } 
     catch (Exception e)
     {
       try { stmt.close(); } catch (Exception ignore) {}
       try { conn.close(); } catch (Exception ignore) {}
-      try
-      {
-        utx.rollback();
+       //     try
+      //      {
+       //       utx.rollback();
         throw new RemoteException("Cannot insert the item into buy_now items table: " +e+"<br>");
-      }
-      catch (Exception se) 
-      {
-        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
-      }
+       //     }
+       //     catch (Exception se) 
+       //     {
+       //       throw new RemoteException("Transaction rollback failed: " + e +"<br>");
+       //     }
     }
   }
 

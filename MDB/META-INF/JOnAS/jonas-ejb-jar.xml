@@ -88,9 +88,9 @@
   </jonas-message-driven>
 
   <jonas-message-driven>
-    <ejb-name>MDB_Putcomment</ejb-name>
+    <ejb-name>MDB_PutComment</ejb-name>
     <jonas-message-driven-destination>
-      <jndi-name>topicPutcomment</jndi-name>
+      <jndi-name>topicPutComment</jndi-name>
     </jonas-message-driven-destination>
 
     <jonas-resource>

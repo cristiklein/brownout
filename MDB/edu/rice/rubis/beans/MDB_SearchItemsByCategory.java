@@ -55,8 +55,6 @@ public class MDB_SearchItemsByCategory implements MessageDrivenBean, MessageList
 
       // get the list of categories
       String html = getItems(categoryId, page, nbOfItems);
-      if ((html.equals("")) || (html == null))
-        System.out.println ("html is empty");
 
       // send the reply
       TemporaryTopic temporaryTopic = (TemporaryTopic) request.getJMSReplyTo();

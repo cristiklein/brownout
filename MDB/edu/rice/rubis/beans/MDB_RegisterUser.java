@@ -25,7 +25,7 @@ import javax.transaction.UserTransaction;
 
 public class MDB_RegisterUser implements MessageDrivenBean, MessageListener 
 {
-  private UserTransaction utx = null;
+  //  private UserTransaction utx = null;
 
   private DataSource dataSource;
   private MessageDrivenContext messageDrivenContext;
@@ -110,10 +110,10 @@ public class MDB_RegisterUser implements MessageDrivenBean, MessageListener
     float balance          = 0;
     String creationDate    = null;
 
-    utx = messageDrivenContext.getUserTransaction(); //bean managed transaction
+    //    utx = messageDrivenContext.getUserTransaction(); //bean managed transaction
     try
     {
-      utx.begin();
+      //     utx.begin();
       conn = dataSource.getConnection();
       stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
       stmt.setString(1, regionName);
@@ -195,21 +195,21 @@ public class MDB_RegisterUser implements MessageDrivenBean, MessageListener
       html.append("Rating        :"+rating+"<br>\n");
       html.append("Balance       :"+balance+"<br>\n");
 
-      utx.commit();
+      //      utx.commit();
     }
     catch (Exception e)
     {
       try { stmt.close(); } catch (Exception ignore) {}
       try { conn.close(); } catch (Exception ignore) {}
-      try
-      {
-        utx.rollback();
+      //      try
+      //     {
+      //        utx.rollback();
         throw new RemoteException("User registration failed (got exception: " +e+")<br>");
-      }
-      catch (Exception se) 
-      {
-        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
-      }
+       //     }
+      //      catch (Exception se) 
+      //      {
+      //        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
+       //     }
     }
     return html.toString();
   }

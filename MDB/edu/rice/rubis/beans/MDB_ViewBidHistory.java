@@ -48,7 +48,7 @@ public class MDB_ViewBidHistory implements MessageDrivenBean, MessageListener
       int itemId = request.getInt("itemId");
         // Retrieve the connection factory
         connectionFactory = (TopicConnectionFactory) initialContext.lookup(BeanConfig.TopicConnectionFactoryName);
-      // get the post comment form
+      // get the bids history
       String html = getBidHistory(itemId);
       // send the reply
       TemporaryTopic temporaryTopic = (TemporaryTopic) request.getJMSReplyTo();
@@ -61,7 +61,6 @@ public class MDB_ViewBidHistory implements MessageDrivenBean, MessageListener
         TextMessage reply = session.createTextMessage();
         reply.setJMSCorrelationID(correlationID);
         reply.setText(html);
-
         replier = session.createPublisher(null); // unidentified publisher
         connection.start();
         replier.publish(temporaryTopic, reply);
@@ -139,13 +138,18 @@ public class MDB_ViewBidHistory implements MessageDrivenBean, MessageListener
     }
     try 
     {
-      if (rs.first())
+      if ((rs == null) || (!rs.first())) // This item does not exist
       {
-
+        stmt.close();
+        conn.close();
+        return "";
+      }
+      else
+      {
         itemName = rs.getString("name");
         html = new StringBuffer("<center><h3>Bid History for "+itemName+"<br></h3></center>");
       }
-        stmt.close();
+      stmt.close();
     }
     catch (Exception e)
     {

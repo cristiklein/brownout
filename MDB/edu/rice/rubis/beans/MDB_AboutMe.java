@@ -88,7 +88,7 @@ public class MDB_AboutMe implements MessageDrivenBean, MessageListener
    */
   public String getAboutMe(String username, String password) throws RemoteException
   {
-    UserTransaction utx    = null;
+       //   UserTransaction utx    = null;
     PreparedStatement stmt = null;
     ResultSet rs           = null;
     Connection conn        = null;
@@ -188,8 +188,8 @@ public class MDB_AboutMe implements MessageDrivenBean, MessageListener
 
     try 
     {
-      utx = messageDrivenContext.getUserTransaction();
-      utx.begin();
+       //     utx = messageDrivenContext.getUserTransaction();
+       //     utx.begin();
       conn = dataSource.getConnection();
       html.append(listItem(userId, conn));
       html.append(listBoughtItems(userId, conn));
@@ -197,12 +197,12 @@ public class MDB_AboutMe implements MessageDrivenBean, MessageListener
       html.append(listBids(userId, username, password, conn));
       html.append(listComments(userId, conn));
       conn.close();
-      utx.commit();
+      //      utx.commit();
     } 
     catch (Exception e)
     {
       try { conn.close(); } catch (Exception ignore) {}
-      try { utx.rollback(); } catch (Exception ignore) {}
+       //     try { utx.rollback(); } catch (Exception ignore) {}
       throw new RemoteException("Cannot get information about items and bids: " +e+"<br>");
     }
     return html.toString();

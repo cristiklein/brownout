@@ -26,7 +26,7 @@ import javax.transaction.UserTransaction;
 public class MDB_StoreBid implements MessageDrivenBean, MessageListener 
 {
 
-  private UserTransaction utx = null;
+  //  private UserTransaction utx = null;
 
   private DataSource dataSource;
   private MessageDrivenContext messageDrivenContext;
@@ -79,10 +79,10 @@ public class MDB_StoreBid implements MessageDrivenBean, MessageListener
     ResultSet rs           = null;
     Connection conn        = null;
 
-    utx = messageDrivenContext.getUserTransaction();
+    //    utx = messageDrivenContext.getUserTransaction();
     try
     {
-      utx.begin();
+      //      utx.begin();
       try 
       {
         // create new bid
@@ -140,20 +140,20 @@ public class MDB_StoreBid implements MessageDrivenBean, MessageListener
         throw new RemoteException("Failed to update nb of bids and max bid: " + ex);
       }
       if (conn != null) conn.close();
-      utx.commit();
+      //      utx.commit();
     }
     catch (Exception e)
     {
       try { conn.close(); } catch (Exception ignore) {}
-      try
-      {
-        utx.rollback();
+      //      try
+      //      {
+      //        utx.rollback();
         throw new RemoteException("Failed to create a new bid (got exception: " +e+")<br>");
-      }
-      catch (Exception se) 
-      {
-        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
-      }
+       //     }
+      //      catch (Exception se) 
+       //     {
+       //       throw new RemoteException("Transaction rollback failed: " + e +"<br>");
+       //     }
     }
   }
 
