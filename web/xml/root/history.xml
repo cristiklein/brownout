@@ -14,8 +14,26 @@
 
     <s1 name="RUBiS History">
 
-      <subtitle></subtitle>
-      <p></p>
+      <s2 name="RUBiS version 1.2 (10 Sep 2002)">
+      <p>This distribution includes the source code of the following implementations:</p>
+	  <ul>
+		<li>Distributed Java Client emulator (works with PHP, Servlets and EJB)</li>
+		<li>PHP</li>
+		<li>Servlets only</li>
+		<li>EJB implementation with Session Beans (supports JBoss/JOnAS/MySQL)</li>
+		<li>EJB implementation with Entity Beans with Container Managed Persistence and Database generated Primary Keys (supports JOnAS/MySQL/PostgreSQL, will not work with JBoss)</li>
+		<li>EJB implementation with Entity Beans with Container Managed Persistence and Bean generated Primary Keys (supports JBoss/JOnAS/MySQL/PostgreSQL)</li>
+		<li>EJB implementation with Entity Beans with Bean Managed Persistence (supports JBoss/JOnAS/MySQL)</li>
+		<li>EJB implementation with facade Session Beans (supports JBoss/JOnAS/MySQL/PostgreSQL)</li>
+		<li>EJB implementation with facade Session Beans and EJB 2.0 local interfaces Entity Beans (supports JBoss/JOnAS/MySQL)</li>
+	  </ul>
+      </s2>
+      <s2 name="RUBiS version 1.1 (25 Mar 2002)">
+        <p>Added PostgreSQL and EB BMP support.</p>
+      </s2>
+      <s2 name="RUBiS version 1.0 (8 Feb 2002)">
+        <p>Client emulator, PHP, Servlets only and EJB implementations (SB, EB CMP, Session Facade).</p>
+      </s2>
     </s1>
   </body>
 

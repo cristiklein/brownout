@@ -4,7 +4,7 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchetc@inrialpes.fr">c-jdbc team</author>
+    <author email="emmanuel.cecchet@inrialpes.fr">RUBiS team</author>
     <title>Team</title>
     <filename>team.xml</filename>
     <pathtoroot>.</pathtoroot>
@@ -27,12 +27,11 @@
       contributed to RUBiS:</p>
 
       <ul>
-	<li></li>
-	<li></li>
+	<li>Daniel Pfeifer (<a href="http://www.ipd.uka.de/%7Epfeifer">University of Karlsruhe</a>)</li>
       </ul>
 
       <p>We apologize if we miss someone. Please <a
-      href="mailto:emmanuel.cecchetc@inrialpes.fr">email us</a> to correct that.</p>
+      href="mailto:jmob@objectweb.org">email us</a> to correct that.</p>
     </s1>    
   </body>
 </document>

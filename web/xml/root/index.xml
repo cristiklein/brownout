@@ -23,14 +23,14 @@
 
       <table border="0">
 	<tr>
-	  <td><img src="images/RUBiS_logo.jpg" alt="RUBiS logo" height="132" width="287" border="0" hspace="2"/></td>
-	  <td valign="middle">Current release: 1.1</td>
+	  <td><img src="images/RUBiS_logo.jpg" alt="RUBiS logo" height="" width="" border="0" hspace="2"/></td>
+	  <td valign="middle"><strong>RUBiS is a <a href="http://www.objectweb.org/jmob/">JMOB</a> project<br/></strong><br/>Current release: 1.2</td>
 	</tr>
       </table>
       
       <s2 name="Overview" anchor="overview">
 	<p>RUBiS is an auction site prototype modeled after <a href="http://www.ebay.com/">eBay.com</a>
-	that is used to evaluate the bottlenecks of such application.
+	that is used to evaluate application design patterns and application servers performance scalability.
 	</p>
 	<p>Our auction site benchmark implements the core functionality of an
 	auction site: selling, browsing and bidding. We do not implement complementary
