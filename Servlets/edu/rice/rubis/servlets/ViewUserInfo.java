@@ -95,7 +95,7 @@ public class ViewUserInfo extends RubisHttpServlet
         {
           authorStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           authorStmt.setInt(1, authorId);
-          authorRS = stmt.executeQuery();
+          authorRS = authorStmt.executeQuery();
           if (authorRS.first())
             authorName = authorRS.getString("nickname");
           authorStmt.close();
