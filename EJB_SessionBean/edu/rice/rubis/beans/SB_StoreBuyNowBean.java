@@ -60,7 +60,7 @@ public class SB_StoreBuyNowBean implements SessionBean
         stmt = conn.prepareStatement("SELECT quantity, end_date FROM items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         rs = stmt.executeQuery();
-        stmt.close();
+        
       }
       catch (SQLException e)
       {
@@ -68,33 +68,37 @@ public class SB_StoreBuyNowBean implements SessionBean
         try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Failed to execute Query for the item: " +e+"<br>");
       }
+      PreparedStatement pstmt = null;
       try
       {
         if (rs.first())
         {
           quantity = rs.getInt("quantity");
           quantity = quantity -qty;
+ 
           if (quantity == 0)
           {
-            stmt = conn.prepareStatement("UPDATE items SET end_date=?,quantity=? WHERE id=?");
-            stmt.setString(1, now);
-            stmt.setInt(2, quantity);
-            stmt.setInt(3, itemId.intValue());
-            stmt.executeUpdate();
+            pstmt = conn.prepareStatement("UPDATE items SET end_date=?,quantity=? WHERE id=?");
+            pstmt.setString(1, now);
+            pstmt.setInt(2, quantity);
+            pstmt.setInt(3, itemId.intValue());
+            pstmt.executeUpdate();
           }
           else
           {
-            stmt = conn.prepareStatement("UPDATE items SET quantity=? WHERE id=?");
-            stmt.setInt(1, quantity);
-            stmt.setInt(2, itemId.intValue());
-            stmt.executeUpdate();
+            pstmt = conn.prepareStatement("UPDATE items SET quantity=? WHERE id=?");
+            pstmt.setInt(1, quantity);
+            pstmt.setInt(2, itemId.intValue());
+            pstmt.executeUpdate();
           }
           stmt.close();
+          pstmt.close();
         }
       }
       catch (Exception e)
       {
         try { stmt.close(); } catch (Exception ignore) {}
+        try { pstmt.close(); } catch (Exception ignore) {}
         try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Failed to update item's quantity: " +e+"<br>");
       }

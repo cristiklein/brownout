@@ -63,11 +63,12 @@ public class SB_RegisterUserBean implements SessionBean
       stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
       stmt.setString(1, regionName);
       rs = stmt.executeQuery();
-      stmt.close();
+      
       if (rs.first())
       {
         regionId = rs.getInt("id");
       }
+      stmt.close();
     }
     catch (Exception e)
     {
@@ -82,13 +83,12 @@ public class SB_RegisterUserBean implements SessionBean
       stmt = conn.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
       stmt.setString(1, nickname);
       rs = stmt.executeQuery();
-      stmt.close();
-      conn.close();
       if (rs.first())
       {
         html.append("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
         return html.toString();
       }
+      stmt.close();
     }
     catch (Exception fe)
     {

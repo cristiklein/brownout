@@ -78,7 +78,7 @@ public class SB_StoreCommentBean implements SessionBean
         stmt = conn.prepareStatement("SELECT rating FROM users WHERE id=?");
         stmt.setInt(1, toId.intValue());
         rs = stmt.executeQuery();
-        stmt.close();
+        
         if (rs.first())
         {
           int userRating = rs.getInt("rating");
@@ -88,8 +88,9 @@ public class SB_StoreCommentBean implements SessionBean
           stmt.setInt(1, userRating);
           stmt.setInt(2, toId.intValue());
           stmt.executeUpdate();
-          stmt.close();
+          
         }
+        stmt.close();
       }
       catch (SQLException e)
       {

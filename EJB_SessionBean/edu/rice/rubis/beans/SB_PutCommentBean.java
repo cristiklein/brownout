@@ -125,7 +125,7 @@ public class SB_PutCommentBean implements SessionBean
     try
     {
       html.append("<center><h2>Give feedback about your experience with "+toName+"</h2><br>\n");
-      html.append("<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n");
+      html.append("<form action=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n");
       html.append("<input type=hidden name=to value="+toId.intValue()+">\n");
       html.append("<input type=hidden name=from value="+userId+">\n");
       html.append("<input type=hidden name=itemId value="+itemId.intValue()+">\n");

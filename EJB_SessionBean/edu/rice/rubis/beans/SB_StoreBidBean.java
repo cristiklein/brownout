@@ -77,7 +77,7 @@ public class SB_StoreBidBean implements SessionBean
         stmt = conn.prepareStatement("SELECT nb_of_bids, max_bid FROM items WHERE id=?");
         stmt.setInt(1, itemId);
         rs = stmt.executeQuery();
-        stmt.close();
+        
         if (rs.first())
         {
           int nbOfBids = rs.getInt("nb_of_bids");
@@ -99,6 +99,7 @@ public class SB_StoreBidBean implements SessionBean
             update.setInt(2, itemId);
             update.executeUpdate();
           }
+          stmt.close();
           update.close();
         }
       }

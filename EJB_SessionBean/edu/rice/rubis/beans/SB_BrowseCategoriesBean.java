@@ -60,7 +60,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
         stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
         stmt.setString(1, regionName);
         rs = stmt.executeQuery();
-        stmt.close();
+        
       }
       catch (SQLException e)
       {
@@ -80,6 +80,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
         {
           regionId = rs.getInt("id");
         }
+        stmt.close();
       }
       catch (Exception e)
       {
@@ -194,7 +195,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
    */
   public String printCategory(String name, int id) throws RemoteException
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
                   "&categoryName="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
   }
 
@@ -207,7 +208,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
    */
   public String printCategoryByRegion(String name, int id, int regionId) throws RemoteException
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
       "&categoryName="+URLEncoder.encode(name)+"&region="+regionId+"\">"+name+"</a><br>\n";
   }
 
@@ -221,7 +222,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
    */
   public String printCategoryToSellItem(String name, int id, int userId) throws RemoteException
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
   }
 
 

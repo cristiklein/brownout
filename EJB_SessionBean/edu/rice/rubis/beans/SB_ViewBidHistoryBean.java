@@ -55,7 +55,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
       stmt = conn.prepareStatement("SELECT name FROM items WHERE id=?");
       stmt.setInt(1, itemId.intValue());
       rs = stmt.executeQuery();
-      stmt.close();
+      
     }
     catch (Exception e)
     {
@@ -73,11 +73,13 @@ public class SB_ViewBidHistoryBean implements SessionBean
     {
       if (!rs.first())
       {
+        stmt.close();
         stmt = conn.prepareStatement("SELECT name FROM old_items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         rs = stmt.executeQuery();
-        stmt.close();
+        
       }
+     
     }
     catch (Exception e)
     {
@@ -98,6 +100,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
         itemName = rs.getString("name");
         html = new StringBuffer("<center><h3>Bid History for "+itemName+"<br></h3></center>");
       }
+       stmt.close();
     }
     catch (Exception e)
     {
@@ -116,9 +119,10 @@ public class SB_ViewBidHistoryBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM bids WHERE item_id=? ORDER BY date DESC");
       stmt.setInt(1, itemId.intValue());
       rs = stmt.executeQuery();
-      stmt.close();
+      
       if (!rs.first())
       {
+        stmt.close();
         conn.close();
         return html.append("<h3>There is no bid corresponding to this item.</h3><br>").toString();
       }
@@ -183,7 +187,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
    */
   public String printBidHistory(int userId, String bidderName, float bid, String date) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+userId+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+userId+
       "\">"+bidderName+"<TD>"+bid+"<TD>"+date+"\n";
   }
 

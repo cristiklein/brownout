@@ -86,7 +86,6 @@ public class SB_BuyNowBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
       stmt.setInt(1, itemId.intValue());
       rs = stmt.executeQuery();
-      stmt.close();
       if (rs.first())
       {
         itemName = rs.getString("name");
@@ -97,7 +96,8 @@ public class SB_BuyNowBean implements SessionBean
         quantity = rs.getInt("quantity");
         sellerId = rs.getInt("seller");
       }
-    }
+      stmt.close();
+     }
     catch (Exception e)
     {
       try
@@ -116,13 +116,13 @@ public class SB_BuyNowBean implements SessionBean
       stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
       stmt.setInt(1, sellerId);
       ResultSet srs = stmt.executeQuery();
-      stmt.close();
       if (srs.first())
       {
         sellerName = srs.getString("nickname");
       }
+      stmt.close();
       conn.close();
-    }
+     }
     catch (SQLException s)
     {
       try
@@ -160,8 +160,8 @@ public class SB_BuyNowBean implements SessionBean
   public String printItemDescriptionToBuyNow(int itemId, String itemName, String description, float buyNow, int quantity, int sellerId, String sellerName, String startDate, String endDate, int userId) throws RemoteException
   {
     StringBuffer result = new StringBuffer("<TABLE>\n"+"<TR><TD>Quantity<TD><b><BIG>"+quantity+"</BIG></b>\n");
-    result.append("<TR><TD>Seller<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+
-                  sellerName+"</a> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="+sellerId+"&itemId="+itemId+"\">Leave a comment on this user</a>)\n"+
+    result.append("<TR><TD>Seller<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+
+                  sellerName+"</a> (<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="+sellerId+"&itemId="+itemId+"\">Leave a comment on this user</a>)\n"+
                   "<TR><TD>Started<TD>"+startDate+"\n"+"<TR><TD>Ends<TD>"+endDate+"\n"+
                   "</TABLE>"+
                   "<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n"+
@@ -170,7 +170,7 @@ public class SB_BuyNowBean implements SessionBean
                   "<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n"+
                   "<TR><TD align=\"center\" width=\"100%\"><FONT size=\"4\" color=\"#000000\"><B>Buy Now</B></FONT></TD></TR>\n"+
                   "</TABLE><p>\n"+
-                  "<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreBuyNow\" method=POST>\n"+
+                  "<form action=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.StoreBuyNow\" method=POST>\n"+
                   "<input type=hidden name=userId value="+userId+">\n"+
                   "<input type=hidden name=itemId value="+itemId+">\n"+
                   "<input type=hidden name=maxQty value="+quantity+">\n");

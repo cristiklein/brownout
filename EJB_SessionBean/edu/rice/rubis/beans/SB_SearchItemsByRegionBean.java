@@ -61,8 +61,7 @@ public class SB_SearchItemsByRegionBean implements SessionBean
       stmt.setInt(4, nbOfItems);
       rs = stmt.executeQuery();
 
-      stmt.close();
-      conn.close();
+
     }
     catch (SQLException e)
     {
@@ -90,9 +89,19 @@ public class SB_SearchItemsByRegionBean implements SessionBean
           maxBid = initialPrice;
         html.append(printItem(itemName, itemId, maxBid, nbOfBids, endDate));
       }
+      stmt.close();
+      conn.close();
     } 
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
         throw new RemoteException("Cannot get items list: " +e);
     }
     return html.toString();
@@ -108,11 +117,11 @@ public class SB_SearchItemsByRegionBean implements SessionBean
    */
   public String printItem(String name, int id, float maxBid, int nbOfBids, String endDate) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+maxBid+
       "<TD>"+nbOfBids+
       "<TD>"+endDate+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\""+BeanConfig.context+"/bid_now.jpg\" height=22 width=90></a>\n";
   }
   
 

@@ -86,8 +86,7 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
       stmt.setInt(1, userId.intValue());
       rs = stmt.executeQuery();
-      stmt.close();
-      conn.close();
+
     }
     catch (Exception e)
     {
@@ -106,6 +105,8 @@ public class SB_AboutMeBean implements SessionBean
         date = rs.getString("creation_date");
         rating = rs.getInt("rating");
       }
+      stmt.close();
+      conn.close();
       html.append("<h2>Information about "+nickname+"<br></h2>");
       html.append("Real life name : "+firstname+" "+lastname+"<br>");
       html.append("Email address  : "+email+"<br>");
@@ -649,9 +650,9 @@ public class SB_AboutMeBean implements SessionBean
    */
   public String printUserBoughtItem(int id, String name, int qty, float buyNow, int sellerId, String sellerName) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
       "<TD>"+qty+"\n"+"<TD>"+buyNow+"\n"+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+sellerName+"</a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+sellerName+"</a>\n";
   }
 
   /**
@@ -663,11 +664,11 @@ public class SB_AboutMeBean implements SessionBean
    */
   public String printItemUserHasBidOn(int id, String name, float initialPrice, float maxBid, float bidMaxBid, int quantity, String startDate, String endDate, int sellerId, String sellerName, String username, String password) throws RemoteException
   {
-    StringBuffer html = new StringBuffer("<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    StringBuffer html = new StringBuffer("<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+initialPrice+"<TD>"+maxBid+"<TD>"+bidMaxBid+"<TD>"+quantity+"<TD>"+startDate+"<TD>"+endDate+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+sellerName+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBid?itemId="+id);
-    html.append("&nickname="+URLEncoder.encode(username)+"&password="+URLEncoder.encode(password)+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n");
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+sellerName+
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutBid?itemId="+id);
+    html.append("&nickname="+URLEncoder.encode(username)+"&password="+URLEncoder.encode(password)+"\"><IMG SRC=\""+BeanConfig.context+"/bid_now.jpg\" height=22 width=90></a>\n");
     return html.toString();
   }
 
@@ -681,7 +682,7 @@ public class SB_AboutMeBean implements SessionBean
    */
   public String printSell(int id, String name, float initialPrice, float maxBid, int quantity, float reservePrice, float buyNow, String startDate, String endDate) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+initialPrice+"<TD>"+maxBid+"<TD>"+quantity+"<TD>"+reservePrice+"<TD>"+buyNow+"<TD>"+startDate+"<TD>"+endDate+"\n";
   }
  
@@ -694,9 +695,9 @@ public class SB_AboutMeBean implements SessionBean
    */
   public String printUserWonItem(int id, String name, float maxBid, int sellerId, String sellerName) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
       "<TD>"+maxBid+"\n"+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+sellerName+"</a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+sellerName+"</a>\n";
   }
 
   /** 
@@ -747,7 +748,7 @@ public class SB_AboutMeBean implements SessionBean
    */
   public String printComment(String userName, String date, String comment, int fromUserId) throws RemoteException
   {
-    return "<DT><b><BIG><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
+    return "<DT><b><BIG><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
       " wrote the "+date+"<DD><i>"+comment+"</i><p>\n";
   }
 

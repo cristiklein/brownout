@@ -55,7 +55,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
       stmt.setInt(1, userId.intValue());
       rs = stmt.executeQuery();
-      stmt.close();
+      
     }
     catch (SQLException e)
     {
@@ -72,17 +72,20 @@ public class SB_ViewUserInfoBean implements SessionBean
     try 
     {
       if (!rs.first())
+      {
        html = new StringBuffer("<h3>There is no comment yet for this user.</h3><br>");
+       stmt.close();
+      }
       else
       {
         html = new StringBuffer("<br><hr><br><h3>Comments for this user</h3><br>");
 
         html.append(printCommentHeader());
         // Display each comment and the name of its author
-        
+        PreparedStatement pstmt = null;
         try
         {
-          stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+          pstmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           do
           {
             comment = rs.getString("comment");
@@ -91,18 +94,21 @@ public class SB_ViewUserInfoBean implements SessionBean
 
             String authorName = "none";
             ResultSet authorRS = null;
-            stmt.setInt(1, authorId);
-            authorRS = stmt.executeQuery();
+            pstmt.setInt(1, authorId);
+            authorRS = pstmt.executeQuery();
             if (authorRS.first())
               authorName = authorRS.getString("nickname");
             html.append(printComment(authorName, date, comment, authorId));
           }
           while (rs.next());
+           stmt.close();
+           pstmt.close();
         }
         catch (Exception e)
         {
           try
           {
+            if (pstmt != null) pstmt.close();
             if (stmt != null) stmt.close();
             if (conn != null) conn.close();
           }
@@ -114,7 +120,6 @@ public class SB_ViewUserInfoBean implements SessionBean
         
         html.append(printCommentFooter());
       }
-      if (stmt != null) stmt.close();
     } 
     catch (Exception e) 
     {
@@ -154,7 +159,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
       stmt.setInt(1, userId.intValue());
       rs = stmt.executeQuery();
-      stmt.close();
+      
     }
     catch (SQLException e)
     {
@@ -185,6 +190,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       }
       else
         html.append("This user does not exist!<br>");
+      stmt.close();
       conn.close();
     }
     catch (Exception e)
@@ -238,7 +244,7 @@ public class SB_ViewUserInfoBean implements SessionBean
    */
   public String printComment(String userName, String date, String comment, int fromUserId) throws RemoteException
   {
-    return "<DT><b><BIG><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
+    return "<DT><b><BIG><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
       " wrote the "+date+"<DD><i>"+comment+"</i><p>\n";
   }
 

@@ -100,7 +100,7 @@ public class SB_BrowseRegionsBean implements SessionBean
 
   public String printRegion(String name) throws RemoteException
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.BrowseCategories?region="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.BrowseCategories?region="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
 
   }
 

@@ -83,6 +83,7 @@ public class SB_ViewItemBean implements SessionBean
     {
       if (!rs.first())
       {
+        stmt.close();
         stmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         rs = stmt.executeQuery();
@@ -257,14 +258,14 @@ public class SB_ViewItemBean implements SessionBean
           + "</BIG></b>\n"
           + "<TR><TD># of bids<TD><b><BIG>"
           + nbOfBids
-          + "</BIG></b> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewBidHistory?itemId="
+          + "</BIG></b> (<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewBidHistory?itemId="
           + itemId
           + "\">bid history</a>)\n"
-          + "<TR><TD>Seller<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="
+          + "<TR><TD>Seller<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="
           + sellerId
           + "\">"
           + sellerName
-          + "</a> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="
+          + "</a> (<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="
           + sellerId
           + "&itemId="
           + itemId
@@ -279,10 +280,10 @@ public class SB_ViewItemBean implements SessionBean
       // Can the user buy this item now ?
       if (buyNow > 0)
         html.append(
-          "<p><a href=\"/servlet/edu.rice.rubis.beans.servlets.BuyNowAuth?itemId="
+          "<p><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.BuyNowAuth?itemId="
             + itemId
             + "\">"
-            + "<IMG SRC=\"/EJB_HTML/buy_it_now.jpg\" height=22 width=150></a>"
+            + "<IMG SRC=\""+BeanConfig.context+"/buy_it_now.jpg\" height=22 width=150></a>"
             + "  <BIG><b>You can buy this item right now for only $"
             + buyNow
             + "</b></BIG><br><p>\n");
@@ -290,9 +291,9 @@ public class SB_ViewItemBean implements SessionBean
       if (userId <= 0)
       {
         html.append(
-          "<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="
+          "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="
             + itemId
-            + "\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90> on this item</a>\n");
+            + "\"><IMG SRC=\""+BeanConfig.context+"/bid_now.jpg\" height=22 width=90> on this item</a>\n");
       }
 
       html.append(printHTMLHighlighted("Item description"));
@@ -304,7 +305,7 @@ public class SB_ViewItemBean implements SessionBean
         html.append(printHTMLHighlighted("Bidding"));
         float minBid = maxBid + 1;
         html.append(
-          "<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreBid\" method=POST>\n"
+          "<form action=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.StoreBid\" method=POST>\n"
             + "<input type=hidden name=minBid value="
             + minBid
             + ">\n"
