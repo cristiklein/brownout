@@ -565,6 +565,14 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.CategoryPK</prim-key-class>
             <reentrant>False</reentrant>
+	    <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>
+		<ejb-link>IDManager</ejb-link>
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+            </ejb-ref>
             <cmp-field>
                 <description>Category name</description>
                 <field-name>name</field-name>
@@ -590,6 +598,14 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.RegionPK</prim-key-class>
             <reentrant>False</reentrant>
+	    <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>
+		<ejb-link>IDManager</ejb-link>
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+            </ejb-ref>
             <cmp-field>
                 <description>Region name</description>
                 <field-name>name</field-name>
