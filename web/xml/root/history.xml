@@ -14,6 +14,11 @@
 
     <s1 name="History">
 
+ 	<s2 name="March 24th 2004: Howto install RUBiS with JOnAS">
+        <p>A howto for installing RUBiS with <a href="http://jonas.objectweb.org/">JOnAS</a>
+         is now available in the documentation 
+         thanks to Jacques Cayuela from the JOnAS project.</p>
+    </s2>        
     
     <s2 name="RUBiS version 1.4.2 (March 2004)">
         <p>This version includes a Session Facade with EJB 2.0 Entity Beans
