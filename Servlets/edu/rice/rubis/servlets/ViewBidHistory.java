@@ -164,6 +164,7 @@ public class ViewBidHistory extends RubisHttpServlet
       closeConnection(stmt, conn);
       return;
     }
+    /**
     try
     {
       if (!rs.first())
@@ -180,6 +181,7 @@ public class ViewBidHistory extends RubisHttpServlet
       closeConnection(stmt, conn);
       return;
     }
+    */
     try
     {
       if (!rs.first())

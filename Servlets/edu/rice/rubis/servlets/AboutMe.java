@@ -151,7 +151,7 @@ public class AboutMe extends RubisHttpServlet
     {
       pastStmt =
         conn.prepareStatement(
-          "SELECT * FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30");
+          "SELECT * FROM items WHERE items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30");
       pastStmt.setInt(1, userId.intValue());
       pastSellings = pastStmt.executeQuery();
     }
@@ -364,7 +364,7 @@ public class AboutMe extends RubisHttpServlet
     {
       stmt =
         conn.prepareStatement(
-          "SELECT item_id FROM bids, old_items WHERE bids.user_id=? AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 GROUP BY item_id");
+          "SELECT item_id FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       won = stmt.executeQuery();
       if (!won.first())
@@ -398,7 +398,7 @@ public class AboutMe extends RubisHttpServlet
           {
             ResultSet itemRS = null;
             itemStmt =
-              conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
+              conn.prepareStatement("SELECT * FROM items WHERE id=?");
             itemStmt.setInt(1, itemId);
             itemRS = itemStmt.executeQuery();
             if (!itemRS.first())

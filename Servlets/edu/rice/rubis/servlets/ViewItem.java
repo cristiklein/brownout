@@ -91,6 +91,7 @@ public class ViewItem extends RubisHttpServlet
       closeConnection(stmt, conn);
       return;
     }
+    /**
     try
     {
       if (!rs.first())
@@ -107,6 +108,7 @@ public class ViewItem extends RubisHttpServlet
       closeConnection(stmt, conn);
       return;
     }
+    */
     try
     {
       if (!rs.first())
