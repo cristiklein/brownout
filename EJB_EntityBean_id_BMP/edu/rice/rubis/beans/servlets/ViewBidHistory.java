@@ -141,6 +141,12 @@ public class ViewBidHistory extends HttpServlet
     else
       itemId = new Integer(value);
 
+    if (itemId.intValue() == -1)
+    {
+      sp.printHTML("ERROR: ItemId is -1.<br>");
+      return ;
+    }
+
     sp.printHTMLheader("RUBiS: Bid history");
 
     try
