@@ -353,7 +353,7 @@ public class QueryBean implements SessionBean
     try 
     {
       conn = dataSource.getConnection();
-      stmt = conn.prepareStatement("SELECT DISTINCT MAX(bid),item_id FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 ORDER BY item_id");
+      stmt = conn.prepareStatement("SELECT MAX(bid),item_id FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       ResultSet rs = stmt.executeQuery();
 
@@ -400,7 +400,7 @@ public class QueryBean implements SessionBean
     try 
     {
       conn = dataSource.getConnection();
-      stmt = conn.prepareStatement("SELECT DISTINCT MAX(bid),bids.id FROM bids,items WHERE user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() ORDER BY item_id");
+      stmt = conn.prepareStatement("SELECT MAX(bid),bids.id FROM bids,items WHERE user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       ResultSet rs = stmt.executeQuery();
 
