@@ -486,14 +486,14 @@ public class QueryBean implements SessionBean
     try 
     {
       conn = dataSource.getConnection();
-      stmt = conn.prepareStatement("SELECT item_id FROM items WHERE items.seller=? AND items.end_date>=NOW()");
+      stmt = conn.prepareStatement("SELECT id FROM items WHERE items.seller=? AND items.end_date>=NOW()");
       stmt.setInt(1, userId.intValue());
       ResultSet rs = stmt.executeQuery();
 
       // Build the vector of primary keys
       while (rs.next()) 
       {
-        ItemPK iPK = new ItemPK(new Integer(rs.getInt("item_id")));
+        ItemPK iPK = new ItemPK(new Integer(rs.getInt("id")));
         v.addElement((Object)iPK);
       };
     }
@@ -532,14 +532,14 @@ public class QueryBean implements SessionBean
     try 
     {
       conn = dataSource.getConnection();
-      stmt = conn.prepareStatement("SELECT item_id FROM items WHERE items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30");
+      stmt = conn.prepareStatement("SELECT id FROM items WHERE items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30");
       stmt.setInt(1, userId.intValue());
       ResultSet rs = stmt.executeQuery();
 
       // Build the vector of primary keys
       while (rs.next()) 
       {
-        ItemPK iPK = new ItemPK(new Integer(rs.getInt("item_id")));
+        ItemPK iPK = new ItemPK(new Integer(rs.getInt("id")));
         v.addElement((Object)iPK);
       };
     }
