@@ -74,6 +74,14 @@ public class SB_RegisterItemBean implements SessionBean
         }
         catch (Exception e)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Failed to create the item: " +e);
         }
         // To test if the item was correctly added in the database
@@ -84,6 +92,8 @@ public class SB_RegisterItemBean implements SessionBean
           ResultSet irs = stmt.executeQuery();
           if (!irs.first())
           {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
             throw new RemoteException("This item does not exist in the database.");
           }
           itemId = irs.getInt("id");
@@ -92,6 +102,14 @@ public class SB_RegisterItemBean implements SessionBean
         }
         catch (Exception e)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Failed to retrieve the item id: " +e);
         }
         if (stmt != null) stmt.close();
@@ -100,6 +118,14 @@ public class SB_RegisterItemBean implements SessionBean
       }
       catch (Exception e)
       {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
         try
         {
           utx.rollback();

@@ -70,6 +70,14 @@ public class SB_RegisterUserBean implements SessionBean
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")<br>\n");
       }
       utx = sessionContext.getUserTransaction();
@@ -87,6 +95,14 @@ public class SB_RegisterUserBean implements SessionBean
       }
       catch (Exception fe)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Failed to execute Query to check the nickname: " +fe);
       }
       try
@@ -103,6 +119,14 @@ public class SB_RegisterUserBean implements SessionBean
         }
         catch (SQLException e)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("RUBiS internal error: User registration failed (got exception: " +e+")<br>");
         }
         try
@@ -119,6 +143,14 @@ public class SB_RegisterUserBean implements SessionBean
         }
         catch (SQLException e)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Failed to execute Query for user: " +e);
         }
         if (stmt != null) stmt.close();
@@ -132,6 +164,14 @@ public class SB_RegisterUserBean implements SessionBean
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         try
         {
           utx.rollback();

@@ -62,6 +62,14 @@ public class SB_ViewItemBean implements SessionBean
     }
     catch (SQLException e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Failed to get the item: " +e);
     }
     try 
@@ -75,18 +83,15 @@ public class SB_ViewItemBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to get the item from old items: " +e);
-    }
-    finally
-    {
-      try 
+      try
       {
-        if (stmt != null) stmt.close();	// close statement
-        
-      } 
-      catch (Exception ignore) 
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
       {
       }
+      throw new RemoteException("Failed to get the item from old items: " +e);
     }
     try
     {
@@ -117,6 +122,13 @@ public class SB_ViewItemBean implements SessionBean
         }
         catch (SQLException e)
         {
+          try
+          {
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Failed to execute Query for seller: " +e);
         }
         finally
@@ -154,6 +166,13 @@ public class SB_ViewItemBean implements SessionBean
           }
           catch (SQLException e)
           {
+          try
+          {
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
             throw new RemoteException("Failed to execute Query for bids: " +e);
           }
           finally
@@ -161,7 +180,6 @@ public class SB_ViewItemBean implements SessionBean
             try 
             {
               if (bidStmt != null) stmt.close();	// close statement
-              if (conn != null) conn.close();	// release connection
             } 
             catch (Exception ignore) 
             {
@@ -181,9 +199,19 @@ public class SB_ViewItemBean implements SessionBean
                 break;
               }
             }
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
           } 
           catch (Exception e)
           {
+            try
+            {
+              if (stmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Problem while computing current bid: "+e+"<br>");
           }
           Float foo = new Float(maxBid);

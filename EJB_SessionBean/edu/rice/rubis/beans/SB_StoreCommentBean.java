@@ -67,6 +67,14 @@ public class SB_StoreCommentBean implements SessionBean
       }
       catch (SQLException e)
       {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
        throw new RemoteException("Error while storing the comment (got exception: " +e+")<br>");
       }
       // Try to find the user corresponding to the 'to' ID
@@ -88,6 +96,14 @@ public class SB_StoreCommentBean implements SessionBean
       }
       catch (SQLException e)
       {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
         throw new RemoteException("Error while updating user's rating (got exception: " +e+")<br>");
       }
       if (stmt != null) stmt.close();
@@ -96,6 +112,14 @@ public class SB_StoreCommentBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       try
       {
         utx.rollback();

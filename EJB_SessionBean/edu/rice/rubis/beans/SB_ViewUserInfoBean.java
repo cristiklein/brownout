@@ -58,6 +58,14 @@ public class SB_ViewUserInfoBean implements SessionBean
     }
     catch (SQLException e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Failed to get categories list " +e);
     }
     try 
@@ -88,6 +96,14 @@ public class SB_ViewUserInfoBean implements SessionBean
           }
           catch (Exception e)
           {
+            try
+            {
+              if (stmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("This author does not exist (got exception: " +e+")<br>");
           }
           html.append(printComment(authorName, date, comment, authorId));
@@ -96,11 +112,18 @@ public class SB_ViewUserInfoBean implements SessionBean
         html.append(printCommentFooter());
       }
       if (stmt != null) stmt.close();
-      if (conn != null) conn.close();
     } 
     catch (Exception e) 
     {
-        throw new RemoteException("Exception getting comment list: " + e +"<br>");
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
+      throw new RemoteException("Exception getting comment list: " + e +"<br>");
     }
     return html.toString();
   }
@@ -131,18 +154,17 @@ public class SB_ViewUserInfoBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to get user information from database: " +e);
-    }
-    finally
-    {
-      try 
+      try
       {
-        if (stmt != null) stmt.close();	// close statement
-      } 
-      catch (Exception ignore) 
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
       {
       }
+      throw new RemoteException("Failed to get user information from database: " +e);
     }
+
     try
     {
       if (rs.first())
@@ -159,9 +181,19 @@ public class SB_ViewUserInfoBean implements SessionBean
       }
       else
         html.append("This user does not exist!<br>");
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Cannot get user information (got exception: " +e+")<br>");
     }
     return html.toString();

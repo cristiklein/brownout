@@ -108,32 +108,47 @@ public class SB_BuyNowBean implements SessionBean
         }
         catch (SQLException s)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Failed to execute Query for seller: " +s);
         }
       }
       catch (Exception e)
       {
-        throw new RemoteException("Failed to execute Query for item: " +e);
-      }
-      finally
-      {
-        try 
+        try
         {
-          if (stmt != null) stmt.close();	// close statement
+          if (stmt != null) stmt.close();
           if (conn != null) conn.close();
-        } 
-        catch (Exception ignore) 
+        }
+        catch (Exception ignore)
         {
         }
+        throw new RemoteException("Failed to execute Query for item: " +e);
       }
       // Display the form for buying the item
       html.append("<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n<TR><TD align=\"center\" width=\"100%\"><FONT size=\"4\" color=\"#000000\"><B>You are ready to buy this item: "+itemName+"</B></FONT></TD></TR>\n</TABLE><p>\n");
       try
       {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
         html.append(printItemDescriptionToBuyNow(itemId.intValue(), itemName, description, buyNow, quantity, sellerId, sellerName, startDate, endDate, userId));
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Unable to print Item description: " +e);
       }
 

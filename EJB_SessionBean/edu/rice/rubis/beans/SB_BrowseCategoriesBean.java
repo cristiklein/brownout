@@ -63,6 +63,14 @@ public class SB_BrowseCategoriesBean implements SessionBean
       }
       catch (SQLException e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Failed to get region Id " +e);
       }
       try
@@ -74,6 +82,14 @@ public class SB_BrowseCategoriesBean implements SessionBean
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")");
       }
     }
@@ -91,6 +107,14 @@ public class SB_BrowseCategoriesBean implements SessionBean
         } 
         catch (Exception e)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Cannot lookup SB_Auth: " +e);
         }
         try 
@@ -99,6 +123,14 @@ public class SB_BrowseCategoriesBean implements SessionBean
         } 
         catch (Exception e)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Authentication failed: " +e);
         }
         if (userId == -1)
@@ -116,6 +148,14 @@ public class SB_BrowseCategoriesBean implements SessionBean
     }
     catch (SQLException e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Failed to get categories list " +e);
     }
     try 
@@ -147,6 +187,14 @@ public class SB_BrowseCategoriesBean implements SessionBean
     } 
     catch (Exception e) 
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting category list: " + e);
     }
     return html.toString();

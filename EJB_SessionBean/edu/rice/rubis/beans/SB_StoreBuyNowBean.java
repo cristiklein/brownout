@@ -63,6 +63,14 @@ public class SB_StoreBuyNowBean implements SessionBean
       }
       catch (SQLException e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Failed to execute Query for the item: " +e+"<br>");
       }
       try
@@ -90,6 +98,14 @@ public class SB_StoreBuyNowBean implements SessionBean
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Failed to update item's quantity: " +e+"<br>");
       }
       try 
@@ -100,6 +116,14 @@ public class SB_StoreBuyNowBean implements SessionBean
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Failed to create buy_now item: " +e+"<br>");
       }
       if (stmt != null) stmt.close();
@@ -109,6 +133,14 @@ public class SB_StoreBuyNowBean implements SessionBean
     } 
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       try
       {
         utx.rollback();

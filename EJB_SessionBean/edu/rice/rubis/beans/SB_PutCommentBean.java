@@ -87,6 +87,14 @@ public class SB_PutCommentBean implements SessionBean
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Failed to execute Query for user name: " +e);
       }
       try
@@ -96,21 +104,20 @@ public class SB_PutCommentBean implements SessionBean
         rs = stmt.executeQuery();
         if (rs.first())
           itemName = rs.getString("name");
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
       }
       catch (Exception e)
       {
-        throw new RemoteException("Failed to execute Query for item name: " +e);
-      }
-      finally
-      {
-        try 
+        try
         {
-          if (stmt != null) stmt.close();	// close statement
+          if (stmt != null) stmt.close();
           if (conn != null) conn.close();
-        } 
-        catch (Exception ignore) 
+        }
+        catch (Exception ignore)
         {
         }
+        throw new RemoteException("Failed to execute Query for item name: " +e);
       }
       try
       {
@@ -126,6 +133,14 @@ public class SB_PutCommentBean implements SessionBean
       }
       catch (Exception e)
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Cannot build comment form: " +e);
       }
  

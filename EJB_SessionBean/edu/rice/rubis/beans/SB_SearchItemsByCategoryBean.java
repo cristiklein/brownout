@@ -60,21 +60,21 @@ public class SB_SearchItemsByCategoryBean implements SessionBean
       stmt.setInt(2, page*nbOfItems);
       stmt.setInt(3, nbOfItems);
       rs = stmt.executeQuery();
+
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to get the items: " +e);
-    }
-    finally
-    {
-      try 
+      try
       {
-        if (stmt != null) stmt.close();	// close statement
-        if (conn != null) conn.close();	// release connection
-      } 
-      catch (Exception ignore) 
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
       {
       }
+      throw new RemoteException("Failed to get the items: " +e);
     }
     try 
     {

@@ -89,6 +89,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Failed to execute Query for user: " +e);
     }
     try 
@@ -110,6 +118,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("This user does not exist (got exception: " +e+")<br>");
     }
     utx = sessionContext.getUserTransaction();
@@ -127,6 +143,14 @@ public class SB_AboutMeBean implements SessionBean
     } 
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Cannot get information about items and bids: " +e+"<br>");
     }
     return html.toString();
@@ -153,6 +177,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting current sellings list: " +e+"<br>");
     }
     try 
@@ -163,6 +195,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting past sellings list: " +e+"<br>");
     }
     try
@@ -192,6 +232,14 @@ public class SB_AboutMeBean implements SessionBean
           }
           catch (Exception e) 
           {
+            try
+            {
+              if (stmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Exception getting item: " + e +"<br>");
           }
           // display information about the item
@@ -208,6 +256,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e) 
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting current items in sell: " + e +"<br>");
     }
     try
@@ -237,6 +293,14 @@ public class SB_AboutMeBean implements SessionBean
           }
           catch (Exception e) 
           {
+            try
+            {
+              if (stmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Exception getting sold item: " + e +"<br>");
           }
           // display information about the item
@@ -253,6 +317,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e) 
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting sold items: " + e +"<br>");
     }
     return sell.toString();
@@ -281,6 +353,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting bought items list: " +e+"<br>");
     }
     html.append(printUserBoughtItemHeader());
@@ -308,6 +388,14 @@ public class SB_AboutMeBean implements SessionBean
 	  }
 	  catch (SQLException e)
           {
+            try
+            {
+              if (stmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Failed to execute Query for item (buy now): " +e);
           }
 	  try 
@@ -321,11 +409,27 @@ public class SB_AboutMeBean implements SessionBean
           }
 	  catch (SQLException e)
           {
+            try
+            {
+              if (stmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Failed to execute Query for seller (buy now): " +e);
           }
         }
         catch (Exception e) 
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Exception getting buyNow: " + e +"<br>");
         }
         // display information about the item
@@ -365,6 +469,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting won items list: " +e+"<br>");
     }
     html = new StringBuffer(printUserWonItemHeader());
@@ -376,10 +488,11 @@ public class SB_AboutMeBean implements SessionBean
         // Get the name of the items
         try
         {
+          PreparedStatement itemStmt = null;
 	  try
 	  {
             ResultSet itemRS = null;
-            PreparedStatement itemStmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
+            itemStmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
             itemStmt.setInt(1, itemId);
             itemRS = itemStmt.executeQuery();
             if (itemRS.first())
@@ -395,6 +508,14 @@ public class SB_AboutMeBean implements SessionBean
 	  }
 	  catch (SQLException e)
           {
+            try
+            {
+              if (itemStmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Failed to execute Query for item (won items): " +e);
           }
 	  PreparedStatement sellerStmt =null;
@@ -409,11 +530,26 @@ public class SB_AboutMeBean implements SessionBean
           }
 	  catch (SQLException e)
           {
+            try
+            {
+              if (sellerStmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Failed to execute Query for seller (won items): " +e);
           }
         }
         catch (Exception e) 
         {
+          try
+          {
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Exception getting item: " + e +"<br>");
         }
         // display information about the item
@@ -423,6 +559,13 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting won items: " +e+"<br>");
     }
     html.append(printItemFooter());
@@ -515,6 +658,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting bids list: " +e+"<br>");
     }
     html = new StringBuffer(printUserBidsHeader());
@@ -565,6 +716,14 @@ public class SB_AboutMeBean implements SessionBean
           }
 	  catch (Exception e)
           {
+            try
+            {
+              if (sellerStmt != null) stmt.close();
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
+            {
+            }
             throw new RemoteException("Failed to execute Query for seller (bids): " +e);
           }
         }

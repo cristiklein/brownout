@@ -58,6 +58,14 @@ public class SB_ViewBidHistoryBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Failed to execute Query for item in items table: " +e);
     }
     try 
@@ -71,6 +79,14 @@ public class SB_ViewBidHistoryBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Failed to execute Query for item in old_items table: " +e);
     }
     try 
@@ -83,6 +99,14 @@ public class SB_ViewBidHistoryBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
      throw new RemoteException("This item does not exist (got exception: " +e+")<br>");
     }
     // Get the list of the user's last bids
@@ -93,11 +117,21 @@ public class SB_ViewBidHistoryBean implements SessionBean
       rs = stmt.executeQuery();
       if (!rs.first())
       {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
         return html.append("<h3>There is no bid corresponding to this item.</h3><br>").toString();
       }
     }
     catch (SQLException e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Exception getting bids list: " +e+"<br>");
     }
     try
@@ -123,28 +157,34 @@ public class SB_ViewBidHistoryBean implements SessionBean
         }
         catch (SQLException e)
         {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
           throw new RemoteException("Couldn't get bidder name: " +e+"<br>");
         }
         html.append(printBidHistory(userId, bidderName, bid, date));
       }
       while(rs.next());
       html.append(printBidHistoryFooter());
-
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
     }
     catch (SQLException e)
-    {
-      throw new RemoteException("Exception getting bid: " +e+"<br>");
-    }
-    finally
     {
       try
       {
         if (stmt != null) stmt.close();
         if (conn != null) conn.close();
       }
-      catch(Exception e)
+      catch (Exception ignore)
       {
       }
+      throw new RemoteException("Exception getting bid: " +e+"<br>");
     }
     return html.toString();
   }

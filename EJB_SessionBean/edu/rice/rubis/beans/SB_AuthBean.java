@@ -56,21 +56,20 @@ public class SB_AuthBean implements SessionBean
       {
         userId = rs.getInt("id");
       }
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
     }
     catch (SQLException e)
     {
-      throw new RemoteException(" User "+name+" does not exist in the database!<br>(got exception: " +e);
-    }
-    finally
-    {
-      try 
+      try
       {
-        if (stmt != null) stmt.close();	// close statement
-        if (conn != null) conn.close();	// release connection
-      } 
-      catch (Exception ignore) 
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
       {
       }
+      throw new RemoteException(" User "+name+" does not exist in the database!<br>(got exception: " +e);
     }
     return userId;
   }

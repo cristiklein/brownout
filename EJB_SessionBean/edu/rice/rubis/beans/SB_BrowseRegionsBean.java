@@ -54,6 +54,14 @@ public class SB_BrowseRegionsBean implements SessionBean
     }
     catch (SQLException e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new RemoteException("Failed to executeQuery " +e);
     }
     try 
@@ -63,21 +71,20 @@ public class SB_BrowseRegionsBean implements SessionBean
         regionName = rs.getString("name");
         html.append(printRegion(regionName));
       };
+      if (stmt != null) stmt.close();	// close statement
+      if (conn != null) conn.close();	// release connection
     } 
     catch (Exception e) 
     {
-      throw new RemoteException("Failed to get the list of regions" +e);
-    }
-    finally
-    {
-      try 
+      try
       {
-        if (stmt != null) stmt.close();	// close statement
-        if (conn != null) conn.close();	// release connection
-      } 
-      catch (Exception ignore) 
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
       {
       }
+      throw new RemoteException("Failed to get the list of regions" +e);
     }
     return html.toString();
   }

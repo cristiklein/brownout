@@ -65,7 +65,15 @@ public class SB_StoreBidBean implements SessionBean
       }
       catch (SQLException e)
       {
-       throw new RemoteException("Error while storing the bid (got exception: " +e+")<br>");
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
+        throw new RemoteException("Error while storing the bid (got exception: " +e+")<br>");
       }
       // update the number of bids and the max bid for the item
       try
@@ -99,6 +107,14 @@ public class SB_StoreBidBean implements SessionBean
       }
       catch (Exception ex) 
       {
+        try
+        {
+          if (stmt != null) stmt.close();
+          if (conn != null) conn.close();
+        }
+        catch (Exception ignore)
+        {
+        }
         throw new RemoteException("Failed to update nb of bids and max bid: " + ex);
       }
       if (stmt != null) stmt.close();
@@ -107,6 +123,14 @@ public class SB_StoreBidBean implements SessionBean
     }
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       try
       {
         utx.rollback();
