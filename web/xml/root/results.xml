@@ -43,7 +43,7 @@ as follows:</p>
 <li>Java Servlets: the Java Servlets implementation,</li>
 <li><em>JBoss</em>: the <a href="http://www.jboss.org">JBoss container</a> 
 using JNP and passing objects by value,</li>
-<li><em>JOnAS-RMI</em>: the <a href="http://www.objectweb.org/jonas">JOnAS container</a> 
+<li><em>JOnAS-RMI</em>: the <a href="http://jonas.objectweb.org/">JOnAS container</a> 
  using RMI,</li>
 <li><em>JBoss optimized calls</em>: the JBoss container using JNP and passing
  objects by reference,</li>
