@@ -61,9 +61,9 @@
               "&categoryName=".urlencode($categoryName)."&page=".($page-1)."&nbOfItems=$nbOfItems\">Previous page</a>\n</CENTER>\n");
       }
       mysql_free_result($result);
-      mysql_close($link);
-      printHTMLfooter($scriptName, $startTime);
       commit($link);
+      mysql_close($link);
+      printHTMLfooter($scriptName, $startTime);   
       exit();
     }
     else
