@@ -552,7 +552,7 @@ public class UserSession extends Thread
         {
           int itemId = extractItemIdFromHTML();
           if (itemId == -1)
-            computeURLFromState(transition.backToPreviousState()); // Nothing
+            return computeURLFromState(transition.backToPreviousState()); // Nothing
           // then go
           // back
           else
@@ -561,9 +561,9 @@ public class UserSession extends Thread
       case 10 :
         // View user information
         {
-          int userId = extractIntFromHTML("userId=");
+	  int userId = extractIntFromHTML("userId=");
           if (userId == -1)
-            computeURLFromState(transition.backToPreviousState()); // Nothing
+            return computeURLFromState(transition.backToPreviousState()); // Nothing
           // then go
           // back
           else
@@ -596,7 +596,7 @@ public class UserSession extends Thread
         {
           int itemId = extractItemIdFromHTML();
           if (itemId == -1)
-            computeURLFromState(transition.backToPreviousState()); // Nothing
+	      return computeURLFromState(transition.backToPreviousState()); // Nothing
           // then go
           // back
           else
@@ -682,7 +682,7 @@ public class UserSession extends Thread
           String staticDescription = "This incredible item is exactly what you need !<br>It has a lot of very nice features including "
               + "a coffee option.<br>It comes with a free license for the free RUBiS software, that's really cool. But RUBiS even if it "
               + "is free, is <B>(C) Rice University/INRIA 2001</B>. It is really hard to write an interesting generic description for "
-              + "automatically generated items, but who will really read this ?<br>You can also check some cool software available on "
+              + "automatically generated items, but who will really read this <br>You can also check some cool software available on "
               + "http://sci-serv.inrialpes.fr. There is a very cool DSM system called SciFS for SCI clusters, but you will need some "
               + "SCI adapters to be able to run it ! Else you can still try CART, the amazing 'Cluster Administration and Reservation "
               + "Tool'. All those software are open source, so don't hesitate ! If you have a SCI Cluster you can also try the Whoops! "
