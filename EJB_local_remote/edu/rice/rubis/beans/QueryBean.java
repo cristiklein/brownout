@@ -154,7 +154,7 @@ public class QueryBean implements SessionBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getItemMaxBid(Integer itemId
+  public float getItemMaxBid(Integer itemId)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
