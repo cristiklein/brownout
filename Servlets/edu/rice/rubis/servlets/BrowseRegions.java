@@ -20,6 +20,9 @@ public class BrowseRegions extends RubisHttpServlet
     return Config.BrowseRegionsPoolSize;
   }
 
+/**
+ * Close both statement and connection.
+ */
   private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
