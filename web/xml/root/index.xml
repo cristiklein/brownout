@@ -39,12 +39,7 @@
     <subtitle>20 may 2003: RUBiS 1.4 is released.</subtitle>
        <p>This version fixes some <a href="http://forge.objectweb.org/bugs/?group_id=44">bugs</a>.
         It has been tested with Tomcat 4.1.24, JBoss 3.2 and JOnAS 3.1.</p>
-
-     <subtitle>December 2002</subtitle>
-
-      <p>RUBiS Web site moves from <a
-      href="http://www.cs.rice.edu/">Rice University</a> to <a
-      href="http://www.objectweb.org/">ObjectWeb</a>.</p>
+     
     </s1>
 
     <s1 name="RUBiS: Rice University Bidding System">
