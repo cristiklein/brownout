@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 1.1//EN" "http://java.sun.com/j2ee/dtds/ejb-jar_1_1.dtd">
+
 <ejb-jar>
     <enterprise-beans>
 
@@ -27,15 +29,7 @@
             <ejb-class>edu.rice.rubis.beans.CategoryBean</ejb-class>
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.CategoryPK</prim-key-class>
-            <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+            <reentrant>False</reentrant>	    
             <cmp-field>
                 <description>Category name</description>
                 <field-name>name</field-name>
@@ -44,6 +38,14 @@
                 <description>Category id</description>
                 <field-name>id</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -60,15 +62,7 @@
             <ejb-class>edu.rice.rubis.beans.RegionBean</ejb-class>
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.RegionPK</prim-key-class>
-            <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+            <reentrant>False</reentrant>	    
             <cmp-field>
                 <description>Region name</description>
                 <field-name>name</field-name>
@@ -77,6 +71,14 @@
                 <description>Region id</description>
                 <field-name>id</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -93,15 +95,7 @@
             <ejb-class>edu.rice.rubis.beans.UserBean</ejb-class>
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.UserPK</prim-key-class>
-            <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+            <reentrant>False</reentrant>	    
             <cmp-field>
                 <description>User id</description>
                 <field-name>id</field-name>
@@ -142,13 +136,21 @@
                 <description>User region Id in regions table</description>
                 <field-name>regionId</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
                 <res-auth>Container</res-auth>
             </resource-ref>
         </entity>
-4
+
         <entity>
             <description>Item Bean deployment descriptor</description>
             <display-name>Item</display-name>
@@ -158,15 +160,7 @@
             <ejb-class>edu.rice.rubis.beans.ItemBean</ejb-class>
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.ItemPK</prim-key-class>
-            <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+            <reentrant>False</reentrant>	    
             <cmp-field>
                 <description>Item id</description>
                 <field-name>id</field-name>
@@ -219,6 +213,14 @@
                 <description>Item category Id in categories table</description>
                 <field-name>categoryId</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -248,7 +250,7 @@
                 <description>OldItem description</description>
                 <field-name>description</field-name>
             </cmp-field>
-4            <cmp-field>
+           <cmp-field>
                 <description>OldItem initial price</description>
                 <field-name>initialPrice</field-name>
             </cmp-field>
@@ -304,15 +306,7 @@
             <ejb-class>edu.rice.rubis.beans.BidBean</ejb-class>
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.BidPK</prim-key-class>
-            <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+            <reentrant>False</reentrant>	    
             <cmp-field>
                 <description>Bean id</description>
                 <field-name>id</field-name>
@@ -341,6 +335,14 @@
                 <description>Bid date</description>
                 <field-name>date</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -357,15 +359,7 @@
             <ejb-class>edu.rice.rubis.beans.CommentBean</ejb-class>
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.CommentPK</prim-key-class>
-            <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+            <reentrant>False</reentrant>	    
             <cmp-field>
                 <description>Comment id</description>
                 <field-name>id</field-name>
@@ -394,6 +388,14 @@
                 <description>Text of the comment</description>
                 <field-name>comment</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -410,15 +412,7 @@
             <ejb-class>edu.rice.rubis.beans.BuyNowBean</ejb-class>
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.BuyNowPK</prim-key-class>
-            <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+            <reentrant>False</reentrant>	    
             <cmp-field>
                 <description>Bean id</description>
                 <field-name>id</field-name>
@@ -439,6 +433,14 @@
                 <description>BuyNow date</description>
                 <field-name>date</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -456,7 +458,6 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.IDManagerPK</prim-key-class>
             <reentrant>False</reentrant>
-
             <cmp-field>
                 <description>IDManager id</description>
                 <field-name>id</field-name>

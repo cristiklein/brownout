@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+<!DOCTYPE jonas-ejb-jar PUBLIC "-//ObjectWeb//DTD JOnAS 2.5//EN" "http://www.objectweb.org/jonas/dtds/jonas-ejb-jar_2_5.dtd">
+
 <jonas-ejb-jar>
 
     <jonas-session>
@@ -12,15 +14,20 @@
 
     <jonas-entity>
         <ejb-name>Category</ejb-name>
-        <jndi-name>CategoryHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-            <jndi-name>IDManagerHome</jndi-name>
-        </jonas-ejb-ref>
+        <jndi-name>CategoryHome</jndi-name>	
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>20</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -54,25 +61,25 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>20</min-pool-size>
+        </jdbc-mapping>        
     </jonas-entity>
 
     <jonas-entity>
         <ejb-name>Region</ejb-name>
-        <jndi-name>RegionHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-            <jndi-name>IDManagerHome</jndi-name>
-        </jonas-ejb-ref>
+        <jndi-name>RegionHome</jndi-name>	
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>62</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -106,25 +113,25 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>62</min-pool-size>
+        </jdbc-mapping>        
     </jonas-entity>
 
     <jonas-entity>
         <ejb-name>User</ejb-name>
-        <jndi-name>UserHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-            <jndi-name>IDManagerHome</jndi-name>
-        </jonas-ejb-ref>
+        <jndi-name>UserHome</jndi-name>	
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>        
+        <min-pool-size>100</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -190,25 +197,25 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>100</min-pool-size>
+        </jdbc-mapping>        
     </jonas-entity>
 
     <jonas-entity>
         <ejb-name>Item</ejb-name>
-        <jndi-name>ItemHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-            <jndi-name>IDManagerHome</jndi-name>
-        </jonas-ejb-ref>
+        <jndi-name>ItemHome</jndi-name>	
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>100</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -314,12 +321,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>100</min-pool-size>
+        </jdbc-mapping>       
     </jonas-entity>
 
     <jonas-entity>
@@ -329,6 +331,11 @@
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>10</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -434,25 +441,25 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>10</min-pool-size>
+        </jdbc-mapping>       
     </jonas-entity>
 
     <jonas-entity>
         <ejb-name>Comment</ejb-name>
-        <jndi-name>CommentHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-            <jndi-name>IDManagerHome</jndi-name>
-        </jonas-ejb-ref>
+        <jndi-name>CommentHome</jndi-name>	
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>20</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -519,25 +526,25 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>20</min-pool-size>
+        </jdbc-mapping>        
     </jonas-entity>
 
     <jonas-entity>
         <ejb-name>Bid</ejb-name>
-        <jndi-name>BidHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-            <jndi-name>IDManagerHome</jndi-name>
-        </jonas-ejb-ref>
+        <jndi-name>BidHome</jndi-name>	
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>10</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -598,24 +605,24 @@
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
         </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>10</min-pool-size>
     </jonas-entity>
 
     <jonas-entity>
         <ejb-name>BuyNow</ejb-name>
-        <jndi-name>BuyNowHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-            <jndi-name>IDManagerHome</jndi-name>
-        </jonas-ejb-ref>
+        <jndi-name>BuyNowHome</jndi-name>	
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>5</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -674,12 +681,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>5</min-pool-size>
+        </jdbc-mapping>        
     </jonas-entity>
 
     <jonas-entity>
@@ -689,6 +691,12 @@
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>
+               
+        <min-pool-size>20</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -733,12 +741,7 @@
                 <jdbc-where-clause>where id=?</jdbc-where-clause>
             </finder-method-jdbc-mapping>
 
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>20</min-pool-size>
+        </jdbc-mapping>        
     </jonas-entity>
 
 </jonas-ejb-jar>

@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!DOCTYPE jonas-ejb-jar PUBLIC "-//ObjectWeb//DTD JOnAS 2.5//EN" "http://www.objectweb.org/jonas/dtds/jonas-ejb-jar_2_5.dtd">
 <jonas-ejb-jar>
 
     <jonas-session>

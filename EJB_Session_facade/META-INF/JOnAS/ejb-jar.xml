@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 1.1//EN" "http://java.sun.com/j2ee/dtds/ejb-jar_1_1.dtd">
 <ejb-jar>
     <enterprise-beans>
 
@@ -14,58 +15,58 @@
 	    <ejb-ref>
                 <description>This is the reference to the SB_Auth  bean</description>
                 <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>SB_Auth</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.SB_AuthHome</home>
 		<remote>edu.rice.rubis.beans.SB_Auth</remote>
+		<ejb-link>SB_Auth</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the user  bean</description>
                 <ejb-ref-name>ejb/User</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>User</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.UserHome</home>
 		<remote>edu.rice.rubis.beans.User</remote>
+		<ejb-link>User</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the comment bean</description>
                 <ejb-ref-name>ejb/Comment</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Comment</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.CommentHome</home>
 		<remote>edu.rice.rubis.beans.Comment</remote>
+		<ejb-link>Comment</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the bid bean</description>
                 <ejb-ref-name>ejb/Bid</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Bid</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.BidHome</home>
 		<remote>edu.rice.rubis.beans.Bid</remote>
+		<ejb-link>Bid</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the Query  bean</description>
                 <ejb-ref-name>ejb/Query</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>Query</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.QueryHome</home>
 		<remote>edu.rice.rubis.beans.Query</remote>
+		<ejb-link>Query</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the buyNow bean</description>
                 <ejb-ref-name>ejb/BuyNow</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>BuyNow</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.BuyNowHome</home>
 		<remote>edu.rice.rubis.beans.BuyNow</remote>
+		<ejb-link>BuyNow</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -86,26 +87,26 @@
 	    <ejb-ref>
                 <description>This is the reference to the bid bean</description>
                 <ejb-ref-name>ejb/Bid</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Bid</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.BidHome</home>
 		<remote>edu.rice.rubis.beans.Bid</remote>
+		<ejb-link>Bid</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the Query  bean</description>
                 <ejb-ref-name>ejb/Query</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>Query</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.QueryHome</home>
 		<remote>edu.rice.rubis.beans.Query</remote>
+		<ejb-link>Query</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -126,18 +127,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the SB_ViewItem  bean</description>
                 <ejb-ref-name>ejb/SB_ViewItem</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>SB_ViewItem</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.SB_ViewItemHome</home>
 		<remote>edu.rice.rubis.beans.SB_ViewItem</remote>
+		<ejb-link>SB_ViewItem</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the SB_Auth  bean</description>
                 <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>SB_Auth</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.SB_AuthHome</home>
 		<remote>edu.rice.rubis.beans.SB_Auth</remote>
+		<ejb-link>SB_Auth</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -158,18 +159,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the buyNow bean</description>
                 <ejb-ref-name>ejb/BuyNow</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>BuyNow</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.BuyNowHome</home>
 		<remote>edu.rice.rubis.beans.BuyNow</remote>
+		<ejb-link>BuyNow</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -190,18 +191,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the SB_Auth  bean</description>
                 <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>SB_Auth</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.SB_AuthHome</home>
 		<remote>edu.rice.rubis.beans.SB_Auth</remote>
+		<ejb-link>SB_Auth</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -222,18 +223,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the region bean</description>
                 <ejb-ref-name>ejb/Region</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Region</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.RegionHome</home>
 		<remote>edu.rice.rubis.beans.Region</remote>
+		<ejb-link>Region</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the user bean</description>
                 <ejb-ref-name>ejb/User</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>User</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.UserHome</home>
 		<remote>edu.rice.rubis.beans.User</remote>
+		<ejb-link>User</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -254,18 +255,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the user bean</description>
                 <ejb-ref-name>ejb/User</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>User</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.UserHome</home>
 		<remote>edu.rice.rubis.beans.User</remote>
+		<ejb-link>User</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the comment bean</description>
                 <ejb-ref-name>ejb/Comment</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Comment</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.CommentHome</home>
 		<remote>edu.rice.rubis.beans.Comment</remote>
+		<ejb-link>Comment</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -286,26 +287,26 @@
 	    <ejb-ref>
                 <description>This is the reference to the user bean</description>
                 <ejb-ref-name>ejb/User</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>User</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.UserHome</home>
 		<remote>edu.rice.rubis.beans.User</remote>
+		<ejb-link>User</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the SB_Auth  bean</description>
                 <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>SB_Auth</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.SB_AuthHome</home>
 		<remote>edu.rice.rubis.beans.SB_Auth</remote>
+		<ejb-link>SB_Auth</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -326,18 +327,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the user bean</description>
                 <ejb-ref-name>ejb/User</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>User</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.UserHome</home>
 		<remote>edu.rice.rubis.beans.User</remote>
+		<ejb-link>User</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the comment bean</description>
                 <ejb-ref-name>ejb/Comment</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Comment</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.CommentHome</home>
 		<remote>edu.rice.rubis.beans.Comment</remote>
+		<ejb-link>Comment</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -358,26 +359,26 @@
 	    <ejb-ref>
                 <description>This is the reference to the bid bean</description>
                 <ejb-ref-name>ejb/Bid</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Bid</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.BidHome</home>
 		<remote>edu.rice.rubis.beans.Bid</remote>
+		<ejb-link>Bid</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the Query  bean</description>
                 <ejb-ref-name>ejb/Query</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>Query</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.QueryHome</home>
 		<remote>edu.rice.rubis.beans.Query</remote>
+		<ejb-link>Query</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -398,18 +399,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the Query  bean</description>
                 <ejb-ref-name>ejb/Query</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>Query</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.QueryHome</home>
 		<remote>edu.rice.rubis.beans.Query</remote>
+		<ejb-link>Query</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -430,18 +431,18 @@
 	    <ejb-ref>
                 <description>This is the reference to the item bean</description>
                 <ejb-ref-name>ejb/Item</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Item</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.ItemHome</home>
 		<remote>edu.rice.rubis.beans.Item</remote>
+		<ejb-link>Item</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the Query  bean</description>
                 <ejb-ref-name>ejb/Query</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>Query</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.QueryHome</home>
 		<remote>edu.rice.rubis.beans.Query</remote>
+		<ejb-link>Query</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -462,10 +463,10 @@
 	    <ejb-ref>
                 <description>This is the reference to the region bean</description>
                 <ejb-ref-name>ejb/Region</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Region</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.RegionHome</home>
 		<remote>edu.rice.rubis.beans.Region</remote>
+		<ejb-link>Region</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -486,26 +487,26 @@
 	    <ejb-ref>
                 <description>This is the reference to the region bean</description>
                 <ejb-ref-name>ejb/Region</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Region</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.RegionHome</home>
 		<remote>edu.rice.rubis.beans.Region</remote>
+		<ejb-link>Region</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the category  bean</description>
                 <ejb-ref-name>ejb/Category</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>Category</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.CategoryHome</home>
 		<remote>edu.rice.rubis.beans.Category</remote>
+		<ejb-link>Category</ejb-link>
             </ejb-ref>
 	    <ejb-ref>
                 <description>This is the reference to the SB_Auth  bean</description>
                 <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
-		<ejb-ref-type>Session</ejb-ref-type>
-		<ejb-link>SB_Auth</ejb-link>
+		<ejb-ref-type>Session</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.SB_AuthHome</home>
 		<remote>edu.rice.rubis.beans.SB_Auth</remote>
+		<ejb-link>SB_Auth</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -526,10 +527,10 @@
 	    <ejb-ref>
                 <description>This is the reference to the user  bean</description>
                 <ejb-ref-name>ejb/User</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>User</ejb-link>
+		<ejb-ref-type>Entity</ejb-ref-type>		
 		<home>edu.rice.rubis.beans.UserHome</home>
 		<remote>edu.rice.rubis.beans.User</remote>
+		<ejb-link>User</ejb-link>
             </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
@@ -565,14 +566,6 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.CategoryPK</prim-key-class>
             <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
             <cmp-field>
                 <description>Category name</description>
                 <field-name>name</field-name>
@@ -581,6 +574,14 @@
                 <description>Category id</description>
                 <field-name>id</field-name>
             </cmp-field>
+            	    <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -598,14 +599,6 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.RegionPK</prim-key-class>
             <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
             <cmp-field>
                 <description>Region name</description>
                 <field-name>name</field-name>
@@ -614,6 +607,14 @@
                 <description>Region id</description>
                 <field-name>id</field-name>
             </cmp-field>
+            	    <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -631,14 +632,7 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.UserPK</prim-key-class>
             <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+	    
             <cmp-field>
                 <description>User id</description>
                 <field-name>id</field-name>
@@ -679,6 +673,14 @@
                 <description>User region Id in regions table</description>
                 <field-name>regionId</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -696,14 +698,7 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.ItemPK</prim-key-class>
             <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+	    
             <cmp-field>
                 <description>Item id</description>
                 <field-name>id</field-name>
@@ -756,6 +751,14 @@
                 <description>Item category Id in categories table</description>
                 <field-name>categoryId</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -842,14 +845,7 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.BidPK</prim-key-class>
             <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+	    
             <cmp-field>
                 <description>Bean id</description>
                 <field-name>id</field-name>
@@ -878,6 +874,14 @@
                 <description>Bid date</description>
                 <field-name>date</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -895,14 +899,7 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.CommentPK</prim-key-class>
             <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+	    
             <cmp-field>
                 <description>Comment id</description>
                 <field-name>id</field-name>
@@ -931,6 +928,14 @@
                 <description>Text of the comment</description>
                 <field-name>comment</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -948,14 +953,7 @@
             <persistence-type>Container</persistence-type>
             <prim-key-class>edu.rice.rubis.beans.BuyNowPK</prim-key-class>
             <reentrant>False</reentrant>
-	    <ejb-ref>
-                <description>This is the reference to the id manager</description>
-                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
-		<ejb-ref-type>Entity</ejb-ref-type>
-		<ejb-link>IDManager</ejb-link>
-		<home>edu.rice.rubis.beans.IDManagerHome</home>
-		<remote>edu.rice.rubis.beans.IDManager</remote>
-            </ejb-ref>
+	    
             <cmp-field>
                 <description>Bean id</description>
                 <field-name>id</field-name>
@@ -976,6 +974,14 @@
                 <description>BuyNow date</description>
                 <field-name>date</field-name>
             </cmp-field>
+            <ejb-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+		<ejb-ref-type>Entity</ejb-ref-type>		
+		<home>edu.rice.rubis.beans.IDManagerHome</home>
+		<remote>edu.rice.rubis.beans.IDManager</remote>
+		<ejb-link>IDManager</ejb-link>
+            </ejb-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>

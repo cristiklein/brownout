@@ -1,9 +1,14 @@
 <?xml version="1.0"?>
+<!DOCTYPE jonas-ejb-jar PUBLIC "-//ObjectWeb//DTD JOnAS 2.5//EN" "http://www.objectweb.org/jonas/dtds/jonas-ejb-jar_2_5.dtd">
 <jonas-ejb-jar>
 
    <jonas-session>
         <ejb-name>SB_AboutMe</ejb-name>
         <jndi-name>SB_AboutMeHome</jndi-name>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
 	<jonas-ejb-ref>
             <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
             <jndi-name>SB_AuthHome</jndi-name>
@@ -31,16 +36,16 @@
 	<jonas-ejb-ref>
             <ejb-ref-name>ejb/BuyNow</ejb-ref-name>
             <jndi-name>BuyNowHome</jndi-name>
-        </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
+        </jonas-ejb-ref>       
    </jonas-session>
 
    <jonas-session>
         <ejb-name>SB_ViewBidHistory</ejb-name>
         <jndi-name>SB_ViewBidHistoryHome</jndi-name>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
 	<jonas-ejb-ref>
             <ejb-ref-name>ejb/Bid</ejb-ref-name>
             <jndi-name>BidHome</jndi-name>
@@ -52,17 +57,17 @@
 	<jonas-ejb-ref>
             <ejb-ref-name>ejb/Query</ejb-ref-name>
             <jndi-name>QueryHome</jndi-name>
-        </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
+        </jonas-ejb-ref>        
     </jonas-session>
 
    <jonas-session>
         <ejb-name>SB_PutBid</ejb-name>
         <jndi-name>SB_PutBidHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        	<jonas-ejb-ref>
             <ejb-ref-name>ejb/SB_ViewItem</ejb-ref-name>
             <jndi-name>SB_ViewItemHome</jndi-name>
         </jonas-ejb-ref>
@@ -70,16 +75,16 @@
             <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
             <jndi-name>SB_AuthHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
    <jonas-session>
         <ejb-name>SB_StoreBuyNow</ejb-name>
         <jndi-name>SB_StoreBuyNowHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        	<jonas-ejb-ref>
             <ejb-ref-name>ejb/Item</ejb-ref-name>
             <jndi-name>ItemHome</jndi-name>
         </jonas-ejb-ref>
@@ -87,16 +92,16 @@
             <ejb-ref-name>ejb/BuyNow</ejb-ref-name>
             <jndi-name>BuyNowHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
    <jonas-session>
         <ejb-name>SB_BuyNow</ejb-name>
         <jndi-name>SB_BuyNowHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        	<jonas-ejb-ref>
             <ejb-ref-name>ejb/Item</ejb-ref-name>
             <jndi-name>ItemHome</jndi-name>
         </jonas-ejb-ref>
@@ -104,16 +109,16 @@
             <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
             <jndi-name>SB_AuthHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_RegisterUser</ejb-name>
         <jndi-name>SB_RegisterUserHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        	<jonas-ejb-ref>
             <ejb-ref-name>ejb/Region</ejb-ref-name>
             <jndi-name>RegionHome</jndi-name>
         </jonas-ejb-ref>
@@ -121,16 +126,16 @@
             <ejb-ref-name>ejb/User</ejb-ref-name>
             <jndi-name>UserHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_StoreComment</ejb-name>
-        <jndi-name>SB_StoreCommentHome</jndi-name>
-	<jonas-ejb-ref>
+        <jndi-name>SB_StoreCommentHome</jndi-name>	
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        <jonas-ejb-ref>
             <ejb-ref-name>ejb/User</ejb-ref-name>
             <jndi-name>UserHome</jndi-name>
         </jonas-ejb-ref>
@@ -138,15 +143,15 @@
             <ejb-ref-name>ejb/Comment</ejb-ref-name>
             <jndi-name>CommentHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_PutComment</ejb-name>
         <jndi-name>SB_PutCommentHome</jndi-name>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
 	<jonas-ejb-ref>
             <ejb-ref-name>ejb/User</ejb-ref-name>
             <jndi-name>UserHome</jndi-name>
@@ -159,16 +164,16 @@
             <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
             <jndi-name>SB_AuthHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_ViewUserInfo</ejb-name>
         <jndi-name>SB_ViewUserInfoHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        <jonas-ejb-ref>
             <ejb-ref-name>ejb/User</ejb-ref-name>
             <jndi-name>UserHome</jndi-name>
         </jonas-ejb-ref>
@@ -176,16 +181,16 @@
             <ejb-ref-name>ejb/Comment</ejb-ref-name>
             <jndi-name>CommentHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_ViewItem</ejb-name>
         <jndi-name>SB_ViewItemHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        <jonas-ejb-ref>
             <ejb-ref-name>ejb/Bid</ejb-ref-name>
             <jndi-name>BidHome</jndi-name>
         </jonas-ejb-ref>
@@ -197,16 +202,16 @@
             <ejb-ref-name>ejb/Query</ejb-ref-name>
             <jndi-name>QueryHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_SearchItemsByRegion</ejb-name>
-        <jndi-name>SB_SearchItemsByRegionHome</jndi-name>
-	<jonas-ejb-ref>
+        <jndi-name>SB_SearchItemsByRegionHome</jndi-name>	
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+        <jonas-ejb-ref>
             <ejb-ref-name>ejb/Item</ejb-ref-name>
             <jndi-name>ItemHome</jndi-name>
         </jonas-ejb-ref>
@@ -214,16 +219,16 @@
             <ejb-ref-name>ejb/Query</ejb-ref-name>
             <jndi-name>QueryHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_SearchItemsByCategory</ejb-name>
         <jndi-name>SB_SearchItemsByCategoryHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+       <jonas-ejb-ref>
             <ejb-ref-name>ejb/Item</ejb-ref-name>
             <jndi-name>ItemHome</jndi-name>
         </jonas-ejb-ref>
@@ -231,29 +236,29 @@
             <ejb-ref-name>ejb/Query</ejb-ref-name>
             <jndi-name>QueryHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_BrowseRegions</ejb-name>
         <jndi-name>SB_BrowseRegionsHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/Region</ejb-ref-name>
-            <jndi-name>RegionHome</jndi-name>
-        </jonas-ejb-ref>
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/Region</ejb-ref-name>
+            <jndi-name>RegionHome</jndi-name>
+        </jonas-ejb-ref>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_BrowseCategories</ejb-name>
         <jndi-name>SB_BrowseCategoriesHome</jndi-name>
-	<jonas-ejb-ref>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+       <jonas-ejb-ref>
             <ejb-ref-name>ejb/Region</ejb-ref-name>
             <jndi-name>RegionHome</jndi-name>
         </jonas-ejb-ref>
@@ -265,23 +270,19 @@
             <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
             <jndi-name>SB_AuthHome</jndi-name>
         </jonas-ejb-ref>
-        <jonas-resource>
-            <res-ref-name>jdbc/rubis</res-ref-name>
-            <jndi-name>mysql</jndi-name>
-        </jonas-resource>
     </jonas-session>
 
     <jonas-session>
         <ejb-name>SB_Auth</ejb-name>
         <jndi-name>SB_AuthHome</jndi-name>
-	<jonas-ejb-ref>
-            <ejb-ref-name>ejb/User</ejb-ref-name>
-            <jndi-name>UserHome</jndi-name>
-        </jonas-ejb-ref>
         <jonas-resource>
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        <jonas-ejb-ref>
+            <ejb-ref-name>ejb/User</ejb-ref-name>
+            <jndi-name>UserHome</jndi-name>
+        </jonas-ejb-ref>
     </jonas-session>
 
     <jonas-session>
@@ -304,6 +305,11 @@
             <ejb-ref-name>ejb/IDManager</ejb-ref-name>
             <jndi-name>IDManagerHome</jndi-name>
         </jonas-ejb-ref>
+        
+         <!-- JONAS 2.4 specific features -->	
+         <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>20</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -338,11 +344,6 @@
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
         </jdbc-mapping>
-
- 	<!-- JONAS 2.4 specific features -->	
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>20</min-pool-size>
     </jonas-entity>
 
     <jonas-entity>
@@ -356,6 +357,11 @@
             <ejb-ref-name>ejb/IDManager</ejb-ref-name>
             <jndi-name>IDManagerHome</jndi-name>
         </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>        
+        <min-pool-size>62</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -390,11 +396,7 @@
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
         </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>62</min-pool-size>
+       
     </jonas-entity>
 
 
@@ -409,6 +411,12 @@
             <ejb-ref-name>ejb/IDManager</ejb-ref-name>
             <jndi-name>IDManagerHome</jndi-name>
         </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>        
+        <min-pool-size>100</min-pool-size>
+        
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
             <jdbc-table-name>users</jdbc-table-name>
@@ -473,12 +481,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
- 	<!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>100</min-pool-size>
+        </jdbc-mapping>	
     </jonas-entity>
 
     <jonas-entity>
@@ -492,6 +495,11 @@
             <ejb-ref-name>ejb/IDManager</ejb-ref-name>
             <jndi-name>IDManagerHome</jndi-name>
         </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>100</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -597,12 +605,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
- 	<!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>100</min-pool-size>
+        </jdbc-mapping>	
     </jonas-entity>
 
     <jonas-entity>
@@ -612,6 +615,11 @@
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>      
+        <min-pool-size>10</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -717,12 +725,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-	<!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>10</min-pool-size>
+        </jdbc-mapping>	
     </jonas-entity>
 
     <jonas-entity>
@@ -736,6 +739,11 @@
             <ejb-ref-name>ejb/IDManager</ejb-ref-name>
             <jndi-name>IDManagerHome</jndi-name>
         </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>        
+        <min-pool-size>20</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -802,12 +810,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-	<!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>20</min-pool-size>
+        </jdbc-mapping>	
     </jonas-entity>
 
 
@@ -822,6 +825,11 @@
             <ejb-ref-name>ejb/IDManager</ejb-ref-name>
             <jndi-name>IDManagerHome</jndi-name>
         </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>10</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -881,12 +889,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-	<!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>10</min-pool-size>
+        </jdbc-mapping>	
     </jonas-entity>
 
     <jonas-entity>
@@ -900,6 +903,11 @@
             <ejb-ref-name>ejb/IDManager</ejb-ref-name>
             <jndi-name>IDManagerHome</jndi-name>
         </jonas-ejb-ref>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>        
+        <min-pool-size>5</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -958,12 +966,7 @@
                 </jonas-method>
                 <jdbc-where-clause></jdbc-where-clause>
             </finder-method-jdbc-mapping>
-        </jdbc-mapping>
-
-	<!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>5</min-pool-size>
+        </jdbc-mapping>	
     </jonas-entity>
 
     <jonas-entity>
@@ -973,6 +976,11 @@
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+        
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>       
+        <min-pool-size>20</min-pool-size>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -1017,12 +1025,7 @@
                 <jdbc-where-clause>where id=?</jdbc-where-clause>
             </finder-method-jdbc-mapping>
 
-        </jdbc-mapping>
-
-        <!-- JONAS 2.4 specific features -->
-        <shared>False</shared>
-        <is-modified-method-name>isModified</is-modified-method-name>
-        <min-pool-size>20</min-pool-size>
+        </jdbc-mapping>       
     </jonas-entity>
 
 </jonas-ejb-jar>
