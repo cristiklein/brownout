@@ -14,13 +14,31 @@
 
     <s1 name="Recent news">
     
+    <subtitle>December 3rd 2003: new contributions to RUBiS.</subtitle>
+       <p>Mark Brody and George Candea from <a href="http://www.stanford.edu/">
+       Stanford University</a> wrote a 
+       <a href="http://crash.stanford.edu/resources/rubis.html">guide to install 
+       RUBiS 1.4.1 on JBoss 3.2.2</a>.<br></br>
+       Daniel Pfeifer from <a href="http://www.ipd.uka.de/">University of Karlsruhe</a>
+       contributed his version of RUBiS which is fully controlled by ANT and includes
+       a client emulator for Windows.
+       The things he changed in RUBiS for his experiments are described in Section 5.1 of 
+       his <a href="http://www.ipd.uka.de/~pfeifer/publications/techreport_2003_11.pdf">
+       paper</a>. <a href="http://forge.objectweb.org/project/showfiles.php?group_id=44">
+       Download</a><br></br>
+       Remigius Kuzyna from <a href="http://www.uni-muenster.de/en/">University of
+       Muenster</a> added some changes to the client emulator: LogWriter, 
+       initialization methods, etc. 
+       <a href="http://forge.objectweb.org/project/showfiles.php?group_id=44">
+       Download</a><br></br>
+       </p>
+    
     <subtitle>28 august 2003: RUBiS 1.4.1 released.</subtitle>
        <p>This version fixes the Javadoc generation process.</p>
 
     <subtitle>20 may 2003: RUBiS 1.4 is released.</subtitle>
        <p>This version fixes some <a href="http://forge.objectweb.org/bugs/?group_id=44">bugs</a>.
         It has been tested with Tomcat 4.1.24, JBoss 3.2 and JOnAS 3.1.</p>
-
 
      <subtitle>December 2002</subtitle>
 
@@ -34,7 +52,7 @@
       <table border="0">
 	<tr>
 	  <td><img src="images/RUBiS_logo.jpg" alt="RUBiS logo" height="" width="" border="0" hspace="2"/></td>
-	  <td valign="middle"><strong>RUBiS is a <a href="http://jmob.objectweb.org/">JMOB</a> project<br/></strong><br/>Current release: 1.4</td>
+	  <td valign="middle"><strong>RUBiS is a <a href="http://jmob.objectweb.org/">JMOB</a> project<br/></strong><br/>Current release: 1.4.1</td>
 	</tr>
       </table>
       
