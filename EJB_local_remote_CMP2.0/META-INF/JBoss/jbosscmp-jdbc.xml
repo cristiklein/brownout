@@ -59,43 +59,6 @@
                  <field-name>id</field-name>
                <column-name>id</column-name>
             </cmp-field>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectCurrentItemsInCategory</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                       <method-param>int</method-param>
-                       <method-param>int</method-param>
-                    </method-params>
-               </query-method>
-              <declared-sql>
-                 <select>
-                   <ejb-name>Item</ejb-name>
-                 </select>
-                 <from>items</from>
-                <where><![CDATA[category={0} AND end_date>=NOW()]]></where>
-                <other><![CDATA[LIMIT {1},{2}]]></other>
-              </declared-sql>
-            </query>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectCurrentItemsInCategoryAndRegion</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                       <method-param>java.lang.Integer</method-param>
-                       <method-param>int</method-param>
-                       <method-param>int</method-param>
-                    </method-params>
-               </query-method>
-              <declared-sql>
-                 <select>
-                   <ejb-name>Item</ejb-name>
-                 </select>
-                 <from>, users</from>
-                <where><![CDATA[items.category={0} AND users.id = items.seller AND users.region={1} AND end_date>=NOW()]]></where>
-                <other><![CDATA[LIMIT {2},{3}]]></other>
-              </declared-sql>
-            </query>
        </entity>
 
         <entity>
@@ -154,36 +117,6 @@
                 <field-name>regionId</field-name>
                 <column-name>region</column-name>
             </cmp-field>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectUserWonItems</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <declared-sql>
-                 <select>
-                   <ejb-name>Item</ejb-name>
-                 </select>
-                 <from>, bids</from>
-                 <where><![CDATA[bids.user_id={0} AND bids.item_id=items.id AND bids.max_bid>=items.max_bid AND items.max_bid<=bids.bid AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 AND items.end_date>=NOW()]]></where>
-              </declared-sql>
-           </query>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectUserBids</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <declared-sql>
-                 <select>
-                   <ejb-name>Bid</ejb-name>
-                 </select>
-                 <from>, items</from>
-                 <where><![CDATA[bids.user_id={0} AND bids.item_id=items.id AND bids.max_bid>=items.max_bid AND items.max_bid<=bids.bid AND items.end_date>=NOW()]]></where>
-              </declared-sql>
-           </query>
         </entity>
 
         <entity>
@@ -241,78 +174,8 @@
                 <field-name>categoryId</field-name>
                 <column-name>category</column-name>
             </cmp-field>
-            <query>
-              <query-method>
-                 <method-name>findCurrentByCategory</method-name>
-                 <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                 </method-params>
-              </query-method>
-              <declared-sql>
-                <where><![CDATA[category={0} AND end_date>=NOW()]]></where>
-              </declared-sql>
-           </query>
-            <query>
-              <query-method>
-                 <method-name>findUserCurrentSellings</method-name>
-                 <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                 </method-params>
-              </query-method>
-              <declared-sql>
-                <where><![CDATA[seller={0} AND end_date>=NOW()]]></where>
-              </declared-sql>
-           </query>
-            <query>
-              <query-method>
-                 <method-name>findUserPastSellings</method-name>
-                 <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                 </method-params>
-              </query-method>
-              <declared-sql>
-                <where><![CDATA[seller={0} AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30]]></where>
-              </declared-sql>
-           </query>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectItemQtyMaxBid</method-name>
-                    <method-params>
-                       <method-param>int</method-param>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-              <declared-sql>
-                 <select>
-                   <ejb-name>Bid</ejb-name>
-                 </select>
-                 <from>bids</from>
-                <where><![CDATA[item_id={1}]]></where>
-                <order><![CDATA[bid DESC LIMIT {0}]]></order>
-              <!--  <other><![CDATA[LIMIT {0}]]></other> jboss bug-->
-              </declared-sql>
-            </query>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectItemBidHistory</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-              <declared-sql>
-                 <select>
-                   <ejb-name>Bid</ejb-name>
-                 </select>
-                 <from>bids</from>
-                <where><![CDATA[item_id={0}]]></where>
-                <order><![CDATA[date DESC]]></order>
-              </declared-sql>
-            </query>
         </entity>
-<!--
-<order><![CDATA[DATE ASC LIMIT {1},{2}]]></order>
-                <other><![CDATA[LIMIT {1},{2}]]></other>
--->
+
         <entity>
             <ejb-name>OldItem</ejb-name>
             <table-name>old_items</table-name>
@@ -459,111 +322,11 @@
                 <field-name>date</field-name>
                 <column-name>date</column-name>
             </cmp-field>
-            <query>
-                <query-method>
-                    <method-name>findUserBuyNow</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-              <declared-sql>
-                <where><![CDATA[buyer_id={0} AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30]]></where>
-              </declared-sql>
-           </query>
+            
         </entity>
 
      </enterprise-beans>
 
-     <relationships>
-        <ejb-relation>
-           <ejb-relation-name>Category-Item</ejb-relation-name>
-           <foreign-key-mapping/>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>one-category-has-many-items</ejb-relationship-role-name>
-                <key-fields>
-                  <key-field>
-                    <field-name>id</field-name> <!-- must match primary key field -->
-                    <column-name>fk_category_id</column-name> <!-- column added to the related entity table -->
-                  </key-field>
-               </key-fields>
-              </ejb-relationship-role>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>many-items-belong-to-one-category</ejb-relationship-role-name>
-                <key-fields/>
-             </ejb-relationship-role>
-        </ejb-relation>
 
-        <ejb-relation>
-           <ejb-relation-name>Region-User</ejb-relation-name>
-           <foreign-key-mapping/>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>one-region-has-many-users</ejb-relationship-role-name>
-                <key-fields>
-                  <key-field>
-                    <field-name>id</field-name>
-                    <column-name>fk_region_id</column-name>
-                  </key-field>
-               </key-fields>
-              </ejb-relationship-role>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>many-users-belong-to-one-region</ejb-relationship-role-name>
-                <key-fields/>
-             </ejb-relationship-role>
-        </ejb-relation>
-
-        <ejb-relation>
-           <ejb-relation-name>User-Item</ejb-relation-name>
-           <foreign-key-mapping/>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>one-user-sells-many-items</ejb-relationship-role-name>
-                <key-fields>
-                  <key-field>
-                    <field-name>id</field-name>
-                    <column-name>fk_user_id</column-name>
-                  </key-field>
-               </key-fields>
-              </ejb-relationship-role>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>many-items-belong-to-one-user</ejb-relationship-role-name>
-                <key-fields/>
-             </ejb-relationship-role>
-        </ejb-relation>
-
-        <ejb-relation>
-           <ejb-relation-name>User-Bid</ejb-relation-name>
-           <foreign-key-mapping/>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>one-user-puts-many-bids</ejb-relationship-role-name>
-                <key-fields>
-                  <key-field>
-                    <field-name>id</field-name>
-                    <column-name>fk_user_id</column-name>
-                  </key-field>
-               </key-fields>
-              </ejb-relationship-role>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>many-bids-belong-to-one-user</ejb-relationship-role-name>
-                <key-fields/>
-             </ejb-relationship-role>
-        </ejb-relation>
-
-        <ejb-relation>
-           <ejb-relation-name>Item-Bid</ejb-relation-name>
-           <foreign-key-mapping/>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>one-item-has-many-bids</ejb-relationship-role-name>
-                <key-fields>
-                  <key-field>
-                    <field-name>id</field-name>
-                    <column-name>fk_item_id</column-name>
-                  </key-field>
-               </key-fields>
-              </ejb-relationship-role>
-              <ejb-relationship-role>
-                <ejb-relationship-role-name>many-bids-belong-to-one-item</ejb-relationship-role-name>
-                <key-fields/>
-             </ejb-relationship-role>
-        </ejb-relation>
-     </relationships>
 
 </jbosscmp-jdbc>
