@@ -14,6 +14,12 @@
 
     <s1 name="History">
 
+    
+    <s2 name="RUBiS version 1.4.2 (March 2004)">
+        <p>This version includes a Session Facade with EJB 2.0 Entity Beans
+         implementation and updated build.xml files for JOnAS.</p>
+      </s2>
+    
     <s2 name="February 4th 2004: Online Demo Available">
 
     <p>An online demo of RUBiS is now <a
