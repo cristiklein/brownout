@@ -41,6 +41,7 @@ public class StoreComment extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -165,13 +166,14 @@ public class StoreComment extends RubisHttpServlet
 
       sp.printHTMLfooter();
       conn.commit();
+      closeConnection();
     } 
     catch (Exception e) 
     {
       sp.printHTML("Exception getting comment list: " + e +"<br>");
       try
       {
-        conn.rollback();
+        conn.rollback();      
       }
       catch (Exception se) 
       {
@@ -180,4 +182,12 @@ public class StoreComment extends RubisHttpServlet
       closeConnection();
     }
   }
+  
+  /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

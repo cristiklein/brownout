@@ -35,6 +35,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -180,7 +181,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
     }
 
     itemList(categoryId, categoryName, page.intValue(), nbOfItems.intValue());
-		
+		closeConnection();
     sp.printHTMLfooter();
   }
 
@@ -189,4 +190,12 @@ public class SearchItemsByCategory extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+   /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

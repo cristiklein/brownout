@@ -37,6 +37,7 @@ public class PutComment extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -142,7 +143,7 @@ public class PutComment extends RubisHttpServlet
       printError("This item does not exist (got exception: " +e+")<br>");
       return ;
     }
-
+    closeConnection();
     sp.printHTMLfooter();
   }
 
@@ -150,4 +151,12 @@ public class PutComment extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+  /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

@@ -29,6 +29,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -120,6 +121,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     catch (Exception e) 
     {
       sp.printHTML("Exception getting item list: " + e +"<br>");
+      closeConnection();
     }
   }
 
@@ -166,6 +168,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
 
     sp.printHTMLheader("RUBiS: Search items by region");
     itemList(categoryId, regionId, page.intValue(), nbOfItems.intValue());
+    closeConnection();
     sp.printHTMLfooter();
   }
 
@@ -174,4 +177,12 @@ public class SearchItemsByRegion extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+   /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

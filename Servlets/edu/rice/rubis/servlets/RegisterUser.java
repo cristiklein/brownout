@@ -25,6 +25,17 @@ public class RegisterUser extends RubisHttpServlet
     return Config.RegisterUserPoolSize;
   }
 
+ private void closeConnection()
+  {
+    try 
+    {
+      if (stmt != null) stmt.close(); // close statement
+      if (conn != null) releaseConnection(conn);
+    } 
+    catch (Exception ignore) 
+    {
+    }
+  }
 
   private void printError(String errorMsg)
   {
@@ -32,13 +43,8 @@ public class RegisterUser extends RubisHttpServlet
     sp.printHTML("<h2>Your registration has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    try 
-    {
-      if (stmt != null) stmt.close();	// close statement
-    } 
-    catch (Exception ignore) 
-    {
-    }
+    closeConnection();
+ 
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
@@ -189,6 +195,7 @@ public class RegisterUser extends RubisHttpServlet
     sp.printHTML("Creation date :"+creationDate+"<br>");
       
     sp.printHTMLfooter();
+    closeConnection();
   }
     
  
@@ -196,4 +203,12 @@ public class RegisterUser extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+  /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

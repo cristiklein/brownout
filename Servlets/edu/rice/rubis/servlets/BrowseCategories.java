@@ -22,8 +22,9 @@ public class BrowseCategories extends RubisHttpServlet
   private void closeConnection()
   {
     try 
-    {
+    {      
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -163,7 +164,7 @@ public class BrowseCategories extends RubisHttpServlet
     }
 
     categoryList(regionId, userId);    	
-
+    closeConnection();
     sp.printHTMLfooter();
 
   }
@@ -172,5 +173,13 @@ public class BrowseCategories extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+  /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 
 }

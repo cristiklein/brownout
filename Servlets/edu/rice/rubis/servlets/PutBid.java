@@ -37,6 +37,8 @@ public class PutBid extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
+      
     } 
     catch (Exception ignore) 
     {
@@ -167,6 +169,7 @@ public class PutBid extends RubisHttpServlet
     {
       printError("Exception getting item list: " + e +"<br>");
     }
+    closeConnection();
     sp.printHTMLfooter();
   }
 
@@ -175,4 +178,12 @@ public class PutBid extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+   /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

@@ -36,6 +36,7 @@ public class BuyNow extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -135,6 +136,7 @@ public class BuyNow extends RubisHttpServlet
       return;
     }
     sp.printHTMLfooter();
+    closeConnection();
 
     // 	try
     // 	{
@@ -166,4 +168,12 @@ public class BuyNow extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+  /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

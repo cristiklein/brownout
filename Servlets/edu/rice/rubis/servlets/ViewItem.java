@@ -33,6 +33,7 @@ public class ViewItem extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -143,6 +144,7 @@ public class ViewItem extends RubisHttpServlet
     {
       printError("Exception getting item list: " + e +"<br>");
     }
+    closeConnection();
     sp.printHTMLfooter();
   }
 
@@ -151,4 +153,12 @@ public class ViewItem extends RubisHttpServlet
   {
     doGet(request, response);
   }
+  
+   /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 }

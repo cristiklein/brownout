@@ -27,8 +27,9 @@ public class AboutMe extends RubisHttpServlet
   private void closeConnection()
   {
     try 
-    {
+    {     
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -709,6 +710,15 @@ public class AboutMe extends RubisHttpServlet
     listComment(userId);
 
     sp.printHTMLfooter();
+    closeConnection();
   }
+  
+  /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 
 }

@@ -31,6 +31,7 @@ public class ViewBidHistory extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -133,6 +134,8 @@ public class ViewBidHistory extends RubisHttpServlet
     }
     else
       itemId = new Integer(value);
+    if(itemId.intValue() == -1)
+      sp.printHTML("ItemId is -1: this item does not exist.<br>");
 
     sp.printHTMLheader("RUBiS: Bid history");
 
@@ -185,7 +188,16 @@ public class ViewBidHistory extends RubisHttpServlet
     }
 
     listBids(itemId);
+    closeConnection();
     sp.printHTMLfooter();
   }
+  
+   /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 
 }

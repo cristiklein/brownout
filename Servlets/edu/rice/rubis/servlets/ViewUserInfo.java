@@ -27,41 +27,43 @@ public class ViewUserInfo extends RubisHttpServlet
 
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-//      if (conn != null) conn.close();	// release connection
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
 
-
-  private void commentList(Integer userId) 
+  private void commentList(Integer userId)
   {
     ResultSet rs = null;
     String date, comment;
     int authorId;
-      
-    try 
+
+    try
     {
-      conn.setAutoCommit(false);	// faster if made inside a Tx
+      conn.setAutoCommit(false); // faster if made inside a Tx
 
       // Try to find the comment corresponding to the user
       try
       {
-        stmt = conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
+        stmt =
+          conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
         stmt.setInt(1, userId.intValue());
         rs = stmt.executeQuery();
       }
       catch (Exception e)
       {
-        sp.printHTML("Failed to execute Query for list of comments: " +e);
+        sp.printHTML("Failed to execute Query for list of comments: " + e);
         closeConnection();
         return;
       }
-      if (!rs.first()) 
+      if (!rs.first())
       {
         sp.printHTML("<h3>There is no comment yet for this user.</h3><br>");
         return;
@@ -71,58 +73,60 @@ public class ViewUserInfo extends RubisHttpServlet
 
       sp.printCommentHeader();
       // Display each comment and the name of its author
-      do 
+      do
       {
         comment = rs.getString("comment");
         date = rs.getString("date");
         authorId = rs.getInt("from_user_id");
 
         String authorName = "none";
-	ResultSet authorRS = null;
-	try
-	{
+        ResultSet authorRS = null;
+        try
+        {
           stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           stmt.setInt(1, authorId);
           authorRS = stmt.executeQuery();
           if (authorRS.first())
             authorName = authorRS.getString("nickname");
-	}
-	catch (Exception e)
-	{
-          sp.printHTML("Failed to execute Query for the comment author: " +e);
+        }
+        catch (Exception e)
+        {
+          sp.printHTML("Failed to execute Query for the comment author: " + e);
           closeConnection();
           return;
-	}
+        }
         sp.printComment(authorName, authorId, date, comment);
       }
       while (rs.next());
       sp.printCommentFooter();
       conn.commit();
-    } 
-    catch (Exception e) 
+      
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e +"<br>");
+      sp.printHTML("Exception getting comment list: " + e + "<br>");
       try
       {
         conn.rollback();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        sp.printHTML("Transaction rollback failed: " + e +"<br>");
+        sp.printHTML("Transaction rollback failed: " + e + "<br>");
       }
       closeConnection();
     }
   }
 
-
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  value = request.getParameter("userId");
+    String value = request.getParameter("userId");
     Integer userId;
     ResultSet rs = null;
 
@@ -134,7 +138,7 @@ public class ViewUserInfo extends RubisHttpServlet
       sp.printHTML("<h3>You must provide a user identifier !<br></h3>");
       closeConnection();
       sp.printHTMLfooter();
-      return ;
+      return;
     }
     else
       userId = new Integer(value);
@@ -151,16 +155,16 @@ public class ViewUserInfo extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for user: " +e);
+      sp.printHTML("Failed to execute Query for user: " + e);
       closeConnection();
       sp.printHTMLfooter();
       return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
-        sp.printHTML("<h2>This user does not exist!</h2>");		    
+        sp.printHTML("<h2>This user does not exist!</h2>");
         closeConnection();
         sp.printHTMLfooter();
         return;
@@ -174,23 +178,33 @@ public class ViewUserInfo extends RubisHttpServlet
 
       String result = new String();
 
-      result = result+"<h2>Information about "+nickname+"<br></h2>";
-      result = result+"Real life name : "+firstname+" "+lastname+"<br>";
-      result = result+"Email address  : "+email+"<br>";
-      result = result+"User since     : "+date+"<br>";
-      result = result+"Current rating : <b>"+rating+"</b><br>";
+      result = result + "<h2>Information about " + nickname + "<br></h2>";
+      result =
+        result + "Real life name : " + firstname + " " + lastname + "<br>";
+      result = result + "Email address  : " + email + "<br>";
+      result = result + "User since     : " + date + "<br>";
+      result = result + "Current rating : <b>" + rating + "</b><br>";
       sp.printHTML(result);
 
     }
     catch (SQLException s)
     {
-      sp.printHTML("Failed to get general information about the user: " +s);
+      sp.printHTML("Failed to get general information about the user: " + s);
       closeConnection();
       sp.printHTMLfooter();
       return;
     }
     commentList(userId);
     sp.printHTMLfooter();
+    closeConnection();
   }
+
+   /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 
 }

@@ -41,6 +41,7 @@ public class StoreBid extends RubisHttpServlet
     try 
     {
       if (stmt != null) stmt.close();	// close statement
+      if (conn != null) releaseConnection(conn);
     } 
     catch (Exception ignore) 
     {
@@ -260,8 +261,16 @@ public class StoreBid extends RubisHttpServlet
       }
       return ;
     }
-		
+		closeConnection();
     sp.printHTMLfooter();
   }
+  
+   /**
+   * Clean up the connection pool.
+   */
+    public void destroy()
+    {
+      super.destroy();
+    }
 
 }
