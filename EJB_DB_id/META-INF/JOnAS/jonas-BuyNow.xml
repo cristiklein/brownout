@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<jonas-ejb-jar>
+    <jonas-entity>
+        <ejb-name>BuyNow</ejb-name>
+        <jndi-name>BuyNowHome</jndi-name>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+
+        <jdbc-mapping>
+            <jndi-name>mysql</jndi-name>
+            <jdbc-table-name>buy_now</jdbc-table-name>
+            <cmp-field-jdbc-mapping>
+                <field-name>id</field-name>
+                <jdbc-field-name>id</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>buyerId</field-name>
+                <jdbc-field-name>buyer_id</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>itemId</field-name>
+                <jdbc-field-name>item_id</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>qty</field-name>
+                <jdbc-field-name>qty</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>date</field-name>
+                <jdbc-field-name>date</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findByPrimaryKey</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where id=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findByItem</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where item_id=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findByUser</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where buyer_id=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+          <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findUserBuyNow</method-name>
+                </jonas-method>
+                <jdbc-where-clause>WHERE buy_now.buyer_id=? AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)&lt;=30</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findAllBuyNows</method-name>
+                </jonas-method>
+                <jdbc-where-clause></jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+        </jdbc-mapping>
+
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>
+        <min-pool-size>5</min-pool-size>
+    </jonas-entity>
+</jonas-ejb-jar>

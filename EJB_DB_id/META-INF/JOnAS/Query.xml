@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<ejb-jar>
+    <description>Deployment descriptor for Rubis Query Bean</description>
+    <display-name>RUBiS Query Bean</display-name>
+    <enterprise-beans>
+        <session>
+            <description>Query Bean used to query the RUBiS database</description>
+            <ejb-name>Query</ejb-name>
+            <home>edu.rice.rubis.beans.QueryHome</home>
+            <remote>edu.rice.rubis.beans.Query</remote>
+            <ejb-class>edu.rice.rubis.beans.QueryBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            <resource-ref>
+                <res-ref-name>jdbc/rubis</res-ref-name>
+                <res-type>javax.sql.DataSource</res-type>
+                <res-auth>Container</res-auth>
+            </resource-ref>
+         </session>
+    </enterprise-beans>
+
+
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+	        <ejb-name>Query</ejb-name>
+	        <method-name>*</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+    </assembly-descriptor>
+</ejb-jar>

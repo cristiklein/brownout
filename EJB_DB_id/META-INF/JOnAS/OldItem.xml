@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<ejb-jar>
+    <description>Deployment descriptor for Rubis Old Item Bean</description>
+    <display-name>RUBiS Old Item Bean</display-name>
+    <enterprise-beans>
+        <entity>
+            <description>Old Item Bean deployment descriptor</description>
+            <display-name>Old Item</display-name>
+            <ejb-name>OldItem</ejb-name>
+            <home>edu.rice.rubis.beans.OldItemHome</home>
+            <remote>edu.rice.rubis.beans.OldItem</remote>
+            <ejb-class>edu.rice.rubis.beans.OldItemBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <prim-key-class>edu.rice.rubis.beans.OldItemPK</prim-key-class>
+            <reentrant>False</reentrant>
+            <cmp-field>
+                <description>OldItem id</description>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem name</description>
+                <field-name>name</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem description</description>
+                <field-name>description</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem initial price</description>
+                <field-name>initialPrice</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem quantity</description>
+                <field-name>quantity</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem reserve price</description>
+                <field-name>reservePrice</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem buy now price</description>
+                <field-name>buyNow</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem number of bids</description>
+                <field-name>nbOfBids</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem maximum bid</description>
+                <field-name>maxBid</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem selling start date</description>
+                <field-name>startDate</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem selling end date</description>
+                <field-name>endDate</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem seller Id in users table</description>
+                <field-name>sellerId</field-name>
+            </cmp-field>
+            <cmp-field>
+                <description>OldItem category Id in categories table</description>
+                <field-name>categoryId</field-name>
+            </cmp-field>
+            <resource-ref>
+                <res-ref-name>jdbc/rubis</res-ref-name>
+                <res-type>javax.sql.DataSource</res-type>
+                <res-auth>Container</res-auth>
+            </resource-ref>
+        </entity>
+    </enterprise-beans>
+
+
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+                <ejb-name>OldItem</ejb-name>
+		<method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+    </assembly-descriptor>
+</ejb-jar>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<jonas-ejb-jar>
+    <jonas-session>
+        <ejb-name>Query</ejb-name>
+        <jndi-name>QueryHome</jndi-name>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+    </jonas-session>
+</jonas-ejb-jar>

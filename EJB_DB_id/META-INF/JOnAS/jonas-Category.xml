@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<jonas-ejb-jar>
+    <jonas-entity>
+        <ejb-name>Category</ejb-name>
+        <jndi-name>CategoryHome</jndi-name>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+
+        <jdbc-mapping>
+            <jndi-name>mysql</jndi-name>
+            <jdbc-table-name>categories</jdbc-table-name>
+            <cmp-field-jdbc-mapping>
+                <field-name>id</field-name>
+                <jdbc-field-name>id</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>name</field-name>
+                <jdbc-field-name>name</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findByPrimaryKey</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where id=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findByName</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where name=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findAllCategories</method-name>
+                </jonas-method>
+                <jdbc-where-clause></jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+        </jdbc-mapping>
+
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>
+        <min-pool-size>20</min-pool-size>
+    </jonas-entity>
+</jonas-ejb-jar>

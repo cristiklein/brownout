@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<jonas-ejb-jar>
+    <jonas-entity>
+        <ejb-name>OldItem</ejb-name>
+        <jndi-name>OldItemHome</jndi-name>
+        <jonas-resource>
+            <res-ref-name>jdbc/rubis</res-ref-name>
+            <jndi-name>mysql</jndi-name>
+        </jonas-resource>
+
+        <jdbc-mapping>
+            <jndi-name>mysql</jndi-name>
+            <jdbc-table-name>old_items</jdbc-table-name>
+            <cmp-field-jdbc-mapping>
+                <field-name>id</field-name>
+                <jdbc-field-name>id</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>name</field-name>
+                <jdbc-field-name>name</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>description</field-name>
+                <jdbc-field-name>description</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>initialPrice</field-name>
+                <jdbc-field-name>initial_price</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>quantity</field-name>
+                <jdbc-field-name>quantity</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>reservePrice</field-name>
+                <jdbc-field-name>reserve_price</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>buyNow</field-name>
+                <jdbc-field-name>buy_now</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>nbOfBids</field-name>
+                <jdbc-field-name>nb_of_bids</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>maxBid</field-name>
+                <jdbc-field-name>max_bid</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>startDate</field-name>
+                <jdbc-field-name>start_date</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>endDate</field-name>
+                <jdbc-field-name>end_date</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>sellerId</field-name>
+                <jdbc-field-name>seller</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+            <cmp-field-jdbc-mapping>
+                <field-name>categoryId</field-name>
+                <jdbc-field-name>category</jdbc-field-name>
+            </cmp-field-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findByPrimaryKey</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where id=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findBySeller</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where seller=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findByCategory</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where category=?</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findCurrentByCategory</method-name>
+                </jonas-method>
+                <jdbc-where-clause>where category=? AND end_date>=NOW()</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findUserCurrentSellings</method-name>
+                </jonas-method>
+                <jdbc-where-clause>WHERE old_items.seller=? AND old_items.end_date>=NOW()</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+           <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findUserPastSellings</method-name>
+                </jonas-method>
+                <jdbc-where-clause>WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) &lt; 30</jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+
+            <finder-method-jdbc-mapping>
+                <jonas-method>
+                    <method-name>findAllOldItems</method-name>
+                </jonas-method>
+                <jdbc-where-clause></jdbc-where-clause>
+            </finder-method-jdbc-mapping>
+        </jdbc-mapping>
+
+        <!-- JONAS 2.4 specific features -->
+        <is-modified-method-name>isModified</is-modified-method-name>
+        <shared>False</shared>
+        <min-pool-size>10</min-pool-size>
+    </jonas-entity>
+</jonas-ejb-jar>
