@@ -23,7 +23,6 @@
     <menu>
       <legend>Developers' corner</legend>
       <menuitem><connect href="dev/contrib.xml">Getting involved</connect></menuitem>
-      <menuitem><connect href="dev/topics.xml">Topics</connect></menuitem>
       <menuitem><connect href="dev/versions.xml">Versions info</connect></menuitem>
     </menu>
     

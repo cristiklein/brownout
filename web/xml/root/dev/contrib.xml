@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+
+<!DOCTYPE document SYSTEM '../../../common/dtd/objectweb.dtd'>
+
+<document>
+  <properties>
+    <author email="emmanuel.cecchet@inrialpes.fr">Julie Marguerite and Emmanuel Cecchet</author>
+    <title>How to get involved?</title>
+    <filename>contrib.xml</filename>
+    <pathtoroot>..</pathtoroot>
+  </properties>
+
+  <body>
+
+    <s1 name="Welcome to the developers' corner!">
+  
+    <p>RUBiS, as an open source project, welcomes and even expects
+       contributions.</p>
+
+    <p>Basically, any feature you need but you do not find implemented in
+       RUBiS may become a contribution topic. Simply send your ideas,
+       documents and developments (if any) to the 
+       <a href="mailto:emmanuel.cecchet@inrialpes.fr">RUBiS team</a> .</p>
+
+    </s1>
+
+  </body>
+
+</document>
