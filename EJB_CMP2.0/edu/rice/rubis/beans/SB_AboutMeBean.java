@@ -124,8 +124,8 @@ public class SB_AboutMeBean implements SessionBean
     }
     try 
     {
-      html.append(listItem(userId, iHome));
-      html.append(listBoughtItems(userId, iHome));
+      html.append(listItem(userId, iHome, qHome));
+      html.append(listBoughtItems(userId, iHome, qHome));
       html.append(listWonItems(userId, iHome, qHome));
       html.append(listBids(userId, username, password, iHome, qHome));
       html.append(listComments(cHome, userId, uHome));
@@ -142,23 +142,26 @@ public class SB_AboutMeBean implements SessionBean
    * List items the user is currently selling and 
    * the items he sold in the past 30 days. 
    */
-  public String listItem(Integer userId, ItemLocalHome iHome) throws RemoteException
+  public String listItem(Integer userId, ItemLocalHome iHome, QueryLocalHome qHome) throws RemoteException
   {
     ItemLocal         item;
     StringBuffer sell = new StringBuffer();
-    Collection   currentItemList, pastItemList;
-
+    Enumeration   currentItemList, pastItemList;
+    QueryLocal        q;
+    
     try 
     {
-      currentItemList = iHome.findUserCurrentSellings(userId);
-      pastItemList = iHome.findUserPastSellings(userId);
+      q = qHome.create();
+      currentItemList = q.getUserCurrentSellings(userId).elements();
+      pastItemList = q.getUserPastSellings(userId).elements();
     }
     catch (Exception e)
     {
-      throw new RemoteException("Exception getting item list: " +e+"<br>");
+      throw new RemoteException("Exception getting current and past sellings: " +e+"<br>");
     }
 
-    if ((currentItemList == null) || (currentItemList.isEmpty()))
+
+    if ((currentItemList == null) || (!currentItemList.hasMoreElements()))
     {
       sell.append("<br>");
       sell.append(printHTMLHighlighted("<h3>You are currently selling no item.</h3>"));
@@ -170,11 +173,10 @@ public class SB_AboutMeBean implements SessionBean
       {
         sell.append(printSellHeader("Items you are currently selling."));
       
-        Iterator it = currentItemList.iterator();
-        while (it.hasNext()) 
+        while (currentItemList.hasMoreElements()) 
         {
           // Get the name of the items
-          item = (ItemLocal)it.next();
+          item = iHome.findByPrimaryKey((ItemPK)currentItemList.nextElement());         
           // display information about the item
           sell.append(item.printSell());
         }
@@ -182,11 +184,11 @@ public class SB_AboutMeBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new RemoteException("Exception getting item: " + e +"<br>");
+        throw new RemoteException("Exception getting item for current sells: " + e +"<br>");
       }
     }
     
-    if ((pastItemList == null) || (pastItemList.isEmpty()))
+    if ((pastItemList == null) || (!pastItemList.hasMoreElements()))
     {
       sell.append("<br><h3>You didn't sell any item.</h3>");
       return sell.toString();
@@ -196,11 +198,10 @@ public class SB_AboutMeBean implements SessionBean
     sell.append(printSellHeader("Items you sold in the last 30 days."));
     try
     {
-      Iterator it = pastItemList.iterator();
-      while (it.hasNext()) 
+      while (pastItemList.hasMoreElements()) 
       {
         // Get the name of the items
-        item = (ItemLocal)it.next();
+        item = iHome.findByPrimaryKey((ItemPK)pastItemList.nextElement());
         // display information about the item
         sell.append(item.printSell());
       }
@@ -208,23 +209,37 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e) 
     {
-      throw new RemoteException("Exception getting item: " + e +"<br>");
+      throw new RemoteException("Exception getting item for past sells: " + e +"<br>");
     }
     
     return sell.toString();
   }
 
   /** List items the user bought in the last 30 days*/
-  public String listBoughtItems(Integer userId, ItemLocalHome iHome) throws RemoteException 
+  public String listBoughtItems(Integer userId, ItemLocalHome iHome, QueryLocalHome qHome) throws RemoteException 
   {
     BuyNowLocalHome   buyHome;
     BuyNowLocal       buy;
+    QueryLocal        q;
     ItemLocal         item;
-    Collection   buyList=null;
-    int          quantity;
+    Enumeration       buyList=null;
+    int               quantity;
     StringBuffer html = new StringBuffer();
 
     // Get the list of items the user bought
+    try 
+    {
+      q = qHome.create();
+      buyList = q.getUserBuyNow(userId).elements();
+    }
+    catch (Exception e)
+    {
+      throw new RemoteException("Exception getting buy now items list: " +e+"<br>");
+    }
+    if ((buyList == null) || (!buyList.hasMoreElements()))
+    {
+      return "<br><h3>You did not buy any item in the last 30 days.</h3><br>";
+    }
     try 
     {
       buyHome = (BuyNowLocalHome)initialContext.lookup("java:comp/env/ejb/BuyNow");
@@ -233,47 +248,33 @@ public class SB_AboutMeBean implements SessionBean
     {
       throw new RemoteException("Cannot lookup BuyNow: " +e+"<br>");
     }
-    try 
-    {
-      buyList = buyHome.findUserBuyNow(userId);
-    }
-    catch (Exception e)
-    {
-      throw new RemoteException("Exception getting item list (buy now): " +e+"<br>");
-    }
-    if ((buyList == null) || (buyList.isEmpty()))
-    {
-      return "<br><h3>You didn't buy any item in the last 30 days.</h3><br>";
-    }
     html.append(printUserBoughtItemHeader());
-    
-    Iterator it = buyList.iterator();
-    while (it.hasNext()) 
+    while (buyList.hasMoreElements()) 
     {
-      // Get the name of the items
-      try
-      {
-        buy = (BuyNowLocal)it.next();
-        quantity = buy.getQuantity();
+       // Get the buyNow elements
+       try
+       {
+            buy = buyHome.findByPrimaryKey((BuyNowPK)buyList.nextElement());
+            quantity = buy.getQuantity();
+            // display information about the item
+            try
+            {
+              item = iHome.findByPrimaryKey(new ItemPK(buy.getItemId()));
+              // display information about the item
+              html.append(item.printUserBoughtItem(quantity));
+            }
+            catch (Exception e) 
+            {
+              throw new RemoteException("Exception getting item associated to buyNow: " + e +"<br>");
+            }           
       }
       catch (Exception e) 
       {
-        throw new RemoteException("Exception getting buyNow quantity: " + e +"<br>");
-      }
-      try
-      {
-        item = iHome.findByPrimaryKey(new ItemPK(buy.getItemId()));
-        // display information about the item
-        html.append(item.printUserBoughtItem(quantity));
-      }
-      catch (Exception e) 
-      {
-        throw new RemoteException("Exception getting item: " + e +"<br>");
+        throw new RemoteException("Exception getting buyNow elements: " + e +"<br>");
       }
     }
     html.append(printItemFooter());
-    return html.toString();
-
+    return html.toString();   
   }
 
   /** List items the user won in the last 30 days*/
