@@ -1,12 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets displays the list of bids regarding an item.
  * It must be called this way :
@@ -28,19 +30,20 @@ public class ViewBidHistory extends RubisHttpServlet
 
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
 
- 
   /** List the bids corresponding to an item */
-  private void listBids(Integer itemId) 
+  private void listBids(Integer itemId)
   {
     float bid;
     int userId;
@@ -48,29 +51,32 @@ public class ViewBidHistory extends RubisHttpServlet
     ResultSet rs = null;
 
     // Get the list of the user's last bids
-    try 
+    try
     {
-      stmt = conn.prepareStatement("SELECT * FROM bids WHERE item_id=? ORDER BY date DESC");
+      stmt =
+        conn.prepareStatement(
+          "SELECT * FROM bids WHERE item_id=? ORDER BY date DESC");
       stmt.setInt(1, itemId.intValue());
       rs = stmt.executeQuery();
       if (!rs.first())
       {
-        sp.printHTML("<h3>There is no bid corresponding to this item.</h3><br>");
+        sp.printHTML(
+          "<h3>There is no bid corresponding to this item.</h3><br>");
         closeConnection();
-        return ;
+        return;
       }
     }
     catch (SQLException e)
     {
-      sp.printHTML("Exception getting bids list: " +e+"<br>");
+      sp.printHTML("Exception getting bids list: " + e + "<br>");
       closeConnection();
       return;
     }
 
     sp.printBidHistoryHeader();
     try
-    {	  
-      do 
+    {
+      do
       {
         // Get the bids
         date = rs.getString("date");
@@ -78,7 +84,7 @@ public class ViewBidHistory extends RubisHttpServlet
         userId = rs.getInt("user_id");
 
         ResultSet urs = null;
-        try 
+        try
         {
           stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           stmt.setInt(1, userId);
@@ -93,32 +99,33 @@ public class ViewBidHistory extends RubisHttpServlet
         }
         catch (SQLException e)
         {
-          sp.printHTML("Couldn't get bidder name: " +e+"<br>");
+          sp.printHTML("Couldn't get bidder name: " + e + "<br>");
           closeConnection();
           return;
         }
         sp.printBidHistory(userId, bidderName, bid, date);
       }
-      while(rs.next());
+      while (rs.next());
     }
     catch (SQLException e)
     {
-      sp.printHTML("Exception getting bid: " +e+"<br>");
+      sp.printHTML("Exception getting bid: " + e + "<br>");
       closeConnection();
       return;
     }
     sp.printBidHistoryFooter();
   }
 
-
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  value = request.getParameter("itemId");
+    String value = request.getParameter("itemId");
     Integer itemId;
     String itemName;
     ResultSet rs = null;
@@ -130,11 +137,11 @@ public class ViewBidHistory extends RubisHttpServlet
       sp.printHTMLheader("RUBiS ERROR: View bids history");
       sp.printHTML("<h3>You must provide an item identifier !<br></h3>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
     else
       itemId = new Integer(value);
-    if(itemId.intValue() == -1)
+    if (itemId.intValue() == -1)
       sp.printHTML("ItemId is -1: this item does not exist.<br>");
 
     sp.printHTMLheader("RUBiS: Bid history");
@@ -149,11 +156,11 @@ public class ViewBidHistory extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for item in table items: " +e);
+      sp.printHTML("Failed to execute Query for item in table items: " + e);
       closeConnection();
       return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
@@ -164,40 +171,41 @@ public class ViewBidHistory extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for item in table old_items: " +e);
+      sp.printHTML("Failed to execute Query for item in table old_items: " + e);
       closeConnection();
-      return ;
+      return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
-        sp.printHTML("<h2>This item does not exist!</h2>");		    
+        sp.printHTML("<h2>This item does not exist!</h2>");
         closeConnection();
         return;
       }
       itemName = rs.getString("name");
-      sp.printHTML("<center><h3>Bid History for "+itemName+"<br></h3></center>");
+      sp.printHTML(
+        "<center><h3>Bid History for " + itemName + "<br></h3></center>");
     }
     catch (Exception e)
     {
-      sp.printHTML("This item does not exist (got exception: " +e+")<br>");
+      sp.printHTML("This item does not exist (got exception: " + e + ")<br>");
       sp.printHTMLfooter();
       closeConnection();
-      return ;
+      return;
     }
 
     listBids(itemId);
     closeConnection();
     sp.printHTMLfooter();
   }
-  
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 
 }

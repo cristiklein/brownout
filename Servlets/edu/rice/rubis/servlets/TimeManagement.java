@@ -1,7 +1,6 @@
 package edu.rice.rubis.servlets;
 
 import java.util.GregorianCalendar;
-import java.lang.String;
 
 /** This class provides additionnal functions that the GregorianCalendar
  * class does not provide. It is mainly to compute time differences and
@@ -27,7 +26,6 @@ public class TimeManagement
     return dateToString(d);
   }
 
-
   /** Returns a string representation of a date conforming to 
    * the following database format : 'YYYY-MM-DD hh:mm:ss'
    *
@@ -37,18 +35,18 @@ public class TimeManagement
   public static String dateToString(GregorianCalendar d)
   {
     String result;
-    int    year, month, day, hour, minute, second;
+    int year, month, day, hour, minute, second;
 
-    year   = d.get(d.YEAR);
-    month  = d.get(d.MONTH) + 1;
-    day    = d.get(d.DATE);
-    hour   = d.get(d.HOUR_OF_DAY);
+    year = d.get(d.YEAR);
+    month = d.get(d.MONTH) + 1;
+    day = d.get(d.DATE);
+    hour = d.get(d.HOUR_OF_DAY);
     minute = d.get(d.MINUTE);
     second = d.get(d.SECOND);
-    result = year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
+    result =
+      year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
     return result;
   }
-
 
   /** Returns a string representation of the time elapsed between startDate
    * and endDate. Example of a returned string : "1 month 3 days 6 hours 33 minutes 4 seconds 234 milliseconds"
@@ -59,19 +57,23 @@ public class TimeManagement
    * @return string containing the time difference up to the millisecond
    *
    */
-  public static String diffTime(GregorianCalendar startDate, GregorianCalendar endDate)
+  public static String diffTime(
+    GregorianCalendar startDate,
+    GregorianCalendar endDate)
   {
-    int    year, month, day, hour, minute, second, millis;
+    int year, month, day, hour, minute, second, millis;
     String result = "";
 
-    year   = endDate.get(endDate.YEAR)-startDate.get(startDate.YEAR);
-    month  = endDate.get(endDate.MONTH)-startDate.get(startDate.MONTH);
-    day    = endDate.get(endDate.DATE)-startDate.get(startDate.DATE);
-    hour   = endDate.get(endDate.HOUR_OF_DAY)-startDate.get(startDate.HOUR_OF_DAY);
-    minute = endDate.get(endDate.MINUTE)-startDate.get(startDate.MINUTE);
-    second = endDate.get(endDate.SECOND)-startDate.get(startDate.SECOND);
-    millis = endDate.get(endDate.MILLISECOND)-startDate.get(startDate.MILLISECOND);
- 
+    year = endDate.get(endDate.YEAR) - startDate.get(startDate.YEAR);
+    month = endDate.get(endDate.MONTH) - startDate.get(startDate.MONTH);
+    day = endDate.get(endDate.DATE) - startDate.get(startDate.DATE);
+    hour =
+      endDate.get(endDate.HOUR_OF_DAY) - startDate.get(startDate.HOUR_OF_DAY);
+    minute = endDate.get(endDate.MINUTE) - startDate.get(startDate.MINUTE);
+    second = endDate.get(endDate.SECOND) - startDate.get(startDate.SECOND);
+    millis =
+      endDate.get(endDate.MILLISECOND) - startDate.get(startDate.MILLISECOND);
+
     if (millis < 0)
     {
       millis = millis + 1000;
@@ -94,7 +96,8 @@ public class TimeManagement
     }
     if (day < 0)
     {
-      day = day + startDate.getActualMaximum(startDate.DAY_OF_MONTH); // is the same as startDate.DATE
+      day = day + startDate.getActualMaximum(startDate.DAY_OF_MONTH);
+      // is the same as startDate.DATE
       month = month - 1;
     }
     if (month < 0)
@@ -104,49 +107,48 @@ public class TimeManagement
     }
 
     if (year > 0)
-      result = year+" year";
+      result = year + " year";
     if (year > 1)
-      result = result+"s ";
+      result = result + "s ";
     else
-      result = result+" ";
+      result = result + " ";
     if (month > 0)
-      result = result+month+" month";
+      result = result + month + " month";
     if (month > 1)
-      result = result+"s ";
+      result = result + "s ";
     else
-      result = result+" ";
+      result = result + " ";
     if (day > 0)
-      result = result+day+" day";
+      result = result + day + " day";
     if (day > 1)
-      result = result+"s ";
+      result = result + "s ";
     else
-      result = result+" ";
+      result = result + " ";
     if (hour > 0)
-      result = result+hour+" hour";
+      result = result + hour + " hour";
     if (hour > 1)
-      result = result+"s ";
+      result = result + "s ";
     else
-      result = result+" ";
+      result = result + " ";
     if (minute > 0)
-      result = result+minute+" minute";
+      result = result + minute + " minute";
     if (minute > 1)
-      result = result+"s ";
+      result = result + "s ";
     else
-      result = result+" ";
+      result = result + " ";
     if (second > 0)
-      result = result+second+" second";
+      result = result + second + " second";
     if (second > 1)
-      result = result+"s ";
+      result = result + "s ";
     else
-      result = result+" ";
-    result = result+millis+" millisecond";
+      result = result + " ";
+    result = result + millis + " millisecond";
     if (millis > 1)
-      result = result+"s ";
+      result = result + "s ";
     else
-      result = result+" ";
+      result = result + " ";
     return result;
   }
-
 
   /** Compute a new GregorianCalendar from a beginning date and a duration in days.
    *
@@ -156,9 +158,11 @@ public class TimeManagement
    * @return date corresponding to startDate+durationInDays
    *
    */
-  public static GregorianCalendar addDays(GregorianCalendar startDate, int durationInDays)
+  public static GregorianCalendar addDays(
+    GregorianCalendar startDate,
+    int durationInDays)
   {
-    GregorianCalendar date = (GregorianCalendar)startDate.clone();
+    GregorianCalendar date = (GregorianCalendar) startDate.clone();
     date.add(date.DATE, durationInDays);
     return date;
   }

@@ -1,11 +1,13 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlet records a bid in the database and display
  * the result of the transaction.
@@ -35,29 +37,29 @@ public class StoreBid extends RubisHttpServlet
     return Config.StoreBidPoolSize;
   }
 
-
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
 
-
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBid");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
-
 
   /**
    * Call the <code>doPost</code> method.
@@ -67,7 +69,8 @@ public class StoreBid extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
@@ -80,15 +83,16 @@ public class StoreBid extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     Integer userId; // item id
     Integer itemId; // user id
-    float   minBid; // minimum acceptable bid for this item
-    float   bid;    // user bid
-    float   maxBid; // maximum bid the user wants
-    int     maxQty; // maximum quantity available for this item
-    int     qty;    // quantity asked by the user
+    float minBid; // minimum acceptable bid for this item
+    float bid; // user bid
+    float maxBid; // maximum bid the user wants
+    int maxQty; // maximum quantity available for this item
+    int qty; // quantity asked by the user
 
     sp = new ServletPrinter(response, "StoreBid");
 
@@ -98,7 +102,7 @@ public class StoreBid extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a user identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       userId = new Integer(value);
@@ -107,7 +111,7 @@ public class StoreBid extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide an item identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       itemId = new Integer(value);
@@ -116,7 +120,7 @@ public class StoreBid extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a minimum bid !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -128,7 +132,7 @@ public class StoreBid extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a bid !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -140,7 +144,7 @@ public class StoreBid extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a maximum bid !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -152,7 +156,7 @@ public class StoreBid extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a maximum quantity !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -164,7 +168,7 @@ public class StoreBid extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a quantity !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -176,37 +180,71 @@ public class StoreBid extends RubisHttpServlet
 
     if (qty > maxQty)
     {
-      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>");
-      return ;
-    }      
+      printError(
+        "<h3>You cannot request "
+          + qty
+          + " items because only "
+          + maxQty
+          + " are proposed !<br></h3>");
+      return;
+    }
     if (bid < minBid)
     {
-      printError("<h3>Your bid of $"+bid+" is not acceptable because it is below the $"+minBid+" minimum bid !<br></h3>");
-      return ;
-    }      
+      printError(
+        "<h3>Your bid of $"
+          + bid
+          + " is not acceptable because it is below the $"
+          + minBid
+          + " minimum bid !<br></h3>");
+      return;
+    }
     if (maxBid < minBid)
     {
-      printError("<h3>Your maximum bid of $"+maxBid+" is not acceptable because it is below the $"+minBid+" minimum bid !<br></h3>");
-      return ;
-    }      
+      printError(
+        "<h3>Your maximum bid of $"
+          + maxBid
+          + " is not acceptable because it is below the $"
+          + minBid
+          + " minimum bid !<br></h3>");
+      return;
+    }
     if (maxBid < bid)
     {
-      printError("<h3>Your maximum bid of $"+maxBid+" is not acceptable because it is below your current bid of $"+bid+" !<br></h3>");
-      return ;
-    }      
+      printError(
+        "<h3>Your maximum bid of $"
+          + maxBid
+          + " is not acceptable because it is below your current bid of $"
+          + bid
+          + " !<br></h3>");
+      return;
+    }
     try
     {
       conn = getConnection();
       conn.setAutoCommit(false);
       String now = TimeManagement.currentDateToString();
-      stmt = conn.prepareStatement("INSERT INTO bids VALUES (NULL, \""+userId+
-				   "\", \""+itemId+"\", \""+bid+"\", \""+
-				   maxBid+"\", \""+qty+"\", \""+now+"\")");
+      stmt =
+        conn.prepareStatement(
+          "INSERT INTO bids VALUES (NULL, \""
+            + userId
+            + "\", \""
+            + itemId
+            + "\", \""
+            + bid
+            + "\", \""
+            + maxBid
+            + "\", \""
+            + qty
+            + "\", \""
+            + now
+            + "\")");
       stmt.executeUpdate();
       // update the number of bids and the max bid for the item
       try
       {
-        stmt = conn.prepareStatement("SELECT nb_of_bids, max_bid FROM items WHERE id=?");
+        stmt =
+          conn.prepareStatement(
+            "SELECT nb_of_bids, max_bid FROM items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         ResultSet rs = stmt.executeQuery();
         if (rs.first())
@@ -218,7 +256,9 @@ public class StoreBid extends RubisHttpServlet
           if (bid > oldMaxBid)
           {
             oldMaxBid = bid;
-            update = conn.prepareStatement("UPDATE items SET max_bid=?, nb_of_bids=? WHERE id=?");
+            update =
+              conn.prepareStatement(
+                "UPDATE items SET max_bid=?, nb_of_bids=? WHERE id=?");
             update.setFloat(1, maxBid);
             update.setInt(2, nbOfBids);
             update.setInt(3, itemId.intValue());
@@ -226,54 +266,57 @@ public class StoreBid extends RubisHttpServlet
           }
           else
           {
-            update = conn.prepareStatement("UPDATE items SET nb_of_bids=? WHERE id=?");
+            update =
+              conn.prepareStatement("UPDATE items SET nb_of_bids=? WHERE id=?");
             update.setInt(1, nbOfBids);
             update.setInt(2, itemId.intValue());
             update.executeUpdate();
           }
-	      
+
         }
         else
         {
           conn.rollback();
           printError("Couldn't find the item.");
-          return ;	      
+          return;
         }
       }
-      catch (Exception ex) 
+      catch (Exception ex)
       {
         conn.rollback();
         printError("Failed to update nb of bids and max bid: " + ex);
         return;
       }
       sp.printHTMLheader("RUBiS: Bidding result");
-      sp.printHTML("<center><h2>Your bid has been successfully processed.</h2></center>\n");
+      sp.printHTML(
+        "<center><h2>Your bid has been successfully processed.</h2></center>\n");
       conn.commit();
       closeConnection();
     }
     catch (Exception e)
     {
-      sp.printHTML("Error while storing the bid (got exception: " +e+")<br>");
+      sp.printHTML(
+        "Error while storing the bid (got exception: " + e + ")<br>");
       try
       {
         conn.rollback();
         closeConnection();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
         printError("Transaction rollback failed: " + e);
       }
-      return ;
-    }	
+      return;
+    }
     sp.printHTMLfooter();
   }
-  
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 
 }

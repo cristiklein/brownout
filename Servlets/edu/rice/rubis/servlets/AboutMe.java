@@ -1,11 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * This servlets displays general information about the user loged in
@@ -26,12 +29,14 @@ public class AboutMe extends RubisHttpServlet
 
   private void closeConnection()
   {
-    try 
-    {     
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+    try
+    {
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
@@ -39,15 +44,15 @@ public class AboutMe extends RubisHttpServlet
   private void printError(String errorMsg)
   {
     //sp.printHTMLheader("RUBiS ERROR: About me");
-    sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
+    sp.printHTML(
+      "<h3>Your request has not been processed due to the following error :</h3><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
 
-
   /** List items the user is currently selling and sold in yhe past 30 days */
-  private void listItem(Integer userId) 
+  private void listItem(Integer userId)
   {
     ResultSet currentSellings = null;
     ResultSet pastSellings = null;
@@ -55,30 +60,33 @@ public class AboutMe extends RubisHttpServlet
     String itemName, endDate, startDate;
     float currentPrice, initialPrice, buyNow, reservePrice;
     int quantity, itemId;
-      
 
     // Retrieve ItemHome to get the names of the items the user sold
-    try 
+    try
     {
-      stmt = conn.prepareStatement("SELECT * FROM items WHERE items.seller=? AND items.end_date>=NOW()");
+      stmt =
+        conn.prepareStatement(
+          "SELECT * FROM items WHERE items.seller=? AND items.end_date>=NOW()");
       stmt.setInt(1, userId.intValue());
       currentSellings = stmt.executeQuery();
     }
     catch (Exception e)
     {
-      printError("Exception getting current sellings list: " +e+"<br>");
-      return ;
+      printError("Exception getting current sellings list: " + e + "<br>");
+      return;
     }
-    try 
+    try
     {
-      stmt = conn.prepareStatement("SELECT * FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30");
+      stmt =
+        conn.prepareStatement(
+          "SELECT * FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30");
       stmt.setInt(1, userId.intValue());
       pastSellings = stmt.executeQuery();
     }
     catch (Exception e)
     {
-      printError("Exception getting past sellings list: " +e+"<br>");
-      return ;
+      printError("Exception getting past sellings list: " + e + "<br>");
+      return;
     }
 
     try
@@ -87,7 +95,7 @@ public class AboutMe extends RubisHttpServlet
       {
         sp.printHTML("<br>");
         sp.printHTMLHighlighted("<h3>You are currently selling no item.</h3>");
-      
+
       }
       else
       {
@@ -109,25 +117,34 @@ public class AboutMe extends RubisHttpServlet
             quantity = currentSellings.getInt("quantity");
 
             currentPrice = currentSellings.getFloat("max_bid");
-            if (currentPrice <initialPrice)
+            if (currentPrice < initialPrice)
               currentPrice = initialPrice;
 
           }
-          catch (Exception e) 
+          catch (Exception e)
           {
-            printError("Exception getting item: " + e +"<br>");
+            printError("Exception getting item: " + e + "<br>");
             return;
           }
           // display information about the item
-          sp.printSell(itemId, itemName,  initialPrice, reservePrice, quantity, buyNow, startDate, endDate, currentPrice);
+          sp.printSell(
+            itemId,
+            itemName,
+            initialPrice,
+            reservePrice,
+            quantity,
+            buyNow,
+            startDate,
+            endDate,
+            currentPrice);
         }
         while (currentSellings.next());
         sp.printItemFooter();
       }
     }
-    catch (Exception e) 
+    catch (Exception e)
     {
-      printError("Exception getting current items in sell: " + e +"<br>");
+      printError("Exception getting current items in sell: " + e + "<br>");
       return;
     }
 
@@ -137,49 +154,58 @@ public class AboutMe extends RubisHttpServlet
       {
         sp.printHTML("<br>");
         sp.printHTMLHighlighted("<h3>You didn't sell any item.</h3>");
-        return ;
+        return;
       }
       // display past sellings
       sp.printHTML("<br>");
       sp.printSellHeader("Items you sold in the last 30 days.");
-      do 
+      do
       {
         // Get the name of the items
         try
         {
-	  itemId = pastSellings.getInt("id");
-	  itemName = pastSellings.getString("name");
-	  endDate = pastSellings.getString("end_date");
-	  startDate = pastSellings.getString("start_date");
-	  initialPrice = pastSellings.getFloat("initial_price");
-	  reservePrice = pastSellings.getFloat("reserve_price");
-	  buyNow = pastSellings.getFloat("buy_now");
-	  quantity = pastSellings.getInt("quantity");
+          itemId = pastSellings.getInt("id");
+          itemName = pastSellings.getString("name");
+          endDate = pastSellings.getString("end_date");
+          startDate = pastSellings.getString("start_date");
+          initialPrice = pastSellings.getFloat("initial_price");
+          reservePrice = pastSellings.getFloat("reserve_price");
+          buyNow = pastSellings.getFloat("buy_now");
+          quantity = pastSellings.getInt("quantity");
 
-	  currentPrice = pastSellings.getFloat("max_bid");
-	  if (currentPrice <initialPrice)
+          currentPrice = pastSellings.getFloat("max_bid");
+          if (currentPrice < initialPrice)
             currentPrice = initialPrice;
         }
-        catch (Exception e) 
+        catch (Exception e)
         {
-          printError("Exception getting sold item: " + e +"<br>");
+          printError("Exception getting sold item: " + e + "<br>");
           return;
         }
         // display information about the item
-        sp.printSell(itemId, itemName,  initialPrice, reservePrice, quantity, buyNow, startDate, endDate, currentPrice);
+        sp.printSell(
+          itemId,
+          itemName,
+          initialPrice,
+          reservePrice,
+          quantity,
+          buyNow,
+          startDate,
+          endDate,
+          currentPrice);
       }
-      while(pastSellings.next());
+      while (pastSellings.next());
     }
-    catch (Exception e) 
+    catch (Exception e)
     {
-      printError("Exception getting sold items: " + e +"<br>");
+      printError("Exception getting sold items: " + e + "<br>");
       return;
     }
     sp.printItemFooter();
   }
 
   /** List items the user bought in the last 30 days*/
-  private void listBoughtItems(Integer userId) 
+  private void listBoughtItems(Integer userId)
   {
     ResultSet buy = null;
     String itemName, sellerName;
@@ -187,40 +213,44 @@ public class AboutMe extends RubisHttpServlet
     float buyNow;
 
     // Get the list of items the user bought
-    try 
+    try
     {
-      stmt = conn.prepareStatement("SELECT * FROM buy_now WHERE buy_now.buyer_id=? AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30");
+      stmt =
+        conn.prepareStatement(
+          "SELECT * FROM buy_now WHERE buy_now.buyer_id=? AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30");
       stmt.setInt(1, userId.intValue());
       buy = stmt.executeQuery();
       if (!buy.first())
       {
         sp.printHTML("<br>");
-        sp.printHTMLHighlighted("<h3>You didn't buy any item in the last 30 days.</h3>");
+        sp.printHTMLHighlighted(
+          "<h3>You didn't buy any item in the last 30 days.</h3>");
         sp.printHTML("<br>");
-        return ;
+        return;
       }
     }
     catch (Exception e)
     {
-      printError("Exception getting bought items list: " +e+"<br>");
-      return ;
+      printError("Exception getting bought items list: " + e + "<br>");
+      return;
     }
 
     sp.printUserBoughtItemHeader();
- 
+
     try
     {
       do
       {
-	itemId = buy.getInt("item_id");
-	quantity = buy.getInt("qty");
+        itemId = buy.getInt("item_id");
+        quantity = buy.getInt("qty");
         // Get the name of the items
         try
         {
-	  try
-	  {
+          try
+          {
             ResultSet itemRS = null;
-            PreparedStatement itemStmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
+            PreparedStatement itemStmt =
+              conn.prepareStatement("SELECT * FROM items WHERE id=?");
             itemStmt.setInt(1, itemId);
             itemRS = itemStmt.executeQuery();
             if (!itemRS.first())
@@ -231,23 +261,24 @@ public class AboutMe extends RubisHttpServlet
             itemName = itemRS.getString("name");
             sellerId = itemRS.getInt("seller");
             buyNow = itemRS.getFloat("buy_now");
-	  }
-	  catch (SQLException e)
+          }
+          catch (SQLException e)
           {
-            sp.printHTML("Failed to execute Query for item (buy now): " +e);
+            sp.printHTML("Failed to execute Query for item (buy now): " + e);
             closeConnection();
             return;
           }
-	  try 
+          try
           {
-            PreparedStatement sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+            PreparedStatement sellerStmt =
+              conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
             sellerStmt.setInt(1, sellerId);
             ResultSet sellerResult = sellerStmt.executeQuery();
             // Get the seller's name		 
-            if (sellerResult.first()) 
+            if (sellerResult.first())
               sellerName = sellerResult.getString("nickname");
             else
-            {	
+            {
               sp.printHTML("Unknown seller");
               sellerStmt = null;
               closeConnection();
@@ -255,74 +286,84 @@ public class AboutMe extends RubisHttpServlet
             }
 
           }
-	  catch (SQLException e)
+          catch (SQLException e)
           {
-            sp.printHTML("Failed to execute Query for seller (buy now): " +e);
+            sp.printHTML("Failed to execute Query for seller (buy now): " + e);
             closeConnection();
             return;
           }
         }
-        catch (Exception e) 
+        catch (Exception e)
         {
-          printError("Exception getting buyNow: " + e +"<br>");
+          printError("Exception getting buyNow: " + e + "<br>");
           return;
         }
         // display information about the item
-        sp.printUserBoughtItem(itemId, itemName, buyNow, quantity, sellerId, sellerName);
+        sp.printUserBoughtItem(
+          itemId,
+          itemName,
+          buyNow,
+          quantity,
+          sellerId,
+          sellerName);
       }
-      while(buy.next());
+      while (buy.next());
     }
     catch (Exception e)
     {
-      printError("Exception getting bought items: " +e+"<br>");
+      printError("Exception getting bought items: " + e + "<br>");
       closeConnection();
-      return ;
+      return;
     }
     sp.printItemFooter();
 
   }
 
   /** List items the user won in the last 30 days*/
-  private void listWonItems(Integer userId) 
+  private void listWonItems(Integer userId)
   {
-    int sellerId, itemId;  
+    int sellerId, itemId;
     float currentPrice, initialPrice;
     String itemName, sellerName;
     ResultSet won = null;
 
     // Get the list of the user's won items
-    try 
+    try
     {
-      stmt = conn.prepareStatement("SELECT item_id FROM bids, old_items WHERE bids.user_id=? AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 GROUP BY item_id");
+      stmt =
+        conn.prepareStatement(
+          "SELECT item_id FROM bids, old_items WHERE bids.user_id=? AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       won = stmt.executeQuery();
       if (!won.first())
       {
         sp.printHTML("<br>");
-        sp.printHTMLHighlighted("<h3>You didn't win any item in the last 30 days.</h3>");
+        sp.printHTMLHighlighted(
+          "<h3>You didn't win any item in the last 30 days.</h3>");
         sp.printHTML("<br>");
-        return ;
+        return;
       }
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting won items list: " +e+"<br>");
-      return ;
+      sp.printHTML("Exception getting won items list: " + e + "<br>");
+      return;
     }
 
     sp.printUserWonItemHeader();
     try
     {
-      do 
+      do
       {
-	itemId = won.getInt("item_id");
+        itemId = won.getInt("item_id");
         // Get the name of the items
         try
         {
-	  try
-	  {
+          try
+          {
             ResultSet itemRS = null;
-            PreparedStatement itemStmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
+            PreparedStatement itemStmt =
+              conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
             itemStmt.setInt(1, itemId);
             itemRS = itemStmt.executeQuery();
             if (!itemRS.first())
@@ -335,26 +376,27 @@ public class AboutMe extends RubisHttpServlet
             initialPrice = itemRS.getFloat("initial_price");
 
             currentPrice = itemRS.getFloat("max_bid");
-            if (currentPrice <initialPrice)
+            if (currentPrice < initialPrice)
               currentPrice = initialPrice;
-	  }
-	  catch (SQLException e)
+          }
+          catch (SQLException e)
           {
-            sp.printHTML("Failed to execute Query for item (won items): " +e);
+            sp.printHTML("Failed to execute Query for item (won items): " + e);
             closeConnection();
             return;
           }
-	  PreparedStatement sellerStmt =null;
-	  try 
+          PreparedStatement sellerStmt = null;
+          try
           {
-            sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+            sellerStmt =
+              conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
             sellerStmt.setInt(1, sellerId);
             ResultSet sellerResult = sellerStmt.executeQuery();
             // Get the seller's name		 
-            if (sellerResult.first()) 
+            if (sellerResult.first())
               sellerName = sellerResult.getString("nickname");
             else
-            {	
+            {
               sp.printHTML("Unknown seller");
               sellerStmt = null;
               closeConnection();
@@ -362,9 +404,10 @@ public class AboutMe extends RubisHttpServlet
             }
 
           }
-	  catch (SQLException e)
+          catch (SQLException e)
           {
-            sp.printHTML("Failed to execute Query for seller (won items): " +e);
+            sp.printHTML(
+              "Failed to execute Query for seller (won items): " + e);
             closeConnection();
             sellerStmt = null;
             return;
@@ -389,56 +432,62 @@ public class AboutMe extends RubisHttpServlet
           // 		  return;
           // 	      }
         }
-        catch (Exception e) 
+        catch (Exception e)
         {
-          printError("Exception getting item: " + e +"<br>");
+          printError("Exception getting item: " + e + "<br>");
           return;
         }
         // display information about the item
-        sp.printUserWonItem(itemId, itemName, currentPrice, sellerId, sellerName);
+        sp.printUserWonItem(
+          itemId,
+          itemName,
+          currentPrice,
+          sellerId,
+          sellerName);
       }
-      while(won.next());
+      while (won.next());
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting won items: " +e+"<br>");
+      sp.printHTML("Exception getting won items: " + e + "<br>");
       closeConnection();
-      return ;
+      return;
     }
     sp.printItemFooter();
 
   }
 
-
   /** List comments about the user */
-  private void listComment(Integer userId) 
+  private void listComment(Integer userId)
   {
     ResultSet rs = null;
     String date, comment;
     int authorId;
-      
-    try 
+
+    try
     {
-      conn.setAutoCommit(false);	// faster if made inside a Tx
+      conn.setAutoCommit(false); // faster if made inside a Tx
 
       // Try to find the comment corresponding to the user
       try
       {
-        stmt = conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
+        stmt =
+          conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
         stmt.setInt(1, userId.intValue());
         rs = stmt.executeQuery();
       }
       catch (Exception e)
       {
-        sp.printHTML("Failed to execute Query for list of comments: " +e);
+        sp.printHTML("Failed to execute Query for list of comments: " + e);
         conn.rollback();
         closeConnection();
         return;
       }
-      if (!rs.first()) 
+      if (!rs.first())
       {
         sp.printHTML("<br>");
-        sp.printHTMLHighlighted("<h3>There is no comment yet for this user.</h3>");
+        sp.printHTMLHighlighted(
+          "<h3>There is no comment yet for this user.</h3>");
         sp.printHTML("<br>");
         conn.commit();
         return;
@@ -448,46 +497,46 @@ public class AboutMe extends RubisHttpServlet
 
       sp.printCommentHeader();
       // Display each comment and the name of its author
-      do 
+      do
       {
         comment = rs.getString("comment");
         date = rs.getString("date");
         authorId = rs.getInt("from_user_id");
 
         String authorName = "none";
-	ResultSet authorRS = null;
-	try
-	{
+        ResultSet authorRS = null;
+        try
+        {
           stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           stmt.setInt(1, authorId);
           authorRS = stmt.executeQuery();
           if (authorRS.first())
             authorName = authorRS.getString("nickname");
-	}
-	catch (Exception e)
-	{
-          sp.printHTML("Failed to execute Query for the comment author: " +e);
+        }
+        catch (Exception e)
+        {
+          sp.printHTML("Failed to execute Query for the comment author: " + e);
           conn.rollback();
           closeConnection();
           return;
-	}
+        }
         sp.printComment(authorName, authorId, date, comment);
       }
       while (rs.next());
       sp.printCommentFooter();
       conn.commit();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e +"<br>");
+      sp.printHTML("Exception getting comment list: " + e + "<br>");
       try
       {
         conn.rollback();
         closeConnection();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        sp.printHTML("Transaction rollback failed: " + e +"<br>");
+        sp.printHTML("Transaction rollback failed: " + e + "<br>");
         closeConnection();
       }
       closeConnection();
@@ -495,31 +544,33 @@ public class AboutMe extends RubisHttpServlet
   }
 
   /** List items the user put a bid on in the last 30 days*/
-  private void listBids(Integer userId, String username, String password) 
+  private void listBids(Integer userId, String username, String password)
   {
- 
+
     float currentPrice, initialPrice, maxBid;
     String itemName, sellerName, startDate, endDate;
     int sellerId, quantity, itemId;
     ResultSet bid = null;
 
     // Get the list of the user's last bids
-    try 
+    try
     {
-      stmt = conn.prepareStatement("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id");
+      stmt =
+        conn.prepareStatement(
+          "SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       bid = stmt.executeQuery();
       if (!bid.first())
       {
         sp.printHTMLHighlighted("<h3>You didn't put any bid.</h3>");
         sp.printHTML("<br>");
-        return ;
+        return;
       }
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting bids list: " +e+"<br>");
-      return ;
+      sp.printHTML("Exception getting bids list: " + e + "<br>");
+      return;
     }
 
     sp.printUserBidsHeader();
@@ -527,86 +578,101 @@ public class AboutMe extends RubisHttpServlet
     PreparedStatement itemStmt = null;
     try
     {
-      do 
+      do
       {
-	itemId = bid.getInt("item_id");
-	maxBid = bid.getFloat("max_bid");
-	try
-	{   
+        itemId = bid.getInt("item_id");
+        maxBid = bid.getFloat("max_bid");
+        try
+        {
           itemStmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
           itemStmt.setInt(1, itemId);
           rs = itemStmt.executeQuery();
-	}
-	catch (Exception e)
-	{
-          sp.printHTML("Failed to execute Query for item the user has bid on: " +e);
+        }
+        catch (Exception e)
+        {
+          sp.printHTML(
+            "Failed to execute Query for item the user has bid on: " + e);
           closeConnection();
           return;
-	}
+        }
 
         // Get the name of the items
         try
         {
-	  if (!rs.first()) 
-	  {
+          if (!rs.first())
+          {
             sp.printHTML("<h3>Failed to get items.</h3><br>");
             return;
-	  }
- 	  itemName = rs.getString("name");
-	  initialPrice = rs.getFloat("initial_price");
-	  quantity = rs.getInt("quantity");
-	  startDate = rs.getString("start_date");
-	  endDate = rs.getString("end_date");  
- 	  sellerId = rs.getInt("seller");
+          }
+          itemName = rs.getString("name");
+          initialPrice = rs.getFloat("initial_price");
+          quantity = rs.getInt("quantity");
+          startDate = rs.getString("start_date");
+          endDate = rs.getString("end_date");
+          sellerId = rs.getInt("seller");
 
-	  currentPrice = rs.getFloat("max_bid");
-	  if (currentPrice <initialPrice)
+          currentPrice = rs.getFloat("max_bid");
+          if (currentPrice < initialPrice)
             currentPrice = initialPrice;
 
-	  PreparedStatement sellerStmt = null;
-	  try 
+          PreparedStatement sellerStmt = null;
+          try
           {
-            sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+            sellerStmt =
+              conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
             sellerStmt.setInt(1, sellerId);
             ResultSet sellerResult = sellerStmt.executeQuery();
             // Get the seller's name		 
-            if (sellerResult.first()) 
+            if (sellerResult.first())
               sellerName = sellerResult.getString("nickname");
             else
-            {	
+            {
               sp.printHTML("Unknown seller");
               closeConnection();
-              if (sellerStmt != null) sellerStmt.close();
+              if (sellerStmt != null)
+                sellerStmt.close();
               return;
             }
 
           }
-	  catch (Exception e)
+          catch (Exception e)
           {
-            sp.printHTML("Failed to execute Query for seller (bids): " +e);
+            sp.printHTML("Failed to execute Query for seller (bids): " + e);
             closeConnection();
-            if (sellerStmt != null) sellerStmt.close();
+            if (sellerStmt != null)
+              sellerStmt.close();
             return;
           }
         }
-        catch (Exception e) 
+        catch (Exception e)
         {
-          printError("Exception getting item: " + e +"<br>");
+          printError("Exception getting item: " + e + "<br>");
           return;
         }
         //  display information about user's bids
-        sp.printItemUserHasBidOn(itemId, itemName, initialPrice, quantity, startDate, endDate, sellerId, sellerName, currentPrice, maxBid, username, password);
+        sp.printItemUserHasBidOn(
+          itemId,
+          itemName,
+          initialPrice,
+          quantity,
+          startDate,
+          endDate,
+          sellerId,
+          sellerName,
+          currentPrice,
+          maxBid,
+          username,
+          password);
       }
-      while(bid.next());
+      while (bid.next());
     }
-    catch (Exception e) 
+    catch (Exception e)
     {
-      printError("Exception getting items the user has bid on: " + e +"<br>");
+      printError("Exception getting items the user has bid on: " + e + "<br>");
       return;
     }
     sp.printItemFooter();
   }
-
 
   /**
    * Call <code>doPost</code> method.
@@ -616,11 +682,11 @@ public class AboutMe extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
-
 
   /** 
    * Check username and password and build the web page that display the information about
@@ -631,33 +697,35 @@ public class AboutMe extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  password=null, username=null; 
-    Integer userId=null;
+    String password = null, username = null;
+    Integer userId = null;
     ResultSet rs = null;
 
     sp = new ServletPrinter(response, "About me");
 
     username = request.getParameter("nickname");
-    password = request.getParameter("password");    
+    password = request.getParameter("password");
     conn = getConnection();
     // Authenticate the user
-    if ((username != null && username !="") || (password != null && password !=""))
+    if ((username != null && username != "")
+      || (password != null && password != ""))
     {
       Auth auth = new Auth(conn, sp);
       int id = auth.authenticate(username, password);
       if (id == -1)
       {
         printError("You don't have an account on RUBiS!<br>You have to register first.<br>");
-        return ;	
+        return;
       }
       userId = new Integer(id);
     }
     else
     {
       printError(" You must provide valid username and password.");
-      return ;
+      return;
     }
     // Try to find the user corresponding to the userId
     try
@@ -668,16 +736,16 @@ public class AboutMe extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for user: " +e);
+      sp.printHTML("Failed to execute Query for user: " + e);
       closeConnection();
       sp.printHTMLfooter();
       return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
-        sp.printHTML("<h2>This user does not exist!</h2>");		    
+        sp.printHTML("<h2>This user does not exist!</h2>");
         closeConnection();
         sp.printHTMLfooter();
         return;
@@ -691,18 +759,19 @@ public class AboutMe extends RubisHttpServlet
 
       String result = new String();
 
-      result = result+"<h2>Information about "+nickname+"<br></h2>";
-      result = result+"Real life name : "+firstname+" "+lastname+"<br>";
-      result = result+"Email address  : "+email+"<br>";
-      result = result+"User since     : "+date+"<br>";
-      result = result+"Current rating : <b>"+rating+"</b><br>";
-      sp.printHTMLheader("RUBiS: About "+nickname);
+      result = result + "<h2>Information about " + nickname + "<br></h2>";
+      result =
+        result + "Real life name : " + firstname + " " + lastname + "<br>";
+      result = result + "Email address  : " + email + "<br>";
+      result = result + "User since     : " + date + "<br>";
+      result = result + "Current rating : <b>" + rating + "</b><br>";
+      sp.printHTMLheader("RUBiS: About " + nickname);
       sp.printHTML(result);
 
     }
     catch (SQLException s)
     {
-      sp.printHTML("Failed to get general information about the user: " +s);
+      sp.printHTML("Failed to get general information about the user: " + s);
       closeConnection();
       sp.printHTMLfooter();
       return;
@@ -717,13 +786,13 @@ public class AboutMe extends RubisHttpServlet
     sp.printHTMLfooter();
     closeConnection();
   }
-  
+
   /**
    * Clean up the connection pool.
    */
-    public void destroy()
-    {
-      super.destroy();
-    }
+  public void destroy()
+  {
+    super.destroy();
+  }
 
 }

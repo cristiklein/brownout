@@ -1,11 +1,13 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Build the html page with the list of all items for given category and region.
@@ -23,35 +25,39 @@ public class SearchItemsByRegion extends RubisHttpServlet
     return Config.SearchItemsByRegionPoolSize;
   }
 
-
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
 
-
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: SearchItemsByRegion");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
 
-
   /** List items in the given category for the given region */
-  private void itemList(Integer categoryId, Integer regionId, int page, int nbOfItems) 
+  private void itemList(
+    Integer categoryId,
+    Integer regionId,
+    int page,
+    int nbOfItems)
   {
     String itemName, endDate;
-    int itemId, nbOfBids=0;
+    int itemId, nbOfBids = 0;
     float maxBid;
     ResultSet rs = null;
 
@@ -59,38 +65,51 @@ public class SearchItemsByRegion extends RubisHttpServlet
     try
     {
       conn = getConnection();
-      stmt = conn.prepareStatement("SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items,users WHERE items.category=? AND items.seller=users.id AND users.region=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
+      stmt =
+        conn.prepareStatement(
+          "SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items,users WHERE items.category=? AND items.seller=users.id AND users.region=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
       stmt.setInt(1, categoryId.intValue());
       stmt.setInt(2, regionId.intValue());
-      stmt.setInt(3, page*nbOfItems);
+      stmt.setInt(3, page * nbOfItems);
       stmt.setInt(4, nbOfItems);
       rs = stmt.executeQuery();
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for items in region: " +e);
+      sp.printHTML("Failed to execute Query for items in region: " + e);
       closeConnection();
       return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
         if (page == 0)
         {
-          sp.printHTML("<h3>Sorry, but there is no items in this category for this region.</h3><br>");
+          sp.printHTML(
+            "<h3>Sorry, but there is no items in this category for this region.</h3><br>");
         }
         else
         {
-          sp.printHTML("<h3>Sorry, but there is no more items in this category for this region.</h3><br>");
+          sp.printHTML(
+            "<h3>Sorry, but there is no more items in this category for this region.</h3><br>");
           sp.printItemHeader();
-          sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="+categoryId+
-                             "&region="+regionId+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>", "");
+          sp.printItemFooter(
+            "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+              + categoryId
+              + "&region="
+              + regionId
+              + "&page="
+              + (page - 1)
+              + "&nbOfItems="
+              + nbOfItems
+              + "\">Previous page</a>",
+            "");
         }
         closeConnection();
         return;
       }
-  
+
       sp.printItemHeader();
       do
       {
@@ -100,38 +119,62 @@ public class SearchItemsByRegion extends RubisHttpServlet
         maxBid = rs.getFloat("max_bid");
         nbOfBids = rs.getInt("nb_of_bids");
         float initialPrice = rs.getFloat("initial_price");
-        if (maxBid <initialPrice)
+        if (maxBid < initialPrice)
           maxBid = initialPrice;
         sp.printItem(itemName, itemId, maxBid, nbOfBids, endDate);
       }
-      while (rs.next()); 
+      while (rs.next());
       if (page == 0)
       {
-        sp.printItemFooter("", "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="+categoryId+
-                           "&region="+regionId+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
+        sp.printItemFooter(
+          "",
+          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+            + categoryId
+            + "&region="
+            + regionId
+            + "&page="
+            + (page + 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Next page</a>");
       }
       else
       {
-        sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="+categoryId+
-                           "&region="+regionId+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>",
-                           "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="+categoryId+
-                           "&region="+regionId+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
+        sp.printItemFooter(
+          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+            + categoryId
+            + "&region="
+            + regionId
+            + "&page="
+            + (page - 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Previous page</a>",
+          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+            + categoryId
+            + "&region="
+            + regionId
+            + "&page="
+            + (page + 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Next page</a>");
       }
       closeConnection();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Exception getting item list: " + e +"<br>");
+      sp.printHTML("Exception getting item list: " + e + "<br>");
       closeConnection();
     }
   }
 
-
   /* Read the parameters, lookup the remote category and region  and build the web page with
      the list of items */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    Integer  categoryId, regionId;
+    Integer categoryId, regionId;
     Integer page;
     Integer nbOfItems;
 
@@ -141,7 +184,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a category!<br>");
-      return ;
+      return;
     }
     else
       categoryId = new Integer(value);
@@ -150,7 +193,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a region!<br>");
-      return ;
+      return;
     }
     else
       regionId = new Integer(value);
@@ -172,17 +215,17 @@ public class SearchItemsByRegion extends RubisHttpServlet
     sp.printHTMLfooter();
   }
 
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
-  
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 }

@@ -1,12 +1,15 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.sql.*;
 
 /** 
  * Add a new user in the database 
@@ -16,7 +19,7 @@ import java.sql.*;
 public class RegisterUser extends RubisHttpServlet
 {
   private UserTransaction utx = null;
-  private ServletPrinter  sp = null;
+  private ServletPrinter sp = null;
   private PreparedStatement stmt = null;
   private Connection conn = null;
 
@@ -25,14 +28,16 @@ public class RegisterUser extends RubisHttpServlet
     return Config.RegisterUserPoolSize;
   }
 
- private void closeConnection()
+  private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close(); // close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
@@ -40,27 +45,33 @@ public class RegisterUser extends RubisHttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: Register user");
-    sp.printHTML("<h2>Your registration has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your registration has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
- 
+
   }
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String firstname=null, lastname=null, nickname=null, email=null, password=null;
-    int    regionId;
-    int    userId;
+    String firstname = null,
+      lastname = null,
+      nickname = null,
+      email = null,
+      password = null;
+    int regionId;
+    int userId;
     String creationDate, region;
 
     sp = new ServletPrinter(response, "RegisterUser");
-      
+
     String value = request.getParameter("firstname");
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a first name!<br>");
-      return ;
+      return;
     }
     else
       firstname = value;
@@ -69,7 +80,7 @@ public class RegisterUser extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a last name!<br>");
-      return ;
+      return;
     }
     else
       lastname = value;
@@ -78,7 +89,7 @@ public class RegisterUser extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a nick name!<br>");
-      return ;
+      return;
     }
     else
       nickname = value;
@@ -87,7 +98,7 @@ public class RegisterUser extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide an email address!<br>");
-      return ;
+      return;
     }
     else
       email = value;
@@ -96,17 +107,16 @@ public class RegisterUser extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a password!<br>");
-      return ;
+      return;
     }
     else
       password = value;
-
 
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a valid region!<br>");
-      return ;
+      return;
     }
     else
     {
@@ -119,51 +129,71 @@ public class RegisterUser extends RubisHttpServlet
         ResultSet rs = stmt.executeQuery();
         if (!rs.first())
         {
-          printError(" Region "+value+" does not exist in the database!<br>");
-          return ;
+          printError(
+            " Region " + value + " does not exist in the database!<br>");
+          return;
         }
         regionId = rs.getInt("id");
       }
       catch (SQLException e)
       {
-        printError("Failed to execute Query for region: " +e);
+        printError("Failed to execute Query for region: " + e);
         return;
       }
     }
     // Try to create a new user
     try
     {
-      stmt = conn.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
+      stmt =
+        conn.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
       stmt.setString(1, nickname);
       ResultSet rs = stmt.executeQuery();
       if (rs.first())
       {
         printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
-        return ;
+        return;
       }
     }
     catch (SQLException e)
     {
-      printError("Failed to execute Query to check the nickname: " +e);
-      return;
-    }
-    try 
-    {
-      String now = TimeManagement.currentDateToString();
-      stmt = conn.prepareStatement("INSERT INTO users VALUES (NULL, \""+firstname+
-                                   "\", \""+lastname+"\", \""+nickname+"\", \""+
-                                   password+"\", \""+email+"\", 0, 0,\""+now+"\", "+ 
-                                   regionId+")");
-      stmt.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      printError("RUBiS internal error: User registration failed (got exception: " +e+")<br>");
+      printError("Failed to execute Query to check the nickname: " + e);
       return;
     }
     try
     {
-      stmt = conn.prepareStatement("SELECT id, creation_date FROM users WHERE nickname=?");
+      String now = TimeManagement.currentDateToString();
+      stmt =
+        conn.prepareStatement(
+          "INSERT INTO users VALUES (NULL, \""
+            + firstname
+            + "\", \""
+            + lastname
+            + "\", \""
+            + nickname
+            + "\", \""
+            + password
+            + "\", \""
+            + email
+            + "\", 0, 0,\""
+            + now
+            + "\", "
+            + regionId
+            + ")");
+      stmt.executeUpdate();
+    }
+    catch (SQLException e)
+    {
+      printError(
+        "RUBiS internal error: User registration failed (got exception: "
+          + e
+          + ")<br>");
+      return;
+    }
+    try
+    {
+      stmt =
+        conn.prepareStatement(
+          "SELECT id, creation_date FROM users WHERE nickname=?");
       stmt.setString(1, nickname);
       ResultSet urs = stmt.executeQuery();
       if (!urs.first())
@@ -176,39 +206,41 @@ public class RegisterUser extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      printError("Failed to execute Query for user: " +e);
+      printError("Failed to execute Query for user: " + e);
       return;
     }
 
-    sp.printHTMLheader("RUBiS: Welcome to "+nickname);
-    sp.printHTML("<h2>Your registration has been processed successfully</h2><br>");
-    sp.printHTML("<h3>Welcome "+nickname+"</h3>");
+    sp.printHTMLheader("RUBiS: Welcome to " + nickname);
+    sp.printHTML(
+      "<h2>Your registration has been processed successfully</h2><br>");
+    sp.printHTML("<h3>Welcome " + nickname + "</h3>");
     sp.printHTML("RUBiS has stored the following information about you:<br>");
-    sp.printHTML("First Name : "+firstname+"<br>");
-    sp.printHTML("Last Name  : "+lastname+"<br>");
-    sp.printHTML("Nick Name  : "+nickname+"<br>");
-    sp.printHTML("Email      : "+email+"<br>");
-    sp.printHTML("Password   : "+password+"<br>");
-    sp.printHTML("Region     : "+region+"<br>"); 
-    sp.printHTML("<br>The following information has been automatically generated by RUBiS:<br>");
-    sp.printHTML("User id       :"+userId+"<br>");
-    sp.printHTML("Creation date :"+creationDate+"<br>");
-      
+    sp.printHTML("First Name : " + firstname + "<br>");
+    sp.printHTML("Last Name  : " + lastname + "<br>");
+    sp.printHTML("Nick Name  : " + nickname + "<br>");
+    sp.printHTML("Email      : " + email + "<br>");
+    sp.printHTML("Password   : " + password + "<br>");
+    sp.printHTML("Region     : " + region + "<br>");
+    sp.printHTML(
+      "<br>The following information has been automatically generated by RUBiS:<br>");
+    sp.printHTML("User id       :" + userId + "<br>");
+    sp.printHTML("Creation date :" + creationDate + "<br>");
+
     sp.printHTMLfooter();
     closeConnection();
   }
-    
- 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
-  
+
   /**
    * Clean up the connection pool.
    */
-    public void destroy()
-    {
-      super.destroy();
-    }
+  public void destroy()
+  {
+    super.destroy();
+  }
 }

@@ -1,11 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets displays the full description of a given item
  * and allows the user to bid on this item.
@@ -30,12 +33,14 @@ public class ViewItem extends RubisHttpServlet
 
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
@@ -43,13 +48,15 @@ public class ViewItem extends RubisHttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: View item");
-    sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>We cannot process your request due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
 
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     sp = new ServletPrinter(response, "ViewItem");
     ResultSet rs = null;
@@ -58,7 +65,7 @@ public class ViewItem extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("No item identifier received - Cannot process the request<br>");
-      return ;
+      return;
     }
     Integer itemId = new Integer(value);
     // get the item
@@ -71,11 +78,11 @@ public class ViewItem extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for item: " +e);
+      sp.printHTML("Failed to execute Query for item: " + e);
       closeConnection();
       return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
@@ -86,21 +93,21 @@ public class ViewItem extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for item in table old_items: " +e);
+      sp.printHTML("Failed to execute Query for item in table old_items: " + e);
       closeConnection();
-      return ;
+      return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
-        sp.printHTML("<h2>This item does not exist!</h2>");		    
+        sp.printHTML("<h2>This item does not exist!</h2>");
         closeConnection();
         return;
       }
       String itemName, endDate, startDate, description, sellerName;
       float maxBid, initialPrice, buyNow, reservePrice;
-      int quantity, sellerId, nbOfBids=0;
+      int quantity, sellerId, nbOfBids = 0;
       itemName = rs.getString("name");
       description = rs.getString("description");
       endDate = rs.getString("end_date");
@@ -113,19 +120,20 @@ public class ViewItem extends RubisHttpServlet
 
       maxBid = rs.getFloat("max_bid");
       nbOfBids = rs.getInt("nb_of_bids");
-      if (maxBid <initialPrice)
+      if (maxBid < initialPrice)
         maxBid = initialPrice;
 
-      try 
+      try
       {
-        PreparedStatement sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+        PreparedStatement sellerStmt =
+          conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
         sellerStmt.setInt(1, sellerId);
         ResultSet sellerResult = sellerStmt.executeQuery();
         // Get the seller's name		 
-        if (sellerResult.first()) 
+        if (sellerResult.first())
           sellerName = sellerResult.getString("nickname");
         else
-        {	
+        {
           sp.printHTML("Unknown seller");
           closeConnection();
           return;
@@ -134,31 +142,46 @@ public class ViewItem extends RubisHttpServlet
       }
       catch (SQLException e)
       {
-        sp.printHTML("Failed to executeQuery for seller: " +e);
+        sp.printHTML("Failed to executeQuery for seller: " + e);
         closeConnection();
         return;
       }
-      sp.printItemDescription(itemId.intValue(), itemName, description, initialPrice, reservePrice, buyNow, quantity, maxBid, nbOfBids, sellerName, sellerId, startDate, endDate, -1, conn);
-    } 
-    catch (Exception e) 
+      sp.printItemDescription(
+        itemId.intValue(),
+        itemName,
+        description,
+        initialPrice,
+        reservePrice,
+        buyNow,
+        quantity,
+        maxBid,
+        nbOfBids,
+        sellerName,
+        sellerId,
+        startDate,
+        endDate,
+        -1,
+        conn);
+    }
+    catch (Exception e)
     {
-      printError("Exception getting item list: " + e +"<br>");
+      printError("Exception getting item list: " + e + "<br>");
     }
     closeConnection();
     sp.printHTMLfooter();
   }
 
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
-  
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 }

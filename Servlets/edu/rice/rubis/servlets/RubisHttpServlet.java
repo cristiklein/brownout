@@ -1,14 +1,21 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.EmptyStackException;
 import java.util.Properties;
 import java.util.Stack;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import javax.servlet.ServletException;
+import javax.servlet.UnavailableException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** Provides the method to initialize connection to the database. All the servlets inherit from this class */
 public abstract class RubisHttpServlet extends HttpServlet
@@ -35,7 +42,7 @@ public abstract class RubisHttpServlet extends HttpServlet
       dbProperties.load(in);
       // load the driver
       Class.forName(dbProperties.getProperty("datasource.classname"));
-      
+
       freeConnections = new Stack();
       initializeConnections();
     }
@@ -92,23 +99,23 @@ public abstract class RubisHttpServlet extends HttpServlet
     }
   }
 
-//  public Connection getConnection()
-//  {
-//    //    currentConn = (currentConn + 1) % poolSize;
-//    //    return conn[currentConn];
-//    try
-//    {
-//      return DriverManager.getConnection(
-//        dbProperties.getProperty("datasource.url"),
-//        dbProperties.getProperty("datasource.username"),
-//        dbProperties.getProperty("datasource.password"));
-//    }
-//    catch (SQLException e)
-//    {
-//      return null;
-//    }
-//
-//  }
+  //  public Connection getConnection()
+  //  {
+  //    //    currentConn = (currentConn + 1) % poolSize;
+  //    //    return conn[currentConn];
+  //    try
+  //    {
+  //      return DriverManager.getConnection(
+  //        dbProperties.getProperty("datasource.url"),
+  //        dbProperties.getProperty("datasource.username"),
+  //        dbProperties.getProperty("datasource.password"));
+  //    }
+  //    catch (SQLException e)
+  //    {
+  //      return null;
+  //    }
+  //
+  //  }
 
   /**
   * Closes a <code>Connection</code>.
@@ -125,7 +132,7 @@ public abstract class RubisHttpServlet extends HttpServlet
 
     }
   }
-  
+
   /**
    * Gets a connection from the pool (round-robin)
    *
@@ -200,19 +207,19 @@ public abstract class RubisHttpServlet extends HttpServlet
   {
 
   }
-  
+
   /**
    * Clean up database connections.
    */
-    public void destroy()
+  public void destroy()
+  {
+    try
     {
-      try
-      {
-        finalizeConnections();
-      }
-      catch (SQLException e)
-      {
-      }
+      finalizeConnections();
     }
+    catch (SQLException e)
+    {
+    }
+  }
 
 }

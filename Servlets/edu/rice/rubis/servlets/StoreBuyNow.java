@@ -1,11 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlet records a BuyNow in the database and display
  * the result of the transaction.
@@ -35,15 +38,16 @@ public class StoreBuyNow extends RubisHttpServlet
     return Config.StoreBuyNowPoolSize;
   }
 
-
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
@@ -51,12 +55,12 @@ public class StoreBuyNow extends RubisHttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBuyNow");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
-
 
   /**
    * Call the <code>doPost</code> method.
@@ -66,7 +70,8 @@ public class StoreBuyNow extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
@@ -79,15 +84,16 @@ public class StoreBuyNow extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     Integer userId; // item id
     Integer itemId; // user id
     //     float   minBuyNow; // minimum acceptable BuyNow for this item
     //     float   BuyNow;    // user BuyNow
     //     float   maxBuyNow; // maximum BuyNow the user wants
-    int     maxQty; // maximum quantity available for this item
-    int     qty;    // quantity asked by the user
+    int maxQty; // maximum quantity available for this item
+    int qty; // quantity asked by the user
 
     sp = new ServletPrinter(response, "StoreBuyNow");
 
@@ -97,7 +103,7 @@ public class StoreBuyNow extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a user identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       userId = new Integer(value);
@@ -106,17 +112,16 @@ public class StoreBuyNow extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide an item identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       itemId = new Integer(value);
-
 
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a maximum quantity !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -128,7 +133,7 @@ public class StoreBuyNow extends RubisHttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a quantity !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -139,17 +144,24 @@ public class StoreBuyNow extends RubisHttpServlet
     /* Check for invalid values */
     if (qty > maxQty)
     {
-      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>");
-      return ;
-    }  
+      printError(
+        "<h3>You cannot request "
+          + qty
+          + " items because only "
+          + maxQty
+          + " are proposed !<br></h3>");
+      return;
+    }
     String now = TimeManagement.currentDateToString();
     // Try to find the Item corresponding to the Item ID
-    try 
+    try
     {
       int quantity;
       conn = getConnection();
       conn.setAutoCommit(false);
-      stmt = conn.prepareStatement("SELECT quantity, end_date FROM items WHERE id=?");
+      stmt =
+        conn.prepareStatement(
+          "SELECT quantity, end_date FROM items WHERE id=?");
       stmt.setInt(1, itemId.intValue());
       ResultSet irs = stmt.executeQuery();
       if (!irs.first())
@@ -159,10 +171,12 @@ public class StoreBuyNow extends RubisHttpServlet
         return;
       }
       quantity = irs.getInt("quantity");
-      quantity = quantity -qty;
+      quantity = quantity - qty;
       if (quantity == 0)
       {
-        stmt = conn.prepareStatement("UPDATE items SET end_date=?, quantity=? WHERE id=?");
+        stmt =
+          conn.prepareStatement(
+            "UPDATE items SET end_date=?, quantity=? WHERE id=?");
         stmt.setString(1, now);
         stmt.setInt(2, quantity);
         stmt.setInt(3, itemId.intValue());
@@ -178,54 +192,66 @@ public class StoreBuyNow extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      sp.printHTML("Failed to execute Query for the item: " +e+"<br>");
+      sp.printHTML("Failed to execute Query for the item: " + e + "<br>");
       try
       {
         conn.rollback();
         closeConnection();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
         printError("Transaction rollback failed: " + e);
       }
       return;
     }
-    try 
-    {	
-      stmt = conn.prepareStatement("INSERT INTO buy_now VALUES (NULL, \""+userId+
-                                   "\", \""+itemId+"\", \""+qty+"\", \""+now+"\")");
+    try
+    {
+      stmt =
+        conn.prepareStatement(
+          "INSERT INTO buy_now VALUES (NULL, \""
+            + userId
+            + "\", \""
+            + itemId
+            + "\", \""
+            + qty
+            + "\", \""
+            + now
+            + "\")");
       stmt.executeUpdate();
       conn.commit();
       sp.printHTMLheader("RUBiS: BuyNow result");
       if (qty == 1)
-        sp.printHTML("<center><h2>Your have successfully bought this item.</h2></center>\n");
+        sp.printHTML(
+          "<center><h2>Your have successfully bought this item.</h2></center>\n");
       else
-        sp.printHTML("<center><h2>Your have successfully bought these items.</h2></center>\n");
+        sp.printHTML(
+          "<center><h2>Your have successfully bought these items.</h2></center>\n");
     }
     catch (Exception e)
     {
-      sp.printHTML("Error while storing the BuyNow (got exception: " +e+")<br>");
+      sp.printHTML(
+        "Error while storing the BuyNow (got exception: " + e + ")<br>");
       try
       {
         conn.rollback();
         closeConnection();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e +"<br>");
+        printError("Transaction rollback failed: " + e + "<br>");
       }
-      return ;
+      return;
     }
-		closeConnection();
+    closeConnection();
     sp.printHTMLfooter();
   }
-  
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 
 }

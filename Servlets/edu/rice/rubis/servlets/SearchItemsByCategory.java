@@ -1,12 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
 import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets displays a list of items belonging to a specific category.
  * It must be called this way :
@@ -32,12 +34,14 @@ public class SearchItemsByCategory extends RubisHttpServlet
 
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
@@ -45,18 +49,23 @@ public class SearchItemsByCategory extends RubisHttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: Search Items By Category");
-    sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>We cannot process your request due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
 
-  private void itemList(Integer categoryId, String categoryName, int page, int nbOfItems) 
+  private void itemList(
+    Integer categoryId,
+    String categoryName,
+    int page,
+    int nbOfItems)
   {
     String itemName, endDate;
     int itemId;
     float maxBid;
-    int nbOfBids=0;
+    int nbOfBids = 0;
     ResultSet rs = null;
 
     // get the list of items
@@ -65,37 +74,50 @@ public class SearchItemsByCategory extends RubisHttpServlet
       conn = getConnection();
       //conn.setAutoCommit(false);
 
-      stmt = conn.prepareStatement("SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items WHERE items.category=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
+      stmt =
+        conn.prepareStatement(
+          "SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items WHERE items.category=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
       stmt.setInt(1, categoryId.intValue());
-      stmt.setInt(2, page*nbOfItems);
+      stmt.setInt(2, page * nbOfItems);
       stmt.setInt(3, nbOfItems);
       rs = stmt.executeQuery();
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to executeQuery for item: " +e);
+      sp.printHTML("Failed to executeQuery for item: " + e);
       closeConnection();
       return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
         if (page == 0)
         {
-          sp.printHTML("<h2>Sorry, but there are no items available in this category !</h2>");
+          sp.printHTML(
+            "<h2>Sorry, but there are no items available in this category !</h2>");
         }
         else
         {
-          sp.printHTML("<h2>Sorry, but there are no more items available in this category !</h2>");
+          sp.printHTML(
+            "<h2>Sorry, but there are no more items available in this category !</h2>");
           sp.printItemHeader();
-          sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="+categoryId+
-                             "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>", "");
+          sp.printItemFooter(
+            "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+              + categoryId
+              + "&categoryName="
+              + URLEncoder.encode(categoryName)
+              + "&page="
+              + (page - 1)
+              + "&nbOfItems="
+              + nbOfItems
+              + "\">Previous page</a>",
+            "");
         }
         closeConnection();
         return;
       }
-  
+
       sp.printItemHeader();
       do
       {
@@ -105,29 +127,53 @@ public class SearchItemsByCategory extends RubisHttpServlet
         maxBid = rs.getFloat("max_bid");
         nbOfBids = rs.getInt("nb_of_bids");
         float initialPrice = rs.getFloat("initial_price");
-        if (maxBid <initialPrice)
+        if (maxBid < initialPrice)
           maxBid = initialPrice;
         sp.printItem(itemName, itemId, maxBid, nbOfBids, endDate);
       }
-      while (rs.next()); 
+      while (rs.next());
       if (page == 0)
       {
-        sp.printItemFooter("", "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="+categoryId+
-                           "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
+        sp.printItemFooter(
+          "",
+          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+            + categoryId
+            + "&categoryName="
+            + URLEncoder.encode(categoryName)
+            + "&page="
+            + (page + 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Next page</a>");
       }
       else
       {
-        sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="+categoryId+
-                           "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>",
-                           "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="+categoryId+
-                           "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
+        sp.printItemFooter(
+          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+            + categoryId
+            + "&categoryName="
+            + URLEncoder.encode(categoryName)
+            + "&page="
+            + (page - 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Previous page</a>",
+          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+            + categoryId
+            + "&categoryName="
+            + URLEncoder.encode(categoryName)
+            + "&page="
+            + (page + 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Next page</a>");
       }
       //conn.commit();
       closeConnection();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      printError("Exception getting item list: " + e +"<br>");
+      printError("Exception getting item list: " + e + "<br>");
       //       try
       //       {
       //         conn.rollback();
@@ -140,21 +186,22 @@ public class SearchItemsByCategory extends RubisHttpServlet
     }
   }
 
-
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     Integer page;
     Integer nbOfItems;
-    String  value = request.getParameter("category");;
+    String value = request.getParameter("category");
+    ;
     Integer categoryId;
-    String  categoryName = request.getParameter("categoryName");
+    String categoryName = request.getParameter("categoryName");
 
     sp = new ServletPrinter(response, "SearchItemsByCategory");
 
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a category identifier!<br>");
-      return ;
+      return;
     }
     else
       categoryId = new Integer(value);
@@ -178,25 +225,25 @@ public class SearchItemsByCategory extends RubisHttpServlet
     }
     else
     {
-      sp.printHTMLheader("RUBiS: Items in category "+categoryName);
-      sp.printHTML("<h2>Items in category "+categoryName+"</h2><br><br>");
+      sp.printHTMLheader("RUBiS: Items in category " + categoryName);
+      sp.printHTML("<h2>Items in category " + categoryName + "</h2><br><br>");
     }
 
     itemList(categoryId, categoryName, page.intValue(), nbOfItems.intValue());
     sp.printHTMLfooter();
   }
 
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
-  
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 }

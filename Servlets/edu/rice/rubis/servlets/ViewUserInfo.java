@@ -1,11 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets displays general information about a user.
  * It must be called this way :
@@ -102,11 +105,11 @@ public class ViewUserInfo extends RubisHttpServlet
       }
       while (rs.next());
       sp.printCommentFooter();
-      conn.commit(); 
+      conn.commit();
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e + "<br>");     
+      sp.printHTML("Exception getting comment list: " + e + "<br>");
       try
       {
         conn.rollback();
@@ -199,12 +202,12 @@ public class ViewUserInfo extends RubisHttpServlet
     closeConnection();
   }
 
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 
 }

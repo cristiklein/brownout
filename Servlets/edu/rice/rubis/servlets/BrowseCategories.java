@@ -1,10 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** Builds the html page with the list of all categories and provides links to browse all
     items in a category or items in a category for a given region */
@@ -21,19 +25,20 @@ public class BrowseCategories extends RubisHttpServlet
 
   private void closeConnection()
   {
-    try 
-    {      
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+    try
+    {
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
 
-
   /** List all the categories in the database */
-  private void categoryList(int regionId, int userId) 
+  private void categoryList(int regionId, int userId)
   {
     String categoryName;
     int categoryId;
@@ -56,21 +61,22 @@ public class BrowseCategories extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Failed to execute Query for categories list: " +e);
+      sp.printHTML("Failed to execute Query for categories list: " + e);
       closeConnection();
       return;
     }
-    try 
+    try
     {
-      if (!rs.first()) 
+      if (!rs.first())
       {
-        sp.printHTML("<h2>Sorry, but there is no category available at this time. Database table is empty</h2><br>");
+        sp.printHTML(
+          "<h2>Sorry, but there is no category available at this time. Database table is empty</h2><br>");
         closeConnection();
         return;
       }
       else
         sp.printHTML("<h2>Currently available categories</h2><br>");
-  
+
       do
       {
         categoryName = rs.getString("name");
@@ -90,11 +96,11 @@ public class BrowseCategories extends RubisHttpServlet
       }
       while (rs.next());
       //conn.commit();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Exception getting categories list: " + e +"<br>");
-	
+      sp.printHTML("Exception getting categories list: " + e + "<br>");
+
       // 		       try
       // 		       {
       // 		         conn.rollback();
@@ -107,35 +113,37 @@ public class BrowseCategories extends RubisHttpServlet
     }
   }
 
-
   /** Build the html page for the response */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    int     regionId = -1, userId = -1;
-    String  username=null, password=null;
+    int regionId = -1, userId = -1;
+    String username = null, password = null;
 
     sp = new ServletPrinter(response, "BrowseCategories");
     sp.printHTMLheader("RUBiS available categories");
 
     username = request.getParameter("nickname");
     password = request.getParameter("password");
-    
+
     conn = getConnection();
 
     // Authenticate the user who want to sell items
-    if ((username != null && username !="") || (password != null && password !=""))
+    if ((username != null && username != "")
+      || (password != null && password != ""))
     {
       Auth auth = new Auth(conn, sp);
       userId = auth.authenticate(username, password);
       if (userId == -1)
       {
-        sp.printHTML(" You don't have an account on RUBiS!<br>You have to register first.<br>");
+        sp.printHTML(
+          " You don't have an account on RUBiS!<br>You have to register first.<br>");
         sp.printHTMLfooter();
-	closeConnection();
-        return ;	
+        closeConnection();
+        return;
       }
     }
-    
+
     String value = request.getParameter("region");
     if ((value != null) && (!value.equals("")))
     {
@@ -147,39 +155,40 @@ public class BrowseCategories extends RubisHttpServlet
         ResultSet rs = stmt.executeQuery();
         if (!rs.first())
         {
-          sp.printHTML(" Region "+value+" does not exist in the database!<br>");
+          sp.printHTML(
+            " Region " + value + " does not exist in the database!<br>");
           closeConnection();
-          return ;
+          return;
         }
         regionId = rs.getInt("id");
-
 
       }
       catch (SQLException e)
       {
-        sp.printHTML("Failed to execute Query for region: " +e);
+        sp.printHTML("Failed to execute Query for region: " + e);
         closeConnection();
         return;
       }
     }
 
-    categoryList(regionId, userId);    	
+    categoryList(regionId, userId);
     closeConnection();
     sp.printHTMLfooter();
 
   }
 
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
-  
+
   /**
    * Clean up the connection pool.
    */
-    public void destroy()
-    {
-      super.destroy();
-    }
+  public void destroy()
+  {
+    super.destroy();
+  }
 
 }

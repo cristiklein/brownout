@@ -1,11 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets display the page allowing a user to put a bid
  * on an item.
@@ -20,7 +23,6 @@ import java.sql.*;
  * @version 1.0
  */
 
-
 public class PutBid extends RubisHttpServlet
 {
   private ServletPrinter sp = null;
@@ -34,13 +36,15 @@ public class PutBid extends RubisHttpServlet
 
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-      
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+
+    }
+    catch (Exception ignore)
     {
     }
   }
@@ -48,26 +52,30 @@ public class PutBid extends RubisHttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: PutBid");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
 
-
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
     String pass = request.getParameter("password");
     sp = new ServletPrinter(response, "PubBid");
-    
-    if ((itemStr == null) || (itemStr.equals("")) ||
-        (name == null) || (name.equals(""))||
-        (pass == null) || (pass.equals("")))
+
+    if ((itemStr == null)
+      || (itemStr.equals(""))
+      || (name == null)
+      || (name.equals(""))
+      || (pass == null)
+      || (pass.equals("")))
     {
       printError("Item id, name and password are required - Cannot process the request<br>");
-      return ;
+      return;
     }
     Integer itemId = new Integer(itemStr);
 
@@ -78,13 +86,13 @@ public class PutBid extends RubisHttpServlet
     if (userId == -1)
     {
       printError(" You don't have an account on RUBiS!<br>You have to register first.<br>");
-      return ;	
+      return;
     }
 
     // Try to find the Item corresponding to the Item ID
     String itemName, endDate, startDate, description, sellerName;
     float maxBid, initialPrice, buyNow, reservePrice;
-    int quantity, sellerId, nbOfBids=0;
+    int quantity, sellerId, nbOfBids = 0;
     ResultSet rs = null;
     try
     {
@@ -94,14 +102,14 @@ public class PutBid extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("Failed to execute Query for item: " +e);
+      printError("Failed to execute Query for item: " + e);
       return;
     }
-    try 
+    try
     {
       if (!rs.first())
       {
-        printError("<h2>This item does not exist!</h2>");		    
+        printError("<h2>This item does not exist!</h2>");
         return;
       }
       itemName = rs.getString("name");
@@ -113,16 +121,17 @@ public class PutBid extends RubisHttpServlet
       buyNow = rs.getFloat("buy_now");
       quantity = rs.getInt("quantity");
       sellerId = rs.getInt("seller");
-      try 
+      try
       {
-        PreparedStatement sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+        PreparedStatement sellerStmt =
+          conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
         sellerStmt.setInt(1, sellerId);
         ResultSet sellerResult = sellerStmt.executeQuery();
         // Get the seller's name		 
-        if (sellerResult.first()) 
+        if (sellerResult.first())
           sellerName = sellerResult.getString("nickname");
         else
-        {	
+        {
           printError("Unknown seller");
           return;
         }
@@ -130,60 +139,79 @@ public class PutBid extends RubisHttpServlet
       }
       catch (SQLException e)
       {
-        printError("Failed to executeQuery for seller: " +e);
+        printError("Failed to executeQuery for seller: " + e);
         return;
       }
-      try 
+      try
       {
-        PreparedStatement maxBidStmt = conn.prepareStatement("SELECT MAX(bid) AS bid FROM bids WHERE item_id=?");
+        PreparedStatement maxBidStmt =
+          conn.prepareStatement(
+            "SELECT MAX(bid) AS bid FROM bids WHERE item_id=?");
         maxBidStmt.setInt(1, itemId.intValue());
         ResultSet maxBidResult = maxBidStmt.executeQuery();
         // Get the current price (max bid)		 
-        if (maxBidResult.first()) 
+        if (maxBidResult.first())
           maxBid = maxBidResult.getFloat("bid");
         else
           maxBid = initialPrice;
       }
       catch (SQLException e)
       {
-        printError("Failed to executeQuery for max bid: " +e);
+        printError("Failed to executeQuery for max bid: " + e);
         return;
       }
-      try 
+      try
       {
-        PreparedStatement nbStmt = conn.prepareStatement("SELECT COUNT(*) AS bid FROM bids WHERE item_id=?");
+        PreparedStatement nbStmt =
+          conn.prepareStatement(
+            "SELECT COUNT(*) AS bid FROM bids WHERE item_id=?");
         nbStmt.setInt(1, itemId.intValue());
         ResultSet nbResult = nbStmt.executeQuery();
         // Get the number of bids for this item
-        if (nbResult.first()) 
+        if (nbResult.first())
           nbOfBids = nbResult.getInt("bid");
       }
       catch (SQLException e)
       {
-        printError("Failed to executeQuery for number of bids: " +e);
+        printError("Failed to executeQuery for number of bids: " + e);
         return;
       }
-      sp.printItemDescription(itemId.intValue(), itemName, description, initialPrice, reservePrice, buyNow, quantity, maxBid, nbOfBids, sellerName, sellerId, startDate, endDate, userId, conn);
-    } 
-    catch (Exception e) 
+      sp.printItemDescription(
+        itemId.intValue(),
+        itemName,
+        description,
+        initialPrice,
+        reservePrice,
+        buyNow,
+        quantity,
+        maxBid,
+        nbOfBids,
+        sellerName,
+        sellerId,
+        startDate,
+        endDate,
+        userId,
+        conn);
+    }
+    catch (Exception e)
     {
-      printError("Exception getting item list: " + e +"<br>");
+      printError("Exception getting item list: " + e + "<br>");
     }
     closeConnection();
     sp.printHTMLfooter();
   }
 
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
-  
-   /**
-   * Clean up the connection pool.
-   */
-    public void destroy()
-    {
-      super.destroy();
-    }
+
+  /**
+  * Clean up the connection pool.
+  */
+  public void destroy()
+  {
+    super.destroy();
+  }
 }

@@ -1,11 +1,14 @@
 package edu.rice.rubis.servlets;
 
-import edu.rice.rubis.*;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.sql.*;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets display the page allowing a user to buy an item
  * It must be called this way :
@@ -30,15 +33,16 @@ public class BuyNow extends RubisHttpServlet
     return Config.BuyNowPoolSize;
   }
 
-
   private void closeConnection()
   {
-    try 
+    try
     {
-      if (stmt != null) stmt.close();	// close statement
-      if (conn != null) releaseConnection(conn);
-    } 
-    catch (Exception ignore) 
+      if (stmt != null)
+        stmt.close(); // close statement
+      if (conn != null)
+        releaseConnection(conn);
+    }
+    catch (Exception ignore)
     {
     }
   }
@@ -46,12 +50,12 @@ public class BuyNow extends RubisHttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: Buy now");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
     closeConnection();
   }
-
 
   /**
    * Authenticate the user and end the display a buy now form
@@ -61,21 +65,24 @@ public class BuyNow extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
     String pass = request.getParameter("password");
     sp = new ServletPrinter(response, "BuyNow");
-    
-    if ((itemStr == null) || (itemStr.equals("")) ||
-        (name == null) || (name.equals(""))||
-        (pass == null) || (pass.equals("")))
+
+    if ((itemStr == null)
+      || (itemStr.equals(""))
+      || (name == null)
+      || (name.equals(""))
+      || (pass == null)
+      || (pass.equals("")))
     {
       printError("Item id, name and password are required - Cannot process the request<br>");
-      return ;
+      return;
     }
-
 
     // Authenticate the user who want to bid
     conn = getConnection();
@@ -83,10 +90,10 @@ public class BuyNow extends RubisHttpServlet
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      sp.printHTML("name: "+name+"<br>");
-      sp.printHTML("pwd: "+pass+"<br>");	
+      sp.printHTML("name: " + name + "<br>");
+      sp.printHTML("pwd: " + pass + "<br>");
       printError(" You don't have an account on RUBiS!<br>You have to register first.<br>");
-      return ;	
+      return;
     }
     Integer itemId = new Integer(itemStr);
     // Try to find the Item corresponding to the Item ID
@@ -123,16 +130,26 @@ public class BuyNow extends RubisHttpServlet
       }
       catch (SQLException s)
       {
-        printError("Failed to execute Query for seller: " +s);
+        printError("Failed to execute Query for seller: " + s);
         return;
       }
       // Display the form for buying the item
-      sp.printItemDescriptionToBuyNow(itemId.intValue(), itemName, description, buyNow, quantity, sellerId, sellerName, startDate, endDate, userId);
+      sp.printItemDescriptionToBuyNow(
+        itemId.intValue(),
+        itemName,
+        description,
+        buyNow,
+        quantity,
+        sellerId,
+        sellerName,
+        startDate,
+        endDate,
+        userId);
 
     }
     catch (SQLException e)
     {
-      printError("Failed to execute Query for item: " +e);
+      printError("Failed to execute Query for item: " + e);
       return;
     }
     sp.printHTMLfooter();
@@ -153,7 +170,7 @@ public class BuyNow extends RubisHttpServlet
     // 	sp.printHTMLheader("Buy now");
     // 	sp.printHTML("<h2>You bought: "+item.getName()+" for $"+item.getBuyNow()+
     // 		     ".</h2><br>");
-	
+
   }
 
   /**
@@ -164,16 +181,17 @@ public class BuyNow extends RubisHttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
-  
+
   /**
    * Clean up the connection pool.
    */
-    public void destroy()
-    {
-      super.destroy();
-    }
+  public void destroy()
+  {
+    super.destroy();
+  }
 }
