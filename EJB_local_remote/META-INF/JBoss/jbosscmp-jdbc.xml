@@ -323,7 +323,7 @@
                  <select>
                    <distinct></distinct>
                  </select>   
-                 <where><![CDATA[items.seller={0} AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) &lt; 30]]></where>
+                 <where><![CDATA[items.seller={0} AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) <= 30]]></where>
                </declared-sql>
               </query>      
             <query>
@@ -462,7 +462,7 @@
                  <select>
                    <distinct></distinct>
                  </select>   
-                 <where><![CDATA[seller={0} AND TO_DAYS(NOW()) - TO_DAYS(end_date) &lt; 30]]></where>
+                 <where><![CDATA[seller={0} AND TO_DAYS(NOW()) - TO_DAYS(end_date) <= 30]]></where>
                </declared-sql>
               </query>      
             <query>
@@ -698,7 +698,7 @@
                  <select>
                    <distinct></distinct>
                  </select>                 
-                <where><![CDATA[buyer_id={0} AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)&lt;=30]]></where>
+                <where><![CDATA[buyer_id={0} AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30]]></where>
                </declared-sql>
               </query>
             <query>
