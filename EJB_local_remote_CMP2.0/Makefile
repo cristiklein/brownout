@@ -38,7 +38,8 @@ base-jar:
 
 # JOnAS specific build
 
-jonas_xml = ejb-jar.xml jonas-ejb-jar.xml
+jonas_xml = 
+#ejb-jar.xml jonas-ejb-jar.xml
 
 %.xml: Makefile 
 	${GENIC} -rmiopts -d . -javac $(JAVAC) -javacopts $(JAVACOPTS) -verbose $@
@@ -79,7 +80,7 @@ all_ejb_servlets_sources =  $(addprefix edu/rice/rubis/beans/servlets/, $(addsuf
 all_ejb_servlets_obj = $(addprefix edu/rice/rubis/beans/servlets/, $(addsuffix .class, $(EJB_Servlets)))
 
 config_jonas:
-	${CP} edu/rice/rubis/beans/servlets/ConfigJOnAS.java edu/rice/rubis/beans/servlets/Config.java
+#	${CP} edu/rice/rubis/beans/servlets/ConfigJOnAS.java edu/rice/rubis/beans/servlets/Config.java
 
 config_jboss:
 	${CP} edu/rice/rubis/beans/servlets/ConfigJBoss.java edu/rice/rubis/beans/servlets/Config.java
