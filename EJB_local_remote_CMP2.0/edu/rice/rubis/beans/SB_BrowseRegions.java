@@ -18,14 +18,5 @@ public interface SB_BrowseRegions extends EJBObject, Remote {
    */
   public String getRegions() throws RemoteException;
 
-  /** 
-   * Region related printed functions
-   *
-   * @param region the region to display
-   * @return a string in html format
-   * @since 1.1
-   */
-
-  public String printRegion(RegionLocal region) throws RemoteException;
-
+ 
 }

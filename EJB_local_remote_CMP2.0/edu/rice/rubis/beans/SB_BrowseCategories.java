@@ -26,20 +26,5 @@ public interface SB_BrowseCategories extends EJBObject, Remote {
    * @since 1.1
    */
 
-  public String printCategory(CategoryLocal category) throws RemoteException;
-
-  /** 
-   * List all the categories with links to browse items by region
-   * @return a string in html format
-   * @since 1.1
-   */
-  public String printCategoryByRegion(CategoryLocal category, int regionId) throws RemoteException;
-
-  /** 
-   * Lists all the categories and links to the sell item page
-   * @return a string in html format
-   * @since 1.1
-   */
-  public String printCategoryToSellItem(CategoryLocal category, int userId) throws RemoteException;
 
 }
