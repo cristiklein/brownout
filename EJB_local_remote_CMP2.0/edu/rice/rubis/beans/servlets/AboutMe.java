@@ -68,7 +68,7 @@ public class AboutMe extends HttpServlet
     username = request.getParameter("nickname");
     password = request.getParameter("password");    
     // Authenticate the user
-    if ((username != null && username !="") || (password != null && password !=""))
+    if ((username != null && !username.equals("")) || (password != null && !password.equals("")))
     {
       try
       {
@@ -90,9 +90,12 @@ public class AboutMe extends HttpServlet
     SB_AboutMe aboutMe;
     try 
     {
+      System.out.println("1");
       aboutMeHome = (SB_AboutMeHome)PortableRemoteObject.narrow(initialContext.lookup("SB_AboutMeHome"),
                                                                 SB_AboutMeHome.class);
+      System.out.println("2");
       aboutMe = aboutMeHome.create();
+      System.out.println("3");
     } 
     catch (Exception e)
     {

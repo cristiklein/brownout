@@ -181,7 +181,7 @@
                    <ejb-name>Bid</ejb-name>
                  </select>
                  <from>items, bids</from>
-                 <where><![CDATA[bids.user_id={0} AND bids.item_id=items.id AND bids.max_bid>=items.max_bid AND items.max_bid<=bids.bid AND end_date>=NOW()]]></where>
+                 <where><![CDATA[bids.user_id={0} AND bids.item_id=items.id AND bids.max_bid>=items.max_bid AND items.max_bid<=bids.bid AND items.end_date>=NOW()]]></where>
               </declared-sql>
            </query>
         </entity>
