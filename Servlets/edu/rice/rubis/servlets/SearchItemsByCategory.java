@@ -65,7 +65,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
       conn = getConnection();
       //conn.setAutoCommit(false);
 
-      stmt = conn.prepareStatement("SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items WHERE items.category=? AND end_date>=NOW() LIMIT ?,?");
+      stmt = conn.prepareStatement("SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items WHERE items.category=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
       stmt.setInt(1, categoryId.intValue());
       stmt.setInt(2, page*nbOfItems);
       stmt.setInt(3, nbOfItems);

@@ -54,7 +54,7 @@ public class SB_SearchItemsByRegionBean implements SessionBean
     try
     {
       conn = dataSource.getConnection();
-      stmt = conn.prepareStatement("SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items,users WHERE items.category=? AND items.seller=users.id AND users.region=? AND end_date>=NOW() LIMIT ?,?");
+      stmt = conn.prepareStatement("SELECT items.name, items.id, items.end_date, items.max_bid, items.nb_of_bids, items.initial_price FROM items,users WHERE items.category=? AND items.seller=users.id AND users.region=? AND end_date>=NOW() ORDER BY items.end_date ASC LIMIT ?,?");
       stmt.setInt(1, categoryId.intValue());
       stmt.setInt(2, regionId.intValue());
       stmt.setInt(3, page*nbOfItems);

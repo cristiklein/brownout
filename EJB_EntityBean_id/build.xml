@@ -116,8 +116,8 @@
               descriptordir="./META-INF/JOnAS"
               basejarname="rubis" >
 
-      <dtd publicId="-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
-	   location="${jonas.root}/xml/ejb-jar_2_0.dtd" />
+      <dtd publicId="-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 1.1//EN"
+	   location="${jonas.root}/xml/ejb-jar_1_1.dtd" />
       <dtd publicId="-//ObjectWeb//DTD JOnAS 2.5//EN"
 	   location="${jonas.root}/xml/jonas-ejb-jar_2_5.dtd" />
       <jonas destdir="${dist}"
