@@ -554,10 +554,11 @@ public class UserSession extends Thread
    */
   public void run()
   {
-    int  nbOfTransitions;
-    int  next;
-    long time;
-    long startSession, endSession;
+    int  nbOfTransitions=0;
+    int  next=0;
+    long time=0;
+    long startSession=0;
+    long endSession=0;
 
     while (!ClientEmulator.isEndOfSimulation())
     {
