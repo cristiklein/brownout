@@ -12,7 +12,7 @@
   <body>    
     <menu>
       <a href="index.html">RUBiS</a>
-      <menuitem><a href="http://debian-sf.objectweb.org/project/showfiles.php?group_id=44">Download</a></menuitem>
+      <menuitem><a href="http://forge.objectweb.org/project/showfiles.php?group_id=44">Download</a></menuitem>
       <menuitem><a href="doc/index.html">Documentation</a></menuitem>
       <menuitem><a href="http://www.objectweb.org/wws/info/jmob">Mailing List</a></menuitem>
       <menuitem><a href="results.html">Experimental Results</a></menuitem>
@@ -23,8 +23,8 @@
     <menu>
       <legend>Developers' Corner</legend>
       <menuitem><a href="dev/contrib.html">Getting Involved</a></menuitem>
-      <menuitem><a href="http://debian-sf.objectweb.org/projects/rubis/">ObjectWeb Forge Site</a></menuitem>
-      <menuitem><a href="http://debian-sf.objectweb.org/cvs/?group_id=44">CVS Repository</a></menuitem>
+      <menuitem><a href="http://forge.objectweb.org/projects/rubis/">ObjectWeb Forge Site</a></menuitem>
+      <menuitem><a href="http://forge.objectweb.org/cvs/?group_id=44">CVS Repository</a></menuitem>
     </menu>
 
     <menu>
@@ -40,7 +40,7 @@
       <menuitem><a href="http://www.objectweb.org/wws">Mailing Lists</a></menuitem>
       <menuitem><a href="http://www.objectweb.org/resources/cvs.html">CVS Repositories</a></menuitem>
       <menuitem><a href="http://www.objectweb.org/resources/search.html">Search</a></menuitem>
-      <menuitem><a href="http://debian-sf.objectweb.org/">ObjectWeb Forge</a></menuitem>
+      <menuitem><a href="http://forge.objectweb.org/">ObjectWeb Forge</a></menuitem>
       <menuitem><a href="http://www.objectweb.org/mirrors.html">Mirror Sites</a></menuitem>
     </menu>
   </body>

@@ -15,7 +15,7 @@
     <s1 name="Recent news">
 
     <subtitle>20 may 2003: RUBiS 1.4 is released.</subtitle>
-       <p>This version fixes some <a href="http://debian-sf.objectweb.org/bugs/?group_id=44">bugs</a>.
+       <p>This version fixes some <a href="http://forge.objectweb.org/bugs/?group_id=44">bugs</a>.
         It has been tested with Tomcat 4.1.24, JBoss 3.2 and JOnAS 3.1.</p>
 
        <hr />

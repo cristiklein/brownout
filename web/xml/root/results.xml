@@ -73,7 +73,7 @@ for the experiments (SQL dump in ASCII format compressed with gzip).</p>
 <p>Download JBoss configuration files: <a href="results/config_files/JBoss.tgz">JBoss</a>  version,
 <a href="results/config_files/JBoss-opt.tgz">JBoss optimized calls </a> version,
 <a href="results/config_files/JBoss-3.0.tgz">JBoss 3.0</a> (EJB 2.0) version.</p>
-<p>Download <a href="http://debian-sf.objectweb.org/project/showfiles.php?group_id=44">RUBiS</a>.</p>
+<p>Download <a href="http://forge.objectweb.org/project/showfiles.php?group_id=44">RUBiS</a>.</p>
   </s2>
 
   </s1>
