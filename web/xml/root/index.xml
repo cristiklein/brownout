@@ -13,6 +13,9 @@
   <body>
 
     <s1 name="Recent news">
+    
+    <subtitle>28 august 2003: RUBiS 1.4.1 released.</subtitle>
+       <p>This version fixes the Javadoc generation process.</p>
 
     <subtitle>20 may 2003: RUBiS 1.4 is released.</subtitle>
        <p>This version fixes some <a href="http://forge.objectweb.org/bugs/?group_id=44">bugs</a>.

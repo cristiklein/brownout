@@ -14,6 +14,10 @@
 
     <s1 name="History">
     
+    <s2 name="RUBiS version 1.4.1 (August 2003)">
+        <p>Fixed Javadoc generation.</p>
+      </s2>
+    
       <s2 name="RUBiS version 1.4 (May 2003)">
         <p>Tested with Tomcat 4.1.24, Jboss 3.2 and JOnAS 3.1.</p>
       </s2>
