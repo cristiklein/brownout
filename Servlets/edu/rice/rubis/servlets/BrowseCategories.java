@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
     items in a category or items in a category for a given region */
 public class BrowseCategories extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
 
   public int getPoolSize()
@@ -40,7 +40,7 @@ public class BrowseCategories extends RubisHttpServlet
   }
 
   /** List all the categories in the database */
-  private void categoryList(int regionId, int userId, PreparedStatement stmt, Connection conn)
+  private void categoryList(int regionId, int userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
     String categoryName;
     int categoryId;
@@ -100,6 +100,7 @@ public class BrowseCategories extends RubisHttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     PreparedStatement stmt = null;
     Connection conn = null;
     int regionId = -1, userId = -1;
@@ -156,7 +157,7 @@ public class BrowseCategories extends RubisHttpServlet
       }
     }
 
-    categoryList(regionId, userId, stmt, conn);
+    categoryList(regionId, userId, stmt, conn, sp);
     closeConnection(stmt, conn);
     sp.printHTMLfooter();
 

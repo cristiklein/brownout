@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /** Builds the html page with the list of all region in the database */
 public class BrowseRegions extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
+ 
 
 
   public int getPoolSize()
@@ -40,7 +40,7 @@ public class BrowseRegions extends RubisHttpServlet
 /**
  * Get the list of regions from the database
  */
-  private void regionList()
+  private void regionList(ServletPrinter sp)
   {
     PreparedStatement stmt = null;
     Connection conn = null;
@@ -92,10 +92,11 @@ public class BrowseRegions extends RubisHttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "BrowseRegions");
     sp.printHTMLheader("RUBiS: Available regions");
 
-    regionList();
+    regionList(sp);
     sp.printHTMLfooter();
   }
 
