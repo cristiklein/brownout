@@ -296,7 +296,7 @@ public class UserSession extends Thread
         return lastItemId;
       if (debugLevel > 0)
         System.err.println("Thread " + this.getName()
-            + ": Cannot found item id in last HTML reply<br>");
+            + ": Cannot find item id in last HTML reply<br>");
       if (debugLevel > 1)
         System.err.println("Thread " + this.getName()
             + ": Last HTML reply is: " + lastHTMLReply + "<br>");
@@ -396,7 +396,7 @@ public class UserSession extends Thread
       if ((key.compareTo("userId=") == 0) && (lastUserId >= 0))
         return lastUserId;
       if (debugLevel > 0)
-        System.err.println("Thread " + this.getName() + ": Cannot found " + key
+        System.err.println("Thread " + this.getName() + ": Cannot find " + key
             + " in last HTML reply<br>");
       if (debugLevel > 1)
         System.err.println("Thread " + this.getName()
@@ -451,7 +451,7 @@ public class UserSession extends Thread
     if (keyIndex == -1)
     {
       if (debugLevel > 0)
-        System.err.println("Thread " + this.getName() + ": Cannot found " + key
+        System.err.println("Thread " + this.getName() + ": Cannot find " + key
             + " in last HTML reply<br>");
       if (debugLevel > 1)
         System.err.println("Thread " + this.getName()
