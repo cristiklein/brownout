@@ -1,15 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.jms.MapMessage;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicRequestor;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.Enumeration;
-import javax.jms.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets displays the list of bids regarding an item.
  * It must be called this way :
@@ -22,10 +28,8 @@ import javax.jms.*;
 
 public class ViewBidHistory extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: View Bid History");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -56,6 +60,9 @@ public class ViewBidHistory extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+
     String  value = request.getParameter("itemId");
     Integer itemId;
     
@@ -79,7 +86,7 @@ public class ViewBidHistory extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 

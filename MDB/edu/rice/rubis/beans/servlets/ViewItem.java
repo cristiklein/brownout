@@ -1,13 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.jms.MapMessage;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicRequestor;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.jms.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets displays the full description of a given item
  * and allows the user to bid on this item.
@@ -22,9 +30,8 @@ import javax.jms.*;
 
 public class ViewItem extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: View item");
     sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
@@ -42,12 +49,13 @@ public class ViewItem extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "ViewItem");
     
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("No item identifier received - Cannot process the request<br>");
+      printError("No item identifier received - Cannot process the request<br>", sp);
       return ;
     }
     sp.printHTMLheader("RUBiS: Viewing Item \n");
@@ -58,7 +66,7 @@ public class ViewItem extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 

@@ -1,13 +1,20 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicRequestor;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.jms.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Builds the html page with the list of all region in the database
@@ -16,8 +23,6 @@ import javax.jms.*;
  */
 public class BrowseRegions extends HttpServlet
 {
-  private ServletPrinter sp = null;
-
 
   /**
    * Display the list of regions
@@ -29,6 +34,7 @@ public class BrowseRegions extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String html;
     sp = new ServletPrinter(response, "BrowseRegions");
     sp.printHTMLheader("RUBiS: Available regions");

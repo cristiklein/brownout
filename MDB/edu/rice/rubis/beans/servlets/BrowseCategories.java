@@ -1,13 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.jms.MapMessage;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicRequestor;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.jms.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Builds the html page with the list of all categories and provides links to browse all
@@ -17,9 +25,8 @@ import javax.jms.*;
  */
 public class BrowseCategories extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Browse Categories");
     sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
@@ -36,6 +43,7 @@ public class BrowseCategories extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String  region=null;
     String  username=null, password=null;
     Context initialContext = null;
@@ -49,7 +57,7 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " +e+"<br>");
+      printError("Cannot get initial context for JNDI: " +e+"<br>", sp);
       return ;
     }
 

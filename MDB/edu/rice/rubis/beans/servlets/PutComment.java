@@ -1,13 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.jms.MapMessage;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicRequestor;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.jms.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets display the page allowing a user to put a comment
  * on an item.
@@ -26,9 +34,8 @@ import javax.jms.*;
 
 public class PutComment extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: PutComment");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -47,6 +54,7 @@ public class PutComment extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String toStr = request.getParameter("to");
     String itemStr = request.getParameter("itemId");
     String username = request.getParameter("nickname");
@@ -55,22 +63,22 @@ public class PutComment extends HttpServlet
 
     if ((toStr == null) || (toStr.equals("")))
     {
-      printError("<h3>You must provide a 'to user' identifier !<br></h3>");
+      printError("<h3>You must provide a 'to user' identifier !<br></h3>", sp);
       return ;
     }
     if ((itemStr == null) || (itemStr.equals("")))
     {
-      printError("<h3>A valid item identifier is required!<br></h3>");
+      printError("<h3>A valid item identifier is required!<br></h3>", sp);
       return ;
     }
         if ((username == null) || (username.equals("")))
     {
-      printError("<h3>You must provide a username !<br></h3>");
+      printError("<h3>You must provide a username !<br></h3>", sp);
       return ;
     }
         if ((password == null) || (password.equals("")))
     {
-      printError("<h3>You must provide a password !<br></h3>");
+      printError("<h3>You must provide a password !<br></h3>", sp);
       return ;
     }
 
@@ -84,7 +92,7 @@ public class PutComment extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
     TopicConnectionFactory topicFactory = null;

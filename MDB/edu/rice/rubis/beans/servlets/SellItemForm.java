@@ -1,12 +1,13 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Builds the html page that display the form to register a new item to sell.
@@ -15,9 +16,7 @@ import javax.servlet.http.*;
  */
 public class SellItemForm extends HttpServlet
 {
-  private ServletPrinter sp = null;
-
-
+  
   /**
    * Call the <code>doGet</code> method.
    *
@@ -41,6 +40,7 @@ public class SellItemForm extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String  categoryId=null, userId=null;
     Context initialContext = null;
 

@@ -1,15 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.jms.MapMessage;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicRequestor;
+import javax.jms.TopicSession;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.GregorianCalendar;
-import javax.jms.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets display the page allowing a user to buy an item
  * It must be called this way :
@@ -26,9 +32,8 @@ import javax.jms.*;
 
 public class BuyNow extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Buy Now");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -47,6 +52,7 @@ public class BuyNow extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
     String pass = request.getParameter("password");
@@ -56,7 +62,7 @@ public class BuyNow extends HttpServlet
         (name == null) || (name.equals(""))||
         (pass == null) || (pass.equals("")))
     {
-      printError("Item id, name and password are required - Cannot process the request<br>");
+      printError("Item id, name and password are required - Cannot process the request<br>", sp);
       return ;
     }
     Integer itemId = new Integer(itemStr);
@@ -68,7 +74,7 @@ public class BuyNow extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
