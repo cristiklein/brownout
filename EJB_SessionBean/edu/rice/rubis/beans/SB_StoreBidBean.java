@@ -59,8 +59,8 @@ public class SB_StoreBidBean implements SessionBean
         conn = dataSource.getConnection();
         String now = TimeManagement.currentDateToString();
         stmt = conn.prepareStatement("INSERT INTO bids VALUES (NULL, \""+userId+
-				   "\", \""+itemId+"\", \""+bid+"\", \""+
-				   maxBid+"\", \""+qty+"\", \""+now+"\")");
+				   "\", \""+itemId+"\", \""+qty+"\", \""+
+				   bid+"\", \""+maxBid+"\", \""+now+"\")");
         stmt.executeUpdate();
       }
       catch (SQLException e)

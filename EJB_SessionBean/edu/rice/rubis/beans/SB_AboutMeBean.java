@@ -121,6 +121,8 @@ public class SB_AboutMeBean implements SessionBean
       html.append(listWonItems(userId, conn));
       html.append(listBids(userId, username, password, conn));
       html.append(listComments(userId, conn));
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
       utx.commit();
     } 
     catch (Exception e)

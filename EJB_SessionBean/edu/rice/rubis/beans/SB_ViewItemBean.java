@@ -147,7 +147,7 @@ public class SB_ViewItemBean implements SessionBean
             /* Get the qty max first bids and parse bids in this order
                until qty is reached. The bid that reaches qty is the
                current minimum bid. */
-            bidStmt = conn.prepareStatement("SELECT bids.id, bids.quantity, bids.bid FROM bids WHERE item_id=? ORDER BY bid DESC LIMIT ?");
+            bidStmt = conn.prepareStatement("SELECT bids.id, bids.qty, bids.bid FROM bids WHERE item_id=? ORDER BY bid DESC LIMIT ?");
             bidStmt.setInt(1, itemId.intValue());
             bidStmt.setInt(2, qty);
             bidResult = bidStmt.executeQuery();
@@ -174,7 +174,7 @@ public class SB_ViewItemBean implements SessionBean
             while (bidResult.next()) 
             {
               bidValue = bidResult.getFloat("bid");
-              numberOfItems += bidResult.getInt("quantity");
+              numberOfItems += bidResult.getInt("qty");
               if (numberOfItems >= qty)
               {
                 maxBid = bidValue;
