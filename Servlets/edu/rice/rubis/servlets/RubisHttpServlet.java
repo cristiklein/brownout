@@ -1,4 +1,26 @@
-
+/*
+ * RUBiS
+ * Copyright (C) 2002, 2003, 2004 French National Institute For Research In Computer
+ * Science And Control (INRIA).
+ * Contact: jmob@objectweb.org
+ * 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation; either version 2.1 of the License, or any later
+ * version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ *
+ * Initial developer(s): Emmanuel Cecchet, Julie Marguerite
+ * Contributor(s): Jeremy Philippe
+ */
 package edu.rice.rubis.servlets;
 
 import java.io.FileInputStream;
@@ -22,7 +44,8 @@ import javax.servlet.http.HttpServlet;
  */
 public abstract class RubisHttpServlet extends HttpServlet
 {
-
+  /** Controls connection pooling */
+  private static final boolean enablePooling = false;
   /** Stack of available connections (pool) */
   private Stack      freeConnections = null;
   private int        poolSize;
@@ -88,14 +111,17 @@ public abstract class RubisHttpServlet extends HttpServlet
    */
   public synchronized void initializeConnections() throws SQLException
   {
+    if (enablePooling)
     for (int i = 0; i < poolSize; i++)
     {
       // Get connections to the database
-      freeConnections.push(DriverManager.getConnection(dbProperties
-          .getProperty("datasource.url"), dbProperties
-          .getProperty("datasource.username"), dbProperties
-          .getProperty("datasource.password")));
+      freeConnections.push(
+      DriverManager.getConnection(
+      dbProperties.getProperty("datasource.url"),
+      dbProperties.getProperty("datasource.username"),
+      dbProperties.getProperty("datasource.password")));
     }
+    
   }
 
   /**
@@ -122,29 +148,47 @@ public abstract class RubisHttpServlet extends HttpServlet
    */
   public synchronized Connection getConnection()
   {
-    try
+    if (enablePooling)
     {
-      // Wait for a connection to be available
-      while (freeConnections.isEmpty())
+      try
       {
-        try
+        // Wait for a connection to be available
+        while (freeConnections.isEmpty())
         {
-          wait();
-        }
-        catch (InterruptedException e)
-        {
-          System.out.println("Connection pool wait interrupted.");
-        }
-      }
+          try
+          {
+            wait();
+          }
+          catch (InterruptedException e)
+          {
+           System.out.println("Connection pool wait interrupted.");
+          }
+         }
+      
 
-      Connection c = (Connection) freeConnections.pop();
-      return c;
+        Connection c = (Connection) freeConnections.pop();
+        return c;
+      }
+      catch (EmptyStackException e)
+      {
+       System.out.println("Out of connections.");
+        return null;
+      }
     }
-    catch (EmptyStackException e)
-    {
-      System.out.println("Out of connections.");
-      return null;
-    }
+     else
+     {
+       try
+       {
+        return DriverManager.getConnection(
+        dbProperties.getProperty("datasource.url"),
+        dbProperties.getProperty("datasource.username"),
+        dbProperties.getProperty("datasource.password"));
+       } 
+       catch (SQLException ex) 
+       {
+        return null; 
+       }
+     }
   }
 
   /**
@@ -153,13 +197,20 @@ public abstract class RubisHttpServlet extends HttpServlet
    * @param c the connection to release
    */
   public synchronized void releaseConnection(Connection c)
-  {
-    boolean mustNotify = freeConnections.isEmpty();
-
-    freeConnections.push(c);
-    // Wake up one servlet waiting for a connection (if any)
-    if (mustNotify)
+  {  
+    if (enablePooling)
+    {
+      boolean mustNotify = freeConnections.isEmpty();
+      freeConnections.push(c);
+      // Wake up one servlet waiting for a connection (if any)
+      if (mustNotify)
       notifyAll();
+    }
+    else
+    {
+      closeConnection(c);
+    }
+    
   }
 
   /**
@@ -169,12 +220,15 @@ public abstract class RubisHttpServlet extends HttpServlet
    */
   public synchronized void finalizeConnections() throws SQLException
   {
-    Connection c = null;
-    while (!freeConnections.isEmpty())
+    if (enablePooling)
     {
+      Connection c = null;
+      while (!freeConnections.isEmpty())
+      {
       c = (Connection) freeConnections.pop();
       c.close();
-    }
+      }
+    }   
   }
 
   /**
