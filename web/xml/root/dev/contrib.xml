@@ -4,23 +4,23 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Julie Marguerite and Emmanuel Cecchet</author>
-    <title>How to get involved?</title>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
+    <title>How to Get Involved?</title>
     <filename>contrib.xml</filename>
     <pathtoroot>..</pathtoroot>
   </properties>
 
   <body>
 
-    <s1 name="Welcome to the developers' corner!">
+    <s1 name="Welcome to the Developers' Corner!">
   
     <p>RUBiS, as an open source project, welcomes and even expects
-       contributions.</p>
+    contributions.</p>
 
-    <p>Basically, any feature you need but you do not find implemented in
-       RUBiS may become a contribution topic. Simply send your ideas,
-       documents and developments (if any) to the 
-       <a href="mailto:emmanuel.cecchet@inrialpes.fr">RUBiS team</a> .</p>
+    <p>Basically, any feature you need but you do not find implemented
+    in RUBiS may become a contribution topic. Simply send your ideas,
+    documents and developments (if any) to the <a
+    href="mailto:jmob@objectweb.org">RUBiS team</a> .</p>
 
     </s1>
 

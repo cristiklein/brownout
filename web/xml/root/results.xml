@@ -4,19 +4,19 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Julie Marguerite and Emmanuel Cecchet</author>
-    <title>Experimental reports</title>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
+    <title>Experimental Reports</title>
     <filename>results_index.xml</filename>
     <pathtoroot>.</pathtoroot>
   </properties>
 
   <body>
 
-<s1 name="Experimental reports">
+<s1 name="Experimental Reports">
 
 <p>In our paper <a
  href="../download/perf_scalability_ejb.pdf"> 
-Performance and Scalability of EJB applications</a> , we investigate the
+Performance and Scalability of EJB applications</a>, we investigate the
 combined effect of application implementation method, container design, and
 efficiency of communication layers on the performance scalability of J2EE
 application servers by measurement of the auction site server <a
@@ -43,7 +43,7 @@ as follows:</p>
 <li>Java Servlets: the Java Servlets implementation,</li>
 <li><em>JBoss</em>: the <a href="http://www.jboss.org">JBoss container</a> 
 using JNP and passing objects by value,</li>
-<li><em> JOnAS-RMI</em>: the <a href="http://www.objectweb.org/jonas">JOnAS container</a> 
+<li><em>JOnAS-RMI</em>: the <a href="http://www.objectweb.org/jonas">JOnAS container</a> 
  using RMI,</li>
 <li><em>JBoss optimized calls</em>: the JBoss container using JNP and passing
  objects by reference,</li>
@@ -52,7 +52,7 @@ using JNP and passing objects by value,</li>
 </ul>
 
 
-<s2 name="Full report of paper experiments:">
+<s2 name="Full Report Of Paper Experiments">
 <p><a href="results/sb.html">Session beans results</a><br></br>
 
 <a href="results/eb-cmp.html">DAO separation with EB CMP results</a> <br></br>
@@ -67,15 +67,13 @@ detailed in 'Test performance report')
 </p>
 <p>Download the <a href="results/rubis_dump.sql.gz">database dump</a>  (113 MB) used
 for the experiments (SQL dump in ASCII format compressed with gzip).</p> 
-<p> Download JOnAS configuration files: <a href="results/config_files/JOnAS-RMI.tgz">JOnAS-RMI</a> 
+<p>Download JOnAS configuration files: <a href="results/config_files/JOnAS-RMI.tgz">JOnAS-RMI</a> 
  version, <a href="results/config_files/JOnAS-Jeremie.tgz">JOnAS-Jeremie</a>  version,
  <a href="results/config_files/JOnAS-2.5.tgz">JOnAS 2.5</a> (EJB 2.0) version. </p>
-<p> Download JBoss configuration files: <a href="results/config_files/JBoss.tgz">JBoss</a>  version,
+<p>Download JBoss configuration files: <a href="results/config_files/JBoss.tgz">JBoss</a>  version,
 <a href="results/config_files/JBoss-opt.tgz">JBoss optimized calls </a> version,
 <a href="results/config_files/JBoss-3.0.tgz">JBoss 3.0</a> (EJB 2.0) version.</p>
-<p> Download
- <a href="http://debian-sf.objectweb.org/projects/rubis/"> 
-RUBiS</a>.</p>
+<p>Download <a href="http://debian-sf.objectweb.org/project/showfiles.php?group_id=44">RUBiS</a>.</p>
   </s2>
 
   </s1>

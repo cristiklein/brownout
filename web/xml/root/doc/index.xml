@@ -4,9 +4,9 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Emmanuel Cecchet</author>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
     <title>Documentation</title>
-    <filename>doc_index.xml</filename>
+    <filename>index.xml</filename>
     <pathtoroot>..</pathtoroot>
   </properties>
 
@@ -15,7 +15,7 @@
     <s1 name="Documentation" anchor="doc">
   
       <ol>
-	<li><a href="install.html">Installation and configuration guide</a></li>
+	<li><a href="install.html">Installation and Configuration Guide</a></li>
       </ol>
     </s1>
 
@@ -28,7 +28,7 @@
 	Cristiana Amza, Emmanuel Cecchet, Anupam Chanda, Alan Cox, Sameh Elnikety, Romer Gil, Julie Marguerite, Karthick Rajamani and Willy Zwaenepoel
 	WWC-5 - Austin, TX, USA - November 25, 2002
 	</li>
-	<li> <a href="../download/perf_scalability_ejb.pdf">Performance and scalability of EJB applications (pdf)</a> (<a href="download/perf_scalability_ejb.ps.gz">ps.gz</a> format)
+	<li> <a href="../download/perf_scalability_ejb.pdf">Performance and Scalability of EJB Applications (pdf)</a> (<a href="download/perf_scalability_ejb.ps.gz">ps.gz</a> format)
 	Emmanuel Cecchet, Julie Marguerite and Willy Zwaenepoel
 	Oopsla'02 - Seattle, WA, USA - November 4-8, 2002
 	Full experiment reports are available<a href="../results.html"> here</a>.

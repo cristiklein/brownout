@@ -4,15 +4,15 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Emmanuel Cecchet</author>
-    <title>rubis.properties file example</title>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
+    <title>rubis.properties File Example</title>
     <filename>properties_file.xml</filename>
     <pathtoroot>..</pathtoroot>
   </properties>
 
   <body>
 
-<s1 name="rubis.properties example">
+<s1 name="rubis.properties Example">
 
 <p><strong># HTTP server information</strong></p>
 <p><code>httpd_hostname = httpserver.cs.rice.edu</code></p>

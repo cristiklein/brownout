@@ -4,7 +4,7 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Emmanuel Cecchet</author>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
     <title>License</title>
     <filename>license.xml</filename>
     <pathtoroot>.</pathtoroot>
@@ -12,7 +12,7 @@
 
   <body>
 
-    <s1 name="RUBiS licence">
+    <s1 name="Licence">
 
       <p>RUBiS is licensed under the <a href="http://www.gnu.org/copyleft/lesser.html">GNU Lesser General Public License</a>.</p>
 

@@ -4,7 +4,7 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">RUBiS team</author>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
     <title>Team</title>
     <filename>team.xml</filename>
     <pathtoroot>.</pathtoroot>
@@ -13,7 +13,7 @@
   <body>
     <s1 name="Team">
 
-      <subtitle>Project team</subtitle>
+      <subtitle>Project Team</subtitle>
  
       <p>Currently, the RUBiS team is composed of:</p>
       <ul>

@@ -4,8 +4,8 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Emmanuel Cecchet</author>
-    <title>Database description</title>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
+    <title>Database Description</title>
     <filename>database.xml</filename>
     <pathtoroot>.</pathtoroot>
   </properties>

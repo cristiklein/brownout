@@ -4,15 +4,15 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Emmanuel Cecchet</author>
-    <title>Installation and configuration</title>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
+    <title>Installation and Configuration</title>
     <filename>install.xml</filename>
     <pathtoroot>..</pathtoroot>
   </properties>
 
   <body>
 
-    <s1 name="Installation and configuration">
+    <s1 name="Installation and Configuration">
 	<ul>
 		<li><strong><a href="install.html#software">Software requirements</a></strong></li>
 		<li><strong><a href="install.html#structure">RUBiS files structure</a></strong></li>
@@ -20,7 +20,7 @@
 	</ul>
     </s1>
 
-    <s1 name="Software requirements" anchor="software">
+    <s1 name="Software Requirements" anchor="software">
 
     <p>For all the versions of the auction site benchmark:</p>
       <ul>
@@ -33,7 +33,7 @@
             since the client is written in Java)
        </li>
        <li>
-            <a href="http://www.apache.org">Apache</a> v.1.3.22
+            <a href="http://www.apache.org/">Apache</a> v.1.3.22
        </li>
        <li>
             <a href="http://freshmeat.net/projects/sysstat">Sysstat utility</a>
@@ -49,12 +49,12 @@
    <p>For the EJB version :</p>
       <ul>
        <li>
-            <a href="http://jakarta.apache.org/tomcat">Jakarta Tomcat</a> v3.2.4 or
+            <a href="http://jakarta.apache.org/tomcat/">Jakarta Tomcat</a> v3.2.4 or
             compatible
        </li>
        <li>
-            EJB server <a href="http://www.objectweb.org">JOnAS </a>v2.4, v2.5 or
-            <a href="http://www.jboss.org">JBoss</a> v2.4, v3.0
+            EJB server <a href="http://www.objectweb.org/jonas/">JOnAS </a>v2.4, v2.5 or
+            <a href="http://www.jboss.org/">JBoss</a> v2.4, v3.0
        </li>
        <li>
             Java servlets extension for Java platform (JSDK)
@@ -91,14 +91,13 @@
    <p>For the PHP version:</p>
       <ul>
        <li>
-            <a href="http://www.php.net">PHP</a> v.4.0.6 module for Apache
+            <a href="http://www.php.net/">PHP</a> v.4.0.6 module for Apache
        </li>
       </ul>
 
     </s1>
 
-
-    <s1 name="RUBiS files structure" anchor="structure">
+    <s1 name="RUBiS Files Structure" anchor="structure">
       <p>The directory tree of RUBiS is organized as follow:</p>
 
       <table border="1" width="100%">
@@ -368,7 +367,7 @@
       use (either MySQL or PostgreSQL) - Warning, this value is case sensitive.</p>
       </s2>
 
-      <s2 name="Compiling and running" anchor="compile">
+      <s2 name="Compiling and Running" anchor="compile">
       <p>From the top directory (/RUBiS/Makefile or /RUBiS/build.xml), you can use:</p>
       <table border="1" width="100%">
       <tr>
@@ -475,7 +474,7 @@
       </tr>
       </table>
 
-      <p><anchor name="JOnAS"></anchor><strong>EJB server : Jonas</strong></p>
+      <p><anchor name="JOnAS"></anchor><strong>EJB server : JOnAS</strong></p>
       <p>Go in the subdirectory of the version you are interested in:</p>
       <table border="1" width="100%">
       <tr>
@@ -549,7 +548,7 @@
       </s2>
 
 
-      <s2 name="Setting up rubis.properties" anchor="rubis_prop">
+      <s2 name="Setting Up rubis.properties" anchor="rubis_prop">
       <p>This files contains information about the http server : name, port, paths
       for html pages and scripts for each version of RUBiS. The version of RUBiS
       and the transition table (workload pattern) currently used and are also
@@ -561,7 +560,7 @@
       </p>
       </s2>
 
-      <s2 name="Performance tuning notes" anchor="tuning">
+      <s2 name="Performance Tuning Notes" anchor="tuning">
       <p>Here are some hints if you want to handle a high number of clients with
       RUBiS:</p>
       <ul>

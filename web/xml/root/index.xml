@@ -4,8 +4,8 @@
 
 <document>
   <properties>
-    <author email="julie.marguerite@inrialpes.fr">Julie Marguerite and Emmanuel Cecchet</author>
-    <title>Home page</title>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
+    <title>Home Page</title>
     <filename>index.xml</filename>
     <pathtoroot>.</pathtoroot>
   </properties>
@@ -15,7 +15,10 @@
     <s1 name="Recent news">
 
      <subtitle>December 2002</subtitle>
-      <p>RUBiS website move from Rice University to ObjectWeb.</p>
+
+      <p>RUBiS Web site moves from <a
+      href="http://www.cs.rice.edu/">Rice University</a> to <a
+      href="http://www.objectweb.org/">ObjectWeb</a>.</p>
     </s1>
 
     <s1 name="RUBiS: Rice University Bidding System">
@@ -47,7 +50,7 @@
 	<p>RUBiS is a <em>free</em>, <em>open source</em> initiative.</p>
       </s2>
 
-      <s2 name="Design patterns" anchor="design">
+      <s2 name="Design Patterns" anchor="design">
 	<p>Several versions of RUBiS are implemented using three different technologies: <a href="design.html#PHP">PHP</a>,
 	<a href="design.html#Servlet">Java
 	servlets</a> and <a href="design.html#EJB">EJB</a> (Enterprise Java Bean).
@@ -138,7 +141,7 @@
 	<p>Learn more about RUBiS in the <a href="doc/index.html">documentation</a> section and <a href="results.html">download</a> the code or the experimental results.</p>
       </s2>
 
-      <s2 name="Getting involved">
+      <s2 name="Getting Involved">
 	
 	<p>Any input or personal view for improving and/or developing
 	RUBiS is welcome. RUBiS, as an <em>open source</em> project,

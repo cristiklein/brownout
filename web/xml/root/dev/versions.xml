@@ -4,8 +4,8 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Julie Marguerite and Emmanuel cecchet</author>
-    <title>Version information</title>
+    <author email="jmob@objectweb.org">jmob@objectweb.org</author>
+    <title>Version Information</title>
     <filename>versions.xml</filename>
     <pathtoroot>..</pathtoroot>
   </properties>
@@ -13,13 +13,7 @@
   <body>
 
     <s1 name="Information on the current version">
-      <s2 name="">
-
-      </s2>
     </s1>
-
-
-
   </body>
 
 </document>
