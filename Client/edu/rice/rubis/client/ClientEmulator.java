@@ -264,7 +264,7 @@ public class ClientEmulator
       // Monitor Web server
       System.out.println("ClientEmulator: Starting monitoring program on Web server "+client.rubis.getWebServerName()+"<br>\n");
       webServerMonitor = client.startMonitoringProgram(client.rubis.getWebServerName(), reportDir+"web_server");
-        
+
       // Monitor Database server
       System.out.println("ClientEmulator: Starting monitoring program on Database server "+client.rubis.getDBServerName()+"<br>\n");
       dbServerMonitor = client.startMonitoringProgram(client.rubis.getDBServerName(), reportDir+"db_server");

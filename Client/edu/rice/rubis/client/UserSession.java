@@ -68,6 +68,7 @@ public class UserSession extends Thread
       try
       {
         in = new BufferedInputStream(url.openStream(), 4096);
+        //System.out.println("Thread "+this.getName()+": "+url);
       }
       catch (IOException ioe) 
       {
