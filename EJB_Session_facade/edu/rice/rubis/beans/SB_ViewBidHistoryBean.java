@@ -65,7 +65,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new RemoteException("Cannot lookup Item: " +e);
+      throw new RemoteException("Cannot lookup Item ("+itemId+"): " +e);
     }
     try 
     {

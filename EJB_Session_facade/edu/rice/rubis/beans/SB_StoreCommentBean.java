@@ -42,15 +42,16 @@ public class SB_StoreCommentBean implements SessionBean
   public void createComment(Integer fromId, Integer toId, Integer itemId, int rating, String comment) throws RemoteException
   {
     // Try to find the user corresponding to the 'to' ID
-    UserHome uHome;
+    User to;
     try 
     {
-      uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("java:comp/env/ejb/User"),
+      UserHome uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("java:comp/env/ejb/User"),
                                                     UserHome.class);
+      to = uHome.findByPrimaryKey(new UserPK(toId));
     } 
     catch (Exception e)
     {
-      throw new RemoteException("Cannot lookup User or Item: " +e+"<br>");
+      throw new RemoteException("Cannot lookup User ("+toId+"): " +e+"<br>");
     }
     CommentHome cHome;
     try 
@@ -67,7 +68,6 @@ public class SB_StoreCommentBean implements SessionBean
     {
       utx.begin();
       Comment c = cHome.create(fromId, toId, itemId, rating, comment);
-      User    to = uHome.findByPrimaryKey(new UserPK(toId));
       to.updateRating(rating);
       utx.commit();
     }

@@ -27,7 +27,7 @@ public class SB_PutCommentBean implements SessionBean
   protected SessionContext sessionContext;
   protected Context initialContext = null;
   protected DataSource dataSource = null;
-  private UserTransaction utx = null;
+//  private UserTransaction utx = null;
 
 
   /**
