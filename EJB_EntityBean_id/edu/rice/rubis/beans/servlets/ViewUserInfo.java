@@ -1,15 +1,23 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.Comment;
+import edu.rice.rubis.beans.CommentHome;
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
+import edu.rice.rubis.beans.UserPK;
 
 /** This servlets displays general information about a user.
  * It must be called this way :
@@ -22,11 +30,9 @@ import java.util.Enumeration;
 
 public class ViewUserInfo extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
-  private UserTransaction utx = null;
+  
 
-  private void commentList(CommentHome home, Integer userId) 
+  private void commentList(CommentHome home, Integer userId, ServletPrinter sp, Context initialContext, UserTransaction utx) 
   {
     Collection list;
     Comment    comment;
@@ -115,6 +121,9 @@ public class ViewUserInfo extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+    UserTransaction utx = null;
     String  value = request.getParameter("userId");
     Integer userId;
     
@@ -192,7 +201,7 @@ public class ViewUserInfo extends HttpServlet
       sp.printHTMLfooter();
       return ;
     }
-    commentList(cHome, userId);
+    commentList(cHome, userId, sp, initialContext, utx);
     sp.printHTMLfooter();
   }
 

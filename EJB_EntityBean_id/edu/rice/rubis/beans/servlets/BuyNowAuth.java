@@ -1,13 +1,11 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets display the page authentifying the user 
  * to allow him to put a buy an item at the "buy now" price.
@@ -22,7 +20,7 @@ import javax.servlet.http.*;
 
 public class BuyNowAuth extends HttpServlet
 {
-  private ServletPrinter sp = null;
+ 
 
   /**
    * Display the web page with the form to authenticate the user
@@ -33,6 +31,7 @@ public class BuyNowAuth extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "BuyNowAuth");
     
     String value = request.getParameter("itemId");

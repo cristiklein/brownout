@@ -1,15 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.ejb.FinderException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import javax.ejb.*;
+
+import edu.rice.rubis.beans.Region;
+import edu.rice.rubis.beans.RegionHome;
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
 
 /** This servlet register a new user in the database and display
  * the result of the transaction.
@@ -29,10 +35,9 @@ import javax.ejb.*;
 
 public class RegisterUser extends HttpServlet
 {
-  private UserTransaction utx = null;
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Register user");
     sp.printHTML("<h2>Your registration has not been processed due to the following error :</h2><br>");
@@ -50,6 +55,8 @@ public class RegisterUser extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    UserTransaction utx = null;
+    ServletPrinter sp = null;
     String firstname=null, lastname=null, nickname=null, email=null, password=null;
     int    regionId = 0;
     int    userId;
@@ -64,14 +71,14 @@ public class RegisterUser extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
     String value = request.getParameter("firstname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a first name!<br>");
+      printError("You must provide a first name!<br>", sp);
       return ;
     }
     else
@@ -80,7 +87,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("lastname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a last name!<br>");
+      printError("You must provide a last name!<br>", sp);
       return ;
     }
     else
@@ -89,7 +96,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("nickname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a nick name!<br>");
+      printError("You must provide a nick name!<br>", sp);
       return ;
     }
     else
@@ -98,7 +105,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("email");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide an email address!<br>");
+      printError("You must provide an email address!<br>", sp);
       return ;
     }
     else
@@ -107,7 +114,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("password");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a password!<br>");
+      printError("You must provide a password!<br>", sp);
       return ;
     }
     else
@@ -117,7 +124,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a valid region!<br>");
+      printError("You must provide a valid region!<br>", sp);
       return ;
     }
     else
@@ -130,7 +137,7 @@ public class RegisterUser extends HttpServlet
       } 
       catch (Exception e)
       {
-        printError("RUBiS internal error: Cannot lookup Region: " +e+"<br>\n");
+        printError("RUBiS internal error: Cannot lookup Region: " +e+"<br>\n", sp);
         return ;
       }
       try
@@ -140,7 +147,7 @@ public class RegisterUser extends HttpServlet
       }
       catch (Exception e)
       {
-        printError(" Region "+value+" does not exist in the database!<br>(got exception: " +e+")<br>\n");
+        printError(" Region "+value+" does not exist in the database!<br>(got exception: " +e+")<br>\n", sp);
         return ;
       }
     }
@@ -156,7 +163,7 @@ public class RegisterUser extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("RUBiS internal error: Cannot lookup User: " +e+"<br>");
+      printError("RUBiS internal error: Cannot lookup User: " +e+"<br>", sp);
       return ;
     }
     try
@@ -164,7 +171,7 @@ public class RegisterUser extends HttpServlet
       user = userHome.findByNickName(nickname);
       /* If an exception has not be thrown at this point, it means that
          the nickname already exists. */
-      printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
+      printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>", sp);
       return ;
     }
     catch (FinderException fe)
@@ -178,7 +185,7 @@ public class RegisterUser extends HttpServlet
       }
       catch (Exception e)
       {
-        printError("RUBiS internal error: User registration failed (got exception: " +e+")<br>");
+        printError("RUBiS internal error: User registration failed (got exception: " +e+")<br>", sp);
         return ;
       }
     }

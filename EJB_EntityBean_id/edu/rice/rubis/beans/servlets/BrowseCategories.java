@@ -19,11 +19,10 @@ import java.util.Iterator;
  */
 public class BrowseCategories extends HttpServlet
 {
-  private UserTransaction utx = null;
-  private ServletPrinter sp = null;
+  
 
   /** List all the categories in the database */
-  private void categoryList(CategoryHome home, int regionId, int userId) 
+  private void categoryList(CategoryHome home, int regionId, int userId, ServletPrinter sp,  UserTransaction utx) 
   {
     Collection list;
     Category cat;
@@ -80,6 +79,8 @@ public class BrowseCategories extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    UserTransaction utx = null;
+    ServletPrinter sp = null;
     int     regionId = -1, userId = -1;
     String  username=null, password=null;
     Context initialContext = null;
@@ -168,7 +169,7 @@ public class BrowseCategories extends HttpServlet
       return ;
     }
   
-    categoryList(home, regionId, userId);    	
+    categoryList(home, regionId, userId, sp, utx);    	
 
     sp.printHTMLfooter();
   }

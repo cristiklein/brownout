@@ -1,14 +1,18 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
 
 /** This servlets displays the full description of a given item
  * and allows the user to bid on this item.
@@ -23,9 +27,9 @@ import java.util.Enumeration;
 
 public class ViewItem extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp )
   {
     sp.printHTMLheader("RUBiS ERROR: View item");
     sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
@@ -43,12 +47,13 @@ public class ViewItem extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "ViewItem");
     
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("No item identifier received - Cannot process the request<br>");
+      printError("No item identifier received - Cannot process the request<br>", sp);
       return ;
     }
 
@@ -59,7 +64,7 @@ public class ViewItem extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
@@ -72,7 +77,7 @@ public class ViewItem extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup Item: " +e+"<br>");
+      printError("Cannot lookup Item: " +e+"<br>", sp);
       return ;
     }
     try
@@ -83,7 +88,7 @@ public class ViewItem extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("This item does not exist (got exception: " +e+")<br>");
+      printError("This item does not exist (got exception: " +e+")<br>", sp);
       return ;
     }
 

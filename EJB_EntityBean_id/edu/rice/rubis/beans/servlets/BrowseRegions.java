@@ -18,10 +18,9 @@ import java.util.Iterator;
  */
 public class BrowseRegions extends HttpServlet
 {
-  private UserTransaction utx = null;
-  private ServletPrinter sp = null;
+  
 
-  private void regionList(RegionHome home) 
+  private void regionList(RegionHome home, ServletPrinter sp, UserTransaction utx) 
   {
     Collection list;
     Region reg;
@@ -62,6 +61,8 @@ public class BrowseRegions extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    UserTransaction utx = null;
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "BrowseRegions");
     sp.printHTMLheader("RUBiS: Available regions");
     sp.printHTML("<h2>Currently available regions</h2><br>");
@@ -101,7 +102,7 @@ public class BrowseRegions extends HttpServlet
       return ;
     }
 
-    regionList(home);    	
+    regionList(home, sp, utx);    	
 
     sp.printHTMLfooter();
   }

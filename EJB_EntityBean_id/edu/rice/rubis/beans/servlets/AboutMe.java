@@ -1,15 +1,33 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.Bid;
+import edu.rice.rubis.beans.BidHome;
+import edu.rice.rubis.beans.BidPK;
+import edu.rice.rubis.beans.BuyNowHome;
+import edu.rice.rubis.beans.Comment;
+import edu.rice.rubis.beans.CommentHome;
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
+import edu.rice.rubis.beans.Query;
+import edu.rice.rubis.beans.QueryHome;
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
+import edu.rice.rubis.beans.UserPK;
 
 /**
  * This servlets displays general information about the user loged in
@@ -19,12 +37,10 @@ import java.util.Enumeration;
  */
 public class AboutMe extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
-  private UserTransaction utx = null;
+ 
 
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     //sp.printHTMLheader("RUBiS ERROR: About me");
     sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
@@ -34,7 +50,7 @@ public class AboutMe extends HttpServlet
 
 
   /** List items the user is currently selling and sold in the past 30 days */
-  private void listItem(Integer userId, ItemHome iHome) 
+  private void listItem(Integer userId, ItemHome iHome, ServletPrinter sp) 
   {
     Item       item;
     Collection currentItemList, pastItemList;
@@ -46,7 +62,7 @@ public class AboutMe extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Exception getting item list: " +e+"<br>");
+      printError("Exception getting item list: " +e+"<br>", sp);
       return ;
     }
 
@@ -70,7 +86,7 @@ public class AboutMe extends HttpServlet
         }
         catch (Exception e) 
         {
-          printError("Exception getting item: " + e +"<br>");
+          printError("Exception getting item: " + e +"<br>", sp);
           return;
         }
         // display information about the item
@@ -100,7 +116,7 @@ public class AboutMe extends HttpServlet
       }
       catch (Exception e) 
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e +"<br>", sp);
         return;
       }
       // display information about the item
@@ -110,7 +126,7 @@ public class AboutMe extends HttpServlet
   }
 
   /** List items the user bought in the last 30 days*/
-  private void listBoughtItems(Integer userId, ItemHome iHome) 
+  private void listBoughtItems(Integer userId, ItemHome iHome, ServletPrinter sp, Context initialContext) 
   {
     BuyNowHome buyHome;
     edu.rice.rubis.beans.BuyNow buy;
@@ -126,7 +142,7 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup BuyNow: " +e+"<br>");
+      printError("Cannot lookup BuyNow: " +e+"<br>", sp);
       return ;
     }
     try 
@@ -135,7 +151,7 @@ public class AboutMe extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Exception getting item list (buy now): " +e+"<br>");
+      printError("Exception getting item list (buy now): " +e+"<br>", sp);
       return ;
     }
 
@@ -159,7 +175,7 @@ public class AboutMe extends HttpServlet
       }
       catch (Exception e) 
       {
-        printError("Exception getting buyNow: " + e +"<br>");
+        printError("Exception getting buyNow: " + e +"<br>", sp);
         return;
       }
       try
@@ -168,7 +184,7 @@ public class AboutMe extends HttpServlet
       }
       catch (Exception e) 
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e +"<br>", sp);
         return;
       }
       // display information about the item
@@ -179,7 +195,7 @@ public class AboutMe extends HttpServlet
   }
 
   /** List items the user won in the last 30 days*/
-  private void listWonItems(Integer userId, ItemHome iHome, QueryHome qHome) 
+  private void listWonItems(Integer userId, ItemHome iHome, QueryHome qHome, ServletPrinter sp) 
   {
     Enumeration wonList=null;
     Query       q;
@@ -216,7 +232,7 @@ public class AboutMe extends HttpServlet
       }
       catch (Exception e) 
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e +"<br>", sp);
         return;
       }
       // display information about the item
@@ -228,7 +244,7 @@ public class AboutMe extends HttpServlet
 
 
   /** List comments about the user */
-  private void listComment(CommentHome home, Integer userId, UserHome uHome) 
+  private void listComment(CommentHome home, Integer userId, UserHome uHome, ServletPrinter sp, UserTransaction utx) 
   {
     Collection list;
     Comment    comment;
@@ -281,7 +297,7 @@ public class AboutMe extends HttpServlet
   }
 
   /** List items the user put a bid on in the last 30 days*/
-  private void listBids(Integer userId, String username, String password, ItemHome iHome, QueryHome qHome) 
+  private void listBids(Integer userId, String username, String password, ItemHome iHome, QueryHome qHome, ServletPrinter sp, Context initialContext) 
   {
     Enumeration bidList=null;
     Query       q;
@@ -316,7 +332,7 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup Bid: " +e+"<br>");
+      printError("Cannot lookup Bid: " +e+"<br>", sp);
       return ;
     }
 
@@ -331,7 +347,7 @@ public class AboutMe extends HttpServlet
       }
       catch (Exception e) 
       {
-        printError("Exception getting bid: " + e +"<br>");
+        printError("Exception getting bid: " + e +"<br>", sp);
         return;
       }
 
@@ -342,7 +358,7 @@ public class AboutMe extends HttpServlet
       }
       catch (Exception e) 
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e +"<br>", sp);
         return;
       }
       //  display information about user's bids
@@ -378,6 +394,9 @@ public class AboutMe extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+    UserTransaction utx = null;
     String  password=null, username=null; 
     Integer userId=null;
     
@@ -394,21 +413,21 @@ public class AboutMe extends HttpServlet
       } 
       catch (Exception e) 
       {
-        printError("Cannot get initial context for JNDI: " + e+"<br>");
+        printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
         return ;
       }
       Auth auth = new Auth(initialContext, sp);
       int id = auth.authenticate(username, password);
       if (id == -1)
       {
-        printError("You don't have an account on RUBiS!<br>You have to register first.<br>");
+        printError("You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
         return ;	
       }
       userId = new Integer(id);
     }
     else
     {
-      printError(" You must provide valid username and password.");
+      printError(" You must provide valid username and password.", sp);
       return ;
     }
 
@@ -419,7 +438,7 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup UserTransaction: "+e+"<br>");
+      printError("Cannot lookup UserTransaction: "+e+"<br>", sp);
       return ;
     }
 
@@ -431,7 +450,7 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup User: " +e+"<br>");
+      printError("Cannot lookup User: " +e+"<br>", sp);
       return ;
     }
     try
@@ -443,7 +462,7 @@ public class AboutMe extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("This user does not exist (got exception: " +e+")<br>");
+      printError("This user does not exist (got exception: " +e+")<br>", sp);
       return ;
     }
 
@@ -468,7 +487,7 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup item: " +e+"<br>");
+      printError("Cannot lookup item: " +e+"<br>", sp);
       return ;
     }
 
@@ -481,15 +500,15 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup Query: " +e+"<br>");
+      printError("Cannot lookup Query: " +e+"<br>", sp);
       return ;
     }
 
-    listBids(userId, username, password, iHome, qHome);
-    listItem(userId, iHome);
-    listWonItems(userId, iHome, qHome);
-    listBoughtItems(userId, iHome);
-    listComment(cHome, userId, uHome);
+    listBids(userId, username, password, iHome, qHome, sp, initialContext);
+    listItem(userId, iHome, sp);
+    listWonItems(userId, iHome, qHome, sp);
+    listBoughtItems(userId, iHome, sp, initialContext);
+    listComment(cHome, userId, uHome, sp, utx);
 
     sp.printHTMLfooter();
   }

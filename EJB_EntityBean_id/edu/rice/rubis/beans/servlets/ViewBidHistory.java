@@ -1,15 +1,25 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+import java.util.Enumeration;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.Bid;
+import edu.rice.rubis.beans.BidHome;
+import edu.rice.rubis.beans.BidPK;
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
+import edu.rice.rubis.beans.Query;
+import edu.rice.rubis.beans.QueryHome;
 
 /** This servlets displays the list of bids regarding an item.
  * It must be called this way :
@@ -22,13 +32,11 @@ import java.util.Enumeration;
 
 public class ViewBidHistory extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
-  private UserTransaction utx = null;
+  
 
  
   /** List the bids corresponding to an item */
-  private void listBids(Integer itemId) 
+  private void listBids(Integer itemId, ServletPrinter sp, Context initialContext) 
   {
     Enumeration bidList=null;
     ItemHome iHome;
@@ -126,6 +134,9 @@ public class ViewBidHistory extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+    UserTransaction utx = null;
     String  value = request.getParameter("itemId");
     Integer itemId;
     
@@ -197,7 +208,7 @@ public class ViewBidHistory extends HttpServlet
       return ;
     }
 		
-    listBids(itemId);
+    listBids(itemId, sp, initialContext);
     sp.printHTMLfooter();
   }
 

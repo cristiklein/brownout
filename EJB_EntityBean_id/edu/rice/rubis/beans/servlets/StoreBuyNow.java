@@ -1,15 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.BuyNowHome;
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
+import edu.rice.rubis.beans.TimeManagement;
 
 /** This servlet records a BuyNow in the database and display
  * the result of the transaction.
@@ -30,10 +36,9 @@ import java.util.Enumeration;
 
 public class StoreBuyNow extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBuyNow");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -65,6 +70,8 @@ public class StoreBuyNow extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     Integer userId; // item id
     Integer itemId; // user id
     float   minBuyNow; // minimum acceptable BuyNow for this item
@@ -80,7 +87,7 @@ public class StoreBuyNow extends HttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>");
+      printError("<h3>You must provide a user identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -89,7 +96,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -99,7 +106,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>");
+      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
       return ;
     }
     else
@@ -111,7 +118,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>");
+      printError("<h3>You must provide a quantity !<br></h3>", sp);
       return ;
     }
     else
@@ -124,7 +131,7 @@ public class StoreBuyNow extends HttpServlet
 
     if (qty > maxQty)
     {
-      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>");
+      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>", sp);
       return ;
     }      
 
@@ -134,7 +141,7 @@ public class StoreBuyNow extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
     // We want to start transactions from client
@@ -146,7 +153,7 @@ public class StoreBuyNow extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup UserTransaction: "+e+"<br>");
+      printError("Cannot lookup UserTransaction: "+e+"<br>", sp);
       return ;
     }
 
@@ -163,14 +170,14 @@ public class StoreBuyNow extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot update Item: " +e+"<br>");
+      printError("Cannot update Item: " +e+"<br>", sp);
       try
       {
         utx.rollback();
       }
       catch (Exception se) 
       {
-        printError("Transaction rollback failed: " + e +"<br>");
+        printError("Transaction rollback failed: " + e +"<br>", sp);
       }
       return ;
     }
@@ -188,14 +195,14 @@ public class StoreBuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Error while storing the BuyNow (got exception: " +e+")<br>");
+      printError("Error while storing the BuyNow (got exception: " +e+")<br>", sp);
       try
       {
         utx.rollback();
       }
       catch (Exception se) 
       {
-        printError("Transaction rollback failed: " + e +"<br>");
+        printError("Transaction rollback failed: " + e +"<br>", sp);
       }
       return ;
     }
