@@ -65,7 +65,7 @@ using JNP and passing objects by value,</li>
  (click on the number to access the experiment report - Resource usage is 
 detailed in 'Test performance report')
 </p>
-<p>Download the <a href="../download/rubis_dump.sql.gz">database dump</a>  (113 MB) used
+<p>Download the <a href="../results/rubis_dump.sql.gz">database dump</a>  (113 MB) used
 for the experiments (SQL dump in ASCII format compressed with gzip).</p> 
 <p> Download JOnAS configuration files: <a href="../download/JOnAS-RMI.tgz">JOnAS-RMI</a> 
  version, <a href="../download/JOnAS-Jeremie.tgz">JOnAS-Jeremie</a>  version,
