@@ -378,7 +378,7 @@ public class SB_AboutMeBean implements SessionBean
     // Get the list of the user's won items
     try 
     {
-      stmt = conn.prepareStatement("SELECT item_id FROM bids, old_items WHERE bids.user_id=? AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 GROUP BY item_id");
+      stmt = conn.prepareStatement("SELECT item_id FROM bids, old_items WHERE bids.user_id=? AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 ORDER BY item_id");
       stmt.setInt(1, userId.intValue());
       won = stmt.executeQuery();
       
@@ -532,7 +532,7 @@ public class SB_AboutMeBean implements SessionBean
     // Get the list of the user's last bids
     try 
     {
-      stmt = conn.prepareStatement("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id");
+      stmt = conn.prepareStatement("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() ORDER BY item_id");
       stmt.setInt(1, userId.intValue());
       bid = stmt.executeQuery();
       
