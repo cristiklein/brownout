@@ -488,7 +488,7 @@ public class SB_AboutMeBean implements SessionBean
   {
     try
     {
-      return item.printItemUserHasBidOn(bid.getMaxBid())+"&nickname="+URLEncoder.encode(username)+"&password="+URLEncoder.encode(password)+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n";
+      return item.printItemUserHasBidOn(bid.getMaxBid())+"&nickname="+URLEncoder.encode(username)+"&password="+URLEncoder.encode(password)+"\"><IMG SRC=\"/ejb_rubis_web/bid_now.jpg\" height=22 width=90></a>\n";
     }
     catch (EJBException re)
     {
