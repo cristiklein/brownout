@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<jonas-ejb-jar>
+
+  <jonas-message-driven>
+    <ejb-name>MDB_Auth</ejb-name>
+    <jonas-message-driven-destination>
+      <jndi-name>topic_topicAuth</jndi-name>
+    </jonas-message-driven-destination>
+
+    <jonas-resource>
+       <res-ref-name>jdbc/rubis</res-ref-name>
+       <jndi-name>mysql</jndi-name>
+    </jonas-resource>
+
+  </jonas-message-driven>
+
+  <jonas-message-driven>
+    <ejb-name>MDB_BrowseRegions</ejb-name>
+    <jonas-message-driven-destination>
+      <jndi-name>topic_topicBrowseRegions</jndi-name>
+    </jonas-message-driven-destination>
+
+    <jonas-resource>
+       <res-ref-name>jdbc/rubis</res-ref-name>
+       <jndi-name>mysql</jndi-name>
+    </jonas-resource>
+
+  </jonas-message-driven>
+
+  <jonas-message-driven>
+    <ejb-name>MDB_BrowseCategories</ejb-name>
+    <jonas-message-driven-destination>
+      <jndi-name>topic/topicBrowseCategories</jndi-name>
+    </jonas-message-driven-destination>
+
+    <jonas-resource>
+       <res-ref-name>jdbc/rubis</res-ref-name>
+       <jndi-name>mysql</jndi-name>
+    </jonas-resource>
+  </jonas-message-driven>
+
+  <jonas-message-driven>
+    <ejb-name>MDB_SearchItemsByCategory</ejb-name>
+    <jonas-message-driven-destination>
+      <jndi-name>topic_topicSearchItemsByCategory</jndi-name>
+    </jonas-message-driven-destination>
+
+    <jonas-resource>
+       <res-ref-name>jdbc/rubis</res-ref-name>
+       <jndi-name>mysql</jndi-name>
+    </jonas-resource>
+  </jonas-message-driven>
+
+  <jonas-message-driven>
+    <ejb-name>MDB_SearchItemsByRegion</ejb-name>
+    <jonas-message-driven-destination>
+      <jndi-name>topic_topicSearchItemsByRegion</jndi-name>
+    </jonas-message-driven-destination>
+
+    <jonas-resource>
+       <res-ref-name>jdbc/rubis</res-ref-name>
+       <jndi-name>mysql</jndi-name>
+    </jonas-resource>
+  </jonas-message-driven>
+
+</jonas-ejb-jar>

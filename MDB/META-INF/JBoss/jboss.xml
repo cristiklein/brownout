@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!-- 
+This is the JBoss 3.0 EJB deployment descriptor for RUBiS.
+-->
+
+<jboss>
+
+  <enterprise-beans>
+
+    <message-driven>
+      <ejb-name>MDB_Auth</ejb-name>
+      <configuration-name>Standard Message Driven Bean</configuration-name>
+      <destination-jndi-name>topic/topicAuth</destination-jndi-name>
+
+      <resource-ref>
+        <res-ref-name>jdbc/rubis</res-ref-name>
+        <resource-name>rubis</resource-name>
+      </resource-ref>
+    </message-driven>
+ 
+    <message-driven>
+      <ejb-name>MDB_BrowseRegions</ejb-name>
+      <configuration-name>Standard Message Driven Bean</configuration-name>
+      <destination-jndi-name>topic/topicBrowseRegions</destination-jndi-name>
+
+      <resource-ref>
+        <res-ref-name>jdbc/rubis</res-ref-name>
+        <resource-name>rubis</resource-name>
+      </resource-ref>
+    </message-driven>
+
+    <message-driven>
+      <ejb-name>MDB_BrowseCategories</ejb-name>
+      <configuration-name>Standard Message Driven Bean</configuration-name>
+      <destination-jndi-name>topic/topicBrowseCategories</destination-jndi-name>
+
+      <resource-ref>
+        <res-ref-name>jdbc/rubis</res-ref-name>
+        <resource-name>rubis</resource-name>
+      </resource-ref>
+    </message-driven>
+
+   </enterprise-beans>
+
+
+  <resource-managers>
+
+    <resource-manager>
+      <res-name>rubis</res-name>
+      <res-jndi-name>java:/rubis</res-jndi-name>
+    </resource-manager>
+
+  </resource-managers>
+
+</jboss>
+
