@@ -78,6 +78,14 @@ public class ViewUserInfo extends HttpServlet
           {
             sp.printHTML(
               "This author does not exist (got exception: " + e + ")<br>");
+            try
+            {
+               utx.rollback();
+            }
+            catch (Exception se)
+            {
+               sp.printHTML("Transaction rollback failed: " + e + "<br>");
+            }
             sp.printHTMLfooter();
             return;
           }

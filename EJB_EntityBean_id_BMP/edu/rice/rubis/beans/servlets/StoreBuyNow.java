@@ -156,8 +156,7 @@ public class StoreBuyNow extends HttpServlet
     {
       utx =
         (javax.transaction.UserTransaction) initialContext.lookup(
-          Config.UserTransaction);
-      utx.begin();
+          Config.UserTransaction);     
     }
     catch (Exception e)
     {
@@ -169,6 +168,7 @@ public class StoreBuyNow extends HttpServlet
     Item item;
     try
     {
+      utx.begin();
       ItemHome itemHome =
         (ItemHome) PortableRemoteObject.narrow(
           initialContext.lookup("ItemHome"),
