@@ -22,7 +22,6 @@ import javax.servlet.http.*;
 
 public class BuyNowAuth extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
   /**
    * Display the web page with the form to authenticate the user
@@ -33,6 +32,7 @@ public class BuyNowAuth extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "BuyNowAuth");
     
     String value = request.getParameter("itemId");

@@ -23,7 +23,7 @@ import java.util.Enumeration;
 
 public class PutBidAuth extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
   /**
    * Describe <code>doGet</code> method here.
@@ -35,6 +35,7 @@ public class PutBidAuth extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "PubBidAuth");
     
     String value = request.getParameter("itemId");

@@ -23,11 +23,9 @@ import java.net.URLEncoder;
 
 public class SearchItemsByCategory extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
-  private String categoryName;
+ 
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: SearchItemsByCategory");
     sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
@@ -35,7 +33,7 @@ public class SearchItemsByCategory extends HttpServlet
     sp.printHTMLfooter();
   }
 
-  private void itemList(Integer categoryId, int page, int nbOfItems)
+  private void itemList(Integer categoryId, int page, int nbOfItems, ServletPrinter sp, Context initialContext, String categoryName)
   {
     // Connecting to Home thru JNDI
     SB_SearchItemsByCategoryHome home = null;
@@ -49,7 +47,7 @@ public class SearchItemsByCategory extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_SearchItemsByCategory: " +e+"<br>");
+      printError("Cannot lookup SB_SearchItemsByCategory: " +e+"<br>", sp);
       return ;
     }
 
@@ -59,7 +57,7 @@ public class SearchItemsByCategory extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot get the list of items: " +e+"<br>");
+      printError("Cannot get the list of items: " +e+"<br>", sp);
       return ;
     }
     try
@@ -94,7 +92,7 @@ public class SearchItemsByCategory extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Exception getting item list: " + e +"<br>");
+      printError("Exception getting item list: " + e +"<br>", sp);
     }
   }
 
@@ -109,6 +107,9 @@ public class SearchItemsByCategory extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+    String categoryName;
     String  value = request.getParameter("category");
     Integer categoryId;
     Integer page;
@@ -118,7 +119,7 @@ public class SearchItemsByCategory extends HttpServlet
     sp = new ServletPrinter(response, "SearchItemsByCategory");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a category identifier!<br>");
+      printError("You must provide a category identifier!<br>", sp);
       return ;
     }
     else
@@ -142,7 +143,7 @@ public class SearchItemsByCategory extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
@@ -157,7 +158,7 @@ public class SearchItemsByCategory extends HttpServlet
       sp.printHTML("<h2>Items in category "+categoryName+"</h2><br><br>");
     }
 
-    itemList(categoryId, page.intValue(), nbOfItems.intValue());
+    itemList(categoryId, page.intValue(), nbOfItems.intValue(), sp, initialContext, categoryName);
 		
     sp.printHTMLfooter();
   }

@@ -25,7 +25,7 @@ import java.util.Enumeration;
 
 public class PutCommentAuth extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
   /**
    * Describe <code>doGet</code> method here.
@@ -37,6 +37,7 @@ public class PutCommentAuth extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "PubCommentAuth");
     
     String to = request.getParameter("to");

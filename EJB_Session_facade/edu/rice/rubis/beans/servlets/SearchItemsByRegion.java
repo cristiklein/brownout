@@ -17,11 +17,9 @@ import java.util.Enumeration;
  */
 public class SearchItemsByRegion extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
 
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: SearchItemsByRegion");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -31,7 +29,7 @@ public class SearchItemsByRegion extends HttpServlet
 
 
   /** List items in the given category for the given region */
-  private void itemList(Integer categoryId, Integer regionId, int page, int nbOfItems) 
+  private void itemList(Integer categoryId, Integer regionId, int page, int nbOfItems, ServletPrinter sp, Context initialContext) 
   {
     // Connecting to Home thru JNDI
     SB_SearchItemsByRegionHome home = null;
@@ -45,7 +43,7 @@ public class SearchItemsByRegion extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_SearchItemsByRegion: " +e+"<br>");
+      printError("Cannot lookup SB_SearchItemsByRegion: " +e+"<br>", sp);
       return ;
     }
 
@@ -55,7 +53,7 @@ public class SearchItemsByRegion extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot get the list of items: " +e+"<br>");
+      printError("Cannot get the list of items: " +e+"<br>", sp);
       return ;
     }
 
@@ -91,7 +89,7 @@ public class SearchItemsByRegion extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Exception getting item list: " + e +"<br>");
+      printError("Exception getting item list: " + e +"<br>", sp);
     }
   }
 
@@ -106,6 +104,8 @@ public class SearchItemsByRegion extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     Integer  categoryId, regionId;
     Integer page;
     Integer nbOfItems;
@@ -118,14 +118,14 @@ public class SearchItemsByRegion extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
     String value = request.getParameter("category");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a category!<br>");
+      printError("You must provide a category!<br>", sp);
       return ;
     }
     else
@@ -134,7 +134,7 @@ public class SearchItemsByRegion extends HttpServlet
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a region!<br>");
+      printError("You must provide a region!<br>", sp);
       return ;
     }
     else
@@ -155,7 +155,7 @@ public class SearchItemsByRegion extends HttpServlet
     sp.printHTMLheader("RUBiS: Search items by region");
     sp.printHTML("<h2>Items in this region</h2><br><br>");
      
-    itemList(categoryId, regionId, page.intValue(), nbOfItems.intValue());
+    itemList(categoryId, regionId, page.intValue(), nbOfItems.intValue(), sp, initialContext);
 		
     sp.printHTMLfooter();
   }

@@ -16,9 +16,9 @@ import javax.servlet.http.*;
  */
 public class BrowseCategories extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Browse Categories");
     sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
@@ -35,6 +35,7 @@ public class BrowseCategories extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String  region;
     String  username=null, password=null;
     Context initialContext = null;
@@ -48,7 +49,7 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " +e+"<br>");
+      printError("Cannot get initial context for JNDI: " +e+"<br>", sp);
       return ;
     }
 
@@ -68,7 +69,7 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_BrowseCategories: " +e+"<br>");
+      printError("Cannot lookup SB_BrowseCategories: " +e+"<br>", sp);
       return ;
     }
     String list;
@@ -78,7 +79,7 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot get the list of categories: " +e+"<br>");
+      printError("Cannot get the list of categories: " +e+"<br>", sp);
       return ;
     }
 

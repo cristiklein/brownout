@@ -21,10 +21,9 @@ import java.util.Enumeration;
 
 public class ViewUserInfo extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
+ 
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: View user info");
     sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
@@ -56,6 +55,8 @@ public class ViewUserInfo extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     String  value = request.getParameter("userId");
     Integer userId;
     
@@ -79,7 +80,7 @@ public class ViewUserInfo extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
@@ -94,7 +95,7 @@ public class ViewUserInfo extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_ViewUserInfo: " +e+"<br>");
+      printError("Cannot lookup SB_ViewUserInfo: " +e+"<br>", sp);
       return ;
     }
     try
@@ -105,7 +106,7 @@ public class ViewUserInfo extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get item description (got exception: " +e+")<br>");
+      printError("Cannot get item description (got exception: " +e+")<br>", sp);
       return ;
     }
 

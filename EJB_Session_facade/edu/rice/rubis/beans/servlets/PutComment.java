@@ -27,9 +27,9 @@ import java.util.Enumeration;
 
 public class PutComment extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: PutComment");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -48,6 +48,7 @@ public class PutComment extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String toStr = request.getParameter("to");
     String itemStr = request.getParameter("itemId");
     String username = request.getParameter("nickname");
@@ -59,7 +60,7 @@ public class PutComment extends HttpServlet
         (username == null) || (username.equals(""))||
         (password == null) || (password.equals("")))
     {
-      printError("User id, name and password are required - Cannot process the request<br>");
+      printError("User id, name and password are required - Cannot process the request<br>", sp);
       return ;
     }
 
@@ -70,7 +71,7 @@ public class PutComment extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
@@ -88,7 +89,7 @@ public class PutComment extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_PutComment: " +e+"<br>");
+      printError("Cannot lookup SB_PutComment: " +e+"<br>", sp);
       return ;
     }
     String html;
@@ -113,7 +114,7 @@ public class PutComment extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot get the html form: " +e+"<br>");
+      printError("Cannot get the html form: " +e+"<br>", sp);
       return ;
     }
   }

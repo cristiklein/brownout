@@ -23,9 +23,9 @@ import java.util.Enumeration;
 
 public class ViewItem extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: View item");
     sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
@@ -43,12 +43,13 @@ public class ViewItem extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "ViewItem");
     
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("No item identifier received - Cannot process the request<br>");
+      printError("No item identifier received - Cannot process the request<br>", sp);
       return ;
     }
     sp.printHTMLheader("RUBiS: Viewing Item \n");
@@ -59,7 +60,7 @@ public class ViewItem extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
@@ -74,7 +75,7 @@ public class ViewItem extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_ViewItem: " +e+"<br>");
+      printError("Cannot lookup SB_ViewItem: " +e+"<br>", sp);
       return ;
     }
     try
@@ -85,7 +86,7 @@ public class ViewItem extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get item description (got exception: " +e+")<br>");
+      printError("Cannot get item description (got exception: " +e+")<br>", sp);
       return ;
     }
 

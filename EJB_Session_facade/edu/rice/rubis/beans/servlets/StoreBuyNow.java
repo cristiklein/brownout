@@ -29,10 +29,8 @@ import java.util.Enumeration;
 
 public class StoreBuyNow extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
-
-  private void printError(String errorMsg)
+  
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBuyNow");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -64,6 +62,8 @@ public class StoreBuyNow extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     Integer userId; // item id
     Integer itemId; // user id
     float   minBuyNow; // minimum acceptable BuyNow for this item
@@ -79,7 +79,7 @@ public class StoreBuyNow extends HttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>");
+      printError("<h3>You must provide a user identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -88,7 +88,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -98,7 +98,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>");
+      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
       return ;
     }
     else
@@ -110,7 +110,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>");
+      printError("<h3>You must provide a quantity !<br></h3>", sp);
       return ;
     }
     else
@@ -123,7 +123,7 @@ public class StoreBuyNow extends HttpServlet
 
     if (qty > maxQty)
     {
-      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>");
+      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>", sp);
       return ;
     }      
 
@@ -133,7 +133,7 @@ public class StoreBuyNow extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
@@ -147,7 +147,7 @@ public class StoreBuyNow extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_StoreBuyNow: " +e+"<br>");
+      printError("Cannot lookup SB_StoreBuyNow: " +e+"<br>", sp);
       return ;
     }
 
@@ -162,7 +162,7 @@ public class StoreBuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Error while storing the BuyNow (got exception: " +e+")<br>");
+      printError("Error while storing the BuyNow (got exception: " +e+")<br>", sp);
       return ;
     }
 		

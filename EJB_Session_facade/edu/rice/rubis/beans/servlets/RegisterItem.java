@@ -16,9 +16,9 @@ import javax.servlet.http.*;
  */
 public class RegisterItem extends HttpServlet
 {
-  private static ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Register item");
     sp.printHTML("<h2>Your registration has not been processed due to the following error :</h2><br>");
@@ -35,6 +35,7 @@ public class RegisterItem extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String  name=null, description=null;
     float   initialPrice, buyNow, reservePrice;
     int     quantity, duration;
@@ -52,14 +53,14 @@ public class RegisterItem extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
     String value = request.getParameter("name");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a name!<br>");
+      printError("You must provide a name!<br>", sp);
       return ;
     }
     else
@@ -76,7 +77,7 @@ public class RegisterItem extends HttpServlet
     value = request.getParameter("initialPrice");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide an initial price!<br>");
+      printError("You must provide an initial price!<br>", sp);
       return ;
     }
     else
@@ -111,7 +112,7 @@ public class RegisterItem extends HttpServlet
     value = request.getParameter("duration");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a duration!<br>");
+      printError("You must provide a duration!<br>", sp);
       return ;
     }
     else
@@ -123,7 +124,7 @@ public class RegisterItem extends HttpServlet
     value = request.getParameter("quantity");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a quantity!<br>");
+      printError("You must provide a quantity!<br>", sp);
       return ;
     }
     else
@@ -145,7 +146,7 @@ public class RegisterItem extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("RUBiS internal error: Cannot lookup Item: " +e+"<br>");
+      printError("RUBiS internal error: Cannot lookup Item: " +e+"<br>", sp);
       return ;
     }
     try
@@ -159,7 +160,7 @@ public class RegisterItem extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("RUBiS internal error: Item registration failed (got exception: " +e+")<br>");
+      printError("RUBiS internal error: Item registration failed (got exception: " +e+")<br>", sp);
       return ;
     }
 
