@@ -14,16 +14,16 @@
 
     <s1 name="Documentation" anchor="doc">
   
-      <ol>
+      <ul>
 	<li><a href="install.html">Installation and Configuration Guide</a></li>
-      </ol>   
+      </ul>   
     </s1>
 
      <s1 name="Contributed documentation">
   
-      <ol>
+      <ul>
 	<li><a href="http://crash.stanford.edu/resources/rubis.html">Guide to Installing RUBiS 1.4.1 on JBoss 3.2.1</a></li>
-      </ol>   
+      </ul>   
     </s1>
 
 
