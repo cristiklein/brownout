@@ -99,22 +99,14 @@ public class MDB_StoreBuyNow implements MessageDrivenBean, MessageListener
         if (rs.first())
         {
           quantity = rs.getInt("quantity");
-
-          System.out.println("item quantity "+quantity);
-          System.out.println("buy quantity "+qty);
-
           quantity = quantity -qty;
-          System.out.println("new item quantity "+quantity);
-          if (quantity == 0)
+           if (quantity == 0)
           {
-            update = conn.prepareStatement("UPDATE items SET end_date=? AND quantity=? WHERE id=?");
+            update = conn.prepareStatement("UPDATE items SET end_date=?,quantity=? WHERE id=?");
             update.setString(1, now);
             update.setInt(2, quantity);
             update.setInt(3, itemId);
             update.executeUpdate();
-          System.out.println("update date "+now);
-          System.out.println("update quantity "+quantity);
-          System.out.println("update itemId "+itemId);
           }
           else
           {
@@ -136,7 +128,6 @@ public class MDB_StoreBuyNow implements MessageDrivenBean, MessageListener
       }
       try 
       {
-      System.out.println("5");
         stmt = conn.prepareStatement("INSERT INTO buy_now VALUES (NULL, \""+userId+
                                      "\", \""+itemId+"\", \""+qty+"\", \""+now+"\")");
         stmt.executeUpdate();

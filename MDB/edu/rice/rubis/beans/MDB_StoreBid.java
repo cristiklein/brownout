@@ -115,8 +115,8 @@ public class MDB_StoreBid implements MessageDrivenBean, MessageListener
           if (bid > oldMaxBid)
           {
             oldMaxBid = bid;
-            update = conn.prepareStatement("UPDATE items SET max_bid=? AND nb_of_bids=? WHERE id=?");
-            update.setFloat(1, maxBid);
+            update = conn.prepareStatement("UPDATE items SET max_bid=?,nb_of_bids=? WHERE id=?"); // AND replaced by ","
+            update.setFloat(1, oldMaxBid);
             update.setInt(2, nbOfBids);
             update.setInt(3, itemId);
             update.executeUpdate();
