@@ -1,6 +1,9 @@
 # HTTP server information
 httpd_hostname = sci23
 httpd_port = 80
+
+# C-JDBC server information
+cjdbc_hostname = 
 httpd_ejb_html_path = /EJB_HTML
 httpd_ejb_script_path = /servlet
 httpd_servlets_html_path = /Servlet_HTML
