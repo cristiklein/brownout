@@ -29,16 +29,17 @@ import javax.servlet.http.HttpServletResponse;
 
 public class StoreComment extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.StoreCommentPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection to the database.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -52,14 +53,18 @@ public class StoreComment extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreComment");
     sp.printHTML(
       "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
+   
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -76,6 +81,9 @@ public class StoreComment extends RubisHttpServlet
     Integer itemId; // item id
     String comment; // user comment
     Integer rating; // user rating
+    ServletPrinter sp = null;
+    PreparedStatement stmt = null;
+    Connection conn = null;
 
     sp = new ServletPrinter(response, "StoreComment");
 
@@ -84,7 +92,7 @@ public class StoreComment extends RubisHttpServlet
     String value = request.getParameter("to");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'to user' identifier !<br></h3>");
+      printError("<h3>You must provide a 'to user' identifier !<br></h3>", sp);
       return;
     }
     else
@@ -93,7 +101,7 @@ public class StoreComment extends RubisHttpServlet
     value = request.getParameter("from");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'from user' identifier !<br></h3>");
+      printError("<h3>You must provide a 'from user' identifier !<br></h3>", sp);
       return;
     }
     else
@@ -102,7 +110,7 @@ public class StoreComment extends RubisHttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return;
     }
     else
@@ -111,7 +119,7 @@ public class StoreComment extends RubisHttpServlet
     value = request.getParameter("rating");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a rating !<br></h3>");
+      printError("<h3>You must provide a rating !<br></h3>", sp);
       return;
     }
     else
@@ -120,7 +128,7 @@ public class StoreComment extends RubisHttpServlet
     comment = request.getParameter("comment");
     if ((comment == null) || (comment.equals("")))
     {
-      printError("<h3>You must provide a comment !<br></h3>");
+      printError("<h3>You must provide a comment !<br></h3>", sp);
       return;
     }
 
@@ -149,12 +157,14 @@ public class StoreComment extends RubisHttpServlet
               + "\")");
 
         stmt.executeUpdate();
+        stmt.close();
       }
       catch (SQLException e)
       {
         conn.rollback();
         printError(
-          "Error while storing the comment (got exception: " + e + ")<br>");
+          "Error while storing the comment (got exception: " + e + ")<br>", sp);
+         closeConnection(stmt, conn);
         return;
       }
       // Try to find the user corresponding to the 'to' ID
@@ -179,7 +189,8 @@ public class StoreComment extends RubisHttpServlet
       {
         conn.rollback();
         printError(
-          "Error while updating user's rating (got exception: " + e + ")<br>");
+          "Error while updating user's rating (got exception: " + e + ")<br>", sp);
+         closeConnection(stmt, conn);
         return;
       }
       sp.printHTMLheader("RUBiS: Comment posting");
@@ -188,7 +199,7 @@ public class StoreComment extends RubisHttpServlet
 
       sp.printHTMLfooter();
       conn.commit();
-      closeConnection();
+      closeConnection(stmt, conn);
     }
     catch (Exception e)
     {
@@ -196,12 +207,12 @@ public class StoreComment extends RubisHttpServlet
       try
       {
         conn.rollback();
-        closeConnection();
+        closeConnection(stmt, conn);
       }
       catch (Exception se)
       {
         sp.printHTML("Transaction rollback failed: " + e + "<br>");
-        closeConnection();
+        closeConnection(stmt, conn);
       }
     }
   }

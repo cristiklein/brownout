@@ -28,16 +28,17 @@ import javax.servlet.http.HttpServletResponse;
 
 public class StoreBid extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.StoreBidPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -51,14 +52,17 @@ public class StoreBid extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBid");
     sp.printHTML(
       "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
   }
 
   /**
@@ -93,6 +97,9 @@ public class StoreBid extends RubisHttpServlet
     float maxBid; // maximum bid the user wants
     int maxQty; // maximum quantity available for this item
     int qty; // quantity asked by the user
+    ServletPrinter sp = null;
+    PreparedStatement stmt = null;
+    Connection conn = null;
 
     sp = new ServletPrinter(response, "StoreBid");
 
@@ -101,7 +108,7 @@ public class StoreBid extends RubisHttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>");
+      printError("<h3>You must provide a user identifier !<br></h3>", sp);
       return;
     }
     else
@@ -110,7 +117,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return;
     }
     else
@@ -119,7 +126,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("minBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a minimum bid !<br></h3>");
+      printError("<h3>You must provide a minimum bid !<br></h3>", sp);
       return;
     }
     else
@@ -131,7 +138,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("bid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a bid !<br></h3>");
+      printError("<h3>You must provide a bid !<br></h3>", sp);
       return;
     }
     else
@@ -143,7 +150,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("maxBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum bid !<br></h3>");
+      printError("<h3>You must provide a maximum bid !<br></h3>", sp);
       return;
     }
     else
@@ -155,7 +162,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>");
+      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
       return;
     }
     else
@@ -167,7 +174,7 @@ public class StoreBid extends RubisHttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>");
+      printError("<h3>You must provide a quantity !<br></h3>", sp);
       return;
     }
     else
@@ -185,7 +192,7 @@ public class StoreBid extends RubisHttpServlet
           + qty
           + " items because only "
           + maxQty
-          + " are proposed !<br></h3>");
+          + " are proposed !<br></h3>", sp);
       return;
     }
     if (bid < minBid)
@@ -195,7 +202,7 @@ public class StoreBid extends RubisHttpServlet
           + bid
           + " is not acceptable because it is below the $"
           + minBid
-          + " minimum bid !<br></h3>");
+          + " minimum bid !<br></h3>", sp);
       return;
     }
     if (maxBid < minBid)
@@ -205,7 +212,7 @@ public class StoreBid extends RubisHttpServlet
           + maxBid
           + " is not acceptable because it is below the $"
           + minBid
-          + " minimum bid !<br></h3>");
+          + " minimum bid !<br></h3>", sp);
       return;
     }
     if (maxBid < bid)
@@ -215,7 +222,7 @@ public class StoreBid extends RubisHttpServlet
           + maxBid
           + " is not acceptable because it is below your current bid of $"
           + bid
-          + " !<br></h3>");
+          + " !<br></h3>", sp);
       return;
     }
     try
@@ -239,6 +246,7 @@ public class StoreBid extends RubisHttpServlet
             + now
             + "\")");
       stmt.executeUpdate();
+      stmt.close();
       // update the number of bids and the max bid for the item
       try
       {
@@ -277,21 +285,23 @@ public class StoreBid extends RubisHttpServlet
         else
         {
           conn.rollback();
-          printError("Couldn't find the item.");
+          printError("Couldn't find the item.", sp);
+          closeConnection(stmt, conn);
           return;
         }
       }
       catch (Exception ex)
       {
         conn.rollback();
-        printError("Failed to update nb of bids and max bid: " + ex);
+        printError("Failed to update nb of bids and max bid: " + ex, sp);
+        closeConnection(stmt, conn);
         return;
       }
       sp.printHTMLheader("RUBiS: Bidding result");
       sp.printHTML(
         "<center><h2>Your bid has been successfully processed.</h2></center>\n");
       conn.commit();
-      closeConnection();
+      closeConnection(stmt, conn);
     }
     catch (Exception e)
     {
@@ -300,11 +310,11 @@ public class StoreBid extends RubisHttpServlet
       try
       {
         conn.rollback();
-        closeConnection();
+        closeConnection(stmt, conn);
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e);
+        printError("Transaction rollback failed: " + e, sp);
       }
       return;
     }

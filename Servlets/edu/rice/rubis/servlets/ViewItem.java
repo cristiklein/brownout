@@ -22,16 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ViewItem extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.ViewItemPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection to the database.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -45,26 +46,34 @@ public class ViewItem extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: View item");
     sp.printHTML(
       "<h2>We cannot process your request due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
+    
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    PreparedStatement stmt = null;
+    Connection conn = null;
+    
     sp = new ServletPrinter(response, "ViewItem");
     ResultSet rs = null;
 
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("No item identifier received - Cannot process the request<br>");
+      printError("No item identifier received - Cannot process the request<br>", sp);
       return;
     }
     Integer itemId = new Integer(value);
@@ -79,7 +88,7 @@ public class ViewItem extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Failed to execute Query for item: " + e);
-      closeConnection();
+      closeConnection(stmt, conn);
       return;
     }
     try
@@ -94,7 +103,7 @@ public class ViewItem extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Failed to execute Query for item in table old_items: " + e);
-      closeConnection();
+      closeConnection(stmt, conn);
       return;
     }
     try
@@ -102,7 +111,7 @@ public class ViewItem extends RubisHttpServlet
       if (!rs.first())
       {
         sp.printHTML("<h2>This item does not exist!</h2>");
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
       String itemName, endDate, startDate, description, sellerName;
@@ -135,7 +144,7 @@ public class ViewItem extends RubisHttpServlet
         else
         {
           sp.printHTML("Unknown seller");
-          closeConnection();
+          closeConnection(stmt, conn);
           return;
         }
 
@@ -143,7 +152,7 @@ public class ViewItem extends RubisHttpServlet
       catch (SQLException e)
       {
         sp.printHTML("Failed to executeQuery for seller: " + e);
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
       sp.printItemDescription(
@@ -165,9 +174,9 @@ public class ViewItem extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("Exception getting item list: " + e + "<br>");
+      printError("Exception getting item list: " + e + "<br>", sp);
     }
-    closeConnection();
+    closeConnection(stmt, conn);
     sp.printHTMLfooter();
   }
 

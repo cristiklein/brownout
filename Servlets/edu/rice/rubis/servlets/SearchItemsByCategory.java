@@ -23,16 +23,17 @@ import javax.servlet.http.HttpServletResponse;
 
 public class SearchItemsByCategory extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.SearchItemsByCategoryPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -46,22 +47,31 @@ public class SearchItemsByCategory extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Search Items By Category");
     sp.printHTML(
       "<h2>We cannot process your request due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
+    
   }
 
   private void itemList(
     Integer categoryId,
     String categoryName,
     int page,
-    int nbOfItems)
+    int nbOfItems,
+    ServletPrinter sp)
   {
+    
+    PreparedStatement stmt = null;
+    Connection conn = null;
+    
     String itemName, endDate;
     int itemId;
     float maxBid;
@@ -85,7 +95,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Failed to executeQuery for item: " + e);
-      closeConnection();
+      closeConnection(stmt, conn);
       return;
     }
     try
@@ -114,7 +124,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
               + "\">Previous page</a>",
             "");
         }
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
 
@@ -169,11 +179,11 @@ public class SearchItemsByCategory extends RubisHttpServlet
             + "\">Next page</a>");
       }
       //conn.commit();
-      closeConnection();
+      closeConnection(stmt, conn);
     }
     catch (Exception e)
     {
-      printError("Exception getting item list: " + e + "<br>");
+      printError("Exception getting item list: " + e + "<br>", sp);
       //       try
       //       {
       //         conn.rollback();
@@ -182,7 +192,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
       //       {
       //         printError("Transaction rollback failed: " + e +"<br>");
       //       }
-      closeConnection();
+      closeConnection(stmt, conn);
     }
   }
 
@@ -196,11 +206,12 @@ public class SearchItemsByCategory extends RubisHttpServlet
     Integer categoryId;
     String categoryName = request.getParameter("categoryName");
 
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "SearchItemsByCategory");
 
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a category identifier!<br>");
+      printError("You must provide a category identifier!<br>", sp);
       return;
     }
     else
@@ -229,7 +240,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
       sp.printHTML("<h2>Items in category " + categoryName + "</h2><br><br>");
     }
 
-    itemList(categoryId, categoryName, page.intValue(), nbOfItems.intValue());
+    itemList(categoryId, categoryName, page.intValue(), nbOfItems.intValue(), sp);
     sp.printHTMLfooter();
   }
 

@@ -29,16 +29,16 @@ import javax.servlet.http.HttpServletResponse;
 
 public class StoreBuyNow extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
 
   public int getPoolSize()
   {
     return Config.StoreBuyNowPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -52,14 +52,18 @@ public class StoreBuyNow extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBuyNow");
     sp.printHTML(
       "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
+    
   }
 
   /**
@@ -94,6 +98,9 @@ public class StoreBuyNow extends RubisHttpServlet
     //     float   maxBuyNow; // maximum BuyNow the user wants
     int maxQty; // maximum quantity available for this item
     int qty; // quantity asked by the user
+    ServletPrinter sp = null;
+    PreparedStatement stmt = null;
+    Connection conn = null;
 
     sp = new ServletPrinter(response, "StoreBuyNow");
 
@@ -102,7 +109,7 @@ public class StoreBuyNow extends RubisHttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>");
+      printError("<h3>You must provide a user identifier !<br></h3>", sp);
       return;
     }
     else
@@ -111,7 +118,7 @@ public class StoreBuyNow extends RubisHttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return;
     }
     else
@@ -120,7 +127,7 @@ public class StoreBuyNow extends RubisHttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>");
+      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
       return;
     }
     else
@@ -132,7 +139,7 @@ public class StoreBuyNow extends RubisHttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>");
+      printError("<h3>You must provide a quantity !<br></h3>", sp);
       return;
     }
     else
@@ -149,7 +156,7 @@ public class StoreBuyNow extends RubisHttpServlet
           + qty
           + " items because only "
           + maxQty
-          + " are proposed !<br></h3>");
+          + " are proposed !<br></h3>", sp);
       return;
     }
     String now = TimeManagement.currentDateToString();
@@ -167,7 +174,8 @@ public class StoreBuyNow extends RubisHttpServlet
       if (!irs.first())
       {
         conn.rollback();
-        printError("This item does not exist in the database.");
+        printError("This item does not exist in the database.", sp);
+        closeConnection(stmt, conn);
         return;
       }
       quantity = irs.getInt("quantity");
@@ -196,11 +204,12 @@ public class StoreBuyNow extends RubisHttpServlet
       try
       {
         conn.rollback();
-        closeConnection();
+        closeConnection(stmt, conn);
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e);
+        printError("Transaction rollback failed: " + e, sp);
+        closeConnection(stmt, conn);
       }
       return;
     }
@@ -234,15 +243,15 @@ public class StoreBuyNow extends RubisHttpServlet
       try
       {
         conn.rollback();
-        closeConnection();
+        closeConnection(stmt, conn);
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e + "<br>");
+        printError("Transaction rollback failed: " + e + "<br>", sp);
       }
       return;
     }
-    closeConnection();
+    closeConnection(stmt, conn);
     sp.printHTMLfooter();
   }
 
