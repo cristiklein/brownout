@@ -147,7 +147,7 @@ public class StoreBuyNow extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_StoreBuyNow: " +e+"<br>");
+      printError("Cannot lookup SB_StoreBuyNow: " +e+"<br>");
       return ;
     }
 

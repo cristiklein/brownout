@@ -24,6 +24,14 @@ public class ViewBidHistory extends HttpServlet
   private ServletPrinter sp = null;
   private Context initialContext = null;
 
+  private void printError(String errorMsg)
+  {
+    sp.printHTMLheader("RUBiS ERROR: View Bid History");
+    sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
+    sp.printHTML(errorMsg);
+    sp.printHTMLfooter();
+  }
+
   /**
    * Call the <code>doPost</code> method.
    *
@@ -54,9 +62,7 @@ public class ViewBidHistory extends HttpServlet
 
     if ((value == null) || (value.equals("")))
     {
-      sp.printHTMLheader("RUBiS ERROR: View bids history");
-      sp.printHTML("<h3>You must provide an item identifier !<br></h3>");
-      sp.printHTMLfooter();
+      printError("You must provide an item identifier !<br>");
       return ;
     }
     else
@@ -70,8 +76,7 @@ public class ViewBidHistory extends HttpServlet
     } 
     catch (Exception e) 
     {
-      sp.printHTML("Cannot get initial context for JNDI: " + e+"<br>");
-      sp.printHTMLfooter();
+      printError("Cannot get initial context for JNDI: " + e+"<br>");
       return ;
     }
 
@@ -84,7 +89,7 @@ public class ViewBidHistory extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_ViewBidHistory: " +e+"<br>");
+      printError("Cannot lookup SB_ViewBidHistory: " +e+"<br>");
       return ;
     }
     

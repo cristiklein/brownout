@@ -53,6 +53,7 @@ public class SellItemForm extends HttpServlet
     } 
     catch (Exception e) 
     {
+      sp.printHTMLheader("RUBiS ERROR: SellItemForm");
       sp.printHTML("Cannot get initial context for JNDI: " +e+"<br>");
       sp.printHTMLfooter();
       return ;

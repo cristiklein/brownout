@@ -79,8 +79,7 @@ public class ViewUserInfo extends HttpServlet
     } 
     catch (Exception e) 
     {
-      sp.printHTML("Cannot get initial context for JNDI: " + e+"<br>");
-      sp.printHTMLfooter();
+      printError("Cannot get initial context for JNDI: " + e+"<br>");
       return ;
     }
 

@@ -80,7 +80,7 @@ public class BuyNow extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_BuyNow: " +e+"<br>");
+      printError("Cannot lookup SB_BuyNow: " +e+"<br>");
       return ;
     }
 
@@ -95,7 +95,7 @@ public class BuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Cannot get Buy Now form: " +e+"<br>");
+      printError("Cannot get Buy Now form: " +e+"<br>");
     } 
    
   }

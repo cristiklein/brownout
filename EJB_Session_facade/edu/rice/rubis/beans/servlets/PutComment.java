@@ -88,7 +88,7 @@ public class PutComment extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_PutComment: " +e+"<br>");
+      printError("Cannot lookup SB_PutComment: " +e+"<br>");
       return ;
     }
     String html;
@@ -113,7 +113,7 @@ public class PutComment extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot get the html form: " +e+"<br>");
+      printError("Cannot get the html form: " +e+"<br>");
       return ;
     }
   }

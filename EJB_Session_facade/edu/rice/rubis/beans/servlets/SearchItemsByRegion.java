@@ -45,7 +45,7 @@ public class SearchItemsByRegion extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_SearchItemsByRegion: " +e+"<br>");
+      printError("Cannot lookup SB_SearchItemsByRegion: " +e+"<br>");
       return ;
     }
 
@@ -55,7 +55,7 @@ public class SearchItemsByRegion extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot get the list of items: " +e+"<br>");
+      printError("Cannot get the list of items: " +e+"<br>");
       return ;
     }
 
@@ -91,7 +91,7 @@ public class SearchItemsByRegion extends HttpServlet
     } 
     catch (Exception e) 
     {
-      sp.printHTML("Exception getting item list: " + e +"<br>");
+      printError("Exception getting item list: " + e +"<br>");
     }
   }
 

@@ -132,7 +132,7 @@ public class RegisterUser extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_RegisterUser: " +e+"<br>");
+      printError("Cannot lookup SB_RegisterUser: " +e+"<br>");
       return ;
     }
     String html;
@@ -157,7 +157,7 @@ public class RegisterUser extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("User registration failed: " +e+"<br>");
+      printError("User registration failed: " +e+"<br>");
     }
   }
     

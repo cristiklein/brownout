@@ -18,6 +18,13 @@ public class BrowseRegions extends HttpServlet
 {
   private ServletPrinter sp = null;
 
+  private void printError(String errorMsg)
+  {
+    sp.printHTMLheader("RUBiS ERROR: Browse Regions");
+    sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
+    sp.printHTML(errorMsg);
+    sp.printHTMLfooter();
+  }
 
   /**
    * Display the list of regions
@@ -40,7 +47,7 @@ public class BrowseRegions extends HttpServlet
     } 
     catch (Exception e) 
     {
-      sp.printHTML("Cannot get initial context for JNDI: " +e+"<br>");
+      printError("Cannot get initial context for JNDI: " +e+"<br>");
       return ;
     }
 
@@ -55,7 +62,7 @@ public class BrowseRegions extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_BrowseRegions: " +e+"<br>");
+      printError("Cannot lookup SB_BrowseRegions: " +e+"<br>");
       return ;
     }
     String list;
@@ -65,7 +72,7 @@ public class BrowseRegions extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot get the list of regions: " +e+"<br>");
+      printError("Cannot get the list of regions: " +e+"<br>");
       return ;
     }
 

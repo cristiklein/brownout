@@ -18,6 +18,14 @@ public class BrowseCategories extends HttpServlet
 {
   private ServletPrinter sp = null;
 
+  private void printError(String errorMsg)
+  {
+    sp.printHTMLheader("RUBiS ERROR: Browse Categories");
+    sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
+    sp.printHTML(errorMsg);
+    sp.printHTMLfooter();
+  }
+
   /**
    * Build the html page for the response
    * @param request a <code>HttpServletRequest</code> value
@@ -40,7 +48,7 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e) 
     {
-      sp.printHTML("Cannot get initial context for JNDI: " +e+"<br>");
+      printError("Cannot get initial context for JNDI: " +e+"<br>");
       return ;
     }
 
@@ -60,7 +68,7 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_BrowseCategories: " +e+"<br>");
+      printError("Cannot lookup SB_BrowseCategories: " +e+"<br>");
       return ;
     }
     String list;
@@ -70,7 +78,7 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot get the list of categories: " +e+"<br>");
+      printError("Cannot get the list of categories: " +e+"<br>");
       return ;
     }
 
