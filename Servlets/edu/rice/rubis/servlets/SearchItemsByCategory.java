@@ -113,7 +113,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
             "<h2>Sorry, but there are no more items available in this category !</h2>");
           sp.printItemHeader();
           sp.printItemFooter(
-            "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+            "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
               + categoryId
               + "&categoryName="
               + URLEncoder.encode(categoryName)
@@ -146,7 +146,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
       {
         sp.printItemFooter(
           "",
-          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
             + categoryId
             + "&categoryName="
             + URLEncoder.encode(categoryName)
@@ -159,7 +159,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
       else
       {
         sp.printItemFooter(
-          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
             + categoryId
             + "&categoryName="
             + URLEncoder.encode(categoryName)
@@ -168,7 +168,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
             + "&nbOfItems="
             + nbOfItems
             + "\">Previous page</a>",
-          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
+          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByCategory?category="
             + categoryId
             + "&categoryName="
             + URLEncoder.encode(categoryName)

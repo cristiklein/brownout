@@ -144,7 +144,7 @@ public class PutComment extends RubisHttpServlet
           + toName
           + "</h2><br>");
       sp.printHTML(
-        "<form action=\"/servlet/edu.rice.rubis.servlets.StoreComment\" method=POST>"
+        "<form action=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.StoreComment\" method=POST>"
           + "<input type=hidden name=to value="
           + toStr
           + ">"

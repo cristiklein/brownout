@@ -231,7 +231,7 @@ public class ServletPrinter
           + endDate
           + "<TD><a href=\"edu.rice.rubis.servlets.PutBidAuth?itemId="
           + itemId
-          + "\"><IMG SRC=\"/Servlet_HTML/bid_now.jpg\" height=22 width=90></a>");
+          + "\"><IMG SRC=\"/rubis_servlets/bid_now.jpg\" height=22 width=90></a>");
     }
     catch (Exception e)
     {
@@ -360,14 +360,14 @@ public class ServletPrinter
           + "</BIG></b>\n"
           + "<TR><TD># of bids<TD><b><BIG>"
           + nbOfBids
-          + "</BIG></b> (<a href=\"/servlet/edu.rice.rubis.servlets.ViewBidHistory?itemId="
+          + "</BIG></b> (<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewBidHistory?itemId="
           + itemId
           + "\">bid history</a>)\n"
-          + "<TR><TD>Seller<TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
+          + "<TR><TD>Seller<TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
           + sellerId
           + "\">"
           + sellerName
-          + "</a> (<a href=\"/servlet/edu.rice.rubis.servlets.PutCommentAuth?to="
+          + "</a> (<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.PutCommentAuth?to="
           + sellerId
           + "&itemId="
           + itemId
@@ -382,10 +382,10 @@ public class ServletPrinter
       // Can the user buy this item now ?
       if (buyNow > 0)
         out.println(
-          "<p><a href=\"/servlet/edu.rice.rubis.servlets.BuyNowAuth?itemId="
+          "<p><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.BuyNowAuth?itemId="
             + itemId
             + "\">"
-            + "<IMG SRC=\"/Servlet_HTML/buy_it_now.jpg\" height=22 width=150></a>"
+            + "<IMG SRC=\"/rubis_servlets/buy_it_now.jpg\" height=22 width=150></a>"
             + "  <BIG><b>You can buy this item right now for only $"
             + buyNow
             + "</b></BIG><br><p>\n");
@@ -393,9 +393,9 @@ public class ServletPrinter
       if (userId <= 0)
       {
         out.println(
-          "<a href=\"/servlet/edu.rice.rubis.servlets.PutBidAuth?itemId="
+          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.PutBidAuth?itemId="
             + itemId
-            + "\"><IMG SRC=\"/Servlet_HTML/bid_now.jpg\" height=22 width=90> on this item</a>\n");
+            + "\"><IMG SRC=\"/rubis_servlets/bid_now.jpg\" height=22 width=90> on this item</a>\n");
       }
 
       printHTMLHighlighted("Item description");
@@ -407,7 +407,7 @@ public class ServletPrinter
         printHTMLHighlighted("Bidding");
         float minBid = maxBid + 1;
         printHTML(
-          "<form action=\"/servlet/edu.rice.rubis.servlets.StoreBid\" method=POST>\n"
+          "<form action=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.StoreBid\" method=POST>\n"
             + "<input type=hidden name=minBid value="
             + minBid
             + ">\n"
@@ -475,7 +475,7 @@ public class ServletPrinter
     try
     {
       out.println(
-        "<TR><TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
+        "<TR><TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
           + itemId
           + "\">"
           + itemName
@@ -491,17 +491,17 @@ public class ServletPrinter
           + startDate
           + "<TD>"
           + endDate
-          + "<TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
+          + "<TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
           + sellerId
           + "\">"
           + sellerName
-          + "<TD><a href=\"/servlet/edu.rice.rubis.servlets.PutBid?itemId="
+          + "<TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.PutBid?itemId="
           + itemId
           + "&nickname="
           + username
           + "&password="
           + password
-          + "\"><IMG SRC=\"/Servlet_HTML/bid_now.jpg\" height=22 width=90></a>\n");
+          + "\"><IMG SRC=\"/rubis_servlets/bid_now.jpg\" height=22 width=90></a>\n");
     }
     catch (Exception e)
     {
@@ -530,7 +530,7 @@ public class ServletPrinter
     try
     {
       out.println(
-        "<TR><TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
+        "<TR><TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
           + itemId
           + "\">"
           + itemName
@@ -538,7 +538,7 @@ public class ServletPrinter
           + "<TD>"
           + currentPrice
           + "\n"
-          + "<TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
+          + "<TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
           + sellerId
           + "\">"
           + sellerName
@@ -572,7 +572,7 @@ public class ServletPrinter
     try
     {
       out.println(
-        "<TR><TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
+        "<TR><TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
           + itemId
           + "\">"
           + itemName
@@ -583,7 +583,7 @@ public class ServletPrinter
           + "<TD>"
           + buyNow
           + "\n"
-          + "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="
+          + "<TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="
           + sellerId
           + "\">"
           + sellerName
@@ -620,7 +620,7 @@ public class ServletPrinter
     try
     {
       out.println(
-        "<TR><TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
+        "<TR><TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewItem?itemId="
           + itemId
           + "\">"
           + itemName
@@ -679,11 +679,11 @@ public class ServletPrinter
           + "<TR><TD>Quantity<TD><b><BIG>"
           + quantity
           + "</BIG></b>\n"
-          + "<TR><TD>Seller<TD><a href=\"/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
+          + "<TR><TD>Seller<TD><a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.ViewUserInfo?userId="
           + sellerId
           + "\">"
           + sellerName
-          + "</a> (<a href=\"/servlet/edu.rice.rubis.servlets.PutCommentAuth?to="
+          + "</a> (<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.PutCommentAuth?to="
           + sellerId
           + "&itemId="
           + itemId
@@ -702,7 +702,7 @@ public class ServletPrinter
 
       printHTMLHighlighted("Buy Now");
       printHTML(
-        "<form action=\"/servlet/edu.rice.rubis.servlets.StoreBuyNow\" method=POST>\n"
+        "<form action=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.StoreBuyNow\" method=POST>\n"
           + "<input type=hidden name=userId value="
           + userId
           + ">\n"

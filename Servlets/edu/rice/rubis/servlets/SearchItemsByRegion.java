@@ -102,7 +102,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
             "<h3>Sorry, but there is no more items in this category for this region.</h3><br>");
           sp.printItemHeader();
           sp.printItemFooter(
-            "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+            "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
               + categoryId
               + "&region="
               + regionId
@@ -135,7 +135,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
       {
         sp.printItemFooter(
           "",
-          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
             + categoryId
             + "&region="
             + regionId
@@ -148,7 +148,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
       else
       {
         sp.printItemFooter(
-          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
             + categoryId
             + "&region="
             + regionId
@@ -157,7 +157,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
             + "&nbOfItems="
             + nbOfItems
             + "\">Previous page</a>",
-          "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
+          "<a href=\"/rubis_servlets/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="
             + categoryId
             + "&region="
             + regionId
