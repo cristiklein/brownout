@@ -148,6 +148,7 @@ public class SB_AboutMeBean implements SessionBean
     ResultSet currentSellings = null;
     ResultSet pastSellings = null;
     PreparedStatement stmt = null;
+    PreparedStatement pstmt = null;
 
     String itemName, endDate, startDate;
     float currentPrice=0, initialPrice=0, buyNow=0, reservePrice=0;
@@ -168,13 +169,14 @@ public class SB_AboutMeBean implements SessionBean
     }
     try 
     {
-      stmt = conn.prepareStatement("SELECT * FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30");
-      stmt.setInt(1, userId.intValue());
-      pastSellings = stmt.executeQuery();
+      pstmt = conn.prepareStatement("SELECT * FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30");
+      pstmt.setInt(1, userId.intValue());
+      pastSellings = pstmt.executeQuery();
     }
     catch (Exception e)
-    {
+    {      
       try { stmt.close(); } catch (Exception ignore) {}
+      try { pstmt.close(); } catch (Exception ignore) {}
       try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting past sellings list: " +e+"<br>");
     }
@@ -268,12 +270,15 @@ public class SB_AboutMeBean implements SessionBean
       {
         sell.append(printHTMLHighlighted("<br><h3>You didn't sell any item in the past 30 days.</h3>"));
         if (stmt != null) stmt.close();
+        if (pstmt != null) pstmt.close();
         return sell.toString();
       }
       stmt.close();
+      pstmt.close();
     }
     catch (Exception e) 
     {
+      try { pstmt.close(); } catch (Exception ignore) {}
       try { stmt.close(); } catch (Exception ignore) {}
       try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting sold items: " + e +"<br>");
@@ -297,9 +302,10 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM buy_now WHERE buy_now.buyer_id=? AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30");
       stmt.setInt(1, userId.intValue());
       buy = stmt.executeQuery();
-      stmt.close();
+      
       if (!buy.first())
       {
+        stmt.close();
         return printHTMLHighlighted("<br><h3>You didn't buy any item in the last 30 days.</h3><br>");
       }
     }
@@ -320,8 +326,8 @@ public class SB_AboutMeBean implements SessionBean
       ResultSet sellerResult = null;
       do
       {
-	itemId = buy.getInt("item_id");
-	quantity = buy.getInt("qty");
+	       itemId = buy.getInt("item_id");
+	       quantity = buy.getInt("qty");
         // Get the name of the items
         
         itemStmt.setInt(1, itemId);
@@ -343,11 +349,13 @@ public class SB_AboutMeBean implements SessionBean
         html.append(printUserBoughtItem(itemId, itemName, quantity, buyNow, sellerId, sellerName));
       }
       while (buy.next());
+      stmt.close();
       itemStmt.close();
       sellerStmt.close();
     }
     catch (Exception e)
     {
+      try { stmt.close(); } catch (Exception ignore) {}
       try { itemStmt.close(); } catch (Exception ignore) {}
       try { sellerStmt.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting bought items: " +e+"<br>");
@@ -373,9 +381,10 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT item_id FROM bids, old_items WHERE bids.user_id=? AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       won = stmt.executeQuery();
-      stmt.close();
+      
       if (!won.first())
       {
+        stmt.close();
         return printHTMLHighlighted("<br><h3>You didn't win any item in the last 30 days.</h3><br>");
       }
     }
@@ -422,12 +431,13 @@ public class SB_AboutMeBean implements SessionBean
         html.append(printUserWonItem(itemId, itemName, currentPrice, sellerId, sellerName));
       }
       while (won.next());
-
-      if (itemStmt != null) itemStmt.close();
-      if (sellerStmt != null) sellerStmt.close();
+      stmt.close();
+      itemStmt.close();
+      sellerStmt.close();
     }
     catch (Exception e)
     {
+      try { stmt.close(); } catch (Exception ignore) {}
       try { itemStmt.close(); } catch (Exception ignore) {}
       try { sellerStmt.close(); } catch (Exception ignore) {}
       try { conn.close(); } catch (Exception ignore) {}
@@ -443,6 +453,7 @@ public class SB_AboutMeBean implements SessionBean
   {
     ResultSet rs = null;
     PreparedStatement stmt = null;
+    PreparedStatement pstmt = null;
     String date = null, comment = null;
     int authorId = -1;
     StringBuffer html = null;
@@ -471,7 +482,7 @@ public class SB_AboutMeBean implements SessionBean
     try
     {
     // Display each comment and the name of its author
-      stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      pstmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
       ResultSet authorRS = null;
       do 
       {
@@ -482,8 +493,8 @@ public class SB_AboutMeBean implements SessionBean
         String authorName = "none";
         try
         {
-          stmt.setInt(1, authorId);
-          authorRS = stmt.executeQuery();
+          pstmt.setInt(1, authorId);
+          authorRS = pstmt.executeQuery();
           if (authorRS.first())
             authorName = authorRS.getString("nickname");
         }
@@ -495,10 +506,12 @@ public class SB_AboutMeBean implements SessionBean
       }
       while (rs.next());
       stmt.close();
+      pstmt.close();
     }
     catch (Exception e)
     {
       try { stmt.close(); } catch (Exception ignore) {}
+      try { pstmt.close(); } catch (Exception ignore) {}
       try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Failed to get comments list: " +e);
     }
@@ -522,9 +535,10 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       bid = stmt.executeQuery();
-      stmt.close();
+      
       if (!bid.first())
       {
+        stmt.close(); 
         return printHTMLHighlighted("<h3>You didn't put any bid.</h3>");
       }
     }
@@ -577,11 +591,13 @@ public class SB_AboutMeBean implements SessionBean
         html.append(printItemUserHasBidOn(itemId, itemName, initialPrice,maxBid, currentPrice, quantity, startDate, endDate, sellerId, sellerName, username, password));
       }
       while(bid.next());
-      if (itemStmt != null) itemStmt.close();
-      if (sellerStmt != null) sellerStmt.close();
+      stmt.close();
+      itemStmt.close();
+      sellerStmt.close();
     }
     catch (Exception e) 
     {
+      try { stmt.close(); } catch (Exception ignore) {}
       try { itemStmt.close(); } catch (Exception ignore) {}
       try { sellerStmt.close(); } catch (Exception ignore) {}
       try { conn.close(); } catch (Exception ignore) {}
