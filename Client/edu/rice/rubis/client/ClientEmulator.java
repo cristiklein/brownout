@@ -32,10 +32,10 @@ public class ClientEmulator
    * Creates a new <code>ClientEmulator</code> instance.
    * The program is stopped on any error reading the configuration files.
    */
-  public ClientEmulator()
+  public ClientEmulator(String propertiesFileName)
   {
     // Initialization, check that all files are ok
-    rubis = new RUBiSProperties();
+    rubis = new RUBiSProperties(propertiesFileName);
     urlGen = rubis.checkPropertiesFileAndGetURLGenerator();
     if (urlGen == null)
       Runtime.getRuntime().exit(1);
@@ -171,10 +171,11 @@ public class ClientEmulator
     Process[]         remoteClientMonitor = null;
     Process[]         remoteClient = null;
     String            reportDir = "";
-    boolean           isMainClient = args.length == 0; // Check if we are the main client
+    boolean           isMainClient = (args.length <= 1); // Check if we are the main client
+    String            propertiesFileName;
 
     if (isMainClient)
-    { 
+    {
       // Start by creating a report directory and redirecting output to an index.html file
       System.out.println("RUBiS client emulator - (C) Rice University/INRIA 2001\n");
       reportDir = "bench/"+TimeManagement.currentDateToString()+"/";
@@ -211,14 +212,19 @@ public class ClientEmulator
       System.out.println("<p><hr><p>");
 
       System.out.println("<CENTER><A NAME=\"config\"></A><h2>*** Test configuration ***</h2></CENTER>");
+      if (args.length == 0)
+        propertiesFileName = "rubis";
+      else
+        propertiesFileName = args[0];
     }
     else
     {
       System.out.println("RUBiS remote client emulator - (C) Rice University/INRIA 2001\n");
       startDate = new GregorianCalendar();
+      propertiesFileName = args[2];
     }
 
-    ClientEmulator client = new ClientEmulator(); // Get also rubis.properties info
+    ClientEmulator client = new ClientEmulator(propertiesFileName); // Get also rubis.properties info
 
     Stats          stats = new Stats(client.rubis.getNbOfRows());
     Stats          upRampStats = new Stats(client.rubis.getNbOfRows());
@@ -242,7 +248,7 @@ public class ClientEmulator
           String[] rcmdClient = new String[3];
           rcmdClient[0] = client.rubis.getMonitoringRsh();
           rcmdClient[1] = (String)client.rubis.getRemoteClients().get(i);
-          rcmdClient[2] = client.rubis.getClientsRemoteCommand()+" "+reportDir+"trace_client"+(i+1)+".html "+reportDir+"stat_client"+(i+1)+".html";
+          rcmdClient[2] = client.rubis.getClientsRemoteCommand()+" "+reportDir+"trace_client"+(i+1)+".html "+reportDir+"stat_client"+(i+1)+".html"+" "+propertiesFileName;
           remoteClient[i] = Runtime.getRuntime().exec(rcmdClient);
           System.out.println("&nbsp &nbsp Command is: "+rcmdClient[0]+" "+rcmdClient[1]+" "+rcmdClient[2]+"<br>\n");
         }

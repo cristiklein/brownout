@@ -96,7 +96,30 @@ public class RUBiSProperties
     }
     catch (java.util.MissingResourceException e)
     {
-      System.err.println("No database.properties file has been found in your classpath.<p>");
+      System.err.println("No rubis.properties file has been found in your classpath.<p>");
+      Runtime.getRuntime().exit(1);
+    }
+  }
+
+  
+  /**
+   * Creates a new <code>RUBiSProperties</code> instance.
+   * If the filename.properties file is not found in the classpath,
+   * the current thread is killed.
+   *
+   * @param filename name of the property file
+   */
+  public RUBiSProperties(String filename)
+  {
+    // Get and check database.properties
+    System.out.println("Looking for "+filename+".properties in classpath ("+System.getProperty("java.class.path",".")+")<p>");
+    try
+    {
+      configuration = ResourceBundle.getBundle(filename);
+    }
+    catch (java.util.MissingResourceException e)
+    {
+      System.err.println("No "+filename+".properties file has been found in your classpath.<p>");
       Runtime.getRuntime().exit(1);
     }
   }
