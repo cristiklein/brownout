@@ -4,7 +4,7 @@
 
 <document>
   <properties>
-    <author email="emmanuel.cecchet@inrialpes.fr">Emmanuel Cecchet</author>
+    <author email="emmanuel.cecchet@inrialpes.fr">Julie Marguerite and Emmanuel Cecchet</author>
     <title>Experimental reports</title>
     <filename>results_index.xml</filename>
     <pathtoroot>.</pathtoroot>
@@ -67,14 +67,14 @@ detailed in 'Test performance report')
 </p>
 <p>Download the <a href="../results/rubis_dump.sql.gz">database dump</a>  (113 MB) used
 for the experiments (SQL dump in ASCII format compressed with gzip).</p> 
-<p> Download JOnAS configuration files: <a href="../download/JOnAS-RMI.tgz">JOnAS-RMI</a> 
- version, <a href="../download/JOnAS-Jeremie.tgz">JOnAS-Jeremie</a>  version,
- <a href="../download/JOnAS-2.5.tgz">JOnAS 2.5</a> (EJB 2.0) version. </p>
+<p> Download JOnAS configuration files: <a href="../results/config_files/JOnAS-RMI.tgz">JOnAS-RMI</a> 
+ version, <a href="../results/config_files/JOnAS-Jeremie.tgz">JOnAS-Jeremie</a>  version,
+ <a href="../results/config_files/JOnAS-2.5.tgz">JOnAS 2.5</a> (EJB 2.0) version. </p>
 <p> Download JBoss configuration files: <a href="JBoss.tgz">JBoss</a>  version,
-<a href="../download/JBoss-opt.tgz">JBoss optimized calls </a> version,
-<a href="../download/JBoss-3.0.tgz">JBoss 3.0</a> (EJB 2.0) version.</p>
+<a href="../results/config_files/JBoss-opt.tgz">JBoss optimized calls </a> version,
+<a href="../results/config_files/JBoss-3.0.tgz">JBoss 3.0</a> (EJB 2.0) version.</p>
 <p> Download
- <a href="http://www.cs.rice.edu/CS/Systems/DynaServer/RUBiS/download.html"> 
+ <a href="http://debian-sf.objectweb.org/projects/rubis/"> 
 RUBiS</a>.</p>
   </s2>
 

@@ -136,7 +136,7 @@
 	The new and old comments tables contain about 31,500 and 475,000 comments,
 	respectively. The total size of the database, including indices, is 1.4GB.
 	</p>
-	<p>Learn more about RUBiS in the <a href="doc/doc_index.html">documentation</a> section and <a href="results.html">download</a> the code or the experimental results.</p>
+	<p>Learn more about RUBiS in the <a href="doc/index.html">documentation</a> section and <a href="results.html">download</a> the code or the experimental results.</p>
       </s2>
 
       <s2 name="Getting involved">
@@ -145,7 +145,7 @@
 	RUBiS is welcome. RUBiS, as an <em>open source</em> project,
 	also welcomes <em>external contributions</em>. Interested?
 	Contact <a
-	href="mailto:emmanuel.cecchet@inrialpes.fr">us</a>.</p>
+	href="mailto:jmob@objectweb.org">us</a>.</p>
 
       </s2>  
     </s1>
