@@ -67,7 +67,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       catch (Exception ignore)
       {
       }
-      throw new RemoteException("Failed to get categories list " +e);
+      throw new RemoteException("Failed to get the comments " +e);
     }
     try 
     {
