@@ -230,11 +230,11 @@ public class StoreBid extends RubisHttpServlet
             + "\", \""
             + itemId
             + "\", \""
+            + qty
+            + "\", \""
             + bid
             + "\", \""
             + maxBid
-            + "\", \""
-            + qty
             + "\", \""
             + now
             + "\")");
