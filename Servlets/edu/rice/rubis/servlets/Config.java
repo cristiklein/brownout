@@ -17,8 +17,9 @@ public class Config
   {
   }
 
-  public static final String HTMLFilesPath = "/users/margueri/RUBiS/Servlet_HTML";
-  public static final String DatabaseProperties = "/users/margueri/RUBiS/Servlets/mysql.properties";
+
+  public static final String HTMLFilesPath = "/home/margueri/workspace/RUBiS/Servlet_HTML";
+  public static final String DatabaseProperties = "/home/margueri/workspace/RUBiS/Servlets/mysql.properties";
 
   public static final int AboutMePoolSize = 10;
   public static final int BrowseCategoriesPoolSize = 6;
