@@ -4,6 +4,7 @@
 
   <!-- set global properties for this build -->
   <property file="../build.properties" />
+  <property name="servlets.html" value="../Servlet_HTML" />
 
 
   <!-- init rule creates build directory -->
@@ -11,17 +12,25 @@
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}/RUBiS-${version}"/>
+    <mkdir dir="${classes.dir}/RUBiS-${version}"/>
   </target>
 
   <!-- dist rule creates a jar file containing the servlets -->
   <target name="dist" depends="init, compile">
-     <jar destfile="${dist}/rubis_ejb_servlets.jar">
-	<fileset dir="${build}/RUBiS-${version}"
+     <jar destfile="${dist}/rubis_servlets.jar">
+	<fileset dir="${classes.dir}/RUBiS-${version}"
 		 includes="edu/rice/rubis/beans/servlets/*.class"/>
     </jar>
   </target>
 
+  <!-- Create a war file-->
+  <target name="war" depends="init, compile, dist">
+    <copy file="${dist}/rubis_servlets.jar" todir="${servlets.html}/WEB-INF/lib"/>
+     <war destfile="${dist}/rubis_servlets.war" webxml="${servlets.html}/WEB-INF/web.xml" basedir="${web.dir}">
+	<fileset dir="${classes.dir}"
+		 includes="*"/>
+    </war>
+  </target>
 
   <!-- compile rule: Compile the beans and the servlets -->
   <target name="compile" depends="init">
@@ -53,10 +62,13 @@
   </target>
 
   <target name="clean">
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <delete dir="${build}"/>
+    <!-- Delete the ${classes.dir} and ${dist} directory trees -->
+    <delete dir="${classes.dir}"/>
     <delete>
-      <fileset dir="${dist}" includes="rubis_ejb_servlets.jar"/>
+      <fileset dir="${dist}" includes="rubis_servlets.jar"/>
+    </delete>
+    <delete>
+      <fileset dir="${dist}" includes="rubis_servlets.war"/>
     </delete>
     <delete>
       <fileset dir="edu" includes="**/*.class"/>
