@@ -44,7 +44,7 @@ public class ViewBidHistory extends RubisHttpServlet
   }
 
   /** List the bids corresponding to an item */
-  private void listBids(Integer itemId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
+  private boolean listBids(Integer itemId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
     float bid;
     int userId;
@@ -64,14 +64,14 @@ public class ViewBidHistory extends RubisHttpServlet
         sp.printHTML(
           "<h3>There is no bid corresponding to this item.</h3><br>");
         closeConnection(stmt, conn);
-        return;
+        return false;
       }
     }
     catch (SQLException e)
     {
       sp.printHTML("Exception getting bids list: " + e + "<br>");
       closeConnection(stmt, conn);
-      return;
+      return false;
     }
 
     sp.printBidHistoryHeader();
@@ -94,7 +94,7 @@ public class ViewBidHistory extends RubisHttpServlet
           {
             sp.printHTML("This user does not exist in the database.<br>");
             closeConnection(stmt, conn);
-            return;
+            return false;
           }
           bidderName = urs.getString("nickname");
         }
@@ -102,7 +102,7 @@ public class ViewBidHistory extends RubisHttpServlet
         {
           sp.printHTML("Couldn't get bidder name: " + e + "<br>");
           closeConnection(stmt, conn);
-          return;
+          return false;
         }
         sp.printBidHistory(userId, bidderName, bid, date);
       }
@@ -112,9 +112,10 @@ public class ViewBidHistory extends RubisHttpServlet
     {
       sp.printHTML("Exception getting bid: " + e + "<br>");
       closeConnection(stmt, conn);
-      return;
+      return false;
     }
     sp.printBidHistoryFooter();
+    return true;
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -202,8 +203,12 @@ public class ViewBidHistory extends RubisHttpServlet
       return;
     }
 
-    listBids(itemId, stmt, conn, sp);
-    closeConnection(stmt, conn);
+    boolean connAlive = listBids(itemId, stmt, conn, sp);
+    // connAlive means we must close it. Otherwise we must NOT do a
+    // double free
+    if (connAlive) {
+        closeConnection(stmt, conn);
+    }
     sp.printHTMLfooter();
   }
 

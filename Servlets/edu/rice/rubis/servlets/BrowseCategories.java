@@ -40,7 +40,7 @@ public class BrowseCategories extends RubisHttpServlet
   }
 
   /** List all the categories in the database */
-  private void categoryList(int regionId, int userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
+  private boolean categoryList(int regionId, int userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
     String categoryName;
     int categoryId;
@@ -56,7 +56,7 @@ public class BrowseCategories extends RubisHttpServlet
     {
       sp.printHTML("Failed to execute Query for categories list: " + e);
       closeConnection(stmt, conn);
-      return;
+      return false;
     }
     try
     {
@@ -65,7 +65,7 @@ public class BrowseCategories extends RubisHttpServlet
         sp.printHTML(
           "<h2>Sorry, but there is no category available at this time. Database table is empty</h2><br>");
         closeConnection(stmt, conn);
-        return;
+        return false;
       }
       else
         sp.printHTML("<h2>Currently available categories</h2><br>");
@@ -93,7 +93,9 @@ public class BrowseCategories extends RubisHttpServlet
     {
       sp.printHTML("Exception getting categories list: " + e + "<br>");
       closeConnection(stmt, conn);
+      return false;
     }
+    return true;
   }
 
   /** Build the html page for the response */
@@ -157,8 +159,10 @@ public class BrowseCategories extends RubisHttpServlet
       }
     }
 
-    categoryList(regionId, userId, stmt, conn, sp);
-    closeConnection(stmt, conn);
+    boolean connAlive = categoryList(regionId, userId, stmt, conn, sp);
+    if (connAlive) {
+        closeConnection(stmt, conn);
+    }
     sp.printHTMLfooter();
 
   }

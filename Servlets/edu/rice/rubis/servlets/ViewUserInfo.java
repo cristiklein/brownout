@@ -56,7 +56,7 @@ public class ViewUserInfo extends RubisHttpServlet
       releaseConnection(conn);
   }
 
-  private void commentList(Integer userId, PreparedStatement stmt,
+  private boolean commentList(Integer userId, PreparedStatement stmt,
       Connection conn, ServletPrinter sp)
   {
     ResultSet rs = null;
@@ -80,14 +80,14 @@ public class ViewUserInfo extends RubisHttpServlet
         sp.printHTML("Failed to execute Query for list of comments: " + e);
         conn.rollback();
         closeConnection(stmt, conn);
-        return;
+        return false;
       }
       if (!rs.first())
       {
         sp.printHTML("<h3>There is no comment yet for this user.</h3><br>");
         conn.commit();
         closeConnection(stmt, conn);
-        return;
+        return false;
       }
       sp.printHTML("<br><hr><br><h3>Comments for this user</h3><br>");
 
@@ -118,7 +118,7 @@ public class ViewUserInfo extends RubisHttpServlet
           conn.rollback();
           authorStmt.close();
           closeConnection(stmt, conn);
-          return;
+          return false;
         }
         sp.printComment(authorName, authorId, date, comment);
       }
@@ -133,13 +133,16 @@ public class ViewUserInfo extends RubisHttpServlet
       {
         conn.rollback();
         closeConnection(stmt, conn);
+        return false;
       }
       catch (Exception se)
       {
         sp.printHTML("Transaction rollback failed: " + e + "<br>");
         closeConnection(stmt, conn);
+        return false;
       }
     }
+    return true;
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -222,9 +225,13 @@ public class ViewUserInfo extends RubisHttpServlet
       sp.printHTMLfooter();
       return;
     }
-    commentList(userId, stmt, conn, sp);
+    boolean connAlive = commentList(userId, stmt, conn, sp);
     sp.printHTMLfooter();
-    closeConnection(stmt, conn);
+    // connAlive means we must close it. Otherwise we must NOT do a
+    // double free
+    if(connAlive) {
+        closeConnection(stmt, conn);
+    }
   }
 
   /**
