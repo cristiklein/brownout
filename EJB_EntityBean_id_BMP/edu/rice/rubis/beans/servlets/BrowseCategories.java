@@ -1,22 +1,14 @@
 package edu.rice.rubis.beans.servlets;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-
+import edu.rice.rubis.beans.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
-
-import edu.rice.rubis.beans.Category;
-import edu.rice.rubis.beans.CategoryHome;
-import edu.rice.rubis.beans.Region;
-import edu.rice.rubis.beans.RegionHome;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Builds the html page with the list of all categories and provides links to browse all
@@ -26,21 +18,18 @@ import edu.rice.rubis.beans.RegionHome;
  */
 public class BrowseCategories extends HttpServlet
 {
-  private UserTransaction utx = null;
-  private ServletPrinter sp = null;
+ 
 
   /** List all the categories in the database */
-  private void categoryList(CategoryHome home, int regionId, int userId)
+  private void categoryList(CategoryHome home, int regionId, int userId, ServletPrinter sp) 
   {
     Collection list;
     Category cat;
-    try
+    try 
     {
-      utx.begin(); // faster if made inside a Tx
       list = home.findAllCategories();
       if (list.isEmpty())
-        sp.printHTML(
-          "<h2>Sorry, but there is no category available at this time. Database table is empty</h2><br>");
+        sp.printHTML("<h2>Sorry, but there is no category available at this time. Database table is empty</h2><br>");
       else
       {
         sp.printHTML("<h2>Currently available categories</h2><br>");
@@ -48,7 +37,7 @@ public class BrowseCategories extends HttpServlet
         Iterator it = list.iterator();
         while (it.hasNext())
         {
-          cat = (Category) it.next();
+          cat = (Category)it.next();
           if (regionId != -1)
           {
             sp.printCategoryByRegion(cat, regionId);
@@ -62,21 +51,14 @@ public class BrowseCategories extends HttpServlet
           }
         }
       }
-      utx.commit();
-    }
-    catch (Exception e)
+
+    } 
+    catch (Exception e) 
     {
-      sp.printHTML("Exception getting category list: " + e + "<br>");
-      try
-      {
-        utx.rollback();
-      }
-      catch (Exception se)
-      {
-        sp.printHTML("Transaction rollback failed: " + e + "<br>");
-      }
+      sp.printHTML("Exception getting category list: " + e +"<br>");    
     }
   }
+
 
   /**
    * Build the html page for the response
@@ -85,74 +67,57 @@ public class BrowseCategories extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
-    int regionId = -1, userId = -1;
-    String username = null, password = null;
+    int     regionId = -1, userId = -1;
+    String  username=null, password=null;
     Context initialContext = null;
 
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "BrowseCategories");
     sp.printHTMLheader("RUBiS available categories");
 
     try
     {
       initialContext = new InitialContext();
-    }
-    catch (Exception e)
+    } 
+    catch (Exception e) 
     {
-      sp.printHTML("Cannot get initial context for JNDI: " + e + "<br>");
-      return;
+      sp.printHTML("Cannot get initial context for JNDI: " +e+"<br>");
+      return ;
     }
-
-    // We want to start transactions from client
-    try
-    {
-      utx =
-        (javax.transaction.UserTransaction) initialContext.lookup(
-          Config.UserTransaction);
-    }
-    catch (Exception e)
-    {
-      sp.printHTML("Cannot lookup UserTransaction: " + e + "<br>");
-      return;
-    }
-
+    
     username = request.getParameter("nickname");
     password = request.getParameter("password");
-
+    
     // Authenticate the user who wants to sell items
-    if ((username != null && username != "")
-      || (password != null && password != ""))
+    if ((username != null && username !="") || (password != null && password !=""))
     {
       Auth auth = new Auth(initialContext, sp);
       userId = auth.authenticate(username, password);
       if (userId == -1)
       {
-        sp.printHTML(
-          " You don't have an account on RUBiS!<br>You have to register first.<br>");
+        sp.printHTML(" You don't have an account on RUBiS!<br>You have to register first.<br>");
         sp.printHTMLfooter();
-        return;
+        return ;	
       }
     }
-
+    
     String value = request.getParameter("region");
     if ((value != null) && (!value.equals("")))
     {
       // Connecting to region Home interface thru JNDI
       RegionHome home = null;
-      try
+      try 
       {
-        home =
-          (RegionHome) PortableRemoteObject.narrow(
-            initialContext.lookup("RegionHome"),
-            RegionHome.class);
-      }
+        home = (RegionHome)PortableRemoteObject.narrow(initialContext.lookup("RegionHome"),
+                                                       RegionHome.class);
+      } 
       catch (Exception e)
       {
-        sp.printHTML("Cannot lookup Region: " + e + "<br>");
+        sp.printHTML("Cannot lookup Region: " +e+"<br>");
         sp.printHTMLfooter();
-        return;
+        return ;
       }
       // get the region ID
       try
@@ -162,34 +127,27 @@ public class BrowseCategories extends HttpServlet
       }
       catch (Exception e)
       {
-        sp.printHTML(
-          " Region "
-            + value
-            + " does not exist in the database!<br>(got exception: "
-            + e
-            + ")<br>");
+        sp.printHTML(" Region "+value+" does not exist in the database!<br>(got exception: " +e+")<br>");
         sp.printHTMLfooter();
-        return;
+        return ;
       }
     }
 
     // Connecting to category Home thru JNDI
     CategoryHome home = null;
-    try
+    try 
     {
-      home =
-        (CategoryHome) PortableRemoteObject.narrow(
-          initialContext.lookup("CategoryHome"),
-          CategoryHome.class);
-    }
+      home = (CategoryHome)PortableRemoteObject.narrow(initialContext.lookup("CategoryHome"),
+                                                       CategoryHome.class);
+    } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup Category: " + e + "<br>");
+      sp.printHTML("Cannot lookup Category: " +e+"<br>");
       sp.printHTMLfooter();
-      return;
+      return ;
     }
-
-    categoryList(home, regionId, userId);
+  
+    categoryList(home, regionId, userId, sp);    	
 
     sp.printHTMLfooter();
   }
@@ -202,8 +160,7 @@ public class BrowseCategories extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
     doGet(request, response);
   }
