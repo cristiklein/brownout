@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+
+<!DOCTYPE document SYSTEM '../../common/dtd/objectweb.dtd'>
+
+<document>
+  <properties>
+    <author email="c-jdbc@objectweb.org">c-jdbc team</author>
+    <title>History</title>
+    <filename>history.xml</filename>
+    <pathtoroot>.</pathtoroot>
+  </properties>
+
+  <body>
+
+    <s1 name="RUBiS History">
+
+      <subtitle>October 2002</subtitle>
+      <p>C-JDBC first open source version available !</p>
+    </s1>
+  </body>
+
+</document>
