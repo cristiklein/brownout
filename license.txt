@@ -1,5 +1,5 @@
 
-Rice University Bidding System"RUBiS"
+Rice University Bidding System "RUBiS"
 Copyright (©) 2002, Rice University  
 All rights reserved. 
 Developed by: E. Cecchet and J. Marguerite
