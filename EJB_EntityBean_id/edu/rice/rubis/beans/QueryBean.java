@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 import java.io.Serializable;
 
 /**
+ * MySQL version of Query Bean:
  * QueryBean is a stateless session bean used to perform requests
  * on the RUBiS database as described in rubis.sql. 
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
@@ -58,8 +59,8 @@ public class QueryBean implements SessionBean
       conn = dataSource.getConnection();
       stmt = conn.prepareStatement("SELECT items.id FROM items WHERE items.category=? AND end_date>=NOW() LIMIT ?,?");
       stmt.setInt(1, categoryId.intValue());
-      stmt.setInt(2, startingRow);
-      stmt.setInt(3, nbOfRows);
+      stmt.setInt(2, startingRow); // MySQL version
+      stmt.setInt(3, nbOfRows);    // MySQL version
       ResultSet rs = stmt.executeQuery();
       // Build the vector of primary keys
       while (rs.next()) 
@@ -114,8 +115,8 @@ public class QueryBean implements SessionBean
       stmt = conn.prepareStatement("SELECT items.id FROM items,users WHERE items.category=? AND items.seller=users.id AND users.region=? AND end_date>=NOW() LIMIT ?,?");
       stmt.setInt(1, categoryId.intValue());
       stmt.setInt(2, regionId.intValue());
-      stmt.setInt(3, startingRow);
-      stmt.setInt(4, nbOfRows);
+      stmt.setInt(3, startingRow);  // MySQL version
+      stmt.setInt(4, nbOfRows);     // MySQL version
       ResultSet rs = stmt.executeQuery();
 
       // Build the vector of primary keys
