@@ -176,13 +176,20 @@
 		   <code> jonas start</code>
 		</p>
       	<p>Access to RUBiS: http://fidji/ejb_rubis_web/</p>
-
-		<p>In case of ClassCast exception problem during UserTransaction look up, *
+		
+  </s2>
+ <s2 name="Troubleshouting">
+      	<p>In case of ClassCast exception problem during UserTransaction look up, 
 		try to :<br></br>
         <code>cp $JONAS_BASE/lib/jonas.jar $CATALINA_BASE/webapps/ejb_rubis_web/WEB-INF/lib</code>
 		</p>
+      	<p>RUBiS requires the DB datasource name to be 'mysql' (all in
+lowercase)</p>
+
+      	<p>If you are using an EJB implementation that does not make use of the Auth.java servlet
+the parts for 'Auth' servlet should be commented out in ejb_rubis_web/WEB-INF/web.xml before 
+compiling the bench. Otherwise JOnAS will not be able to load the war file.</p>
   </s2>
-	
 
   </s1>
 
