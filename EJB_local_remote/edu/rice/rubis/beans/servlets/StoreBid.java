@@ -87,7 +87,7 @@ public class StoreBid extends HttpServlet
       userId = new Integer(value);
 
     value = request.getParameter("itemId");
-    if ((value == null) || (value.equals("")))
+    if ((value == null) || (value.equals("")) || (value.equals("-1")))
     {
       printError("<h3>You must provide an item identifier !<br></h3>");
       return ;
@@ -202,6 +202,7 @@ public class StoreBid extends HttpServlet
     }
     try
     {
+      
       sb_StoreBid.createBid(userId, itemId, bid, maxBid, qty);
       sp.printHTMLheader("RUBiS: Bidding result");
       sp.printHTML("<center><h2>Your bid has been successfully processed.</h2></center>\n");

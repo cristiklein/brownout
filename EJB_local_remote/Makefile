@@ -38,7 +38,7 @@ base-jar:
 jonas_xml = ejb-jar.xml jonas-ejb-jar.xml
 
 %.xml: Makefile 
-	${GENIC} -rmiopts -d . -javac $(JAVAC) -javacopts $(JAVACOPTS) -verbose $@
+	${GENIC} -d . -javac $(JAVAC) -javacopts $(JAVACOPTS) -verbose $@
 
 jonas-jar: META-INF/JOnAS/ejb-jar.xml base-jar
 	${CP} $(addprefix META-INF/JOnAS/, $(jonas_xml)) META-INF/

@@ -83,6 +83,11 @@ public class StoreComment extends HttpServlet
     }
     else
       toId = new Integer(value);
+    if (toId.intValue() == -1)
+    {
+      printError( "The'to user' identifier is -1.<br></h3>");
+      return ;
+    }
 
     value = request.getParameter("from");
     if ((value == null) || (value.equals("")))

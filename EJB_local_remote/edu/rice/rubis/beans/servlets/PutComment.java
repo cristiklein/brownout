@@ -62,6 +62,13 @@ public class PutComment extends HttpServlet
       printError("User id, name and password are required - Cannot process the request<br>");
       return ;
     }
+    Integer toId = new Integer(toStr);
+    if (toId.intValue() == -1)
+    {
+      printError("toId is -1 - Cannot process the request<br>");
+      return ;
+    }
+    Integer itemId = new Integer(itemStr);
 
     Context initialContext = null;
     try
@@ -77,8 +84,6 @@ public class PutComment extends HttpServlet
     // Connecting to Home thru JNDI
     SB_PutCommentHome home = null;
     SB_PutComment sb_PutComment = null;
-    Integer toId = new Integer(toStr);
-    Integer itemId = new Integer(itemStr);
 
     try 
     {

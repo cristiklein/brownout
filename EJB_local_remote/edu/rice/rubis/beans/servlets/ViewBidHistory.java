@@ -69,40 +69,44 @@ public class ViewBidHistory extends HttpServlet
       itemId = new Integer(value);
 
     sp.printHTMLheader("RUBiS: Bid history");
+    if(itemId.intValue() == -1)
+      sp.printHTML("ItemId is -1: this item does not exist.<br>");
+    else
+    {
+      try
+      {
+        initialContext = new InitialContext();
+      } 
+      catch (Exception e) 
+      {
+        printError("Cannot get initial context for JNDI: " + e+"<br>");
+        return ;
+      }
 
-    try
-    {
-      initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
-    {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
-      return ;
-    }
-
-    SB_ViewBidHistory viewBid;
-    try 
-    {
-      SB_ViewBidHistoryHome viewBidHome = (SB_ViewBidHistoryHome)PortableRemoteObject.narrow(initialContext.lookup("SB_ViewBidHistoryHome"),
-                                                                                             SB_ViewBidHistoryHome.class);
-      viewBid = viewBidHome.create();
-    } 
-    catch (Exception e)
-    {
-      printError("Cannot lookup SB_ViewBidHistory: " +e+"<br>");
-      return ;
-    }
-    
-    try
-    {
-      sp.printHTML(viewBid.getBidHistory(itemId));
-
-    }
-    catch (Exception e)
-    {
-      sp.printHTML("Cannot get bids history (got exception: " +e+")<br>");
-      sp.printHTMLfooter();
-      return ;
+      SB_ViewBidHistory viewBid;
+      try 
+      {
+        SB_ViewBidHistoryHome viewBidHome = (SB_ViewBidHistoryHome)PortableRemoteObject.narrow(initialContext.lookup("SB_ViewBidHistoryHome"),
+                                                                                               SB_ViewBidHistoryHome.class);
+        viewBid = viewBidHome.create();
+      } 
+      catch (Exception e)
+      {
+        printError("Cannot lookup SB_ViewBidHistory: " +e+"<br>");
+        return ;
+      }
+      
+      try
+      {
+        sp.printHTML(viewBid.getBidHistory(itemId));
+        
+      }
+      catch (Exception e)
+      {
+        sp.printHTML("Cannot get bids history (got exception: " +e+")<br>");
+        sp.printHTMLfooter();
+        return ;
+      }
     }
     sp.printHTMLfooter();
   }

@@ -58,6 +58,12 @@ public class PutBid extends HttpServlet
       printError("Item id, name and password are required - Cannot process the request<br>");
       return ;
     }
+    Integer itemId = new Integer(itemStr);
+    if (itemId.intValue() == -1)
+    {
+      printError( "Item id is -1.<br>");
+      return ;
+    }
 
     Context initialContext = null;
     try
@@ -85,8 +91,6 @@ public class PutBid extends HttpServlet
     }
    try
     {
-      Integer itemId = new Integer(itemStr);
-
       // Display the form for bidding
       String html = putBid.getBiddingForm(itemId, name, pass);
       sp.printHTMLheader("RUBiS: PutBid");
