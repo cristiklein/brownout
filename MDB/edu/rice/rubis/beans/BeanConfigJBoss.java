@@ -40,7 +40,8 @@ public class BeanConfig
   public static final String UserTransaction = "UserTransaction";
 
   /**
-   * Returns the context used by the web container for html files and servlets (this isthe name of the war file).
+   * Returns the context used by the web container for html files and servlets (this is the name of the war file).
+   * If no war file is used context is /EJB_HTML
    */
   public static final String context = "/ejb_rubis_web";
 }

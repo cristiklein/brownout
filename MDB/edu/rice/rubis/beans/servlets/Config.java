@@ -36,11 +36,12 @@ public class Config
    * Returns the path to the directory where the HTML header and footer are stored.
    */
   //public static final String HTMLFilesPath = "/users/cecchet/RUBiS/EJB_HTML";
-  public static final String HTMLFilesPath = "/home/margueri/RUBiS/ejb_rubis_web";
+  public static final String HTMLFilesPath = "/users/margueri/RUBiS/ejb_rubis_web";
 
 
   /**
    * Returns the context used by the web container for html files and servlets (this isthe name of the war file).
+   * If no war file is used context is /EJB_HTML
    */
   public static final String context = "/ejb_rubis_web";
 
