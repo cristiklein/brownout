@@ -3,21 +3,27 @@
 # $1 is the report directory with the trailing /
 # $2 is the Gnuplot terminal to use (gif, jpeg, ...)
 # $3 is the number of clients
+# $4 is the number of databases
+# $5 is the number of servlets servers
 
-if [ -d $1 ]; then
-  # Generate data files
-  gunzip $1"db_server.gz"
-  gunzip $1"web_server.gz"
-  gunzip $1"servlets_server.gz"
-  bench/format_sar_output.awk $1"db_server"
-  bench/format_sar_output.awk $1"web_server"
-  bench/format_sar_output.awk $1"servlets_server"
-  gzip -9 $1"db_server" &
-  gzip -9 $1"web_server" &
-  gzip -9 $1"servlets_server" &
-  for ((i = 0 ; i < $3 ; i = i + 1)); do
-    gunzip $1client$i.gz
-    bench/format_sar_output.awk $1client$i
+ if [ -d $1 ]; then
+   # Generate data files
+  for ((i = 0; i < $4; i = i + 1)); do
+    gunzip $1db_server$i.gz
+    bench/format_sar_output.awk $1db_server$i
+    gzip -9 $1db_server$i &
+  done
+   gunzip $1"web_server.gz"
+   bench/format_sar_output.awk $1"web_server"
+   gzip -9 $1"web_server" &
+  for ((i = 0; i < $5; i = i + 1)); do
+    gunzip $1servlets_server$i.gz
+    bench/format_sar_output.awk $1servlets_server$i
+    gzip -9 $1servlets_server$i &
+  done
+   for ((i = 0 ; i < $3 ; i = i + 1)); do
+     gunzip $1client$i.gz
+     bench/format_sar_output.awk $1client$i
     gzip -9 $1client$i &
   done
   tmpFile=$1"gnuplot_input"
@@ -35,8 +41,8 @@ if [ -d $1 ]; then
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Processor idle time in %"' >> $tmpFile;
   echo "set yrange [0:100]" >> $tmpFile;
-  echo plot '"'$1db_server.cpu.idle.dat'"' title '"'Database'"' with lines, '"'$1web_server.cpu.idle.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server.cpu.idle.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.cpu.idle.dat'"' title '"'Database'"' with lines, '"'$1web_server.cpu.idle.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server0.cpu.idle.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot CPU busy time 
   echo "Generating servers CPU busy time graph";
@@ -46,8 +52,8 @@ if [ -d $1 ]; then
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Processor usage in %"' >> $tmpFile;
   echo "set yrange [0:100]" >> $tmpFile;
-  echo plot '"'$1db_server.cpu.busy.dat'"' title '"'Database'"' with lines, '"'$1web_server.cpu.busy.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server.cpu.busy.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.cpu.busy.dat'"' title '"'Database'"' with lines, '"'$1web_server.cpu.busy.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server0.cpu.busy.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot CPU user/system time
   echo "Generating servers CPU user/system time graph";
@@ -57,8 +63,8 @@ if [ -d $1 ]; then
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Processor usage in %"' >> $tmpFile;
   echo "set yrange [0:100]" >> $tmpFile;
-  echo plot '"'$1db_server.cpu.user.dat'"' title '"'Database user'"' with lines, '"'$1db_server.cpu.system.dat'"' title '"'Database kernel'"' with lines, '"'$1web_server.cpu.user.dat'"' title '"'Frontend user'"' with lines, '"'$1web_server.cpu.system.dat'"' title '"'Frontend kernel'"' with lines, '"'$1servlets_server.cpu.user.dat'"' title '"'Servlets user'"' with lines, '"'$1servlets_server.cpu.system.dat'"' title '"'Servlets kernel'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.cpu.user.dat'"' title '"'Database user'"' with lines, '"'$1db_server0.cpu.system.dat'"' title '"'Database kernel'"' with lines, '"'$1web_server.cpu.user.dat'"' title '"'Frontend user'"' with lines, '"'$1web_server.cpu.system.dat'"' title '"'Frontend kernel'"' with lines, '"'$1servlets_server0.cpu.user.dat'"' title '"'Servlets user'"' with lines, '"'$1servlets_server0.cpu.system.dat'"' title '"'Servlets kernel'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot Processes/second
   echo "Generating servers Processes/second graph";
@@ -67,8 +73,8 @@ if [ -d $1 ]; then
   echo 'set title "Processes created"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Nb of processes created per second"' >> $tmpFile;
-  echo plot '"'$1db_server.proc.dat'"' title '"'Database'"' with lines, '"'$1web_server.proc.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server.proc.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.proc.dat'"' title '"'Database'"' with lines, '"'$1web_server.proc.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server0.proc.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot Context switches/second
   echo "Generating servers Context switches/second graph";
@@ -77,8 +83,8 @@ if [ -d $1 ]; then
   echo 'set title "Context switches"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Nb of context switches per second"' >> $tmpFile;
-  echo plot '"'$1db_server.ctxsw.dat'"' title '"'Database'"' with lines, '"'$1web_server.ctxsw.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server.ctxsw.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.ctxsw.dat'"' title '"'Database'"' with lines, '"'$1web_server.ctxsw.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server0.ctxsw.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot Disk total transfers
   echo "Generating servers Disk total transfers graph";
@@ -87,8 +93,8 @@ if [ -d $1 ]; then
   echo 'set title "Disk transfers"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Nb of disk transfers per second"' >> $tmpFile;
-  echo plot '"'$1db_server.disk.tps.dat'"' title '"'Database'"' with lines, '"'$1web_server.disk.tps.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server.disk.tps.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.disk.tps.dat'"' title '"'Database'"' with lines, '"'$1web_server.disk.tps.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server0.disk.tps.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot disk read/write requests
   echo "Generating servers disk read/write requests graph";
@@ -97,8 +103,8 @@ if [ -d $1 ]; then
   echo 'set title "Read/Write disk requests"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Nb of requests per second"' >> $tmpFile;
-  echo plot '"'$1db_server.disk.rtps.dat'"' title '"'Database read'"' with lines, '"'$1db_server.disk.wtps.dat'"' title '"'Database write'"' with lines, '"'$1web_server.disk.rtps.dat'"' title '"'Frontend read'"' with lines, '"'$1web_server.disk.wtps.dat'"' title '"'Frontend write'"' with lines, '"'$1servlets_server.disk.rtps.dat'"' title '"'Servlets read'"' with lines, '"'$1servlets_server.disk.wtps.dat'"' title '"'Servlets write'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.disk.rtps.dat'"' title '"'Database read'"' with lines, '"'$1db_server0.disk.wtps.dat'"' title '"'Database write'"' with lines, '"'$1web_server.disk.rtps.dat'"' title '"'Frontend read'"' with lines, '"'$1web_server.disk.wtps.dat'"' title '"'Frontend write'"' with lines, '"'$1servlets_server0.disk.rtps.dat'"' title '"'Servlets read'"' with lines, '"'$1servlets_server0.disk.wtps.dat'"' title '"'Servlets write'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot disk blocks read/write requests
   echo "Generating servers disk blocks read/write requests graph";
@@ -107,8 +113,8 @@ if [ -d $1 ]; then
   echo 'set title " Disk blocks read/write requests"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Nb of blocks per second"' >> $tmpFile;
-  echo plot '"'$1db_server.disk.brdps.dat'"' title '"'Database read'"' with lines, '"'$1db_server.disk.bwrps.dat'"' title '"'Database write'"' with lines, '"'$1web_server.disk.brdps.dat'"' title '"'Frontend read'"' with lines, '"'$1web_server.disk.bwrps.dat'"' title '"'Frontend write'"' with lines, '"'$1servlets_server.disk.brdps.dat'"' title '"'Servlets read'"' with lines, '"'$1servlets_server.disk.bwrps.dat'"' title '"'Servlets write'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.disk.brdps.dat'"' title '"'Database read'"' with lines, '"'$1db_server0.disk.bwrps.dat'"' title '"'Database write'"' with lines, '"'$1web_server.disk.brdps.dat'"' title '"'Frontend read'"' with lines, '"'$1web_server.disk.bwrps.dat'"' title '"'Frontend write'"' with lines, '"'$1servlets_server0.disk.brdps.dat'"' title '"'Servlets read'"' with lines, '"'$1servlets_server0.disk.bwrps.dat'"' title '"'Servlets write'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot Memory usage
   echo "Generating servers Memory usage graph";
@@ -117,8 +123,8 @@ if [ -d $1 ]; then
   echo 'set title "Memory usage"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Amount of memory in KB"' >> $tmpFile;
-  echo plot '"'$1db_server.mem.kbmemused.dat'"' title '"'Database'"' with lines, '"'$1web_server.mem.kbmemused.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server.mem.kbmemused.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.mem.kbmemused.dat'"' title '"'Database'"' with lines, '"'$1web_server.mem.kbmemused.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server0.mem.kbmemused.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot Memory & cache usage
   echo "Generating servers Memory & cache usage graph";
@@ -127,8 +133,8 @@ if [ -d $1 ]; then
   echo 'set title "Memory & cache usage"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Amount of memory in KB"' >> $tmpFile;
-  echo plot '"'$1db_server.mem.kbmemused.dat'"' title '"'Database memory'"' with lines, '"'$1web_server.mem.kbmemused.dat'"' title '"'Frontend memory'"' with lines, '"'$1servlets_server.mem.kbmemused.dat'"' title '"'Servlets memory'"' with lines, '"'$1db_server.mem.kbcached.dat'"' title '"'Database cache'"' with lines, '"'$1web_server.mem.kbcached.dat'"' title '"'Frontend cache'"' with lines, '"'$1servlets_server.mem.kbcached.dat'"' title '"'Servlets cache'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.mem.kbmemused.dat'"' title '"'Database memory'"' with lines, '"'$1web_server.mem.kbmemused.dat'"' title '"'Frontend memory'"' with lines, '"'$1servlets_server0.mem.kbmemused.dat'"' title '"'Servlets memory'"' with lines, '"'$1db_server0.mem.kbcached.dat'"' title '"'Database cache'"' with lines, '"'$1web_server.mem.kbcached.dat'"' title '"'Frontend cache'"' with lines, '"'$1servlets_server0.mem.kbcached.dat'"' title '"'Servlets cache'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot network received/transmitted packets
   echo "Generating servers network received/transmitted packets graph";
@@ -137,8 +143,8 @@ if [ -d $1 ]; then
   echo 'set title "Network received/transmitted packets"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Nb of packets per second"' >> $tmpFile;
-  echo plot '"'$1db_server.net.rxpck.dat'"' title '"'Database received'"' with lines, '"'$1db_server.net.txpck.dat'"' title '"'Database transmitted'"' with lines, '"'$1web_server.net.rxpck.dat'"' title '"'Frontend received'"' with lines, '"'$1web_server.net.txpck.dat'"' title '"'Frontend transmitted'"' with lines, '"'$1servlets_server.net.rxpck.dat'"' title '"'Servlets received'"' with lines, '"'$1servlets_server.net.txpck.dat'"' title '"'Servlets transmitted'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.net.rxpck.dat'"' title '"'Database received'"' with lines, '"'$1db_server0.net.txpck.dat'"' title '"'Database transmitted'"' with lines, '"'$1web_server.net.rxpck.dat'"' title '"'Frontend received'"' with lines, '"'$1web_server.net.txpck.dat'"' title '"'Frontend transmitted'"' with lines, '"'$1servlets_server0.net.rxpck.dat'"' title '"'Servlets received'"' with lines, '"'$1servlets_server0.net.txpck.dat'"' title '"'Servlets transmitted'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot network received/transmitted bytes
   echo "Generating servers network received/transmitted bytes graph";
@@ -147,8 +153,8 @@ if [ -d $1 ]; then
   echo 'set title "Network received/transmitted bytes"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Nb of bytes per second"' >> $tmpFile;
-  echo plot '"'$1db_server.net.rxbyt.dat'"' title '"'Database received'"' with lines, '"'$1db_server.net.txbyt.dat'"' title '"'Database transmitted'"' with lines, '"'$1web_server.net.rxbyt.dat'"' title '"'Frontend received'"' with lines, '"'$1web_server.net.txbyt.dat'"' title '"'Frontend transmitted'"' with lines, '"'$1servlets_server.net.rxbyt.dat'"' title '"'Servlets received'"' with lines, '"'$1servlets_server.net.txbyt.dat'"' title '"'Servlets transmitted'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.net.rxbyt.dat'"' title '"'Database received'"' with lines, '"'$1db_server0.net.txbyt.dat'"' title '"'Database transmitted'"' with lines, '"'$1web_server.net.rxbyt.dat'"' title '"'Frontend received'"' with lines, '"'$1web_server.net.txbyt.dat'"' title '"'Frontend transmitted'"' with lines, '"'$1servlets_server0.net.rxbyt.dat'"' title '"'Servlets received'"' with lines, '"'$1servlets_server0.net.txbyt.dat'"' title '"'Servlets transmitted'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
   # Plot Sockets usage
   echo "Generating servers Sockets usage graph";
@@ -157,8 +163,8 @@ if [ -d $1 ]; then
   echo 'set title "Sockets"' >> $tmpFile;
   echo 'set xlabel "Time in seconds"' >> $tmpFile;
   echo 'set ylabel "Number of sockets"' >> $tmpFile;
-  echo plot '"'$1db_server.sock.totsck.dat'"' title '"'Database'"' with lines, '"'$1web_server.sock.totsck.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server.sock.totsck.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
-  /usr/bin/gnuplot $tmpFile
+  echo plot '"'$1db_server0.sock.totsck.dat'"' title '"'Database'"' with lines, '"'$1web_server.sock.totsck.dat'"' title '"'Frontend'"' with lines, '"'$1servlets_server0.sock.totsck.dat'"' title '"'Servlets'"' with lines >> $tmpFile;
+   /usr/bin/gnuplot $tmpFile
 
 
   ########################
@@ -334,6 +340,357 @@ if [ -d $1 ]; then
   echo -n plot '"'$1client0.sock.totsck.dat'"' title '"'Main client'"' with lines >> $tmpFile;
   for ((i = 1 ; i < $3 ; i = i + 1)); do
     echo -n ', "'$1client$i.sock.totsck.dat'"' title '"'Remote client $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  ########################
+  ## Graphs for DB Tier ##
+  ########################
+
+  # Plot CPU idle time
+  echo "Generating database CPU idle time graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_cpu_idle.$2'"' >> $tmpFile;
+  echo 'set title "Processor idle time"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Processor idle time in %"' >> $tmpFile;
+  echo "set yrange [0:100]" >> $tmpFile;
+  echo -n plot '"'$1db_server0.cpu.idle.dat'"' title '"'Database 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.cpu.idle.dat'"' title '"'Database $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot CPU busy time 
+  echo "Generating database CPU busy time graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_cpu_busy.$2'"' >> $tmpFile;
+  echo 'set title "Processor usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Processor usage in %"' >> $tmpFile;
+  echo "set yrange [0:100]" >> $tmpFile;
+  echo -n plot '"'$1db_server0.cpu.busy.dat'"' title '"'Database 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.cpu.busy.dat'"' title '"'Database $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot CPU user/system time
+  echo "Generating database CPU user/system time graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_cpu_user_kernel.$2'"' >> $tmpFile;
+  echo 'set title "User/Kernel processor usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Processor usage in %"' >> $tmpFile;
+  echo "set yrange [0:100]" >> $tmpFile;
+  echo -n plot '"'$1db_server0.cpu.user.dat'"' title '"'Database 0 user'"' with lines, '"'$1db_server0.cpu.system.dat'"' title '"'Database 0 kernel'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.cpu.user.dat'"' title '"'Database $i user'"' with lines', "'$1db_server$i.cpu.system.dat'"' title '"'Database $i system'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Processes/second
+  echo "Generating database Processes/second graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_procs.$2'"' >> $tmpFile;
+  echo 'set title "Processes created"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of processes created per second"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.proc.dat'"' title '"'Database 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.proc.dat'"' title '"'Database $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Context switches/second
+  echo "Generating database Context switches/second graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_ctxtsw.$2'"' >> $tmpFile;
+  echo 'set title "Context switches"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of context switches per second"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.ctxsw.dat'"' title '"'Database 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.ctxsw.dat'"' title '"'Database $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Disk total transfers
+  echo "Generating database Disk total transfers graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_disk_tps.$2'"' >> $tmpFile;
+  echo 'set title "Disk transfers"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of disk transfers per second"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.disk.tps.dat'"' title '"'Database 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.disk.tps.dat'"' title '"'Database $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot disk read/write requests
+  echo "Generating database disk read/write requests graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_disk_rw_req.$2'"' >> $tmpFile;
+  echo 'set title "Read/Write disk requests"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of requests per second"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.disk.rtps.dat'"' title '"'Database 0 read'"' with lines, '"'$1db_server0.disk.wtps.dat'"' title '"'Database 0 write'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.disk.rtps.dat'"' title '"'Database $i read'"' with lines', "'$1db_server$i.disk.wtps.dat'"' title '"'Database $i write'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot disk blocks read/write requests
+  echo "Generating database disk blocks read/write requests graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_disk_rw_req.$2'"' >> $tmpFile;
+  echo 'set title " Disk blocks read/write requests"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of blocks per second"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.disk.brdps.dat'"' title '"'Database 0 read'"' with lines, '"'$1db_server0.disk.bwrps.dat'"' title '"'Database 0 write'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.disk.brdps.dat'"' title '"'Database $i read'"' with lines', "'$1db_server$i.disk.bwrps.dat'"' title '"'Database $i write'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Memory usage
+  echo "Generating database Memory usage graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_mem_usage.$2'"' >> $tmpFile;
+  echo 'set title "Memory usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Amount of memory in KB"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.mem.kbmemused.dat'"' title '"'Database 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.mem.kbmemused.dat'"' title '"'Database $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Memory & cache usage
+  echo "Generating database Memory & cache usage graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_mem_cache.$2'"' >> $tmpFile;
+  echo 'set title "Memory & cache usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Amount of memory in KB"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.mem.kbmemused.dat'"' title '"'Database 0 memory'"' with lines, '"'$1db_server0.mem.kbcached.dat'"' title '"'Database 0 cache'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.mem.kbmemused.dat'"' title '"'Database $i memory'"' with lines', "'$1db_server$i.mem.kbcached.dat'"' title '"'Database $i cache'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot network received/transmitted packets
+  echo "Generating database network received/transmitted packets graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_net_rt_pack.$2'"' >> $tmpFile;
+  echo 'set title "Network received/transmitted packets"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of packets per second"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.net.rxpck.dat'"' title '"'Database 0 received'"' with lines, '"'$1db_server0.net.txpck.dat'"' title '"'Database 0 transmitted'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.net.rxpck.dat'"' title '"'Database $i received'"' with lines', "'$1db_server$i.net.txpck.dat'"' title '"'Database $i transmitted'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot network received/transmitted bytes
+  echo "Generating database network received/transmitted bytes graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_net_rt_byt.$2'"' >> $tmpFile;
+  echo 'set title "Network received/transmitted bytes"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of bytes per second"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.net.rxbyt.dat'"' title '"'Database 0 received'"' with lines, '"'$1db_server0.net.txbyt.dat'"' title '"'Database 0 transmitted'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.net.rxbyt.dat'"' title '"'Database $i received'"' with lines', "'$1db_server$i.net.txbyt.dat'"' title '"'Database $i transmitted'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Sockets usage
+  echo "Generating database Sockets usage graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1db_socks.$2'"' >> $tmpFile;
+  echo 'set title "Sockets"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Number of sockets"' >> $tmpFile;
+  echo -n plot '"'$1db_server0.sock.totsck.dat'"' title '"'Database 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $4 ; i = i + 1)); do
+    echo -n ', "'$1db_server$i.sock.totsck.dat'"' title '"'Database $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  ##############################
+  ## Graphs for Servlets Tier ##
+  ##############################
+
+  # Plot CPU idle time
+  echo "Generating servlets CPU idle time graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_cpu_idle.$2'"' >> $tmpFile;
+  echo 'set title "Processor idle time"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Processor idle time in %"' >> $tmpFile;
+  echo "set yrange [0:100]" >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.cpu.idle.dat'"' title '"'Servlets 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.cpu.idle.dat'"' title '"'Servlets $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+  # Plot CPU busy time 
+ echo "Generating servlets CPU busy time graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_cpu_busy.$2'"' >> $tmpFile;
+  echo 'set title "Processor usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Processor usage in %"' >> $tmpFile;
+  echo "set yrange [0:100]" >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.cpu.busy.dat'"' title '"'Servlets 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.cpu.busy.dat'"' title '"'Servlets $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot CPU user/system time
+  echo "Generating servlets CPU user/system time graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_cpu_user_kernel.$2'"' >> $tmpFile;
+  echo 'set title "User/Kernel processor usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Processor usage in %"' >> $tmpFile;
+  echo "set yrange [0:100]" >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.cpu.user.dat'"' title '"'Servlets 0 user'"' with lines, '"'$1servlets_server0.cpu.system.dat'"' title '"'Servlets 0 kernel'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.cpu.user.dat'"' title '"'Servlets $i user'"' with lines', "'$1servlets_server$i.cpu.system.dat'"' title '"'Servlets $i system'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Processes/second
+  echo "Generating servlets Processes/second graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_procs.$2'"' >> $tmpFile;
+  echo 'set title "Processes created"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of processes created per second"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.proc.dat'"' title '"'Servlets 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.proc.dat'"' title '"'Servlets $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Context switches/second
+  echo "Generating servlets Context switches/second graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_ctxtsw.$2'"' >> $tmpFile;
+  echo 'set title "Context switches"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of context switches per second"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.ctxsw.dat'"' title '"'Servlets 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.ctxsw.dat'"' title '"'Servlets $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Disk total transfers
+  echo "Generating servlets Disk total transfers graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_disk_tps.$2'"' >> $tmpFile;
+  echo 'set title "Disk transfers"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of disk transfers per second"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.disk.tps.dat'"' title '"'Servlets 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.disk.tps.dat'"' title '"'Servlets $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot disk read/write requests
+  echo "Generating servlets disk read/write requests graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_disk_rw_req.$2'"' >> $tmpFile;
+  echo 'set title "Read/Write disk requests"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of requests per second"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.disk.rtps.dat'"' title '"'Servlets 0 read'"' with lines, '"'$1servlets_server0.disk.wtps.dat'"' title '"'Servlets 0 write'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.disk.rtps.dat'"' title '"'Servlets $i read'"' with lines', "'$1servlets_server$i.disk.wtps.dat'"' title '"'Servlets $i write'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot disk blocks read/write requests
+  echo "Generating servlets disk blocks read/write requests graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_disk_rw_req.$2'"' >> $tmpFile;
+  echo 'set title " Disk blocks read/write requests"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of blocks per second"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.disk.brdps.dat'"' title '"'Servlets 0 read'"' with lines, '"'$1servlets_server0.disk.bwrps.dat'"' title '"'Servlets 0 write'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.disk.brdps.dat'"' title '"'Servlets $i read'"' with lines', "'$1servlets_server$i.disk.bwrps.dat'"' title '"'Servlets $i write'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Memory usage
+  echo "Generating servlets Memory usage graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_mem_usage.$2'"' >> $tmpFile;
+  echo 'set title "Memory usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Amount of memory in KB"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.mem.kbmemused.dat'"' title '"'Servlets 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.mem.kbmemused.dat'"' title '"'Servlets $i'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Memory & cache usage
+  echo "Generating servlets Memory & cache usage graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_mem_cache.$2'"' >> $tmpFile;
+  echo 'set title "Memory & cache usage"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Amount of memory in KB"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.mem.kbmemused.dat'"' title '"'Servlets 0 memory'"' with lines, '"'$1servlets_server0.mem.kbcached.dat'"' title '"'Servlets 0 cache'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+  echo -n ', "'$1servlets_server$i.mem.kbmemused.dat'"' title '"'Servlets $i memory'"' with lines', "'$1servlets_server$i.mem.kbcached.dat'"' title '"'Servlets $i cache'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot network received/transmitted packets
+  echo "Generating servlets network received/transmitted packets graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_net_rt_pack.$2'"' >> $tmpFile;
+  echo 'set title "Network received/transmitted packets"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of packets per second"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.net.rxpck.dat'"' title '"'Servlets 0 received'"' with lines, '"'$1servlets_server0.net.txpck.dat'"' title '"'Servlets 0 transmitted'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.net.rxpck.dat'"' title '"'Servlets $i received'"' with lines', "'$1servlets_server$i.net.txpck.dat'"' title '"'Servlets $i transmitted'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot network received/transmitted bytes
+  echo "Generating servlets network received/transmitted bytes graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_net_rt_byt.$2'"' >> $tmpFile;
+  echo 'set title "Network received/transmitted bytes"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Nb of bytes per second"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.net.rxbyt.dat'"' title '"'Servlets 0 received'"' with lines, '"'$1servlets_server0.net.txbyt.dat'"' title '"'Servlets 0 transmitted'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.net.rxbyt.dat'"' title '"'Servlets $i received'"' with lines', "'$1servlets_server$i.net.txbyt.dat'"' title '"'Servlets $i transmitted'"' with lines >> $tmpFile;
+  done
+  /usr/bin/gnuplot $tmpFile
+
+  # Plot Sockets usage
+  echo "Generating servlets Sockets usage graph";
+  echo "set terminal "$2 > $tmpFile;
+  echo set output '"'$1servlets_socks.$2'"' >> $tmpFile;
+  echo 'set title "Sockets"' >> $tmpFile;
+  echo 'set xlabel "Time in seconds"' >> $tmpFile;
+  echo 'set ylabel "Number of sockets"' >> $tmpFile;
+  echo -n plot '"'$1servlets_server0.sock.totsck.dat'"' title '"'Servlets 0'"' with lines >> $tmpFile;
+  for ((i = 1 ; i < $5 ; i = i + 1)); do
+    echo -n ', "'$1servlets_server$i.sock.totsck.dat'"' title '"'Servlets $i'"' with lines >> $tmpFile;
   done
   /usr/bin/gnuplot $tmpFile
 
