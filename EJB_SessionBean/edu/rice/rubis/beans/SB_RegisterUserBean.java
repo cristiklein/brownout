@@ -89,6 +89,7 @@ public class SB_RegisterUserBean implements SessionBean
         return html.toString();
       }
       stmt.close();
+      conn.close();
     }
     catch (Exception fe)
     {
@@ -120,23 +121,23 @@ public class SB_RegisterUserBean implements SessionBean
       {
         stmt = conn.prepareStatement("SELECT id, rating, balance FROM users WHERE nickname=?");
         stmt.setString(1, nickname);
-        ResultSet urs = stmt.executeQuery();
-        stmt.close();
+        ResultSet urs = stmt.executeQuery();      
         if (urs.first())
         {
           userId = urs.getInt("id");
           rating = urs.getInt("rating");
           balance = urs.getFloat("balance");
         }
+       stmt.close();       
       }
       catch (SQLException e)
       {
         try { stmt.close(); } catch (Exception ignore) {}
         try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Failed to execute Query for user: " +e);
-      }
-      if (conn != null) conn.close();
+      }    
       utx.commit();
+      conn.close();
 
       html.append("User id       :"+userId+"<br>\n");
       html.append("Creation date :"+creationDate+"<br>\n");
