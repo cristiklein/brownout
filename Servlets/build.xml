@@ -101,6 +101,9 @@
       <fileset dir="edu" includes="**/*.class"/>
     </delete>
   </target>
-
+  
+  <target name="clean-doc">
+    <delete dir="docs/api"/>
+  </target>
 </project>
 
