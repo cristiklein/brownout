@@ -209,19 +209,6 @@
      </javadoc>
   </target>
 
-<!-- ====================================================================== -->
-<!-- Install -->
-<!-- ====================================================================== -->
-
-<target name="install-jonas" 
-	  description="Build and install the rubis.jar file in JONAS_ROOT"
-	  depends="jonas_jar" >
-    <!-- Copy ear files in JONAS_ROOT -->
-    <copy todir="${jonas.root}/ejbjars">
-      <fileset dir="${dist}"
-	       includes="rubis.jar" />
-    </copy>
-  </target>
 
 <!-- ====================================================================== -->
 <!-- Clean -->
