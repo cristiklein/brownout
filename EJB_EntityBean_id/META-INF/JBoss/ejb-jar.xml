@@ -514,7 +514,7 @@
                 <ejb-name>Category</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -522,7 +522,7 @@
                 <ejb-name>Region</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -530,7 +530,7 @@
                 <ejb-name>User</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -538,7 +538,7 @@
                 <ejb-name>Item</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -546,7 +546,7 @@
                 <ejb-name>OldItem</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -554,7 +554,7 @@
                 <ejb-name>Bid</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -562,7 +562,7 @@
                 <ejb-name>Comment</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -570,7 +570,7 @@
                 <ejb-name>BuyNow</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
         <container-transaction>
@@ -578,7 +578,7 @@
                 <ejb-name>IDManager</ejb-name>
 		<method-name>*</method-name>
             </method>
-            <trans-attribute>Required</trans-attribute>
+            <trans-attribute>Supports</trans-attribute>
         </container-transaction>
 
     </assembly-descriptor>
