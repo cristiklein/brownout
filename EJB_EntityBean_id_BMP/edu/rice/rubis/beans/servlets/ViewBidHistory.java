@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
 
 import edu.rice.rubis.beans.Bid;
 import edu.rice.rubis.beans.BidHome;
@@ -140,7 +139,6 @@ public class ViewBidHistory extends HttpServlet
   {
     ServletPrinter sp = null;
     Context initialContext = null;
-    UserTransaction utx = null;
     String value = request.getParameter("itemId");
     Integer itemId;
 
@@ -172,19 +170,6 @@ public class ViewBidHistory extends HttpServlet
     {
       sp.printHTML("Cannot get initial context for JNDI: " + e + "<br>");
       sp.printHTMLfooter();
-      return;
-    }
-
-    // We want to start transactions from client: get UserTransaction
-    try
-    {
-      utx =
-        (javax.transaction.UserTransaction) initialContext.lookup(
-          Config.UserTransaction);
-    }
-    catch (Exception e)
-    {
-      sp.printHTML("Cannot lookup UserTransaction: " + e + "<br>");
       return;
     }
 
