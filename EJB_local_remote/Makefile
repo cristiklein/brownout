@@ -50,7 +50,7 @@ clean_jonas:
 
 # JBoss specific build
 
-jboss_xml = ejb-jar.xml jboss.xml jaws.xml
+jboss_xml = ejb-jar.xml jboss.xml jbosscmp-jdbc.xml jaws.xml
 
 jboss-jar: base-jar
 	${CP} $(addprefix META-INF/JBoss/, $(jboss_xml)) META-INF/

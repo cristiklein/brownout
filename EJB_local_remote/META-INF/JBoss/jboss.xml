@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 
 <!-- 
-This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
+This is the JBoss 3.0 EJB deployment descriptor for RUBiS.
 -->
 
 <jboss>
@@ -17,6 +17,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>Category</ejb-name>
       <jndi-name>CategoryHome</jndi-name>
+      <local-jndi-name>CategoryLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -26,6 +27,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>Region</ejb-name>
       <jndi-name>RegionHome</jndi-name>
+      <local-jndi-name>RegionLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -35,6 +37,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>User</ejb-name>
       <jndi-name>UserHome</jndi-name>
+      <local-jndi-name>UserLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -44,6 +47,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>Item</ejb-name>
       <jndi-name>ItemHome</jndi-name>
+      <local-jndi-name>ItemLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -53,6 +57,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>OldItem</ejb-name>
       <jndi-name>OldItemHome</jndi-name>
+      <local-jndi-name>OldItemLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -62,6 +67,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>Bid</ejb-name>
       <jndi-name>BidHome</jndi-name>
+      <local-jndi-name>BidLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -71,6 +77,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>Comment</ejb-name>
       <jndi-name>CommentHome</jndi-name>
+      <local-jndi-name>CommentLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -80,6 +87,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>BuyNow</ejb-name>
       <jndi-name>BuyNowHome</jndi-name>
+      <local-jndi-name>BuyNowLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
@@ -89,6 +97,7 @@ This is the JBoss 2.4 EJB deployment descriptor for RUBiS.
     <entity>
       <ejb-name>IDManager</ejb-name>
       <jndi-name>IDManagerHome</jndi-name>
+      <local-jndi-name>IDManagerLocalHome</local-jndi-name>
       <resource-ref>
         <res-ref-name>jdbc/rubis</res-ref-name>
         <resource-name>rubis</resource-name>
