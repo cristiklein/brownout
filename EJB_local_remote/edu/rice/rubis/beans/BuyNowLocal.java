@@ -13,7 +13,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * Get BuyNow id.
    *
    * @return BuyNow id
-   * @exception RemoteException if an error occurs
    */
   public Integer getId();
 
@@ -21,7 +20,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * Get the buyer id which is the primary key in the users table.
    *
    * @return buyer id
-   * @exception RemoteException if an error occurs
    */
   public Integer getBuyerId();
 
@@ -29,7 +27,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * Get the item id which is the primary key in the items table.
    *
    * @return item id
-   * @exception RemoteException if an error occurs
    */
   public Integer getItemId();
 
@@ -37,7 +34,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * Get how many of this item the buyer has bought.
    *
    * @return quantity of items for this bid.
-   * @exception RemoteException if an error occurs
    */
   public int getQuantity();
 
@@ -45,7 +41,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * Time of the BuyNow in the format 'YYYY-MM-DD hh:mm:ss'
    *
    * @return bid time
-   * @exception RemoteException if an error occurs
    */
   public String getDate();
 
@@ -54,7 +49,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * the primary key of the buyers table.
    *
    * @param id buyer id
-   * @exception RemoteException if an error occurs
    */
   public void setBuyerId(Integer id);
 
@@ -63,7 +57,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * the primary key of the items table.
    *
    * @param id item id
-   * @exception RemoteException if an error occurs
    */
   public void setItemId(Integer id);
 
@@ -71,7 +64,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * Set a new quantity for this buy
    *
    * @param Qty quantity
-   * @exception RemoteException if an error occurs
    */
   public void setQuantity(int Qty);
 
@@ -79,7 +71,6 @@ public interface BuyNowLocal extends EJBLocalObject {
    * Set a new date for this buy
    *
    * @param newDate bid date
-   * @exception RemoteException if an error occurs
    */
   public void setDate(String newDate);
 }

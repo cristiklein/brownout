@@ -401,7 +401,6 @@ public class ItemBean implements EntityBean
    * Set a new beginning date for the auction
    *
    * @param newDate auction new beginning date
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public void setStartDate(String newDate)

@@ -13,7 +13,6 @@ public interface CategoryLocal extends EJBLocalObject {
    * Get category's id.
    *
    * @return category id
-   * @exception RemoteException if an error occurs
    */
   public Integer getId();
 
@@ -21,7 +20,6 @@ public interface CategoryLocal extends EJBLocalObject {
    * Get the category name.
    *
    * @return category name
-   * @exception RemoteException if an error occurs
    */
   public String getName();
 
@@ -29,7 +27,6 @@ public interface CategoryLocal extends EJBLocalObject {
    * Set category's name
    *
    * @param newName category name
-   * @exception RemoteException if an error occurs
    */
   public void setName(String newName);
 
@@ -38,7 +35,6 @@ public interface CategoryLocal extends EJBLocalObject {
    * Display category information for the BrowseCategories servlet
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public String printCategory();
@@ -47,7 +43,6 @@ public interface CategoryLocal extends EJBLocalObject {
    * Display category information for the BrowseCategories servlet
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public String printCategoryByRegion(int regionId);
@@ -56,7 +51,6 @@ public interface CategoryLocal extends EJBLocalObject {
    * Display category information for the BrowseCategories servlet
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public String printCategoryToSellItem(int userId);

@@ -14,7 +14,6 @@ public interface IDManagerLocal extends EJBLocalObject {
    * Get IDManager id.
    *
    * @return IDManager id
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public Integer getId();

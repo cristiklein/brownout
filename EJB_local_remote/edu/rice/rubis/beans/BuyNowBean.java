@@ -74,7 +74,6 @@ public class BuyNowBean implements EntityBean
    * Get how many of this item the user has bought.
    *
    * @return quantity of items for this BuyNow.
-   * @exception RemoteException if an error occurs
    */
   public int getQuantity()
   {

@@ -25,7 +25,6 @@ public interface BidLocalHome extends EJBLocalHome {
    *
    * @return pk primary key set to null
    * @exception CreateException if an error occurs
-   * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
   public BidLocal create(Integer bidUserId, Integer bidItemId, float userBid, float userMaxBid, int quantity) throws CreateException, RemoveException;
@@ -38,7 +37,6 @@ public interface BidLocalHome extends EJBLocalHome {
    *
    * @return the Bid if found else null
    * @exception FinderException if an error occurs
-   * @exception RemoteException if an error occurs
    */
   public BidLocal findByPrimaryKey(BidPK id) throws FinderException;
   /**
@@ -49,7 +47,6 @@ public interface BidLocalHome extends EJBLocalHome {
    *
    * @return List of Bids found (eventually empty)
    * @exception FinderException if an error occurs
-   * @exception RemoteException if an error occurs
    */
   public Collection findByItem(Integer id) throws FinderException;
 
@@ -61,7 +58,6 @@ public interface BidLocalHome extends EJBLocalHome {
    *
    * @return List of Bids found (eventually empty)
    * @exception FinderException if an error occurs
-   * @exception RemoteException if an error occurs
    */
   public Collection findByUser(Integer id) throws FinderException;
 
@@ -69,7 +65,6 @@ public interface BidLocalHome extends EJBLocalHome {
    * This method is used to retrieve all bids from the database!
    *
    * @return List of all bids (eventually empty)
-   * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
   public Collection findAllBids() throws FinderException;

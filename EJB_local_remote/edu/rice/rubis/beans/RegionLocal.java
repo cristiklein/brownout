@@ -13,7 +13,6 @@ public interface RegionLocal extends EJBLocalObject {
    * Get region's id.
    *
    * @return region id
-   * @exception RemoteException if an error occurs
    */
   public Integer getId();
 
@@ -21,7 +20,6 @@ public interface RegionLocal extends EJBLocalObject {
    * Get the region name.
    *
    * @return region name
-   * @exception RemoteException if an error occurs
    */
   public String getName();
 
@@ -29,7 +27,6 @@ public interface RegionLocal extends EJBLocalObject {
    * Set region's name
    *
    * @param newName region name
-   * @exception RemoteException if an error occurs
    */
   public void setName(String newName);
 }

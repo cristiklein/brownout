@@ -13,7 +13,6 @@ public interface BidLocal extends EJBLocalObject {
    * Get bid's id.
    *
    * @return bid id
-   * @exception RemoteException if an error occurs
    */
   public Integer getId();
 
@@ -21,7 +20,6 @@ public interface BidLocal extends EJBLocalObject {
    * Get the user id which is the primary key in the users table.
    *
    * @return user id
-   * @exception RemoteException if an error occurs
    */
   public Integer getUserId();
 
@@ -29,7 +27,6 @@ public interface BidLocal extends EJBLocalObject {
    * Get the item id which is the primary key in the items table.
    *
    * @return item id
-   * @exception RemoteException if an error occurs
    */
   public Integer getItemId();
 
@@ -37,7 +34,6 @@ public interface BidLocal extends EJBLocalObject {
    * Get how many of this item the user wants.
    *
    * @return quantity of items for this bid.
-   * @exception RemoteException if an error occurs
    */
   public int getQuantity();
 
@@ -45,7 +41,6 @@ public interface BidLocal extends EJBLocalObject {
    * Get the bid of the user.
    *
    * @return user's bid
-   * @exception RemoteException if an error occurs
    */
   public float getBid();
 
@@ -53,7 +48,6 @@ public interface BidLocal extends EJBLocalObject {
    * Get the maximum bid wanted by the user.
    *
    * @return user's maximum bid
-   * @exception RemoteException if an error occurs
    */
   public float getMaxBid();
 
@@ -61,7 +55,6 @@ public interface BidLocal extends EJBLocalObject {
    * Time of the Bid in the format 'YYYY-MM-DD hh:mm:ss'
    *
    * @return bid time
-   * @exception RemoteException if an error occurs
    */
   public String getDate();
 
@@ -69,7 +62,6 @@ public interface BidLocal extends EJBLocalObject {
    * Give the nick name of the bidder.
    *
    * @return bidder's nick name
-   * @exception RemoteException if an error occurs
    */
   public String getBidderNickName();
   
@@ -79,7 +71,6 @@ public interface BidLocal extends EJBLocalObject {
    * the primary key of the users table.
    *
    * @param id user id
-   * @exception RemoteException if an error occurs
    */
   public void setUserId(Integer id);
 
@@ -88,7 +79,6 @@ public interface BidLocal extends EJBLocalObject {
    * the primary key of the items table.
    *
    * @param id item id
-   * @exception RemoteException if an error occurs
    */
   public void setItemId(Integer id);
 
@@ -96,7 +86,6 @@ public interface BidLocal extends EJBLocalObject {
    * Set a new quantity for this bid
    *
    * @param Qty quantity
-   * @exception RemoteException if an error occurs
    */
   public void setQuantity(int Qty);
 
@@ -104,7 +93,6 @@ public interface BidLocal extends EJBLocalObject {
    * Set a new bid on the item for the user
    *
    * @param newBid bid price
-   * @exception RemoteException if an error occurs
    */
   public void setBid(float newBid);
 
@@ -112,7 +100,6 @@ public interface BidLocal extends EJBLocalObject {
    * Set a new maximum bid on the item for the user
    *
    * @param newBid maximum bid price
-   * @exception RemoteException if an error occurs
    */
   public void setMaxBid(float newBid);
 
@@ -120,7 +107,6 @@ public interface BidLocal extends EJBLocalObject {
    * Set a new date for this bid
    *
    * @param newDate bid date
-   * @exception RemoteException if an error occurs
    */
   public void setDate(String newDate);
 
@@ -128,7 +114,6 @@ public interface BidLocal extends EJBLocalObject {
    * Display bid history information as an HTML table row
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public String printBidHistory();

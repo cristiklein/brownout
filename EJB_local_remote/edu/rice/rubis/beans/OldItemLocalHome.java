@@ -83,7 +83,6 @@ public interface OldItemLocalHome extends EJBLocalHome {
    * @param userId user id
    *
    * @return Vector of items primary keys (can be less than maxToCollect)
-   * @exception RemoteException if an error occurs
    */
   public Collection findUserCurrentSellings(Integer userId) throws FinderException;
 
@@ -94,7 +93,6 @@ public interface OldItemLocalHome extends EJBLocalHome {
    * @param userId user id
    *
    * @return Vector of items primary keys (can be less than maxToCollect)
-   * @exception RemoteException if an error occurs
    */
     public Collection findUserPastSellings(Integer userId) throws FinderException;
 

@@ -151,7 +151,6 @@ public class QueryBean implements SessionBean
    * @param itemId item id
    *
    * @return maximum bid or 0 if no bid
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public float getItemMaxBid(Integer itemId)
@@ -198,7 +197,6 @@ public class QueryBean implements SessionBean
    * @param itemId item id
    *
    * @return Vector of bids primary keys (can be less than maxToCollect)
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public Vector getItemQtyMaxBid(int maxToCollect, Integer itemId)
@@ -247,7 +245,6 @@ public class QueryBean implements SessionBean
    * @param itemId item id
    *
    * @return number of bids or 0 if no bid
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public int getItemNbOfBids(Integer itemId)
@@ -293,7 +290,6 @@ public class QueryBean implements SessionBean
    * @param itemId item id
    *
    * @return Vector of bids primary keys or null if no bids
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public Vector getItemBidHistory(Integer itemId)
@@ -341,7 +337,6 @@ public class QueryBean implements SessionBean
    * @param userId user id
    *
    * @return Vector of items primary keys (can be less than maxToCollect)
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
   public Vector getUserWonItems(Integer userId)
@@ -389,7 +384,6 @@ public class QueryBean implements SessionBean
    * @param userId user id
    *
    * @return Vector of bids primary keys (can be less than maxToCollect)
-   * @exception RemoteException if an error occurs
    */
   public Vector getUserBids(Integer userId)
   {

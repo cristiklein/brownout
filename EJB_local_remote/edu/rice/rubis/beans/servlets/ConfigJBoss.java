@@ -27,7 +27,7 @@ public class Config
   /**
    * Returns the path to the directory where the HTML header and footer are stored.
    */
-  public static final String HTMLFilesPath = "/users/margueri/RUBiS/ejb_rubis_web";
+  public static final String HTMLFilesPath = "/home/margueri/workspace/RUBiS/ejb_rubis_web";
 
   /**
    * Return the UserTransaction name to look for since JBoss does not support full class names

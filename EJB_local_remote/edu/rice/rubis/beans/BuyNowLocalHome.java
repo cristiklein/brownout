@@ -23,7 +23,6 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    *
    * @return pk primary key set to null
    * @exception CreateException if an error occurs
-   * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
   public BuyNowLocal create(Integer BuyNowUserId, Integer BuyNowItemId, int quantity) throws CreateException, RemoveException;
@@ -36,7 +35,6 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    *
    * @return the BuyNow if found else null
    * @exception FinderException if an error occurs
-   * @exception RemoteException if an error occurs
    */
   public BuyNowLocal findByPrimaryKey(BuyNowPK id) throws FinderException;
 
@@ -48,7 +46,6 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    *
    * @return List of BuyNows found (eventually empty)
    * @exception FinderException if an error occurs
-   * @exception RemoteException if an error occurs
    */
   public Collection findByItem(Integer id) throws FinderException;
 
@@ -60,7 +57,6 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    *
    * @return List of BuyNows found (eventually empty)
    * @exception FinderException if an error occurs
-   * @exception RemoteException if an error occurs
    */
   public Collection findByUser(Integer id) throws FinderException;
 
@@ -68,7 +64,6 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * This method is used to retrieve all BuyNows from the database!
    *
    * @return List of all BuyNows (eventually empty)
-   * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
   public Collection findAllBuyNows() throws FinderException;
@@ -79,7 +74,6 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * @param userId user id
    *
    * @return Vector of items primary keys (can be less than maxToCollect)
-   * @exception RemoteException if an error occurs
    */
     public Collection findUserBuyNow(Integer userId) throws FinderException;
 
