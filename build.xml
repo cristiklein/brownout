@@ -1,5 +1,5 @@
 
-<project name="RUBiS" default="dist" basedir=".">
+<project name="RUBiS" default="all" basedir=".">
   <!-- RUBiS main Ant build file -->
   <property name="version" value="1.0"/>
 
