@@ -47,9 +47,8 @@ public class BidBean implements EntityBean
    * Get bid's id.
    *
    * @return bid id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException
+  public Integer getId()
   {
     return id;
   }
@@ -58,9 +57,8 @@ public class BidBean implements EntityBean
    * Get the user id which is the primary key in the users table.
    *
    * @return user id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getUserId() throws RemoteException
+  public Integer getUserId()
   {
     return userId;
   }
@@ -69,9 +67,8 @@ public class BidBean implements EntityBean
    * Get the item id which is the primary key in the items table.
    *
    * @return item id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getItemId() throws RemoteException
+  public Integer getItemId()
   {
     return itemId;
   }
@@ -80,9 +77,8 @@ public class BidBean implements EntityBean
    * Get how many of this item the user wants.
    *
    * @return quantity of items for this bid.
-   * @exception RemoteException if an error occurs
    */
-  public int getQuantity() throws RemoteException
+  public int getQuantity()
   {
     return qty;
   }
@@ -91,9 +87,8 @@ public class BidBean implements EntityBean
    * Get the bid of the user.
    *
    * @return user's bid
-   * @exception RemoteException if an error occurs
    */
-  public float getBid() throws RemoteException
+  public float getBid()
   {
     return bid;
   }
@@ -102,9 +97,8 @@ public class BidBean implements EntityBean
    * Get the maximum bid wanted by the user.
    *
    * @return user's maximum bid
-   * @exception RemoteException if an error occurs
    */
-  public float getMaxBid() throws RemoteException
+  public float getMaxBid()
   {
     return maxBid;
   }
@@ -113,9 +107,8 @@ public class BidBean implements EntityBean
    * Time of the Bid in the format 'YYYY-MM-DD hh:mm:ss'
    *
    * @return bid time
-   * @exception RemoteException if an error occurs
    */
-  public String getDate() throws RemoteException
+  public String getDate()
   {
     return date;
   }
@@ -124,9 +117,8 @@ public class BidBean implements EntityBean
    * Give the nick name of the bidder
    *
    * @return bidder's nick name
-   * @exception RemoteException if an error occurs
    */
-  public String getBidderNickName() throws RemoteException
+  public String getBidderNickName()
   {
     Context initialContext = null;
     try
@@ -168,9 +160,8 @@ public class BidBean implements EntityBean
    * the primary key of the users table.
    *
    * @param id user id
-   * @exception RemoteException if an error occurs
    */
-  public void setUserId(Integer id) throws RemoteException
+  public void setUserId(Integer id)
   {
     userId = id;
     isDirty = true; // the bean content has been modified
@@ -181,9 +172,8 @@ public class BidBean implements EntityBean
    * the primary key of the items table.
    *
    * @param id item id
-   * @exception RemoteException if an error occurs
    */
-  public void setItemId(Integer id) throws RemoteException
+  public void setItemId(Integer id)
   {
     itemId = id;
     isDirty = true; // the bean content has been modified
@@ -193,9 +183,8 @@ public class BidBean implements EntityBean
    * Set a new quantity for this bid
    *
    * @param Qty quantity
-   * @exception RemoteException if an error occurs
    */
-  public void setQuantity(int Qty) throws RemoteException
+  public void setQuantity(int Qty)
   {
     qty = Qty;
     isDirty = true; // the bean content has been modified
@@ -208,9 +197,8 @@ public class BidBean implements EntityBean
    * </pre>
    *
    * @param newBid a <code>float</code> value
-   * @exception RemoteException if an error occurs
    */
-  public void setBid(float newBid) throws RemoteException
+  public void setBid(float newBid)
   {
     bid = newBid;
     isDirty = true; // the bean content has been modified
@@ -220,9 +208,8 @@ public class BidBean implements EntityBean
    * Set a new maximum bid on the item for the user
    *
    * @param newBid a <code>float</code> value
-   * @exception RemoteException if an error occurs
    */
-  public void setMaxBid(float newBid) throws RemoteException
+  public void setMaxBid(float newBid)
   {
     maxBid = newBid;
     isDirty = true; // the bean content has been modified
@@ -232,9 +219,8 @@ public class BidBean implements EntityBean
    * Set a new date for this bid
    *
    * @param newDate bid date
-   * @exception RemoteException if an error occurs
    */
-  public void setDate(String newDate) throws RemoteException
+  public void setDate(String newDate)
   {
     date = newDate;
     isDirty = true; // the bean content has been modified
@@ -253,10 +239,8 @@ public class BidBean implements EntityBean
    *
    * @return pk primary key set to null
    * @exception CreateException if an error occurs
-   * @exception RemoteException if an error occurs
-   * @exception RemoveException if an error occurs
    */
-  public BidPK ejbCreate(Integer bidUserId, Integer bidItemId, float userBid, float userMaxBid, int quantity) throws CreateException, RemoteException, RemoveException
+  public BidPK ejbCreate(Integer bidUserId, Integer bidItemId, float userBid, float userMaxBid, int quantity) throws CreateException
   {
     ItemLocal item;
     InitialContext initialContext = null;
@@ -315,24 +299,24 @@ public class BidBean implements EntityBean
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbLoad() throws RemoteException 
+  public void ejbLoad() 
   {
     isDirty = false;
   }
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbStore() throws RemoteException
+  public void ejbStore()
   {
     isDirty = false;
   }
 
   /** This method is empty because persistence is managed by the container */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbPassivate() throws RemoteException  {}
+  public void ejbPassivate()  {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbRemove() throws RemoteException, RemoveException {}
+  public void ejbRemove() {}
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -344,14 +328,8 @@ public class BidBean implements EntityBean
    *              store the reference to the context in an instance variable. 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception. 
    */
-  public void setEntityContext(EntityContext context) throws RemoteException
+  public void setEntityContext(EntityContext context)
   {
     entityContext = context;
   }
@@ -366,14 +344,8 @@ public class BidBean implements EntityBean
    * 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception.
    */
-  public void unsetEntityContext() throws RemoteException
+  public void unsetEntityContext()
   {
     entityContext = null;
   }
@@ -396,12 +368,11 @@ public class BidBean implements EntityBean
    * Display bid history information as an HTML table row
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printBidHistory() throws RemoteException
+  public String printBidHistory()
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+userId+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+userId+
       "\">"+getBidderNickName()+"<TD>"+bid+"<TD>"+date+"\n";
   }
 }

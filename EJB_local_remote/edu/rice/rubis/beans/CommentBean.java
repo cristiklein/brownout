@@ -48,10 +48,9 @@ public class CommentBean implements EntityBean
    * Get comment's id.
    *
    * @return comment id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException
-  {
+  public Integer getId()
+    {
     return id;
   }
 
@@ -59,9 +58,8 @@ public class CommentBean implements EntityBean
    * Get the user id of the author of the comment
    *
    * @return author user id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getFromUserId() throws RemoteException
+  public Integer getFromUserId()
   {
     return fromUserId;
   }
@@ -70,9 +68,8 @@ public class CommentBean implements EntityBean
    * Get the user id of the user this comment is about.
    *
    * @return user id this comment is about
-   * @exception RemoteException if an error occurs
    */
-  public Integer getToUserId() throws RemoteException
+  public Integer getToUserId()
   {
     return toUserId;
   }
@@ -81,9 +78,8 @@ public class CommentBean implements EntityBean
    * Get the item id which is the primary key in the items table.
    *
    * @return item id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getItemId() throws RemoteException
+  public Integer getItemId()
   {
     return itemId;
   }
@@ -92,9 +88,8 @@ public class CommentBean implements EntityBean
    * Get the rating associated to this comment.
    *
    * @return rating
-   * @exception RemoteException if an error occurs
    */
-  public float getRating() throws RemoteException
+  public float getRating()
   {
     return rating;
   }
@@ -103,9 +98,8 @@ public class CommentBean implements EntityBean
    * Time of the Comment in the format 'YYYY-MM-DD hh:mm:ss'
    *
    * @return comment time
-   * @exception RemoteException if an error occurs
    */
-  public String getDate() throws RemoteException
+  public String getDate()
   {
     return date;
   }
@@ -114,9 +108,8 @@ public class CommentBean implements EntityBean
    * Get the comment text.
    *
    * @return comment text
-   * @exception RemoteException if an error occurs
    */
-  public String getComment() throws RemoteException
+  public String getComment()
   {
     return comment;
   }
@@ -127,9 +120,8 @@ public class CommentBean implements EntityBean
    * This id must match the primary key of the users table.
    *
    * @param id author user id
-   * @exception RemoteException if an error occurs
    */
-  public void setFromUserId(Integer id) throws RemoteException
+  public void setFromUserId(Integer id)
   {
     fromUserId = id;
     isDirty = true; // the bean content has been modified
@@ -140,9 +132,8 @@ public class CommentBean implements EntityBean
    * This id must match the primary key of the users table.
    *
    * @param id user id comment is about
-   * @exception RemoteException if an error occurs
    */
-  public void setToUserId(Integer id) throws RemoteException
+  public void setToUserId(Integer id)
   {
     toUserId = id;
     isDirty = true; // the bean content has been modified
@@ -153,9 +144,8 @@ public class CommentBean implements EntityBean
    * the primary key of the items table.
    *
    * @param id item id
-   * @exception RemoteException if an error occurs
    */
-  public void setItemId(Integer id) throws RemoteException
+  public void setItemId(Integer id)
   {
     itemId = id;
     isDirty = true; // the bean content has been modified
@@ -165,9 +155,8 @@ public class CommentBean implements EntityBean
    * Set a new rating for the ToUserId.
    *
    * @param Rating an <code>int</code> value
-   * @exception RemoteException if an error occurs
    */
-  public void setRating(int Rating) throws RemoteException
+  public void setRating(int Rating)
   {
     rating = Rating;
     isDirty = true; // the bean content has been modified
@@ -177,9 +166,8 @@ public class CommentBean implements EntityBean
    * Set a new date for this comment
    *
    * @param newDate comment date
-   * @exception RemoteException if an error occurs
    */
-  public void setDate(String newDate) throws RemoteException
+  public void setDate(String newDate)
   {
     date = newDate;
     isDirty = true; // the bean content has been modified
@@ -189,9 +177,8 @@ public class CommentBean implements EntityBean
    * Set a new comment for ToUserId from FromUserId.
    *
    * @param newComment Comment
-   * @exception RemoteException if an error occurs
    */
-  public void setComment(String newComment) throws RemoteException
+  public void setComment(String newComment)
   {
     comment = newComment;
     isDirty = true; // the bean content has been modified
@@ -210,10 +197,8 @@ public class CommentBean implements EntityBean
    *
    * @return pk primary key set to null
    * @exception CreateException if an error occurs
-   * @exception RemoteException if an error occurs
-   * @exception RemoveException if an error occurs
    */
-  public CommentPK ejbCreate(Integer FromUserId, Integer ToUserId, Integer ItemId, int Rating, String Comment) throws CreateException, RemoteException, RemoveException
+  public CommentPK ejbCreate(Integer FromUserId, Integer ToUserId, Integer ItemId, int Rating, String Comment) throws CreateException
   {
       // Connecting to IDManager Home interface thru JNDI
       IDManagerLocalHome home = null;
@@ -257,24 +242,24 @@ public class CommentBean implements EntityBean
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbLoad() throws RemoteException 
+  public void ejbLoad() 
   {
     isDirty = false;
   }
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbStore() throws RemoteException
+  public void ejbStore()
   {
     isDirty = false;
   }
 
   /** This method is empty because persistence is managed by the container */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate()  {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbRemove() throws RemoteException, RemoveException {}
+  public void ejbRemove()  {}
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -286,14 +271,8 @@ public class CommentBean implements EntityBean
    *                store the reference to the context in an instance variable. 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception. 
    */
-  public void setEntityContext(EntityContext context) throws RemoteException
+  public void setEntityContext(EntityContext context) 
   {
     entityContext = context;
   }
@@ -308,14 +287,8 @@ public class CommentBean implements EntityBean
    * 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception.
    */
-  public void unsetEntityContext() throws RemoteException
+  public void unsetEntityContext()
   {
     entityContext = null;
   }
@@ -337,12 +310,11 @@ public class CommentBean implements EntityBean
    * Display comment information as an HTML table row
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printComment(String userName) throws RemoteException
+  public String printComment(String userName)
   {
-    return "<DT><b><BIG><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
+    return "<DT><b><BIG><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
       " wrote the "+date+"<DD><i>"+comment+"</i><p>\n";
   }
 }

@@ -36,9 +36,8 @@ public class CategoryBean implements EntityBean
    * Get category's id.
    *
    * @return category id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException
+  public Integer getId()
   {
     return id;
   }
@@ -47,9 +46,8 @@ public class CategoryBean implements EntityBean
    * Get the category name.
    *
    * @return category name
-   * @exception RemoteException if an error occurs
    */
-  public String getName() throws RemoteException
+  public String getName()
   {
     return name;
   }
@@ -58,9 +56,8 @@ public class CategoryBean implements EntityBean
    * Set category's name
    *
    * @param newName category name
-   * @exception RemoteException if an error occurs
    */
-  public void setName(String newName) throws RemoteException 
+  public void setName(String newName)
   {
     name = newName;
     isDirty = true; // the bean content has been modified
@@ -76,10 +73,8 @@ public class CategoryBean implements EntityBean
    *
    * @return pk primary key set to null
    * @exception CreateException if an error occurs
-   * @exception RemoteException if an error occurs
-   * @exception RemoveException if an error occurs
    */
-  public CategoryPK ejbCreate(String categoryName) throws CreateException, RemoteException, RemoveException
+  public CategoryPK ejbCreate(String categoryName) throws CreateException
   {
       // Connecting to IDManager Home interface thru JNDI
       IDManagerLocalHome home = null;
@@ -93,7 +88,7 @@ public class CategoryBean implements EntityBean
       } 
       catch (Exception e)
       {
-        throw new RemoteException("Cannot lookup IDManager: " +e);
+        throw new EJBException("Cannot lookup IDManager: " +e);
       }
      try 
       {
@@ -104,7 +99,7 @@ public class CategoryBean implements EntityBean
       } 
       catch (Exception e)
       {
-        throw new RemoteException("Cannot create category: " +e);
+        throw new EJBException("Cannot create category: " +e);
       }
       return null; 
   }
@@ -119,24 +114,24 @@ public class CategoryBean implements EntityBean
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbLoad() throws RemoteException 
+  public void ejbLoad() 
   {
     isDirty = false;
   }
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbStore() throws RemoteException
+  public void ejbStore()
   {
     isDirty = false;
   }
 
   /** This method is empty because persistence is managed by the container */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbRemove() throws RemoteException, RemoveException {}
+  public void ejbRemove() {}
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -148,14 +143,8 @@ public class CategoryBean implements EntityBean
    *              store the reference to the context in an instance variable. 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception. 
    */
-  public void setEntityContext(EntityContext context) throws RemoteException
+  public void setEntityContext(EntityContext context)
   {
     entityContext = context;
   }
@@ -170,14 +159,8 @@ public class CategoryBean implements EntityBean
    * 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception.
    */
-  public void unsetEntityContext() throws RemoteException
+  public void unsetEntityContext()
   {
     entityContext = null;
   }
@@ -186,12 +169,11 @@ public class CategoryBean implements EntityBean
    * Display category information for the BrowseCategories servlet
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printCategory() throws RemoteException
+  public String printCategory()
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
                   "&categoryName="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
   }
 
@@ -199,12 +181,11 @@ public class CategoryBean implements EntityBean
    * Display category information for the BrowseCategories servlet
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printCategoryByRegion(int regionId) throws RemoteException
+  public String printCategoryByRegion(int regionId)
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
       "&categoryName="+URLEncoder.encode(name)+"&region="+regionId+"\">"+name+"</a><br>\n";
   }
 
@@ -226,11 +207,10 @@ public class CategoryBean implements EntityBean
    * Display category information for the BrowseCategories servlet
    *
    * @return a <code>String</code> containing HTML code
-   * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printCategoryToSellItem(int userId) throws RemoteException
+  public String printCategoryToSellItem(int userId)
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
   }
 }

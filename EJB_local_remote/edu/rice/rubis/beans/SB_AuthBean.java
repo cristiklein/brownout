@@ -34,7 +34,7 @@ public class SB_AuthBean implements SessionBean
    * @param password user password
    * @return an <code>int</code> value corresponding to the user id or -1 on error
    */
-  public int authenticate (String name, String password) throws RemoteException
+  public int authenticate (String name, String password)
   {
     int userId = -1;
 
@@ -46,7 +46,7 @@ public class SB_AuthBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new RemoteException("Cannot lookup User: " +e);
+      throw new EJBException("Cannot lookup User: " +e);
     }
     // get the User ID
     try
@@ -60,7 +60,7 @@ public class SB_AuthBean implements SessionBean
     }
     catch (Exception e)
     {
-      throw new RemoteException(" User "+name+" does not exist in the database!<br>(got exception: " +e);
+      throw new EJBException(" User "+name+" does not exist in the database!<br>(got exception: " +e);
     }
     return userId;
   }
@@ -71,16 +71,16 @@ public class SB_AuthBean implements SessionBean
   /**
    * This method is empty for a stateless session bean
    */
-  public void ejbCreate() throws CreateException, RemoteException
+  public void ejbCreate() throws CreateException
   {
   }
 
   /** This method is empty for a stateless session bean */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate() {}
   /** This method is empty for a stateless session bean */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() {}
   /** This method is empty for a stateless session bean */
-  public void ejbRemove() throws RemoteException {}
+  public void ejbRemove() {}
 
 
   /** 

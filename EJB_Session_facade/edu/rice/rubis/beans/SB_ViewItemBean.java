@@ -147,14 +147,14 @@ public class SB_ViewItemBean implements SessionBean
       html.append("<TR><TD>Quantity<TD><b><BIG>"+qty+"</BIG></b>\n"+
                   "<TR><TD>First bid<TD><b><BIG>"+firstBid+"</BIG></b>\n"+
                   "<TR><TD># of bids<TD><b><BIG>"+nbOfBids+"</BIG></b> (<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewBidHistory?itemId="+itemId+"\">bid history</a>)\n"+
-                  "<TR><TD>Seller<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+item.getSellerNickname()+"</a> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="+sellerId+"&itemId="+itemId+"\">Leave a comment on this user</a>)\n"+
+                  "<TR><TD>Seller<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+item.getSellerNickname()+"</a> (<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="+sellerId+"&itemId="+itemId+"\">Leave a comment on this user</a>)\n"+
                   "<TR><TD>Started<TD>"+item.getStartDate()+"\n"+
                   "<TR><TD>Ends<TD>"+item.getEndDate()+"\n"+
                   "</TABLE>");
       // Can the user buy this item now ?
       if (buyNow > 0)
         html.append("<p><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.BuyNowAuth?itemId="+itemId+"\">"+
-                    "<IMG SRC=\"/ejb_rubis_web/buy_it_now.jpg\" height=22 width=150></a>"+
+                    "<IMG SRC=\""+BeanConfig.context+"/buy_it_now.jpg\" height=22 width=150></a>"+
                     "  <BIG><b>You can buy this item right now for only $"+buyNow+"</b></BIG><br><p>\n");
 
       if (userId<=0)

@@ -34,9 +34,8 @@ public class RegionBean implements EntityBean
    * Get region's id.
    *
    * @return region id
-   * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException
+  public Integer getId()
   {
     return id;
   }
@@ -45,9 +44,8 @@ public class RegionBean implements EntityBean
    * Get region name.
    *
    * @return region name
-   * @exception RemoteException if an error occurs
    */
-  public String getName() throws RemoteException
+  public String getName()
   {
     return name;
   }
@@ -56,9 +54,8 @@ public class RegionBean implements EntityBean
    * Set region's name
    *
    * @param newName region name
-   * @exception RemoteException if an error occurs
    */
-  public void setName(String newName) throws RemoteException 
+  public void setName(String newName) 
   {
     name = newName;
     isDirty = true; // the bean content has been modified
@@ -74,10 +71,8 @@ public class RegionBean implements EntityBean
    *
    * @return pk primary key set to null
    * @exception CreateException if an error occurs
-   * @exception RemoteException if an error occurs
-   * @exception RemoveException if an error occurs
    */
-  public RegionPK ejbCreate(String regionName) throws CreateException, RemoteException, RemoveException
+  public RegionPK ejbCreate(String regionName) throws CreateException
   {
      // Connecting to IDManager Home interface thru JNDI
       IDManagerLocalHome home = null;
@@ -116,24 +111,24 @@ public class RegionBean implements EntityBean
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbLoad() throws RemoteException 
+  public void ejbLoad()
   {
     isDirty = false;
   }
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbStore() throws RemoteException
+  public void ejbStore()
   {
     isDirty = false;
   }
 
   /** This method is empty because persistence is managed by the container */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbRemove() throws RemoteException, RemoveException {}
+  public void ejbRemove() {}
 
 
   /**
@@ -146,14 +141,8 @@ public class RegionBean implements EntityBean
    *                store the reference to the context in an instance variable. 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception. 
    */
-  public void setEntityContext(EntityContext context) throws RemoteException
+  public void setEntityContext(EntityContext context)
   {
     entityContext = context;
   }
@@ -169,14 +158,8 @@ public class RegionBean implements EntityBean
    * 
    * @exception EJBException  Thrown by the method to indicate a failure 
    *                          caused by a system-level error.
-   * @exception RemoteException - This exception is defined in the method signature
-   *                           to provide backward compatibility for enterprise beans
-   *                           written for the EJB 1.0 specification. 
-   *                           Enterprise beans written for the EJB 1.1 and 
-   *                           higher specification should throw the javax.ejb.EJBException 
-   *                           instead of this exception.
    */
-  public void unsetEntityContext() throws RemoteException
+  public void unsetEntityContext() 
   {
     entityContext = null;
   }
