@@ -159,6 +159,7 @@ public class RegisterItem extends RubisHttpServlet
       }
       catch (SQLException e)
       {
+        conn.rollback(); 
         printError("RUBiS internal error: Item registration failed (got exception: " +e+")<br>");
         return;
       }
@@ -170,6 +171,7 @@ public class RegisterItem extends RubisHttpServlet
         ResultSet irs = stmt.executeQuery();
         if (!irs.first())
         {
+          conn.rollback(); 
           printError("This item does not exist in the database.");
           return;
         }
@@ -177,6 +179,7 @@ public class RegisterItem extends RubisHttpServlet
       }
       catch (SQLException e)
       {
+        conn.rollback(); 
         printError("Failed to execute Query for the new item: " +e);
         return;
       }
@@ -213,8 +216,8 @@ public class RegisterItem extends RubisHttpServlet
       catch (Exception se) 
       {
         sp.printHTML("Transaction rollback failed: " + e +"<br>");
+        closeConnection();
       }
-      closeConnection();
     }
   }
     

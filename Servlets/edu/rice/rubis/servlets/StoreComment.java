@@ -135,6 +135,7 @@ public class StoreComment extends RubisHttpServlet
       }
       catch (SQLException e)
       {
+        conn.rollback(); 
         printError("Error while storing the comment (got exception: " +e+")<br>");
         return;
       }
@@ -158,6 +159,7 @@ public class StoreComment extends RubisHttpServlet
       }
       catch (SQLException e)
       {
+        conn.rollback(); 
         printError("Error while updating user's rating (got exception: " +e+")<br>");
         return;
       }
@@ -181,7 +183,6 @@ public class StoreComment extends RubisHttpServlet
         sp.printHTML("Transaction rollback failed: " + e +"<br>");
         closeConnection();
       }
-      closeConnection();
     }
   }
   

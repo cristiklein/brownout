@@ -154,6 +154,7 @@ public class StoreBuyNow extends RubisHttpServlet
       ResultSet irs = stmt.executeQuery();
       if (!irs.first())
       {
+        conn.rollback();
         printError("This item does not exist in the database.");
         return;
       }
@@ -178,7 +179,6 @@ public class StoreBuyNow extends RubisHttpServlet
     catch (SQLException e)
     {
       sp.printHTML("Failed to execute Query for the item: " +e+"<br>");
-      closeConnection();
       try
       {
         conn.rollback();
@@ -191,8 +191,7 @@ public class StoreBuyNow extends RubisHttpServlet
       return;
     }
     try 
-    {
-	
+    {	
       stmt = conn.prepareStatement("INSERT INTO buy_now VALUES (NULL, \""+userId+
                                    "\", \""+itemId+"\", \""+qty+"\", \""+now+"\")");
       stmt.executeUpdate();
@@ -206,7 +205,6 @@ public class StoreBuyNow extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Error while storing the BuyNow (got exception: " +e+")<br>");
-      closeConnection();
       try
       {
         conn.rollback();

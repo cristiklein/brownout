@@ -29,6 +29,9 @@ public class ViewUserInfo extends RubisHttpServlet
   {
     try
     {
+      if (conn != null)
+        if (conn.getAutoCommit() == false)
+          conn.rollback();
       if (stmt != null)
         stmt.close(); // close statement
       if (conn != null)
@@ -60,7 +63,7 @@ public class ViewUserInfo extends RubisHttpServlet
       catch (Exception e)
       {
         sp.printHTML("Failed to execute Query for list of comments: " + e);
-        closeConnection();
+        conn.rollback();
         return;
       }
       if (!rs.first())
@@ -69,8 +72,7 @@ public class ViewUserInfo extends RubisHttpServlet
         conn.commit();
         return;
       }
-      else
-        sp.printHTML("<br><hr><br><h3>Comments for this user</h3><br>");
+      sp.printHTML("<br><hr><br><h3>Comments for this user</h3><br>");
 
       sp.printCommentHeader();
       // Display each comment and the name of its author
@@ -93,7 +95,7 @@ public class ViewUserInfo extends RubisHttpServlet
         catch (Exception e)
         {
           sp.printHTML("Failed to execute Query for the comment author: " + e);
-          closeConnection();
+          conn.rollback();
           return;
         }
         sp.printComment(authorName, authorId, date, comment);
@@ -104,17 +106,14 @@ public class ViewUserInfo extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e + "<br>");
-      closeConnection();
+      sp.printHTML("Exception getting comment list: " + e + "<br>");     
       try
       {
         conn.rollback();
-        closeConnection();
       }
       catch (Exception se)
       {
         sp.printHTML("Transaction rollback failed: " + e + "<br>");
-        closeConnection();
       }
     }
   }

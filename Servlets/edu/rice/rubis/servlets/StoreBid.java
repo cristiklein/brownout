@@ -235,12 +235,14 @@ public class StoreBid extends RubisHttpServlet
         }
         else
         {
+          conn.rollback();
           printError("Couldn't find the item.");
           return ;	      
         }
       }
       catch (Exception ex) 
       {
+        conn.rollback();
         printError("Failed to update nb of bids and max bid: " + ex);
         return;
       }
@@ -251,7 +253,7 @@ public class StoreBid extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("Error while storing the bid (got exception: " +e+")<br>");
+      sp.printHTML("Error while storing the bid (got exception: " +e+")<br>");
       try
       {
         conn.rollback();

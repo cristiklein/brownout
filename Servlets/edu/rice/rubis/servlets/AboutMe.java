@@ -431,6 +431,7 @@ public class AboutMe extends RubisHttpServlet
       catch (Exception e)
       {
         sp.printHTML("Failed to execute Query for list of comments: " +e);
+        conn.rollback();
         closeConnection();
         return;
       }
@@ -439,6 +440,7 @@ public class AboutMe extends RubisHttpServlet
         sp.printHTML("<br>");
         sp.printHTMLHighlighted("<h3>There is no comment yet for this user.</h3>");
         sp.printHTML("<br>");
+        conn.commit();
         return;
       }
       else
@@ -465,6 +467,7 @@ public class AboutMe extends RubisHttpServlet
 	catch (Exception e)
 	{
           sp.printHTML("Failed to execute Query for the comment author: " +e);
+          conn.rollback();
           closeConnection();
           return;
 	}
@@ -480,10 +483,12 @@ public class AboutMe extends RubisHttpServlet
       try
       {
         conn.rollback();
+        closeConnection();
       }
       catch (Exception se) 
       {
         sp.printHTML("Transaction rollback failed: " + e +"<br>");
+        closeConnection();
       }
       closeConnection();
     }
