@@ -15,11 +15,10 @@
     <s1 name="Recent news">
     
 
-    <subtitle>March 2004: RUBiS version 1.4.2.</subtitle>
+    <subtitle>March 9th 2004: RUBiS version 1.4.2.</subtitle>
         <p>This version includes a Session Facade with EJB 2.0 Entity Beans
          implementation and updated build.xml files for JOnAS.</p>
       
-     <hr /> 
      
     <subtitle>February 4th 2004: Online Demo Available</subtitle>
 
@@ -55,7 +54,7 @@
       <table border="0">
 	<tr>
 	  <td><img src="images/RUBiS_logo.jpg" alt="RUBiS logo" height="" width="" border="0" hspace="2"/></td>
-	  <td valign="middle"><strong>RUBiS is a <a href="http://jmob.objectweb.org/">JMOB</a> project<br/></strong><br/>Current release: 1.4.1</td>
+	  <td valign="middle"><strong>RUBiS is a <a href="http://jmob.objectweb.org/">JMOB</a> project<br/></strong><br/>Current release: 1.4.2</td>
 	</tr>
       </table>
       
