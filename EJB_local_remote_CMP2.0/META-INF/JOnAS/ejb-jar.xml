@@ -55,6 +55,22 @@
 				<local>edu.rice.rubis.beans.BuyNowLocal</local>
 				<ejb-link>BuyNow</ejb-link>
             </ejb-local-ref>
+            <ejb-local-ref>
+                <description>This is the reference to the bid bean</description>
+                <ejb-ref-name>ejb/Bid</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.BidLocalHome</local-home>
+				<local>edu.rice.rubis.beans.BidLocal</local>
+				<ejb-link>Bid</ejb-link>
+            </ejb-local-ref>
+            <ejb-local-ref>
+                <description>This is the reference to the Query  bean</description>
+                <ejb-ref-name>ejb/Query</ejb-ref-name>
+		        <ejb-ref-type>Session</ejb-ref-type>	
+				<local-home>edu.rice.rubis.beans.QueryLocalHome</local-home>
+				<local>edu.rice.rubis.beans.QueryLocal</local>	
+				<ejb-link>Query</ejb-link>				
+            </ejb-local-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -654,33 +670,7 @@
                     FROM CategoryBean c
                ]]></ejb-ql>
             </query>
-<!-- 
-            <query>
-                <query-method>
-                    <method-name>ejbSelectCurrentItemsInCategory</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                       <method-param>int</method-param>
-                       <method-param>int</method-param>
-                    </method-params>
-               </query-method>
-               <result-type-mapping>Local</result-type-mapping>
-               <ejb-ql></ejb-ql>
-            </query>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectCurrentItemsInCategoryAndRegion</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                       <method-param>java.lang.Integer</method-param>
-                       <method-param>int</method-param>
-                       <method-param>int</method-param>
-                    </method-params>
-               </query-method>
-               <result-type-mapping>Local</result-type-mapping>
-               <ejb-ql></ejb-ql>
-            </query>
- -->          
+
         </entity>
 
         <entity>
@@ -820,28 +810,7 @@
                     FROM UserBean u
                ]]></ejb-ql>
             </query>
- <!--           
-            <query>
-                <query-method>
-                    <method-name>ejbSelectUserWonItems</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <result-type-mapping>Local</result-type-mapping>
-               <ejb-ql></ejb-ql>
-            </query>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectUserBids</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <result-type-mapping>Local</result-type-mapping>
-               <ejb-ql></ejb-ql>
-            </query>
-  -->
+ 
         </entity>
 
         <entity>
@@ -950,35 +919,7 @@
                     WHERE i.categoryId = ?1
                ]]></ejb-ql>
             </query>
-<!--             
-            <query>
-                <query-method>
-                    <method-name>findCurrentByCategory</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <ejb-ql></ejb-ql>
-            </query>
-            <query>
-                <query-method>
-                    <method-name>findUserCurrentSellings</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <ejb-ql></ejb-ql>
-            </query>
-            <query>
-                <query-method>
-                    <method-name>findUserPastSellings</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <ejb-ql></ejb-ql>
-            </query>
- -->
+
             <query>
                 <query-method>
                     <method-name>findAllItems</method-name>
@@ -989,29 +930,7 @@
                     FROM ItemBean i
                ]]></ejb-ql>
             </query>
-<!--           
-            <query>
-                <query-method>
-                    <method-name>ejbSelectItemQtyMaxBid</method-name>
-                    <method-params>
-                       <method-param>int</method-param>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <result-type-mapping>Local</result-type-mapping>
-               <ejb-ql></ejb-ql>
-            </query>
-            <query>
-                <query-method>
-                    <method-name>ejbSelectItemBidHistory</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <result-type-mapping>Local</result-type-mapping>
-               <ejb-ql></ejb-ql>
-            </query>
--->            
+          
         </entity>
 
         <entity>
@@ -1397,17 +1316,7 @@
                     FROM BuyNowBean b
                ]]></ejb-ql>
             </query>
-<!--            
-            <query>
-                <query-method>
-                    <method-name>findUserBuyNow</method-name>
-                    <method-params>
-                       <method-param>java.lang.Integer</method-param>
-                    </method-params>
-               </query-method>
-               <ejb-ql></ejb-ql>
-            </query>   
--->                    
+               
         </entity>
 
         <entity>
@@ -1454,121 +1363,7 @@
         </entity>
 
     </enterprise-beans>
-<!--  
-    <relationships>
-  
-      <ejb-relation>
-          <ejb-relation-name>Region-User</ejb-relation-name>
-          <ejb-relationship-role>
-             <ejb-relationship-role-name>one-region-has-many-users</ejb-relationship-role-name>
-             <multiplicity>One</multiplicity>
-             <relationship-role-source>
-                <ejb-name>Region</ejb-name>
-             </relationship-role-source>
-             <cmr-field>
-                <cmr-field-name>users</cmr-field-name>
-                <cmr-field-type>java.util.Collection</cmr-field-type>
-             </cmr-field>
-           </ejb-relationship-role>
-           <ejb-relationship-role>
-             <ejb-relationship-role-name>many-users-belong-to-one-region</ejb-relationship-role-name>
-             <multiplicity>Many</multiplicity>
-             <relationship-role-source>
-                <ejb-name>User</ejb-name>
-             </relationship-role-source>
-            </ejb-relationship-role>
-        </ejb-relation>
-        
-       <ejb-relation>
-          <ejb-relation-name>Category-Item</ejb-relation-name>
-          <ejb-relationship-role>
-             <ejb-relationship-role-name>one-category-has-many-items</ejb-relationship-role-name>
-             <multiplicity>One</multiplicity>
-             <relationship-role-source>
-                <ejb-name>Category</ejb-name>
-             </relationship-role-source>
-             <cmr-field>
-                <cmr-field-name>items</cmr-field-name>
-                <cmr-field-type>java.util.Collection</cmr-field-type>
-             </cmr-field>
-           </ejb-relationship-role>
-           <ejb-relationship-role>
-             <ejb-relationship-role-name>many-items-belong-to-one-category</ejb-relationship-role-name>
-             <multiplicity>Many</multiplicity>
-             <relationship-role-source>
-                <ejb-name>Item</ejb-name>
-             </relationship-role-source>
-            </ejb-relationship-role>
-        </ejb-relation>
 
-       <ejb-relation>
-          <ejb-relation-name>User-Item</ejb-relation-name>
-          <ejb-relationship-role>
-             <ejb-relationship-role-name>one-user-sells-many-items</ejb-relationship-role-name>
-             <multiplicity>One</multiplicity>
-             <relationship-role-source>
-                <ejb-name>User</ejb-name>
-             </relationship-role-source>
-             <cmr-field>
-                <cmr-field-name>items</cmr-field-name>
-                <cmr-field-type>java.util.Collection</cmr-field-type>
-             </cmr-field>
-           </ejb-relationship-role>
-           <ejb-relationship-role>
-             <ejb-relationship-role-name>many-items-belong-to-one-user</ejb-relationship-role-name>
-             <multiplicity>Many</multiplicity>
-             <relationship-role-source>
-                <ejb-name>Item</ejb-name>
-             </relationship-role-source>
-            </ejb-relationship-role>
-        </ejb-relation>
-
-       <ejb-relation>
-          <ejb-relation-name>User-Bid</ejb-relation-name>
-          <ejb-relationship-role>
-             <ejb-relationship-role-name>one-user-puts-many-bids</ejb-relationship-role-name>
-             <multiplicity>One</multiplicity>
-             <relationship-role-source>
-                <ejb-name>User</ejb-name>
-             </relationship-role-source>
-             <cmr-field>
-                <cmr-field-name>bids</cmr-field-name>
-                <cmr-field-type>java.util.Collection</cmr-field-type>
-             </cmr-field>
-           </ejb-relationship-role>
-           <ejb-relationship-role>
-             <ejb-relationship-role-name>many-bids-belong-to-one-user</ejb-relationship-role-name>
-             <multiplicity>Many</multiplicity>
-             <relationship-role-source>
-                <ejb-name>Bid</ejb-name>
-             </relationship-role-source>
-            </ejb-relationship-role>
-        </ejb-relation>
-
-       <ejb-relation>
-          <ejb-relation-name>Item-Bid</ejb-relation-name>
-          <ejb-relationship-role>
-             <ejb-relationship-role-name>one-item-has-many-bids</ejb-relationship-role-name>
-             <multiplicity>One</multiplicity>
-             <relationship-role-source>
-                <ejb-name>Item</ejb-name>
-             </relationship-role-source>
-             <cmr-field>
-                <cmr-field-name>bids</cmr-field-name>
-                <cmr-field-type>java.util.Collection</cmr-field-type>
-             </cmr-field>
-           </ejb-relationship-role>
-           <ejb-relationship-role>
-             <ejb-relationship-role-name>many-bids-belong-to-one-item</ejb-relationship-role-name>
-             <multiplicity>Many</multiplicity>
-             <relationship-role-source>
-                <ejb-name>Bid</ejb-name>
-             </relationship-role-source>
-            </ejb-relationship-role>
-        </ejb-relation>
-      
-    </relationships>
---> 
     <assembly-descriptor>
 
         <container-transaction>
