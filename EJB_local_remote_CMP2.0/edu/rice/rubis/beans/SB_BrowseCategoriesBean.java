@@ -75,7 +75,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
     else
     {
       // Authenticate the user who wants to sell items
-      if ((username != null && username !="") || (password != null && password !=""))
+      if ((username != null && !username.equals("")) || (password != null && !password.equals("")))
       {
         SB_AuthLocalHome authHome = null;
         SB_AuthLocal auth = null;
