@@ -1,9 +1,20 @@
 
 <project name="EntityBean_BMP" default="dist" basedir=".">
-  <!-- EntityBean BMP Ant build file -->
+  <!-- EntityBean CMP Ant build file -->
 
   <!-- set global properties for this build -->
   <property file="../build.properties" />
+
+ <!-- some properties are build from environment variables -->
+  <property environment="myenv"/>
+  <property name="jonas.root" value="${myenv.JONAS_ROOT}" />
+  <property name="jboss.dist" value="${myenv.JBOSS_DIST}" />
+  <property name="orb" value="${myenv.OBJECTWEB_ORB}" />
+
+ <!-- Set the uncustomizable properties -->
+ 
+  <property name="lib.dir" value="${jonas.root}/lib" />
+
 
 
   <!-- init rule creates build directory -->
@@ -11,8 +22,8 @@
     <!-- Create the time stamp -->
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build}/RUBiS-${version}"/>
-    <!-- check the ejb server value -->
+    <mkdir dir="${classes.dir}"/>
+     <!-- check the ejb server value -->
      <condition property="jonas">
        <equals trim="true"
        arg1="${ejb.server}" arg2="jonas" />
@@ -23,14 +34,31 @@
     </condition>
   </target>
 
+ <!-- ejbjar task for jonas -->
+ <taskdef name="ejbjar"
+    classname="org.objectweb.jonas.ant.EjbJar"
+    classpath="${jonas.root}/lib/common/ow_jonas_ant.jar" />
+
+  <!-- The classpath to be used to compile  -->
+  <path id="base.classpath">
+    <pathelement location="${classes.dir}" />
+    <fileset dir="${lib.dir}">
+      <include name="${orb}_jonas.jar"/>
+      <include name="web*.jar"/>
+    </fileset>
+  </path>
 
   <!-- Create the rubis.jar file for Jonas --> 
-  <target name="jonas_jar" if="jonas" depends="init">
-    <ejbjar srcdir="${build}/RUBiS-${version}"
+  <target name="jonas_jar" if="jonas" depends="init, compile">
+    <ejbjar srcdir="${classes.dir}"
               destdir="${dist}"
               descriptordir="./META-INF/JOnAS"
-              basejarname="rubis"
-              classpath="${build.classpath}">
+              basejarname="rubis" >
+
+      <dtd publicId="-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+	   location="${jonas.root}/xml/ejb-jar_2_0.dtd" />
+      <dtd publicId="-//ObjectWeb//DTD JOnAS 2.5//EN"
+	   location="${jonas.root}/xml/jonas-ejb-jar_2_5.dtd" />
       <jonas destdir="${dist}"
              jonasroot="${jonas.root}"
              orb="${orb}"/>
@@ -41,14 +69,14 @@
   </target>
 
   <!-- Create the rubis.jar file that contains the beans for Jboss--> 
-  <target name="jboss_jar" if="jboss" depends="init">
+  <target name="jboss_jar" if="jboss" depends="init, compile">
      <copy todir="${src}/META-INF">
        <fileset dir="${src}/META-INF/JBoss">
           <include name="*.xml"/>
        </fileset>
      </copy>
      <jar destfile="${dist}/rubis.jar">
-	<fileset dir="${build}/RUBiS-${version}"
+	<fileset dir="${classes.dir}"
 		 includes="edu/rice/rubis/beans/*.class"/>
 	<metainf dir="${src}/META-INF">
             <include name="*.xml"/>
@@ -58,18 +86,18 @@
   </target>
 
   <!-- Create the rubis_ejb_servlets jar file that contains the servlets-->
-  <target name="servlets_jar" depends="init">
+  <target name="servlets_jar" depends="init, compile">
      <jar destfile="${dist}/rubis_ejb_servlets.jar">
-	<fileset dir="${build}/RUBiS-${version}"
+	<fileset dir="${classes.dir}"
 		 includes="edu/rice/rubis/beans/servlets/*.class"/>
     </jar>
   </target>
 
 <!-- Create a war file-->
-  <target name="rubis_war" depends="init, servlets_jar">
+  <target name="rubis_war" depends="init, compile, servlets_jar">
     <copy file="${dist}/rubis_ejb_servlets.jar" todir="${web.dir}/WEB-INF/lib"/>
      <war destfile="${dist}/ejb_rubis_web.war" webxml="${web.dir}/WEB-INF/web.xml" basedir="${web.dir}">
-	<fileset dir="${build}/RUBiS-${version}"
+	<fileset dir="${classes.dir}"
 		 includes="*"/>
     </war>
   </target>
@@ -91,15 +119,14 @@
   </target>
 
   <target name="servlets" depends="init, servlets_config_jboss, servlets_config_jonas">
-<echo message="${build.classpath}"/>
     <javac srcdir="${src}"
 	   includes="edu/rice/rubis/beans/servlets/*"
 	   excludes="edu/rice/rubis/beans/servlets/ConfigJBoss.java, edu/rice/rubis/beans/servlets/ConfigJOnAS.java"
-	   destdir="${build}/RUBiS-${version}"
-	   classpath="${build.classpath}"
+	   destdir="${classes.dir}"
 	   depend="yes"
-	   deprecation="yes"
-	   />
+	   deprecation="yes" >
+     <classpath refid="base.classpath" />
+    </javac>
   </target>
 
   <target name="beans" depends="init">
@@ -107,13 +134,12 @@
     <javac srcdir="${src}"
 	   includes="edu/rice/rubis/beans/*"
 	   excludes="edu/rice/rubis/beans/QueryBeanMySQL.java, edu/rice/rubis/beans/QueryBeanPostgreSQL.java"
-	   destdir="${build}/RUBiS-${version}"
-	   classpath="${build.classpath}"
+	   destdir="${classes.dir}"
 	   depend="yes"
-	   deprecation="yes"
-	   />
+	   deprecation="yes" >
+     <classpath refid="base.classpath" />
+    </javac>
   </target>
-
 
   <!-- Generate Javadoc documentation -->
   <target name="doc">
@@ -132,8 +158,8 @@
   </target>
 
   <target name="clean">
-    <!-- Delete the ${build} and ${dist} directory trees -->
-    <delete dir="${build}"/>
+    <!-- Delete the ${classes.dir} and ${dist} directory trees -->
+    <delete dir="${classes.dir}"/>
     <delete>
       <fileset dir="${dist}" includes="*.jar"/>
     </delete>
