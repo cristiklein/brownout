@@ -1,4 +1,4 @@
 #!/bin/sh
 
-cd /usr/java/JBoss-2.4.4/bin/
-./run.sh myjboss
+cd ${JBOSS_DIST}/bin/
+./run.sh
