@@ -61,17 +61,18 @@
       }
     }
 
-    $reservePrice = $HTTP_POST_VARS['reservePrice'];
-    if ($reservePrice == null)
+    $buyNow = $HTTP_POST_VARS['buyNow'];
+    if ($buyNow == null)
     {
-      $reservePrice = $HTTP_GET_VARS['reservePrice'];
-      if ($reservePrice == null)
+      $buyNow = $HTTP_GET_VARS['buyNow'];
+      if ($buyNow == null)
       {
          printError($scriptName, $startTime, "RegisterItem", "<h3>You must provide a Buy Now price !<br></h3>");
          exit();
       }
     }
 
+    $duration = $HTTP_POST_VARS['duration'];
     if ($duration == null)
     {
       $duration = $HTTP_GET_VARS['duration'];
@@ -107,7 +108,7 @@
     // Add item to database
     $start = date("Y:m:d H:i:s");
     $end = date("Y:m:d H:i:s", mktime(date("H"), date("i"),date("s"), date("m"), date("d")+$duration, date("Y")));
-    $result = mysql_query("INSERT INTO items VALUES (NULL, \"$name\", \"$description\", $initialPrice, $quantity, $reservePrice, $buyNow, 0, 0, '$start', '$end', $userId, $categoryId)", $link) or die("ERROR: Failed to insert new item in database. MySQL reports '".mysql_error()."' while querying 'INSERT INTO items VALUES (NULL, \"$name\", \"$description\", $initialPrice, $quantity, $reservePrice, $buyNow, '$start', '$end', $userId, $categoryId)'");
+    $result = mysql_query("INSERT INTO items VALUES (NULL, \"$name\", \"$description\", $initialPrice, $qty, $reservePrice, $buyNow, 0, 0, '$start', '$end', $userId, $categoryId)", $link) or die("ERROR: Failed to insert new item in database. MySQL reports '".mysql_error()."' while querying 'INSERT INTO items VALUES (NULL, \"$name\", \"$description\", $initialPrice, $quantity, $reservePrice, $buyNow, '$start', '$end', $userId, $categoryId)'");
     commit($link);
 
     printHTMLheader("RUBiS: Selling $name");
