@@ -138,6 +138,7 @@ public class RegisterUser extends RubisHttpServlet
       catch (SQLException e)
       {
         printError("Failed to execute Query for region: " + e);
+        closeConnection();
         return;
       }
     }
@@ -157,6 +158,7 @@ public class RegisterUser extends RubisHttpServlet
     catch (SQLException e)
     {
       printError("Failed to execute Query to check the nickname: " + e);
+      closeConnection();
       return;
     }
     try
@@ -187,6 +189,7 @@ public class RegisterUser extends RubisHttpServlet
         "RUBiS internal error: User registration failed (got exception: "
           + e
           + ")<br>");
+      closeConnection();
       return;
     }
     try
@@ -209,6 +212,10 @@ public class RegisterUser extends RubisHttpServlet
       printError("Failed to execute Query for user: " + e);
       return;
     }
+    finally
+    {
+      closeConnection();
+    }
 
     sp.printHTMLheader("RUBiS: Welcome to " + nickname);
     sp.printHTML(
@@ -227,7 +234,6 @@ public class RegisterUser extends RubisHttpServlet
     sp.printHTML("Creation date :" + creationDate + "<br>");
 
     sp.printHTMLfooter();
-    closeConnection();
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
