@@ -18,14 +18,6 @@ public interface SB_SearchItemsByCategory extends EJBObject, Remote {
    */
   public String getItems(Integer categoryId, int page, int nbOfItems) throws RemoteException;
 
-  /** 
-   * Item related printed function
-   *
-   * @param item the item to display
-   * @return a string in html format
-   * @since 1.1
-   */
-  public String printItem(ItemLocal item) throws RemoteException;
 
 
 }
