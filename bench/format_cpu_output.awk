@@ -10,7 +10,7 @@ BEGIN {
 
   if ($2 ~ /all/)
     { # This is the cpu info
-      print 100-$6 > FILENAME".cpu.busy.dat";
+      print 100-$7 > FILENAME".cpu.busy.dat";
     }
 }
 END {
