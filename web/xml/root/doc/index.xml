@@ -23,6 +23,10 @@
 
     <s1 name="Papers" anchor="paper">
       <ul>
+      <li> 
+	<a href="../download/Middleware-2003.pdf"> Performance Comparison of Middleware Architectures for Generating Dynamic Web Content</a>  - Emmanuel Cecchet, Anupam Chanda, Sameh Elnikety, Julie Marguerite and Willy Zwaenepoel.
+	 - 4th ACM/IFIP/USENIX International Middleware Conference, Rio de Janeiro, Brazil, June 16-20, 2003
+	</li>
 	<li> 
 	<a href="http://www.cs.rice.edu/CS/Systems/DynaServer/wwc5-spec_dyna_bench.pdf">Specification and Implementation of Dynamic Web Site Benchmarks</a> (<a href="http://www.cs.rice.edu/CS/Systems/DynaServer/wwc5-spec_dyna_bench.ps.gz">ps.gz</a> format)
 	Cristiana Amza, Emmanuel Cecchet, Anupam Chanda, Alan Cox, Sameh Elnikety, Romer Gil, Julie Marguerite, Karthick Rajamani and Willy Zwaenepoel
