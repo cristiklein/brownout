@@ -71,7 +71,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -128,7 +128,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -173,7 +173,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -224,7 +224,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -269,7 +269,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -318,7 +318,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -366,7 +366,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -413,7 +413,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new EJBException("Failed to executeQuery " +e);
+      throw new RemoteException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -470,7 +470,7 @@ public class QueryBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

@@ -39,7 +39,7 @@ public class SB_StoreCommentBean implements SessionBean
    * @param comment text of the comment
    * @since 1.1
    */
-  public void createComment(Integer fromId, Integer toId, Integer itemId, int rating, String comment)
+  public void createComment(Integer fromId, Integer toId, Integer itemId, int rating, String comment) throws RemoteException
   {
     // Try to find the user corresponding to the 'to' ID
     UserHome uHome;
@@ -50,7 +50,7 @@ public class SB_StoreCommentBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup User or Item: " +e+"<br>");
+      throw new RemoteException("Cannot lookup User or Item: " +e+"<br>");
     }
     CommentHome cHome;
     try 
@@ -60,7 +60,7 @@ public class SB_StoreCommentBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Comment: " +e+"<br>");
+      throw new RemoteException("Cannot lookup Comment: " +e+"<br>");
     }
     utx = sessionContext.getUserTransaction();
     try
@@ -76,11 +76,11 @@ public class SB_StoreCommentBean implements SessionBean
       try
       {
         utx.rollback();
-        throw new EJBException("Error while storing the comment (got exception: " +e+")<br>");
+        throw new RemoteException("Error while storing the comment (got exception: " +e+")<br>");
       }
       catch (Exception se) 
       {
-        throw new EJBException("Transaction rollback failed: " + e +"<br>");
+        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
       }
     }
 		
@@ -128,7 +128,7 @@ public class SB_StoreCommentBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

@@ -40,7 +40,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
    * @since 1.1
    */
   /** List all the categories in the database */
-  public String getCategories(String regionName, String username, String password) 
+  public String getCategories(String regionName, String username, String password) throws RemoteException
   {
     Collection list;
     Category cat;
@@ -60,7 +60,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
       } 
       catch (Exception e)
       {
-        throw new EJBException("Cannot lookup Region: " +e);
+        throw new RemoteException("Cannot lookup Region: " +e);
       }
       // get the region ID
       try
@@ -70,7 +70,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
       }
       catch (Exception e)
       {
-        throw new EJBException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")");
+        throw new RemoteException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")");
       }
     }
     else
@@ -87,7 +87,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Cannot lookup SB_Auth: " +e);
+          throw new RemoteException("Cannot lookup SB_Auth: " +e);
         }
         try 
         {
@@ -95,7 +95,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Authentication failed: " +e);
+          throw new RemoteException("Authentication failed: " +e);
         }
         if (userId == -1)
         {
@@ -112,7 +112,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Category: " +e);
+      throw new RemoteException("Cannot lookup Category: " +e);
     }
 
     utx = sessionContext.getUserTransaction();
@@ -149,11 +149,11 @@ public class SB_BrowseCategoriesBean implements SessionBean
       try
       {
         utx.rollback();
-        throw new EJBException("Exception getting category list: " + e);
+        throw new RemoteException("Exception getting category list: " + e);
       }
       catch (Exception se) 
       {
-        throw new EJBException("Transaction rollback failed: " + e);
+        throw new RemoteException("Transaction rollback failed: " + e);
       }
     }
     return html;
@@ -168,7 +168,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
    * @since 1.1
    */
 
-  public String printCategory(Category category)
+  public String printCategory(Category category) throws RemoteException
   {
     String html = "";
     try
@@ -177,7 +177,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
     }
     catch (RemoteException re)
     {
-      throw new EJBException("Unable to print Category 1 (exception: "+re+")");
+      throw new RemoteException("Unable to print Category 1 (exception: "+re+")");
     }
     return html;
   }
@@ -187,7 +187,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String printCategoryByRegion(Category category, int regionId)
+  public String printCategoryByRegion(Category category, int regionId) throws RemoteException
   {
     String html = "";
     try
@@ -196,7 +196,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
     }
     catch (RemoteException re)
     {
-      throw new EJBException("Unable to print Category 2 (exception: "+re+")<br>\n");
+      throw new RemoteException("Unable to print Category 2 (exception: "+re+")<br>\n");
     }
     return html;
   }
@@ -206,7 +206,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String printCategoryToSellItem(Category category, int userId)
+  public String printCategoryToSellItem(Category category, int userId) throws RemoteException
   {
     String html= "";
     try
@@ -215,7 +215,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
     }
     catch (RemoteException re)
     {
-      throw new EJBException("Unable to print Category 3 (exception: "+re+")<br>\n");
+      throw new RemoteException("Unable to print Category 3 (exception: "+re+")<br>\n");
     }
     return html;
   }
@@ -262,7 +262,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

@@ -734,7 +734,7 @@ public class ItemBean implements EntityBean
         "<td><input type=text size=5 name=qty></td></tr></table></center>\n";
     else
       result = result + "<input type=hidden name=qty value=1>\n";
-    result = result.concat("<p><input type=submit value=\"Buy now!\"></center><p>\n");
+    result = result + "<p><input type=submit value=\"Buy now!\"></center><p>\n";
     return result;
   }
 }

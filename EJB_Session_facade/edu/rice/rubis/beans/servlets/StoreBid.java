@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.transaction.UserTransaction;
 import java.util.Enumeration;
 
 /** This servlet records a bid in the database and display

@@ -37,16 +37,17 @@ public class SB_ViewBidHistoryBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String getBidHistory(Integer itemId) 
+  public String getBidHistory(Integer itemId) throws RemoteException 
   {
-    String      html = "";
-    ItemHome    iHome;
-    Item        item;
-    Query       query;
-    QueryHome   qHome;
-    BidHome     bidHome;
-    Bid         bid;
-    Enumeration bidList=null;
+    StringBuffer html;
+    ItemHome     iHome;
+    Item         item;
+    Query        query;
+    QueryHome    qHome;
+    BidHome      bidHome;
+    Bid          bid;
+    Enumeration  bidList=null;
+
     try
     {
       qHome = (QueryHome)PortableRemoteObject.narrow(initialContext.lookup("java:comp/env/ejb/Query"), QueryHome.class);
@@ -54,17 +55,17 @@ public class SB_ViewBidHistoryBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Query: " +e);
+      throw new RemoteException("Cannot lookup Query: " +e);
     }
     try 
     {
       iHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("java:comp/env/ejb/Item"), ItemHome.class);
       item = iHome.findByPrimaryKey(new ItemPK(itemId));
-      html = "<center><h3>Bid History for "+item.getName()+"<br></h3></center>";
+      html = new StringBuffer("<center><h3>Bid History for "+item.getName()+"<br></h3></center>");
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Item: " +e);
+      throw new RemoteException("Cannot lookup Item: " +e);
     }
     try 
     {
@@ -73,12 +74,11 @@ public class SB_ViewBidHistoryBean implements SessionBean
     }
     catch (Exception e)
     {
-	throw new EJBException("Exception getting bids list: " +e+"<br>");
+	throw new RemoteException("Exception getting bids list: " +e+"<br>");
     }
     if ((bidList == null) || (!bidList.hasMoreElements()))
     {
-      html = html.concat("<h3>There is no bid corresponding to this item.</h3><br>");
-      return html;
+      return html.append("<h3>There is no bid corresponding to this item.</h3><br>").toString();
     }
     // Lookup bid home interface
     try 
@@ -88,24 +88,24 @@ public class SB_ViewBidHistoryBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Bid: " +e+"<br>");
+      throw new RemoteException("Cannot lookup Bid: " +e+"<br>");
     }
     try
     {
-      html = html.concat(printBidHistoryHeader());
+      html.append(printBidHistoryHeader());
       while (bidList.hasMoreElements()) 
       {
         // Get the bids
-          bid = bidHome.findByPrimaryKey((BidPK)bidList.nextElement());
-          html = html.concat(bid.printBidHistory());
+        bid = bidHome.findByPrimaryKey((BidPK)bidList.nextElement());
+        html.append(bid.printBidHistory());
       }
-      html = html.concat(printBidHistoryFooter());
+      html.append(printBidHistoryFooter());
     }
     catch (Exception e)
     {
-      throw new EJBException("Exception getting bid: " + e +"<br>");
+      throw new RemoteException("Exception getting bid: " + e +"<br>");
     }
-    return html;
+    return html.toString();
   }
 
   /** 
@@ -171,7 +171,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

@@ -40,13 +40,13 @@ public class SB_ViewUserInfoBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String getComments(UserHome userHome, Integer userId) 
+  public String getComments(UserHome userHome, Integer userId) throws RemoteException
   {
-    Collection list;
-    String html;
+    Collection   list;
+    StringBuffer html;
     CommentHome  cHome = null;
     Comment      comment = null;
-    User user = null;
+    User         user = null;
 
     // Try to find the comments corresponding for this user
 
@@ -57,7 +57,7 @@ public class SB_ViewUserInfoBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Comment: " +e+"<br>");
+      throw new RemoteException("Cannot lookup Comment: " +e+"<br>");
     }
     
     utx = sessionContext.getUserTransaction();
@@ -67,12 +67,12 @@ public class SB_ViewUserInfoBean implements SessionBean
       utx.begin();
       list = cHome.findByToUser(userId);
       if (list.isEmpty())
-       html = "<h3>There is no comment yet for this user.</h3><br>";
+       html = new StringBuffer("<h3>There is no comment yet for this user.</h3><br>");
       else
       {
-        html = "<br><hr><br><h3>Comments for this user</h3><br>";
+        html = new StringBuffer("<br><hr><br><h3>Comments for this user</h3><br>");
 
-        html = html.concat(printCommentHeader());
+        html.append(printCommentHeader());
         // Display each comment and the name of its author
         Iterator it = list.iterator();
         while (it.hasNext())
@@ -86,11 +86,11 @@ public class SB_ViewUserInfoBean implements SessionBean
           }
           catch (Exception e)
           {
-            throw new EJBException("This author does not exist (got exception: " +e+")<br>");
+            throw new RemoteException("This author does not exist (got exception: " +e+")<br>");
           }
-          html = html.concat(printComment(userName, comment));
+          html.append(printComment(userName, comment));
         }
-        html = html.concat(printCommentFooter());
+        html.append(printCommentFooter());
       }
       utx.commit();
     } 
@@ -99,14 +99,14 @@ public class SB_ViewUserInfoBean implements SessionBean
       try
       {
         utx.rollback();
-        throw new EJBException("Exception getting comment list: " + e +"<br>");
+        throw new RemoteException("Exception getting comment list: " + e +"<br>");
       }
       catch (Exception se) 
       {
-        throw new EJBException("Transaction rollback failed: " + e +"<br>");
+        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
       }
     }
-    return html;
+    return html.toString();
   }
 
 
@@ -117,9 +117,9 @@ public class SB_ViewUserInfoBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String getUserInfo(Integer userId)
+  public String getUserInfo(Integer userId) throws RemoteException
   {
-    String       html = "";
+    StringBuffer html = new StringBuffer();
     UserHome     uHome = null;
     User         user = null;
  
@@ -132,19 +132,19 @@ public class SB_ViewUserInfoBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup User: " +e+"<br>");
+      throw new RemoteException("Cannot lookup User: " +e+"<br>");
     }
     try
     {
       user = uHome.findByPrimaryKey(new UserPK(userId));
-      html = html .concat(user.getHTMLGeneralUserInformation());
-      html = html.concat(getComments(uHome, userId));
+      html.append(user.getHTMLGeneralUserInformation());
+      html.append(getComments(uHome, userId));
     }
     catch (Exception e)
     {
-      throw new EJBException("Cannot get user information (got exception: " +e+")<br>");
+      throw new RemoteException("Cannot get user information (got exception: " +e+")<br>");
     }
-    return html;
+    return html.toString();
   }
 
   /** 
@@ -166,7 +166,7 @@ public class SB_ViewUserInfoBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String printComment(String userName, Comment comment)
+  public String printComment(String userName, Comment comment) throws RemoteException
   {
     try
     {
@@ -174,7 +174,7 @@ public class SB_ViewUserInfoBean implements SessionBean
     }
     catch (RemoteException re)
     {
-      throw new EJBException("Unable to print Comment (exception: "+re+")<br>\n");
+      throw new RemoteException("Unable to print Comment (exception: "+re+")<br>\n");
     }
   }
 
@@ -233,7 +233,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

@@ -37,7 +37,7 @@ public class SB_StoreBuyNowBean implements SessionBean
    * @param qty quantity of items
    * @since 1.1
    */
-  public void createBuyNow(Integer itemId, Integer userId, int qty)
+  public void createBuyNow(Integer itemId, Integer userId, int qty) throws RemoteException
   {
     utx = sessionContext.getUserTransaction();
     // Try to find the Item corresponding to the Item ID
@@ -57,11 +57,11 @@ public class SB_StoreBuyNowBean implements SessionBean
       try
       {
         utx.rollback();
-        throw new EJBException("Cannot update Item: " +e+"<br>");
+        throw new RemoteException("Cannot update Item: " +e+"<br>");
       }
       catch (Exception se) 
       {
-        throw new EJBException("Transaction rollback failed: " + e +"<br>");
+        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
       }
     }
     try
@@ -76,11 +76,11 @@ public class SB_StoreBuyNowBean implements SessionBean
       try
       {
         utx.rollback();
-        throw new EJBException("Error while storing the comment (got exception: " +e+")<br>");
+        throw new RemoteException("Error while storing the comment (got exception: " +e+")<br>");
       }
       catch (Exception se) 
       {
-        throw new EJBException("Transaction rollback failed: " + e +"<br>");
+        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
       }
     }
 		
@@ -128,7 +128,7 @@ public class SB_StoreBuyNowBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

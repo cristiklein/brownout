@@ -36,7 +36,7 @@ public class SB_BuyNowBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String getBuyNowForm(Integer itemId, String username, String password) 
+  public String getBuyNowForm(Integer itemId, String username, String password) throws RemoteException
   {
     int userId = -1;
     String html = "";
@@ -53,7 +53,7 @@ public class SB_BuyNowBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Cannot lookup SB_Auth: " +e);
+          throw new RemoteException("Cannot lookup SB_Auth: " +e);
         }
         try 
         {
@@ -61,7 +61,7 @@ public class SB_BuyNowBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Authentication failed: " +e);
+          throw new RemoteException("Authentication failed: " +e);
         }
         if (userId == -1)
         {
@@ -78,7 +78,7 @@ public class SB_BuyNowBean implements SessionBean
       } 
       catch (Exception e)
       {
-        throw new EJBException("Cannot lookup Item: " +e+"<br>");
+        throw new RemoteException("Cannot lookup Item: " +e+"<br>");
       }
       try
       {
@@ -89,7 +89,7 @@ public class SB_BuyNowBean implements SessionBean
       } 
       catch (Exception e) 
       {
-        throw new EJBException("Exception getting the item information: "+ e +"<br>");
+        throw new RemoteException("Exception getting the item information: "+ e +"<br>");
       }
  
     return html;
@@ -101,18 +101,18 @@ public class SB_BuyNowBean implements SessionBean
    * @param item an <code>Item</code> value
    * @param userId an authenticated user id
    */
-  public String printItemDescriptionToBuyNow(Item item, int userId)
+  public String printItemDescriptionToBuyNow(Item item, int userId) throws RemoteException
   {
     String html = "";
     try
     {
       String itemName = item.getName();
-      html = html.concat("<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n<TR><TD align=\"center\" width=\"100%\"><FONT size=\"4\" color=\"#000000\"><B>You are ready to buy this item: "+itemName+"</B></FONT></TD></TR>\n</TABLE><p>\n").concat(item.printItemDescriptionToBuyNow(userId));
+      html = html + "<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n<TR><TD align=\"center\" width=\"100%\"><FONT size=\"4\" color=\"#000000\"><B>You are ready to buy this item: "+itemName+"</B></FONT></TD></TR>\n</TABLE><p>\n" + item.printItemDescriptionToBuyNow(userId);
       ;
     }
     catch (RemoteException re)
     {
-      throw new EJBException("Unable to print Item description (exception: "+re+")<br>\n");
+      throw new RemoteException("Unable to print Item description (exception: "+re+")<br>\n");
     }
     return html;
   }
@@ -160,7 +160,7 @@ public class SB_BuyNowBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

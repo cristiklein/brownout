@@ -41,7 +41,7 @@ public class SB_RegisterUserBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String createUser(String firstname, String lastname, String nickname, String email, String password, String regionName)
+  public String createUser(String firstname, String lastname, String nickname, String email, String password, String regionName) throws RemoteException
   {
     String html = "";
     UserHome uHome;
@@ -58,7 +58,7 @@ public class SB_RegisterUserBean implements SessionBean
       } 
       catch (Exception e)
       {
-        throw new EJBException("Cannot lookup Region: " +e+"<br>\n");
+        throw new RemoteException("Cannot lookup Region: " +e+"<br>\n");
       }
       try
       {
@@ -67,7 +67,7 @@ public class SB_RegisterUserBean implements SessionBean
       }
       catch (Exception e)
       {
-        throw new EJBException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")<br>\n");
+        throw new RemoteException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")<br>\n");
       }
     
       try 
@@ -77,7 +77,7 @@ public class SB_RegisterUserBean implements SessionBean
       } 
       catch (Exception e)
       {
-        throw new EJBException("Cannot lookup User: " +e+"<br>");
+        throw new RemoteException("Cannot lookup User: " +e+"<br>");
       }
       utx = sessionContext.getUserTransaction();
       try
@@ -98,21 +98,21 @@ public class SB_RegisterUserBean implements SessionBean
           userId = user.getId().intValue();
           creationDate = user.getCreationDate();
           utx.commit();
-          html = "User id       :"+userId+"<br>\n";
-          html = html.concat("Creation date :"+creationDate+"<br>\n");
-          html = html.concat("Rating        :"+user.getRating()+"<br>\n");
-          html = html.concat("Balance       :"+user.getBalance()+"<br>\n");
+          html = "User id       :"+userId+"<br>\n" +
+            "Creation date :"+creationDate+"<br>\n" +
+            "Rating        :"+user.getRating()+"<br>\n" +
+            "Balance       :"+user.getBalance()+"<br>\n";
         }
         catch (Exception e)
         {
           try
           {
             utx.rollback();
-            throw new EJBException("User registration failed (got exception: " +e+")<br>");
+            throw new RemoteException("User registration failed (got exception: " +e+")<br>");
           }
           catch (Exception se) 
           {
-            throw new EJBException("Transaction rollback failed: " + e +"<br>");
+            throw new RemoteException("Transaction rollback failed: " + e +"<br>");
           }
         }
         return html;
@@ -165,7 +165,7 @@ public class SB_RegisterUserBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

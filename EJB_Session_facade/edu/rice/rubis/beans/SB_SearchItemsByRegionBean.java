@@ -39,16 +39,16 @@ public class SB_SearchItemsByRegionBean implements SessionBean
    * @return a string that is the list of items in html format
    * @since 1.1
    */
-  public String getItems(Integer categoryId, Integer regionId, int page, int nbOfItems) 
+  public String getItems(Integer categoryId, Integer regionId, int page, int nbOfItems) throws RemoteException
   {
+    Enumeration list;
+    ItemPK      itemPK;
+    ItemHome    iHome;
+    Item        item;
+    Query       query;
+    QueryHome   qHome;
+    StringBuffer html = new StringBuffer();
 
-      Enumeration list;
-      ItemPK      itemPK;
-      ItemHome    iHome;
-      Item        item;
-      Query       query;
-      QueryHome   qHome;
-      String html = "";
     try 
     {
       qHome = (QueryHome)PortableRemoteObject.narrow(initialContext.lookup("java:comp/env/ejb/Query"), QueryHome.class);
@@ -56,7 +56,7 @@ public class SB_SearchItemsByRegionBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Query: " +e);
+      throw new RemoteException("Cannot lookup Query: " +e);
     }
     try 
     {
@@ -64,7 +64,7 @@ public class SB_SearchItemsByRegionBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Item: " +e);
+      throw new RemoteException("Cannot lookup Item: " +e);
     }
 
     utx = sessionContext.getUserTransaction();
@@ -77,7 +77,7 @@ public class SB_SearchItemsByRegionBean implements SessionBean
         {
           itemPK = (ItemPK)list.nextElement();
           item = iHome.findByPrimaryKey(itemPK);
-          html = html.concat(printItem(item));
+          html.append(printItem(item));
         }
       utx.commit();
     } 
@@ -86,14 +86,14 @@ public class SB_SearchItemsByRegionBean implements SessionBean
       try
       {
         utx.rollback();
-        throw new EJBException("Cannot get items list: " +e);
+        throw new RemoteException("Cannot get items list: " +e);
       }
       catch (Exception se) 
       {
-        throw new EJBException("Transaction rollback failed: " + e);
+        throw new RemoteException("Transaction rollback failed: " + e);
       }
     }
-    return html;
+    return html.toString();
   }
 
 
@@ -104,18 +104,16 @@ public class SB_SearchItemsByRegionBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String printItem(Item item)
+  public String printItem(Item item) throws RemoteException
   {
-    String html = "";
     try
     {
-      html = html.concat(item.printItem());
+      return item.printItem();
     }
     catch (RemoteException re)
     {
-      throw new EJBException("Unable to print Item (exception: "+re+")<br>\n");
+      throw new RemoteException("Unable to print Item (exception: "+re+")<br>\n");
     }
-    return html;
   }
   
 
@@ -161,7 +159,7 @@ public class SB_SearchItemsByRegionBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

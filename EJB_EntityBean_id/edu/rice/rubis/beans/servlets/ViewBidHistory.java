@@ -27,7 +27,7 @@ public class ViewBidHistory extends HttpServlet
   private UserTransaction utx = null;
 
  
-    /** List the bids corresponding to an item */
+  /** List the bids corresponding to an item */
   private void listBids(Integer itemId) 
   {
     Enumeration bidList=null;
@@ -59,47 +59,47 @@ public class ViewBidHistory extends HttpServlet
     }
     catch (Exception e)
     {
-	sp.printHTML("Exception getting bids list: " +e+"<br>");
-	return ;
+      sp.printHTML("Exception getting bids list: " +e+"<br>");
+      return ;
     }
-      if ((bidList == null) || (!bidList.hasMoreElements()))
-      {
-        sp.printHTML("<h3>There is no bid corresponding to this item.</h3><br>");
-        return ;
-      }
+    if ((bidList == null) || (!bidList.hasMoreElements()))
+    {
+      sp.printHTML("<h3>There is no bid corresponding to this item.</h3><br>");
+      return ;
+    }
 
-      // Lookup bid home interface
-      try 
-	  {
-	      bidHome = (BidHome)PortableRemoteObject.narrow(initialContext.lookup("BidHome"),
-							    BidHome.class);
-	  } 
-      catch (Exception e)
-	  {
-	      sp.printHTML("Cannot lookup Bid: " +e+"<br>");
-	      return ;
-	  }
+    // Lookup bid home interface
+    try 
+    {
+      bidHome = (BidHome)PortableRemoteObject.narrow(initialContext.lookup("BidHome"),
+                                                     BidHome.class);
+    } 
+    catch (Exception e)
+    {
+      sp.printHTML("Cannot lookup Bid: " +e+"<br>");
+      return ;
+    }
  
-      sp.printBidHistoryHeader();
+    sp.printBidHistoryHeader();
 
-      while (bidList.hasMoreElements()) 
+    while (bidList.hasMoreElements()) 
+    {
+      // Get the bids
+      try
       {
-	  // Get the bids
-	  try
-	  {
-	      bid = bidHome.findByPrimaryKey((BidPK)bidList.nextElement());
+        bid = bidHome.findByPrimaryKey((BidPK)bidList.nextElement());
 	      
-	  }
-	  catch (Exception e) 
-	  {
-	      sp.printHTML("Exception getting bid: " + e +"<br>");
-	      sp.printHTMLfooter();
-	      return;
-	  }
-
-	  sp.printBidHistory(bid);
       }
-      sp.printBidHistoryFooter();
+      catch (Exception e) 
+      {
+        sp.printHTML("Exception getting bid: " + e +"<br>");
+        sp.printHTMLfooter();
+        return;
+      }
+
+      sp.printBidHistory(bid);
+    }
+    sp.printBidHistoryFooter();
   }
 
 
@@ -167,17 +167,17 @@ public class ViewBidHistory extends HttpServlet
 
     // Try to find the item corresponding to the itemId
     ItemHome iHome;
-      try 
-      {
-	  iHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"),
+    try 
+    {
+      iHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"),
                                                     ItemHome.class);
-      } 
-      catch (Exception e)
-      {
-	  sp.printHTML("Cannot lookup item: " +e+"<br>");
-	  sp.printHTMLfooter();
-	  return ;
-      }
+    } 
+    catch (Exception e)
+    {
+      sp.printHTML("Cannot lookup item: " +e+"<br>");
+      sp.printHTMLfooter();
+      return ;
+    }
     try
     {
       Item item = iHome.findByPrimaryKey(new ItemPK(itemId));

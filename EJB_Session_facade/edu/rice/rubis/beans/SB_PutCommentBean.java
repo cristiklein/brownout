@@ -36,7 +36,7 @@ public class SB_PutCommentBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String getCommentForm(Integer itemId, Integer toId, String username, String password) 
+  public String getCommentForm(Integer itemId, Integer toId, String username, String password) throws RemoteException 
   {
     int userId = -1;
     String html = "";
@@ -55,7 +55,7 @@ public class SB_PutCommentBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Cannot lookup SB_Auth: " +e);
+          throw new RemoteException("Cannot lookup SB_Auth: " +e);
         }
         try 
         {
@@ -63,7 +63,7 @@ public class SB_PutCommentBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Authentication failed: " +e);
+          throw new RemoteException("Authentication failed: " +e);
         }
         if (userId == -1)
         {
@@ -81,7 +81,7 @@ public class SB_PutCommentBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup User or Item: " +e+"<br>");
+      throw new RemoteException("Cannot lookup User or Item: " +e+"<br>");
     }
     try
     {
@@ -89,19 +89,19 @@ public class SB_PutCommentBean implements SessionBean
       Item    item = iHome.findByPrimaryKey(new ItemPK(itemId));
       String  toName = to.getNickName();
 
-      html = "<center><h2>Give feedback about your experience with "+toName+"</h2><br>\n";
-      html = html.concat("<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n"+
-                   "<input type=hidden name=to value="+toId.intValue()+">\n"+
-                   "<input type=hidden name=from value="+userId+">\n"+
-                   "<input type=hidden name=itemId value="+itemId.intValue()+">\n"+
-                   "<center><table>\n"+
-                   "<tr><td><b>From</b><td>"+username+"\n"+
-                   "<tr><td><b>To</b><td>"+toName+"\n"+
-                         "<tr><td><b>About item</b><td>"+item.getName()+"\n");
+      html = "<center><h2>Give feedback about your experience with "+toName+"</h2><br>\n" +
+        "<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n"+
+        "<input type=hidden name=to value="+toId.intValue()+">\n"+
+        "<input type=hidden name=from value="+userId+">\n"+
+        "<input type=hidden name=itemId value="+itemId.intValue()+">\n"+
+        "<center><table>\n"+
+        "<tr><td><b>From</b><td>"+username+"\n"+
+        "<tr><td><b>To</b><td>"+toName+"\n"+
+        "<tr><td><b>About item</b><td>"+item.getName()+"\n";
     }
     catch (Exception e)
     {
-      throw new EJBException("Cannot build comment form: " +e);
+      throw new RemoteException("Cannot build comment form: " +e);
     }
     return html;
   }
@@ -151,7 +151,7 @@ public class SB_PutCommentBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

@@ -39,7 +39,7 @@ public class SB_BrowseRegionsBean implements SessionBean
    * @return a string that is the list of regions in html format
    * @since 1.1
    */
-  public String getRegions() 
+  public String getRegions() throws RemoteException
   {
     
     Collection list;
@@ -54,7 +54,7 @@ public class SB_BrowseRegionsBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup Region: " +e);
+      throw new RemoteException("Cannot lookup Region: " +e);
     }
 
     utx = sessionContext.getUserTransaction();
@@ -76,11 +76,11 @@ public class SB_BrowseRegionsBean implements SessionBean
       try
       {
         utx.rollback();
-        throw new EJBException("Exception getting region list: " + e);
+        throw new RemoteException("Exception getting region list: " + e);
       }
       catch (Exception se) 
       {
-        throw new EJBException("Transaction rollback failed: " + e);
+        throw new RemoteException("Transaction rollback failed: " + e);
       }
     }
     return html;
@@ -95,7 +95,7 @@ public class SB_BrowseRegionsBean implements SessionBean
    * @since 1.1
    */
 
-  public String printRegion(Region region)
+  public String printRegion(Region region) throws RemoteException
   {
     String html;
     try
@@ -105,7 +105,7 @@ public class SB_BrowseRegionsBean implements SessionBean
     }
     catch (RemoteException re)
     {
-      throw new EJBException("Unable to print Region (exception: "+re+")");
+      throw new RemoteException("Unable to print Region (exception: "+re+")");
     }
     return html;
   }
@@ -151,7 +151,7 @@ public class SB_BrowseRegionsBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }

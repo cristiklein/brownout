@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.transaction.UserTransaction;
 
 /**
  * Add a new item in the database
@@ -17,7 +16,6 @@ import javax.transaction.UserTransaction;
  */
 public class RegisterItem extends HttpServlet
 {
-  private static UserTransaction utx = null;
   private static ServletPrinter sp = null;
 
   private void printError(String errorMsg)

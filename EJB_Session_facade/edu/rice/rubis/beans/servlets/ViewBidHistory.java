@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.transaction.UserTransaction;
 import java.util.Enumeration;
 
 /** This servlets displays the list of bids regarding an item.
@@ -76,24 +75,22 @@ public class ViewBidHistory extends HttpServlet
       return ;
     }
 
-    SB_ViewBidHistoryHome viewBidHome;
     SB_ViewBidHistory viewBid;
-     try 
+    try 
     {
-      viewBidHome = (SB_ViewBidHistoryHome)PortableRemoteObject.narrow(initialContext.lookup("SB_ViewBidHistoryHome"),
-                                                     SB_ViewBidHistoryHome.class);
-     viewBid  = viewBidHome.create();
+      SB_ViewBidHistoryHome viewBidHome = (SB_ViewBidHistoryHome)PortableRemoteObject.narrow(initialContext.lookup("SB_ViewBidHistoryHome"),
+                                                                                             SB_ViewBidHistoryHome.class);
+      viewBid = viewBidHome.create();
     } 
     catch (Exception e)
     {
       sp.printHTML("Cannot lookup SB_ViewBidHistory: " +e+"<br>");
       return ;
     }
-     String html;
+    
     try
     {
-      html = viewBid.getBidHistory(itemId);
-      sp.printHTML(html);
+      sp.printHTML(viewBid.getBidHistory(itemId));
 
     }
     catch (Exception e)

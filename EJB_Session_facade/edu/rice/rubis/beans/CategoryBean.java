@@ -93,7 +93,7 @@ public class CategoryBean implements EntityBean
       } 
       catch (Exception e)
       {
-        throw new EJBException("Cannot lookup IDManager: " +e);
+        throw new RemoteException("Cannot lookup IDManager: " +e);
       }
      try 
       {
@@ -104,7 +104,7 @@ public class CategoryBean implements EntityBean
       } 
       catch (Exception e)
       {
-        throw new EJBException("Cannot create category: " +e);
+        throw new RemoteException("Cannot create category: " +e);
       }
       return null; 
   }

@@ -8,7 +8,6 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
-import javax.transaction.UserTransaction;
 import javax.ejb.*;
 
 /** This servlet register a new user in the database and display
@@ -29,7 +28,6 @@ import javax.ejb.*;
 
 public class RegisterUser extends HttpServlet
 {
-  private UserTransaction utx = null;
   private ServletPrinter sp = null;
 
   private void printError(String errorMsg)

@@ -36,7 +36,7 @@ public class SB_PutBidBean implements SessionBean
    * @return a string in html format
    * @since 1.1
    */
-  public String getBiddingForm(Integer itemId, String username, String password) 
+  public String getBiddingForm(Integer itemId, String username, String password) throws RemoteException 
   {
     int userId = -1;
     String html = "";
@@ -53,7 +53,7 @@ public class SB_PutBidBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Cannot lookup SB_Auth: " +e);
+          throw new RemoteException("Cannot lookup SB_Auth: " +e);
         }
         try 
         {
@@ -61,7 +61,7 @@ public class SB_PutBidBean implements SessionBean
         } 
         catch (Exception e)
         {
-          throw new EJBException("Authentication failed: " +e);
+          throw new RemoteException("Authentication failed: " +e);
         }
         if (userId == -1)
         {
@@ -80,7 +80,7 @@ public class SB_PutBidBean implements SessionBean
       } 
       catch (Exception e)
       {
-        throw new EJBException("Cannot lookup SB_ViewItem: " +e+"<br>");
+        throw new RemoteException("Cannot lookup SB_ViewItem: " +e+"<br>");
       }
       try
       {
@@ -88,7 +88,7 @@ public class SB_PutBidBean implements SessionBean
       } 
       catch (Exception e) 
       {
-        throw new EJBException("Exception getting the item information: "+ e +"<br>");
+        throw new RemoteException("Exception getting the item information: "+ e +"<br>");
       }
  
     return html;
@@ -136,7 +136,7 @@ public class SB_PutBidBean implements SessionBean
       }
       catch (Exception e) 
       {
-        throw new EJBException("Cannot get JNDI InitialContext");
+        throw new RemoteException("Cannot get JNDI InitialContext");
       }
     }
   }
