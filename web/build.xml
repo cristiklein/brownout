@@ -1,4 +1,4 @@
-<project name="JOTM web" default="publish" basedir=".">
+<project name="web" default="publish" basedir=".">
 
   <!-- customizable properties -->
   <property file="build.properties" />
