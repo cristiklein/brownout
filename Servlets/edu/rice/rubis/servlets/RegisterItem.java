@@ -200,6 +200,7 @@ public class RegisterItem extends RubisHttpServlet
       
       conn.commit();
       sp.printHTMLfooter();
+      closeConnection();
     } 
     catch (Exception e) 
     {
@@ -207,6 +208,7 @@ public class RegisterItem extends RubisHttpServlet
       try
       {
         conn.rollback();
+        closeConnection();
       }
       catch (Exception se) 
       {

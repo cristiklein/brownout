@@ -82,6 +82,7 @@ public class BrowseRegions extends RubisHttpServlet
       //       {
       //         sp.printHTML("Transaction rollback failed: " + e +"<br>");
       //       }
+      closeConnection();
     }
   }
 

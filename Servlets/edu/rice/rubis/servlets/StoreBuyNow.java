@@ -178,9 +178,11 @@ public class StoreBuyNow extends RubisHttpServlet
     catch (SQLException e)
     {
       sp.printHTML("Failed to execute Query for the item: " +e+"<br>");
+      closeConnection();
       try
       {
         conn.rollback();
+        closeConnection();
       }
       catch (Exception se) 
       {
@@ -204,9 +206,11 @@ public class StoreBuyNow extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Error while storing the BuyNow (got exception: " +e+")<br>");
+      closeConnection();
       try
       {
         conn.rollback();
+        closeConnection();
       }
       catch (Exception se) 
       {

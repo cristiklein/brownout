@@ -66,6 +66,7 @@ public class ViewUserInfo extends RubisHttpServlet
       if (!rs.first())
       {
         sp.printHTML("<h3>There is no comment yet for this user.</h3><br>");
+        conn.commit();
         return;
       }
       else
@@ -99,21 +100,22 @@ public class ViewUserInfo extends RubisHttpServlet
       }
       while (rs.next());
       sp.printCommentFooter();
-      conn.commit();
-      
+      conn.commit(); 
     }
     catch (Exception e)
     {
       sp.printHTML("Exception getting comment list: " + e + "<br>");
+      closeConnection();
       try
       {
         conn.rollback();
+        closeConnection();
       }
       catch (Exception se)
       {
         sp.printHTML("Transaction rollback failed: " + e + "<br>");
+        closeConnection();
       }
-      closeConnection();
     }
   }
 
@@ -136,7 +138,6 @@ public class ViewUserInfo extends RubisHttpServlet
     {
       sp.printHTMLheader("RUBiS ERROR: View user information");
       sp.printHTML("<h3>You must provide a user identifier !<br></h3>");
-      closeConnection();
       sp.printHTMLfooter();
       return;
     }

@@ -173,11 +173,13 @@ public class StoreComment extends RubisHttpServlet
       sp.printHTML("Exception getting comment list: " + e +"<br>");
       try
       {
-        conn.rollback();      
+        conn.rollback(); 
+        closeConnection();     
       }
       catch (Exception se) 
       {
         sp.printHTML("Transaction rollback failed: " + e +"<br>");
+        closeConnection();
       }
       closeConnection();
     }

@@ -123,6 +123,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
       }
       //conn.commit();
+      closeConnection();
     } 
     catch (Exception e) 
     {
@@ -135,6 +136,7 @@ public class SearchItemsByCategory extends RubisHttpServlet
       //       {
       //         printError("Transaction rollback failed: " + e +"<br>");
       //       }
+      closeConnection();
     }
   }
 
@@ -181,7 +183,6 @@ public class SearchItemsByCategory extends RubisHttpServlet
     }
 
     itemList(categoryId, categoryName, page.intValue(), nbOfItems.intValue());
-		closeConnection();
     sp.printHTMLfooter();
   }
 

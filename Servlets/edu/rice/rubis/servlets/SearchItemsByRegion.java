@@ -117,6 +117,7 @@ public class SearchItemsByRegion extends RubisHttpServlet
                            "<a href=\"/servlet/edu.rice.rubis.servlets.SearchItemsByRegion?category="+categoryId+
                            "&region="+regionId+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
       }
+      closeConnection();
     } 
     catch (Exception e) 
     {
@@ -168,7 +169,6 @@ public class SearchItemsByRegion extends RubisHttpServlet
 
     sp.printHTMLheader("RUBiS: Search items by region");
     itemList(categoryId, regionId, page.intValue(), nbOfItems.intValue());
-    closeConnection();
     sp.printHTMLfooter();
   }
 

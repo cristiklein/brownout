@@ -247,6 +247,7 @@ public class StoreBid extends RubisHttpServlet
       sp.printHTMLheader("RUBiS: Bidding result");
       sp.printHTML("<center><h2>Your bid has been successfully processed.</h2></center>\n");
       conn.commit();
+      closeConnection();
     }
     catch (Exception e)
     {
@@ -254,14 +255,14 @@ public class StoreBid extends RubisHttpServlet
       try
       {
         conn.rollback();
+        closeConnection();
       }
       catch (Exception se) 
       {
         printError("Transaction rollback failed: " + e);
       }
       return ;
-    }
-		closeConnection();
+    }	
     sp.printHTMLfooter();
   }
   
