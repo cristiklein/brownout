@@ -133,7 +133,7 @@ public class SB_AboutMeBean implements SessionBean
     } 
     catch (Exception e)
     {
-      throw new RemoteException("Cannot lookup Query: " +e+"<br>");
+      throw new RemoteException("Cannot get information about the user: " +e+"<br>");
     }
     return html.toString();
   }
