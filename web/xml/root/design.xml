@@ -137,7 +137,7 @@ manager and persistence services.
 <p><a href="results/facade.html">Experimental reports</a></p>
 </s2>
 
-<s2 name="EJB 2.0 local interfaces" anchor="sf_local">
+<s2 name="Session facade with local interfaces" anchor="sf_local">
 <p>
 Although the session façade beans and the entity beans execute inside the same JVM, 
 with RMI (Remote Method Invocation) communication between them has to go through all 
@@ -150,10 +150,28 @@ Our final implementation takes advantage of these local interfaces. This impleme
 the session façade pattern, and container-managed persistence. Only session façade beans have 
 a remote interface that is exposed to the servlets. The entity beans only have a local interface 
 that is used by the session façade beans. Therefore, interactions between session and entity 
-beans bypass the communication layers. This implementation is the only one that requires EJB 2.0 
+beans bypass the communication layers. This implementation requires EJB 2.0 
 compliant containers.
 </p>
 <p><a href="results/local.html">Experimental reports</a></p>
+</s2>
+
+<s2 name="MDB" anchor="mdb">
+<p>
+In this implementation, we extract the data access code from the servlets, 
+and move it into Message Driven Beans (MDB). The business logic embedded in the
+ servlets directly invokes methods on the MDB that query the database.
+</p>
+</s2>
+
+<s2 name="EJB CMP 2.0" anchor="cmp2.0">
+<p>
+This implementation uses the session façade pattern and local interfaces as discribed
+above in the "Session facade with local interfaces" section. It also takes advantage 
+of container-managed persistence 2.0. EJB-QL is used in most of the queries
+however a stateless session beans is required to execute some complex queries.
+This implementation requires EJB 2.0 compliant containers.
+</p>
 </s2>
 
     </s1>
