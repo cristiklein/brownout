@@ -5,7 +5,7 @@
 <project>
   <title>RUBiS</title>
 
-  <description></description>
+  <description>RUBiS is an auction site prototype modeled after eBay.com. It is used for design patterns and J2EE servers performance scalability evaluation.</description>
 
   <keywords>RUBiS,benchmark,web,Java,EJB,server,database,servlets,dynamic,content,open,source,free,software</keywords>
 
