@@ -124,6 +124,7 @@ public class BuyNow extends RubisHttpServlet
       float buyNow = irs.getFloat("buy_now");
       int quantity = irs.getInt("quantity");
       int sellerId = irs.getInt("seller");
+      stmt.close();
       String sellerName = null;
       try
       {

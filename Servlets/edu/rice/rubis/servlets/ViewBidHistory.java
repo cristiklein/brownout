@@ -168,6 +168,7 @@ public class ViewBidHistory extends RubisHttpServlet
     {
       if (!rs.first())
       {
+        stmt.close();
         stmt = conn.prepareStatement("SELECT name FROM old_items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         rs = stmt.executeQuery();

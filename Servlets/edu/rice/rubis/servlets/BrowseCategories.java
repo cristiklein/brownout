@@ -147,7 +147,7 @@ public class BrowseCategories extends RubisHttpServlet
           return;
         }
         regionId = rs.getInt("id");
-
+        stmt.close();
       }
       catch (SQLException e)
       {

@@ -248,6 +248,7 @@ public class StoreBid extends RubisHttpServlet
       stmt.executeUpdate();
       stmt.close();
       // update the number of bids and the max bid for the item
+      PreparedStatement update = null;
       try
       {
         stmt =
@@ -257,7 +258,7 @@ public class StoreBid extends RubisHttpServlet
         ResultSet rs = stmt.executeQuery();
         if (rs.first())
         {
-          PreparedStatement update = null;
+          
           int nbOfBids = rs.getInt("nb_of_bids");
           nbOfBids++;
           float oldMaxBid = rs.getFloat("max_bid");
@@ -271,6 +272,7 @@ public class StoreBid extends RubisHttpServlet
             update.setInt(2, nbOfBids);
             update.setInt(3, itemId.intValue());
             update.executeUpdate();
+            update.close();
           }
           else
           {
@@ -279,6 +281,7 @@ public class StoreBid extends RubisHttpServlet
             update.setInt(1, nbOfBids);
             update.setInt(2, itemId.intValue());
             update.executeUpdate();
+            update.close();
           }
 
         }
@@ -294,6 +297,8 @@ public class StoreBid extends RubisHttpServlet
       {
         conn.rollback();
         printError("Failed to update nb of bids and max bid: " + ex, sp);
+        if (update != null) 
+          update.close();
         closeConnection(stmt, conn);
         return;
       }

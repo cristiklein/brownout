@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SellItemForm extends HttpServlet
 {
-  private ServletPrinter sp = null;
+
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
@@ -28,6 +28,7 @@ public class SellItemForm extends HttpServlet
   {
     String categoryId = null, userId = null;
 
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "SellItemForm");
     sp.printHTMLheader("Sell your item");
 

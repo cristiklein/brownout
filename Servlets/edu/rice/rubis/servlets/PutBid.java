@@ -133,32 +133,38 @@ public class PutBid extends RubisHttpServlet
       buyNow = rs.getFloat("buy_now");
       quantity = rs.getInt("quantity");
       sellerId = rs.getInt("seller");
+      
+      PreparedStatement sellerStmt = null;
       try
       {
-        PreparedStatement sellerStmt =
+        sellerStmt =
           conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
         sellerStmt.setInt(1, sellerId);
         ResultSet sellerResult = sellerStmt.executeQuery();
         // Get the seller's name		 
         if (sellerResult.first())
-          sellerName = sellerResult.getString("nickname");
+          sellerName = sellerResult.getString("nickname");       
         else
         {
           printError("Unknown seller", sp);
+          sellerStmt.close();
           closeConnection(stmt, conn);
           return;
         }
+        sellerStmt.close();
 
       }
       catch (SQLException e)
       {
         printError("Failed to executeQuery for seller: " + e, sp);
+        sellerStmt.close();
         closeConnection(stmt, conn);
         return;
       }
+      PreparedStatement maxBidStmt = null;
       try
       {
-        PreparedStatement maxBidStmt =
+        maxBidStmt =
           conn.prepareStatement(
             "SELECT MAX(bid) AS bid FROM bids WHERE item_id=?");
         maxBidStmt.setInt(1, itemId.intValue());
@@ -168,16 +174,19 @@ public class PutBid extends RubisHttpServlet
           maxBid = maxBidResult.getFloat("bid");
         else
           maxBid = initialPrice;
+        maxBidStmt.close();
       }
       catch (SQLException e)
       {
         printError("Failed to executeQuery for max bid: " + e, sp);
+        maxBidStmt.close();
         closeConnection(stmt, conn);
         return;
       }
+      PreparedStatement nbStmt = null;
       try
       {
-        PreparedStatement nbStmt =
+        nbStmt =
           conn.prepareStatement(
             "SELECT COUNT(*) AS bid FROM bids WHERE item_id=?");
         nbStmt.setInt(1, itemId.intValue());
@@ -185,10 +194,12 @@ public class PutBid extends RubisHttpServlet
         // Get the number of bids for this item
         if (nbResult.first())
           nbOfBids = nbResult.getInt("bid");
+        nbStmt.close();
       }
       catch (SQLException e)
       {
         printError("Failed to executeQuery for number of bids: " + e, sp);
+        nbStmt.close();
         closeConnection(stmt, conn);
         return;
       }
