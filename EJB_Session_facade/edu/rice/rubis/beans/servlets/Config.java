@@ -1,7 +1,7 @@
 package edu.rice.rubis.beans.servlets;
 
 /** 
- * JBoss version.
+ * JOnAS version.
  * This class contains the configuration for the servlets
  * like the path of HTML files, etc ...
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
@@ -29,5 +29,5 @@ public class Config
    * JOnAS looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("java:comp/UserTransaction");
    * JBoss looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("UserTransaction");
    */
-  public static final String UserTransaction = "UserTransaction";
+  public static final String UserTransaction = "java:comp/UserTransaction";
 }

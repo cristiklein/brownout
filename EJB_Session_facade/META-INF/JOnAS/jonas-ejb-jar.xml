@@ -300,6 +300,10 @@
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+	<jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
@@ -348,6 +352,10 @@
             <res-ref-name>jdbc/rubis</res-ref-name>
             <jndi-name>mysql</jndi-name>
         </jonas-resource>
+	<jonas-ejb-ref>
+            <ejb-ref-name>ejb/IDManager</ejb-ref-name>
+            <jndi-name>IDManagerHome</jndi-name>
+        </jonas-ejb-ref>
 
         <jdbc-mapping>
             <jndi-name>mysql</jndi-name>
