@@ -13,15 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 public class BrowseRegions extends RubisHttpServlet
 {
   private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.BrowseRegionsPoolSize;
   }
 
-  private void closeConnection()
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -34,9 +33,14 @@ public class BrowseRegions extends RubisHttpServlet
     {
     }
   }
-
+  
+/**
+ * Get the list of regions from the database
+ */
   private void regionList()
   {
+    PreparedStatement stmt = null;
+    Connection conn = null;
     String regionName;
     ResultSet rs = null;
 
@@ -44,7 +48,6 @@ public class BrowseRegions extends RubisHttpServlet
     try
     {
       conn = getConnection();
-      // conn.setAutoCommit(false);	// faster if made inside a Tx
 
       stmt = conn.prepareStatement("SELECT name, id FROM regions");
       rs = stmt.executeQuery();
@@ -52,7 +55,7 @@ public class BrowseRegions extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Failed to executeQuery for the list of regions" + e);
-      closeConnection();
+      closeConnection(stmt, conn);
       return;
     }
     try
@@ -61,7 +64,7 @@ public class BrowseRegions extends RubisHttpServlet
       {
         sp.printHTML(
           "<h2>Sorry, but there is no region available at this time. Database table is empty</h2><br>");
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
       else
@@ -73,21 +76,13 @@ public class BrowseRegions extends RubisHttpServlet
         sp.printRegion(regionName);
       }
       while (rs.next());
-      //conn.commit();
+      closeConnection(stmt, conn);
 
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting region list: " + e + "<br>");
-      //       try
-      //       {
-      //         conn.rollback();
-      //       }
-      //       catch (Exception se) 
-      //       {
-      //         sp.printHTML("Transaction rollback failed: " + e +"<br>");
-      //       }
-      closeConnection();
+      sp.printHTML("Exception getting region list: " + e + "<br>");    
+      closeConnection(stmt, conn);
     }
   }
 
@@ -98,7 +93,6 @@ public class BrowseRegions extends RubisHttpServlet
     sp.printHTMLheader("RUBiS: Available regions");
 
     regionList();
-    closeConnection();
     sp.printHTMLfooter();
   }
 

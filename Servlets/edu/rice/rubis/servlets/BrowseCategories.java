@@ -15,15 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 public class BrowseCategories extends RubisHttpServlet
 {
   private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.BrowseCategoriesPoolSize;
   }
-
-  private void closeConnection()
+  
+  /**
+   * Close the connection and statement.
+   */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -38,21 +40,12 @@ public class BrowseCategories extends RubisHttpServlet
   }
 
   /** List all the categories in the database */
-  private void categoryList(int regionId, int userId)
+  private void categoryList(int regionId, int userId, PreparedStatement stmt, Connection conn)
   {
     String categoryName;
     int categoryId;
     ResultSet rs = null;
-    //     try 
-    //     {
-    // 	faster if made inside a Tx
-    // 	conn.setAutoCommit(false);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    // 	sp.printHTML("Failed to create transaction: " +ex);
-    // 	closeConnection();
-    //     }
+
     // get the list of categories
     try
     {
@@ -62,7 +55,7 @@ public class BrowseCategories extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Failed to execute Query for categories list: " + e);
-      closeConnection();
+      closeConnection(stmt, conn);
       return;
     }
     try
@@ -71,7 +64,7 @@ public class BrowseCategories extends RubisHttpServlet
       {
         sp.printHTML(
           "<h2>Sorry, but there is no category available at this time. Database table is empty</h2><br>");
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
       else
@@ -95,21 +88,11 @@ public class BrowseCategories extends RubisHttpServlet
         }
       }
       while (rs.next());
-      //conn.commit();
     }
     catch (Exception e)
     {
       sp.printHTML("Exception getting categories list: " + e + "<br>");
-
-      // 		       try
-      // 		       {
-      // 		         conn.rollback();
-      // 		       }
-      // 		       catch (Exception se) 
-      // 		       {
-      // 		         sp.printHTML("Transaction rollback failed: " + e +"<br>");
-      // 		       }
-      closeConnection();
+      closeConnection(stmt, conn);
     }
   }
 
@@ -117,6 +100,8 @@ public class BrowseCategories extends RubisHttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    PreparedStatement stmt = null;
+    Connection conn = null;
     int regionId = -1, userId = -1;
     String username = null, password = null;
 
@@ -139,7 +124,7 @@ public class BrowseCategories extends RubisHttpServlet
         sp.printHTML(
           " You don't have an account on RUBiS!<br>You have to register first.<br>");
         sp.printHTMLfooter();
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
     }
@@ -157,7 +142,7 @@ public class BrowseCategories extends RubisHttpServlet
         {
           sp.printHTML(
             " Region " + value + " does not exist in the database!<br>");
-          closeConnection();
+          closeConnection(stmt, conn);
           return;
         }
         regionId = rs.getInt("id");
@@ -166,13 +151,13 @@ public class BrowseCategories extends RubisHttpServlet
       catch (SQLException e)
       {
         sp.printHTML("Failed to execute Query for region: " + e);
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
     }
 
-    categoryList(regionId, userId);
-    closeConnection();
+    categoryList(regionId, userId, stmt, conn);
+    closeConnection(stmt, conn);
     sp.printHTMLfooter();
 
   }
