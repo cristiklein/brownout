@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE project SYSTEM '../../common/dtd/project.dtd'>
+
+<project>
+  <title>RUBiS</title>
+
+  <description></description>
+
+  <keywords>RUBiS,benchmark,web,Java,EJB,server,database,servlets,dynamic,content,open,source,free,software</keywords>
+
+  <body>    
+    <menu>
+      <connect href="index.xml">RUBiS</connect>
+      <menuitem><connect href="http://debian-sf.objectweb.org/projects/RUBiS/">Download</connect></menuitem>
+      <menuitem><connect href="doc/doc_index.xml">Documentation</connect></menuitem>
+      <menuitem><connect href="results.xml">Experimental results</connect></menuitem>
+      <menuitem><connect href="license.xml">License</connect></menuitem>
+      <menuitem><connect href="history.xml">History</connect></menuitem>
+      <menuitem><connect href="http://debian-sf.objectweb.org/projects/RUBiS/">debian-sf page</connect></menuitem>
+    </menu>
+
+    <menu>
+      <legend>Developers' corner</legend>
+      <menuitem><connect href="dev/contrib.xml">Getting involved</connect></menuitem>
+      <menuitem><connect href="dev/topics.xml">Topics</connect></menuitem>
+      <menuitem><connect href="dev/versions.xml">Versions info</connect></menuitem>
+    </menu>
+    
+    <menu>
+      <legend>Resources</legend>
+      <menuitem><a href="http://www.objectweb.org/faq">FAQ</a></menuitem>
+      <menuitem><a href="http://www.objectweb.org/wws">Mailing Lists</a></menuitem>
+      <menuitem><connect href="../resources/search.xml">Search</connect></menuitem>
+      <menuitem><connect href="../resources/cvs.xml">CVS Repositories</connect></menuitem>
+    </menu>
+
+    <menu>
+      <legend>Misc</legend>
+      <menuitem><a href="mailto:emmanuel.cecchet@inrialpes.fr">Contacts</a></menuitem>
+      <menuitem><connect href="team.xml">Team</connect></menuitem>
+      <menuitem><connect href="../mirrors.xml">Mirror sites</connect></menuitem> 
+    </menu>
+  </body>
+</project>
