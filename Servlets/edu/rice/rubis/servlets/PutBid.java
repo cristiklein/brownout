@@ -25,16 +25,17 @@ import javax.servlet.http.HttpServletResponse;
 
 public class PutBid extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+ 
 
   public int getPoolSize()
   {
     return Config.PutBidPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -49,19 +50,25 @@ public class PutBid extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: PutBid");
     sp.printHTML(
       "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
+    
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+     ServletPrinter sp = null;
+     
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
     String pass = request.getParameter("password");
@@ -74,18 +81,21 @@ public class PutBid extends RubisHttpServlet
       || (pass == null)
       || (pass.equals("")))
     {
-      printError("Item id, name and password are required - Cannot process the request<br>");
+      printError("Item id, name and password are required - Cannot process the request<br>", sp);
       return;
     }
     Integer itemId = new Integer(itemStr);
-
+    
+    PreparedStatement stmt = null;
+    Connection conn = null;
     conn = getConnection();
     // Authenticate the user who want to bid
     Auth auth = new Auth(conn, sp);
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      printError(" You don't have an account on RUBiS!<br>You have to register first.<br>");
+      printError(" You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
+      closeConnection(stmt, conn);
       return;
     }
 
@@ -102,14 +112,16 @@ public class PutBid extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("Failed to execute Query for item: " + e);
+      printError("Failed to execute Query for item: " + e, sp);
+      closeConnection(stmt, conn);
       return;
     }
     try
     {
       if (!rs.first())
       {
-        printError("<h2>This item does not exist!</h2>");
+        printError("<h2>This item does not exist!</h2>", sp);
+        closeConnection(stmt, conn);
         return;
       }
       itemName = rs.getString("name");
@@ -132,14 +144,16 @@ public class PutBid extends RubisHttpServlet
           sellerName = sellerResult.getString("nickname");
         else
         {
-          printError("Unknown seller");
+          printError("Unknown seller", sp);
+          closeConnection(stmt, conn);
           return;
         }
 
       }
       catch (SQLException e)
       {
-        printError("Failed to executeQuery for seller: " + e);
+        printError("Failed to executeQuery for seller: " + e, sp);
+        closeConnection(stmt, conn);
         return;
       }
       try
@@ -157,7 +171,8 @@ public class PutBid extends RubisHttpServlet
       }
       catch (SQLException e)
       {
-        printError("Failed to executeQuery for max bid: " + e);
+        printError("Failed to executeQuery for max bid: " + e, sp);
+        closeConnection(stmt, conn);
         return;
       }
       try
@@ -173,7 +188,8 @@ public class PutBid extends RubisHttpServlet
       }
       catch (SQLException e)
       {
-        printError("Failed to executeQuery for number of bids: " + e);
+        printError("Failed to executeQuery for number of bids: " + e, sp);
+        closeConnection(stmt, conn);
         return;
       }
       sp.printItemDescription(
@@ -195,9 +211,10 @@ public class PutBid extends RubisHttpServlet
     }
     catch (Exception e)
     {
-      printError("Exception getting item list: " + e + "<br>");
+      printError("Exception getting item list: " + e + "<br>", sp);
+      closeConnection(stmt, conn);
     }
-    closeConnection();
+    closeConnection(stmt, conn);
     sp.printHTMLfooter();
   }
 
