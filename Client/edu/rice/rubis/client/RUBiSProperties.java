@@ -45,6 +45,7 @@ public class RUBiSProperties
   // Information about web server
   private String webSiteName;
   private int    webSitePort;
+  private String cjdbcSiteName;
   private Vector EJBServers;
   private String EJBHTMLPath;
   private String EJBScriptPath;
@@ -181,6 +182,9 @@ public class RUBiSProperties
       Integer foo  = new Integer(getProperty("httpd_port"));
       webSitePort = foo.intValue();
       System.out.println(webSitePort+"<br><br>");
+      System.out.print("CJDBC server name : ");
+      cjdbcSiteName  = getProperty("cjdbc_hostname");
+      System.out.println(cjdbcSiteName+"<br>");
 
       System.out.print("EJB Server            : ");
       StringTokenizer nodes = new StringTokenizer(getProperty("ejb_server"),",");
@@ -458,6 +462,15 @@ public class RUBiSProperties
     return webSiteName;
   }
 
+  /**
+   * Get the CJDBC server name
+   *
+   * @return CJDBC server name
+   */
+  public String getCJDBCServerName()
+  {
+    return cjdbcSiteName;
+  }
 
   /**
    * Get the database server name
