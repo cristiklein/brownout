@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
 
 /** 
  * Add a new user in the database 
@@ -18,8 +17,6 @@ import javax.transaction.UserTransaction;
  */
 public class RegisterUser extends RubisHttpServlet
 {
-  private UserTransaction utx = null;
-  
 
   public int getPoolSize()
   {
