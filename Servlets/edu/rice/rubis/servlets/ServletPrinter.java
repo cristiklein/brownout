@@ -291,7 +291,7 @@ public class ServletPrinter
 
       if (userId<=0)
       {
-        out.println("<a href=\"/servlet/edu.rice.rubis.servlets.PutBidAuth?itemId="+itemId+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90> on this item</a>\n");
+        out.println("<a href=\"/servlet/edu.rice.rubis.servlets.PutBidAuth?itemId="+itemId+"\"><IMG SRC=\"/Servlet_HTML/bid_now.jpg\" height=22 width=90> on this item</a>\n");
       }
 
       printHTMLHighlighted("Item description");
