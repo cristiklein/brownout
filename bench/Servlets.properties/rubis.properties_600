@@ -13,8 +13,8 @@ ejb_html_path = /EJB_HTML
 ejb_script_path = /servlet
 
 servlets_server = sci21
-servlets_html_path = /Servlet_HTML
-servlets_script_path = /servlet
+servlets_html_path = /rubis_servlets
+servlets_script_path = /rubis_servlets/servlet
 
 php_html_path = /PHP
 php_script_path = /PHP
