@@ -175,12 +175,12 @@
 	  description="Build and install the rubis.jar and ejb_rubis_web.war file in JONAS_ROOT"
 	  depends="jonas_jar, rubis_war" >
     <!-- Copy jar files in JONAS_ROOT -->
-    <copy todir="${jonas.root}/ejbjars">
+    <copy todir="${jonas.root}/ejbjars/autoload">
       <fileset dir="${dist}"
 	       includes="rubis.jar" />
     </copy>
     <!-- Copy war files in JONAS_ROOT -->
-    <copy todir="${jonas.root}/webapps">
+    <copy todir="${jonas.root}/webapps/autoload">
       <fileset dir="${dist}"
 	       includes="ejb_rubis_web.war" />
     </copy>
