@@ -84,15 +84,15 @@ public class SB_SearchItemsByCategoryBean implements SessionBean
     } 
     catch (Exception e)
     {
-      //      try
-      //     {
-      //       utx.rollback();
+      //try
+      //{
+      //utx.rollback();
         throw new RemoteException("Cannot get items list: " +e);
-        //      }
-        //      catch (Exception se) 
-        //      {
-        //        throw new RemoteException("Transaction rollback failed: " + se);
-        //      }
+        //}
+    //catch (Exception se) 
+    //{
+    //throw new RemoteException("Transaction rollback failed: " + se);
+    //}
     }
     return html.toString();
   }
