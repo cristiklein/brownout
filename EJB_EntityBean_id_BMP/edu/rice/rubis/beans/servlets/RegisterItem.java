@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.UserTransaction;
 
 import edu.rice.rubis.beans.Item;
 import edu.rice.rubis.beans.ItemHome;
@@ -41,8 +40,7 @@ public class RegisterItem extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
-  {
-    UserTransaction utx = null;
+  {  
     ServletPrinter sp = null;
     String name = null, description = null;
     float initialPrice, buyNow, reservePrice;
