@@ -9,7 +9,6 @@
   <property environment="myenv"/>
   <property name="jonas.root" value="${myenv.JONAS_ROOT}" />
   <property name="jboss.dist" value="${myenv.JBOSS_DIST}" />
-  <property name="orb" value="${myenv.OBJECTWEB_ORB}" />
 
  <!-- Set the uncustomizable properties -->
  
@@ -68,8 +67,9 @@
   </target>
 
 <!-- Create a war file-->
-  <target name="rubis_war" depends="init, compile, servlets_jar">
+  <target name="rubis_war" depends="init, compile, servlets_jar, jonas_jar, jboss_jar">
     <copy file="${dist}/rubis_ejb_servlets.jar" todir="${web.dir}/WEB-INF/lib"/>
+    <copy file="${dist}/rubis.jar" todir="${web.dir}/WEB-INF/lib"/>
      <war destfile="${dist}/ejb_rubis_web.war" webxml="${web.dir}/WEB-INF/web.xml" basedir="${web.dir}">
 	<fileset dir="${classes.dir}"
 		 includes="*"/>
@@ -90,7 +90,7 @@
   <path id="base.classpath">
     <pathelement location="${classes.dir}" />
     <fileset dir="${lib.dir}">
-      <include name="${orb}_jonas.jar"/>
+      <include name="jonas.jar"/>
       <include name="web*.jar"/>
     </fileset>
     <fileset dir="${j2ee}/lib">
@@ -131,7 +131,7 @@
 	   location="${jonas.root}/xml/jonas-ejb-jar_2_5.dtd" />
       <jonas destdir="${dist}"
              jonasroot="${jonas.root}"
-             orb="${orb}"/>
+             protocols="${protocols.names}"/>
       <include name="**/ejb-jar.xml"/>
       <exclude name="**/jonas-ejb-jar.xml"/>
       <support dir="${classes.dir}">
