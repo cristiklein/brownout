@@ -429,6 +429,123 @@ public class QueryBean implements SessionBean
     return v;
   }
 
+  /**
+   * Get all the items, their maximum bid (or initial price if no bid)
+   * and number of bids for items that match a specific category 
+   * and that are still to sell (auction end date is not passed).
+   * This function returns a vector of ItemAndBids objects.
+   *
+   * @param categoryId id of the category you are looking for
+   * @param startingRow row where result starts (0 if beginning)
+   * @param nbOfRows number of rows to get
+   * @return Vector of ItemAndBids objects.
+   * @exception RemoteException if an error occurs
+   * @deprecated This method is useless since maximum bid and number of bids have been moved to items table for performance purposes.
+   */
+  public Vector getItemsMaxBidAndNbOfBidsInCategory(Integer categoryId, int startingRow, int nbOfRows) throws RemoteException
+  {
+    Connection        conn = null;
+    PreparedStatement stmt = null;
+    Vector v = new Vector();
+
+    try 
+    {
+      conn = dataSource.getConnection();
+      stmt = conn.prepareStatement("SELECT items.id, items.name, items.initial_price, items.end_date, count(bids.id) AS count, max(bid) AS max FROM items LEFT JOIN bids ON items.id=bids.item_id WHERE items.category=? AND end_date>=NOW() GROUP BY items.id LIMIT ?,?");
+      stmt.setInt(1, categoryId.intValue());
+      stmt.setInt(2, startingRow);
+      stmt.setInt(3, nbOfRows);
+      ResultSet rs = stmt.executeQuery();
+
+      // Build the vector of primary keys
+      while (rs.next()) 
+      {
+        float max = rs.getFloat("max");
+        if (max == 0)
+          max = rs.getFloat("items.initial_price");
+        ItemAndBids iAb = new ItemAndBids(rs.getInt("items.id"), rs.getString("items.name"),
+                                          rs.getString("items.end_date"),max, rs.getInt("count"));
+        v.addElement(iAb);
+      };
+    }
+    catch (SQLException e)
+    {
+      throw new EJBException("Failed to executeQuery " +e);
+    }
+    finally
+    {
+      try 
+      {
+        if (stmt != null) stmt.close();	// close statement
+        if (conn != null) conn.close();	// release connection
+      } 
+      catch (Exception ignore) 
+      {
+      }
+    }
+    return v;
+  }
+
+
+  /** 
+   * Get all the items, their maximum bid (or initial price if no
+   * bid) and number of bids for items that match a specific category 
+   * and region and that are still to sell (auction end date is not passed).
+   * This function returns a vector of ItemAndBids objects.
+   *
+   * @param categoryId id of the category you are looking for
+   * @param regionId id of the region you are looking for
+   * @param startingRow row where result starts (0 if beginning)
+   * @param nbOfRows number of rows to get
+   *
+   * @return Vector of ItemAndBids objects.
+   * @deprecated This method is useless since maximum bid and number of bids have been moved to items table for performance purposes.
+   */
+  public Vector getItemsMaxBidAndNbOfBidsInCategoryAndRegion(Integer categoryId, Integer regionId, int startingRow, int nbOfRows) throws RemoteException
+  {
+    Connection        conn = null;
+    PreparedStatement stmt = null;
+    Vector v = new Vector();
+
+    try 
+    {
+      conn = dataSource.getConnection();
+      stmt = conn.prepareStatement("SELECT items.id, items.name, items.initial_price, items.end_date, count(bids.id) AS count, max(bid) AS max FROM items LEFT JOIN users ON items.seller=users.id LEFT JOIN bids ON items.id=bids.item_id WHERE items.category=? AND users.region=? AND end_date>=NOW() GROUP BY items.id LIMIT ?,?");
+      stmt.setInt(1, categoryId.intValue());
+      stmt.setInt(2, regionId.intValue());
+      stmt.setInt(3, startingRow);
+      stmt.setInt(4, nbOfRows);
+      ResultSet rs = stmt.executeQuery();
+
+      // Build the vector of primary keys
+      while (rs.next()) 
+      {
+        float max = rs.getFloat("max");
+        if (max == 0)
+          max = rs.getFloat("items.initial_price");
+        ItemAndBids iAb = new ItemAndBids(rs.getInt("items.id"), rs.getString("items.name"),
+                                          rs.getString("items.end_date"),max, rs.getInt("count"));
+        v.addElement(iAb);
+      };
+    }
+    catch (SQLException e)
+    {
+      throw new EJBException("Failed to executeQuery " +e);
+    }
+    finally
+    {
+      try 
+      {
+        if (stmt != null) stmt.close();	// close statement
+        if (conn != null) conn.close();	// release connection
+      } 
+      catch (Exception ignore) 
+      {
+      }
+    }
+    return v;
+  }
+
 
   // ======================== EJB related methods ============================
 
@@ -474,5 +591,7 @@ public class QueryBean implements SessionBean
       }
     }
   }
+
+
 
 }
