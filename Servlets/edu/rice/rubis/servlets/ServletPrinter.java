@@ -385,7 +385,7 @@ public class ServletPrinter
           "<p><a href=\"/servlet/edu.rice.rubis.servlets.BuyNowAuth?itemId="
             + itemId
             + "\">"
-            + "<IMG SRC=\"/EJB_HTML/buy_it_now.jpg\" height=22 width=150></a>"
+            + "<IMG SRC=\"/Servlet_HTML/buy_it_now.jpg\" height=22 width=150></a>"
             + "  <BIG><b>You can buy this item right now for only $"
             + buyNow
             + "</b></BIG><br><p>\n");
