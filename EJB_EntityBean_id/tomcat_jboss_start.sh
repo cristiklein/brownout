@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CLASSPATH=${JBOSS_DIST}/client/jnp-client.jar:${JBOSS_DIST}/client/jnet.jar:${JBOSS_DIST}/client/jbossall-client.jar:${JBOSS_DIST}/client/jboss-j2ee.jar:/users/margueri/RUBiS/EJB_Session_facade/rubis.jar
+CLASSPATH=${JBOSS_DIST}/client/jnp-client.jar:${JBOSS_DIST}/client/jnet.jar:${JBOSS_DIST}/client/jbossall-client.jar:${JBOSS_DIST}/client/jboss-j2ee.jar:/users/margueri/RUBiS/EJB_EntityBean_id/rubis.jar
 export CLASSPATH
 
 ### JBoss + JNP ###
