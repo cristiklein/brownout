@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # classpath jonas 2.6/ 3.x rmi
-#CLASSPATH="$JAVA_HOME"/lib/tools.jar:"$JONAS_ROOT"/lib/RMI_client.jar:"$JONAS_ROOT"/lib/RMI_jonas.jar:/users/margueri/RUBiS/EJB_EntityBean_id/rubis.jar
+#CLASSPATH=${JONAS_ROOT}/lib/RMI_client.jar:${JONAS_ROOT}/lib/RMI_jonas.jar:/users/margueri/RUBiS/EJB_EntityBean_id/rubis.jar
 
 # classpath jonas 2.6/ 3.x jeremie
-#CLASSPATH="$JAVA_HOME"/lib/tools.jar:"$JONAS_ROOT"/lib/JEREMIE_client.jar:"$JONAS_ROOT"/lib/JEREMIE_jonas.jar:/users/margueri/RUBiS/EJB_EntityBean_id/rubis.jar
+#CLASSPATH=${JONAS_ROOT}/lib/JEREMIE_client.jar:${JONAS_ROOT}/lib/JEREMIE_jonas.jar:/users/margueri/RUBiS/EJB_EntityBean_id/rubis.jar
 
 # classpath jonas 3.1 with carol
-#CLASSPATH="$JAVA_HOME"/lib/tools.jar:"$JONAS_ROOT"/lib/client.jar:"$JONAS_ROOT"/lib/jonas.jar:"$JONAS_ROOT"/lib/common/carol/carol.jar:/users/margueri/RUBiS/EJB_EntityBean_id/rubis.jar
+#CLASSPATH=${JONAS_ROOT}/lib/client.jar:${JONAS_ROOT}/lib/jonas.jar:${JONAS_ROOT}/lib/common/carol/carol.jar:/users/margueri/RUBiS/EJB_EntityBean_id/rubis.jar
 
 # classpath for jonas2.5
 #. $JONAS_ROOT/bin/unix/config_env
