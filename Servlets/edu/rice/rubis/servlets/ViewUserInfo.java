@@ -1,3 +1,4 @@
+
 package edu.rice.rubis.servlets;
 
 import java.io.IOException;
@@ -10,25 +11,28 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** This servlets displays general information about a user.
- * It must be called this way :
+/**
+ * This servlets displays general information about a user. It must be called
+ * this way :
+ * 
  * <pre>
- * http://..../ViewUserInfo?userId=xx where xx is the id of the user
- * /<pre>
+ * 
+ *  http://..../ViewUserInfo?userId=xx where xx is the id of the user
+ *  
+ * </pre>
  */
 
 public class ViewUserInfo extends RubisHttpServlet
 {
-
 
   public int getPoolSize()
   {
     return Config.ViewUserInfoPoolSize;
   }
 
-/**
- * Close both statement and connection to the database.
- */
+  /**
+   * Close both statement and connection to the database.
+   */
   private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
@@ -36,17 +40,24 @@ public class ViewUserInfo extends RubisHttpServlet
       if (conn != null)
         if (conn.getAutoCommit() == false)
           conn.rollback();
-      if (stmt != null)
-        stmt.close(); // close statement
-      if (conn != null)
-        releaseConnection(conn);
     }
     catch (Exception ignore)
     {
     }
+    try
+    {
+      if (stmt != null)
+        stmt.close(); // close statement
+    }
+    catch (SQLException e)
+    {
+    }
+    if (conn != null)
+      releaseConnection(conn);
   }
 
-  private void commentList(Integer userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
+  private void commentList(Integer userId, PreparedStatement stmt,
+      Connection conn, ServletPrinter sp)
   {
     ResultSet rs = null;
     String date, comment;
@@ -59,8 +70,8 @@ public class ViewUserInfo extends RubisHttpServlet
       // Try to find the comment corresponding to the user
       try
       {
-        stmt =
-          conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
+        stmt = conn
+            .prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
         stmt.setInt(1, userId.intValue());
         rs = stmt.executeQuery();
       }
@@ -93,7 +104,8 @@ public class ViewUserInfo extends RubisHttpServlet
         PreparedStatement authorStmt = null;
         try
         {
-          authorStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+          authorStmt = conn
+              .prepareStatement("SELECT nickname FROM users WHERE id=?");
           authorStmt.setInt(1, authorId);
           authorRS = authorStmt.executeQuery();
           if (authorRS.first())
@@ -131,13 +143,13 @@ public class ViewUserInfo extends RubisHttpServlet
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
+      throws IOException, ServletException
   {
     doPost(request, response);
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
+      throws IOException, ServletException
   {
     String value = request.getParameter("userId");
     Integer userId;
@@ -195,8 +207,8 @@ public class ViewUserInfo extends RubisHttpServlet
       String result = new String();
 
       result = result + "<h2>Information about " + nickname + "<br></h2>";
-      result =
-        result + "Real life name : " + firstname + " " + lastname + "<br>";
+      result = result + "Real life name : " + firstname + " " + lastname
+          + "<br>";
       result = result + "Email address  : " + email + "<br>";
       result = result + "User since     : " + date + "<br>";
       result = result + "Current rating : <b>" + rating + "</b><br>";
@@ -216,8 +228,8 @@ public class ViewUserInfo extends RubisHttpServlet
   }
 
   /**
-  * Clean up the connection pool.
-  */
+   * Clean up the connection pool.
+   */
   public void destroy()
   {
     super.destroy();
