@@ -22,7 +22,7 @@ public class Config
   /**
    * Returns the path to the directory where the HTML header and footer are stored.
    */
-  public static final String HTMLFilesPath = "/home/margueri/proton/RUBiS/ejb_rubis_web";
+  public static final String HTMLFilesPath = "/home/margueri/RUBiS/ejb_rubis_web";
 
 
   /**
