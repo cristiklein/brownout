@@ -16,9 +16,15 @@
   
       <ol>
 	<li><a href="install.html">Installation and Configuration Guide</a></li>
-      </ol>
+      </ol>   
     </s1>
 
+     <s1 name="Contributed documentation">
+  
+      <ol>
+	<li><a href="http://crash.stanford.edu/resources/rubis.html">Guide to Installing RUBiS 1.4.1 on JBoss 3.2.1</a></li>
+      </ol>   
+    </s1>
 
 
     <s1 name="Papers" anchor="paper">
