@@ -180,6 +180,7 @@ public class StoreBuyNow extends RubisHttpServlet
       }
       quantity = irs.getInt("quantity");
       quantity = quantity - qty;
+      stmt.close();
       if (quantity == 0)
       {
         stmt =
@@ -189,6 +190,7 @@ public class StoreBuyNow extends RubisHttpServlet
         stmt.setInt(2, quantity);
         stmt.setInt(3, itemId.intValue());
         stmt.executeUpdate();
+        stmt.close();
       }
       else
       {
@@ -196,6 +198,7 @@ public class StoreBuyNow extends RubisHttpServlet
         stmt.setInt(1, quantity);
         stmt.setInt(2, itemId.intValue());
         stmt.executeUpdate();
+        stmt.close();
       }
     }
     catch (SQLException e)
@@ -227,6 +230,7 @@ public class StoreBuyNow extends RubisHttpServlet
             + now
             + "\")");
       stmt.executeUpdate();
+      
       conn.commit();
       sp.printHTMLheader("RUBiS: BuyNow result");
       if (qty == 1)

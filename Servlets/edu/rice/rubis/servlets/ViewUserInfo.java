@@ -19,16 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ViewUserInfo extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.ViewUserInfoPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection to the database.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -45,7 +46,7 @@ public class ViewUserInfo extends RubisHttpServlet
     }
   }
 
-  private void commentList(Integer userId)
+  private void commentList(Integer userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
     ResultSet rs = null;
     String date, comment;
@@ -67,12 +68,14 @@ public class ViewUserInfo extends RubisHttpServlet
       {
         sp.printHTML("Failed to execute Query for list of comments: " + e);
         conn.rollback();
+        closeConnection(stmt, conn);
         return;
       }
       if (!rs.first())
       {
         sp.printHTML("<h3>There is no comment yet for this user.</h3><br>");
         conn.commit();
+        closeConnection(stmt, conn);
         return;
       }
       sp.printHTML("<br><hr><br><h3>Comments for this user</h3><br>");
@@ -87,18 +90,22 @@ public class ViewUserInfo extends RubisHttpServlet
 
         String authorName = "none";
         ResultSet authorRS = null;
+        PreparedStatement authorStmt = null;
         try
         {
-          stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-          stmt.setInt(1, authorId);
+          authorStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+          authorStmt.setInt(1, authorId);
           authorRS = stmt.executeQuery();
           if (authorRS.first())
             authorName = authorRS.getString("nickname");
+          authorStmt.close();
         }
         catch (Exception e)
         {
           sp.printHTML("Failed to execute Query for the comment author: " + e);
           conn.rollback();
+          authorStmt.close();
+          closeConnection(stmt, conn);
           return;
         }
         sp.printComment(authorName, authorId, date, comment);
@@ -113,10 +120,12 @@ public class ViewUserInfo extends RubisHttpServlet
       try
       {
         conn.rollback();
+        closeConnection(stmt, conn);
       }
       catch (Exception se)
       {
         sp.printHTML("Transaction rollback failed: " + e + "<br>");
+        closeConnection(stmt, conn);
       }
     }
   }
@@ -133,6 +142,9 @@ public class ViewUserInfo extends RubisHttpServlet
     String value = request.getParameter("userId");
     Integer userId;
     ResultSet rs = null;
+    ServletPrinter sp = null;
+    PreparedStatement stmt = null;
+    Connection conn = null;
 
     sp = new ServletPrinter(response, "ViewUserInfo");
 
@@ -159,7 +171,7 @@ public class ViewUserInfo extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Failed to execute Query for user: " + e);
-      closeConnection();
+      closeConnection(stmt, conn);
       sp.printHTMLfooter();
       return;
     }
@@ -168,7 +180,7 @@ public class ViewUserInfo extends RubisHttpServlet
       if (!rs.first())
       {
         sp.printHTML("<h2>This user does not exist!</h2>");
-        closeConnection();
+        closeConnection(stmt, conn);
         sp.printHTMLfooter();
         return;
       }
@@ -178,6 +190,7 @@ public class ViewUserInfo extends RubisHttpServlet
       String email = rs.getString("email");
       String date = rs.getString("creation_date");
       int rating = rs.getInt("rating");
+      stmt.close();
 
       String result = new String();
 
@@ -193,13 +206,13 @@ public class ViewUserInfo extends RubisHttpServlet
     catch (SQLException s)
     {
       sp.printHTML("Failed to get general information about the user: " + s);
-      closeConnection();
+      closeConnection(stmt, conn);
       sp.printHTMLfooter();
       return;
     }
-    commentList(userId);
+    commentList(userId, stmt, conn, sp);
     sp.printHTMLfooter();
-    closeConnection();
+    closeConnection(stmt, conn);
   }
 
   /**

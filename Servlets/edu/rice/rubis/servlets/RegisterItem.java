@@ -216,6 +216,7 @@ public class RegisterItem extends RubisHttpServlet
           return;
         }
         itemId = irs.getInt("id");
+        
       }
       catch (SQLException e)
       {

@@ -95,6 +95,7 @@ public class ViewItem extends RubisHttpServlet
     {
       if (!rs.first())
       {
+        stmt.close();
         stmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         rs = stmt.executeQuery();
@@ -132,9 +133,10 @@ public class ViewItem extends RubisHttpServlet
       if (maxBid < initialPrice)
         maxBid = initialPrice;
 
+      PreparedStatement sellerStmt = null;
       try
       {
-        PreparedStatement sellerStmt =
+        sellerStmt =
           conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
         sellerStmt.setInt(1, sellerId);
         ResultSet sellerResult = sellerStmt.executeQuery();
@@ -144,14 +146,17 @@ public class ViewItem extends RubisHttpServlet
         else
         {
           sp.printHTML("Unknown seller");
+          sellerStmt.close();
           closeConnection(stmt, conn);
           return;
         }
+        sellerStmt.close();
 
       }
       catch (SQLException e)
       {
         sp.printHTML("Failed to executeQuery for seller: " + e);
+        sellerStmt.close();
         closeConnection(stmt, conn);
         return;
       }
