@@ -28,9 +28,9 @@ import javax.ejb.*;
 
 public class RegisterUser extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Register user");
     sp.printHTML("<h2>Your registration has not been processed due to the following error :</h2><br>");
@@ -48,6 +48,8 @@ public class RegisterUser extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    
     String firstname=null, lastname=null, nickname=null, email=null, password=null;
     int    regionId = 0;
     int    userId;
@@ -62,14 +64,14 @@ public class RegisterUser extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
     String value = request.getParameter("firstname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a first name!<br>");
+      printError("You must provide a first name!<br>", sp);
       return ;
     }
     else
@@ -78,7 +80,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("lastname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a last name!<br>");
+      printError("You must provide a last name!<br>", sp);
       return ;
     }
     else
@@ -87,7 +89,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("nickname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a nick name!<br>");
+      printError("You must provide a nick name!<br>", sp);
       return ;
     }
     else
@@ -96,7 +98,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("email");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide an email address!<br>");
+      printError("You must provide an email address!<br>", sp);
       return ;
     }
     else
@@ -105,7 +107,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("password");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a password!<br>");
+      printError("You must provide a password!<br>", sp);
       return ;
     }
     else
@@ -115,7 +117,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a valid region!<br>");
+      printError("You must provide a valid region!<br>", sp);
       return ;
     }
     else
@@ -132,7 +134,7 @@ public class RegisterUser extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_RegisterUser: " +e+"<br>");
+      printError("Cannot lookup SB_RegisterUser: " +e+"<br>", sp);
       return ;
     }
     String html;
