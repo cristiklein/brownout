@@ -88,7 +88,7 @@ public class SB_PutCommentBean implements SessionBean
       String  toName = to.getNickName();
 
       html = "<center><h2>Give feedback about your experience with "+toName+"</h2><br>\n" +
-        "<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n"+
+        "<form action=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n"+
         "<input type=hidden name=to value="+toId.intValue()+">\n"+
         "<input type=hidden name=from value="+userId+">\n"+
         "<input type=hidden name=itemId value="+itemId.intValue()+">\n"+
