@@ -88,8 +88,8 @@
 	access control.EJB containers automatically manage bean persistence, relieving the
 	programmer of writing SQL code. We use these facilities to implement various <a href="design.html#ejb_patterns">EJB versions</a>
 	of RUBiS.</p>
-	<p>While using EJB 1.1 CMP model, we use session beans for complex queries 
-	that require joins on several database tables.</p>
+	<p>While using EJB 1.1 or 2.0 CMP model, we use session beans for complex queries 
+	that cannot be executed using CMP.</p>
 	<p>The Java servlets are used only as the presentation tier, to generate the HTML 
 	reply from the information retrieved from the bean.
 	</p>
