@@ -25,7 +25,7 @@ client. Valid options are : PHP, Servlets, EJB (respect the case)</code></em></p
 <p><code>ejb_server = jonas.cs.rice.edu</code><em><code># leave
 this field blank if you don't use the EJB version or if the EJB server
 is co-located with another server.</code></em></p>
-<p><code>ejb_html_path = /EJB_HTML</code></p>
+<p><code>ejb_html_path = /ejb_rubis_web</code></p>
 <p><code>ejb_script_path = /servlet</code></p>
 
 <p><strong># Servlet server information</strong></p>
