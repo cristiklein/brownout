@@ -16,7 +16,10 @@ all_beans_obj = $(addprefix edu/rice/rubis/beans/, $(addsuffix .class, $(BeansFi
 
 # Common build
 
-beans:  $(all_beans_obj)
+config_ejb:
+	${CP} edu/rice/rubis/beans/QueryBean${DB_SERVER}.java edu/rice/rubis/beans/QueryBean.java
+
+beans: config_ejb $(all_beans_obj)
 
 base-jar:
 	${RM} -f rubis.jar
@@ -63,7 +66,13 @@ EJB_Servlets = ServletPrinter Config \
 all_ejb_servlets_sources =  $(addprefix edu/rice/rubis/beans/servlets/, $(addsuffix .java, $(EJB_Servlets)))
 all_ejb_servlets_obj = $(addprefix edu/rice/rubis/beans/servlets/, $(addsuffix .class, $(EJB_Servlets)))
 
-ejb_servlets: $(all_ejb_servlets_obj)
+config_jonas:
+	${CP} edu/rice/rubis/beans/servlets/ConfigJOnAS.java edu/rice/rubis/beans/servlets/Config.java
+
+config_jboss:
+	${CP} edu/rice/rubis/beans/servlets/ConfigJBoss.java edu/rice/rubis/beans/servlets/Config.java
+
+ejb_servlets: config_$(EJB_SERVER) $(all_ejb_servlets_obj)
 	${JAR} cvf rubis_ejb_servlets.jar $(all_ejb_servlets_obj)
 
 all: ejb_servlets beans $(EJB_SERVER)-jar
