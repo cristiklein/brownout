@@ -207,7 +207,7 @@ public class InitDB
         description = description+staticDescription;
         descriptionLength -= staticDescriptionLength;
       }
-      description = staticDescription.substring(0, descriptionLength);
+      description += staticDescription.substring(0, descriptionLength);
       initialPrice = rand.nextInt(5000)+1;
       duration = rand.nextInt(7)+1;
       if (i < oldItems)
@@ -285,7 +285,7 @@ public class InitDB
           comment = comment+staticComment[rating];
           commentLength -= staticCommentLength[rating];
         }
-        comment = staticComment[rating].substring(0, commentLength);
+        comment += staticComment[rating].substring(0, commentLength);
             
         // Call the HTTP server to store this comment
         url = urlGen.storeComment(i+1, sellerId, rand.nextInt(getNbOfUsers)+1, ratingValue[rating], comment);
