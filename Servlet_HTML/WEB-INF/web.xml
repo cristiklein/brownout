@@ -115,102 +115,102 @@
 
     <servlet-mapping>
       <servlet-name>AboutMe</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.AboutMe</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.AboutMe</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>BrowseCategories</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.BrowseCategories</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.BrowseCategories</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>BrowseRegions</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.BrowseRegions</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.BrowseRegions</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>StoreBuyNow</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.StoreBuyNow</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.StoreBuyNow</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>BuyNow</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.BuyNow</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.BuyNow</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>BuyNowAuth</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.BuyNowAuth</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.BuyNowAuth</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>PutBid</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.PutBid</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.PutBid</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>PutBidAuth</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.PutBidAuth</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.PutBidAuth</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>PutComment</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.PutComment</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.PutComment</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>PutCommentAuth</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.PutCommentAuth</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.PutCommentAuth</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>RegisterItem</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.RegisterItem</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.RegisterItem</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>RegisterUser</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.RegisterUser</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.RegisterUser</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>SearchItemsByCategory</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.SearchItemsByCategory</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.SearchItemsByCategory</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>SearchItemsByRegion</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.SearchItemsByRegion</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.SearchItemsByRegion</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>SellItemForm</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.SellItemForm</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.SellItemForm</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>StoreBid</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.StoreBid</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.StoreBid</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>StoreComment</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.StoreComment</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.StoreComment</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>ViewBidHistory</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.ViewBidHistory</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.ViewBidHistory</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>ViewItem</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.ViewItem</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.ViewItem</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
       <servlet-name>ViewUserInfo</servlet-name>
-      <url-pattern>/edu.rice.rubis.servlets.ViewUserInfo</url-pattern>
+      <url-pattern>/servlet/edu.rice.rubis.servlets.ViewUserInfo</url-pattern>
     </servlet-mapping>
 
     <session-config>
