@@ -217,7 +217,7 @@ public class StoreBid extends RubisHttpServlet
           if (bid > oldMaxBid)
           {
             oldMaxBid = bid;
-            update = conn.prepareStatement("UPDATE items SET max_bid=? AND nb_of_bids=? WHERE id=?");
+            update = conn.prepareStatement("UPDATE items SET max_bid=?, nb_of_bids=? WHERE id=?");
             update.setFloat(1, maxBid);
             update.setInt(2, nbOfBids);
             update.setInt(3, itemId.intValue());

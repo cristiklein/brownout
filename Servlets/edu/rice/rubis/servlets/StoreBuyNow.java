@@ -160,7 +160,7 @@ public class StoreBuyNow extends RubisHttpServlet
       quantity = quantity -qty;
       if (quantity == 0)
       {
-        stmt = conn.prepareStatement("UPDATE items SET end_date=? AND quantity=? WHERE id=?");
+        stmt = conn.prepareStatement("UPDATE items SET end_date=?, quantity=? WHERE id=?");
         stmt.setString(1, now);
         stmt.setInt(2, quantity);
         stmt.setInt(3, itemId.intValue());
