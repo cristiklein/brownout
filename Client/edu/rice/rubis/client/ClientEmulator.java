@@ -178,11 +178,13 @@ public class ClientEmulator
     // Give 5 seconds extra for init
     try
     {
-      String[] cmd = new String[3];
+      String[] cmd = new String[5];
       cmd[0] = rubis.getMonitoringRsh();
       cmd[1] = node.trim();
-      cmd[2] =
-        rubis.getMonitoringProgram()
+      cmd[2] = "/bin/bash";
+      cmd[3] = "-c";
+      cmd[4] = "'LANG=en_GB.UTF-8 "
+          + rubis.getMonitoringProgram()
           + " "
           + rubis.getMonitoringOptions()
           + " "
@@ -190,7 +192,8 @@ public class ClientEmulator
           + " "
           + fullTimeInSec
           + " > "
-          + outputFileName;
+          + outputFileName
+	  + "'";
       System.out.println(
         "&nbsp &nbsp Command is: "
           + cmd[0]
@@ -198,6 +201,10 @@ public class ClientEmulator
           + cmd[1]
           + " "
           + cmd[2]
+          + " "
+          + cmd[3]
+          + " "
+          + cmd[4]
           + "<br>\n");
       return Runtime.getRuntime().exec(cmd);
     }
