@@ -172,7 +172,7 @@ public class SB_ViewItemBean implements SessionBean
             bidStmt.setInt(1, itemId.intValue());
             bidStmt.setInt(2, qty);
             bidResult = bidStmt.executeQuery();
-            bidStmt.close(); // close statement
+            
           }
           catch (SQLException e)
           {
@@ -202,6 +202,7 @@ public class SB_ViewItemBean implements SessionBean
                 break;
               }
             }
+            bidStmt.close(); // close statement
           }
           catch (Exception e)
           {
