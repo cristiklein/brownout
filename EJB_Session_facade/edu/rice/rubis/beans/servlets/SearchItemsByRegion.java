@@ -75,7 +75,7 @@ public class SearchItemsByRegion extends HttpServlet
         {
           sp.printHTML("<h3>Sorry, but there is no more items in this category for this region.</h3><br>");
           sp.printItemHeader();
-          sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+categoryId+
+          sp.printItemFooter("<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+categoryId+
                              "&region="+regionId+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>", "");
         }
         return ;
