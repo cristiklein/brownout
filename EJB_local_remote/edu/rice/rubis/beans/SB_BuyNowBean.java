@@ -42,7 +42,7 @@ public class SB_BuyNowBean implements SessionBean
     String html = "";
 
     // Authenticate the user who want to comment
-      if ((username != null && username !="") || (password != null && password !=""))
+      if ((username != null && !username.equals("")) || (password != null && !password.equals("")))
       {
         SB_AuthLocalHome authHome = null;
         SB_AuthLocal auth = null;
@@ -109,9 +109,9 @@ public class SB_BuyNowBean implements SessionBean
       html = html + "<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n<TR><TD align=\"center\" width=\"100%\"><FONT size=\"4\" color=\"#000000\"><B>You are ready to buy this item: "+itemName+"</B></FONT></TD></TR>\n</TABLE><p>\n" + item.printItemDescriptionToBuyNow(userId);
       ;
     }
-    catch (RemoteException re)
+    catch (Exception re)
     {
-      throw new RemoteException("Unable to print Item description (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Item description (exception: "+re+")<br>\n");
     }
     return html;
   }

@@ -13,7 +13,6 @@ import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
 import java.io.Serializable;
-import javax.transaction.UserTransaction;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.net.URLEncoder;
@@ -30,7 +29,6 @@ public class SB_SearchItemsByCategoryBean implements SessionBean
   protected SessionContext sessionContext;
   protected Context initialContext = null;
   protected DataSource dataSource = null;
-  //private UserTransaction utx = null;
 
 
   /**
@@ -68,11 +66,9 @@ public class SB_SearchItemsByCategoryBean implements SessionBean
       throw new RemoteException("Cannot lookup Item: " +e);
     }
 
-    //utx = sessionContext.getUserTransaction();
 
     try 
     {
-      //utx.begin();
       list = query.getCurrentItemsInCategory(categoryId, page*nbOfItems, nbOfItems).elements();
       while (list.hasMoreElements()) 
       {
@@ -80,19 +76,11 @@ public class SB_SearchItemsByCategoryBean implements SessionBean
         item = iHome.findByPrimaryKey(itemPK);
         html.append(printItem(item));
       }
-      //utx.commit();
     } 
     catch (Exception e)
     {
-      //try
-      //{
-      //utx.rollback();
         throw new RemoteException("Cannot get items list: " +e);
-        //}
-    //catch (Exception se) 
-    //{
-    //throw new RemoteException("Transaction rollback failed: " + se);
-    //}
+
     }
     return html.toString();
   }
@@ -111,9 +99,9 @@ public class SB_SearchItemsByCategoryBean implements SessionBean
     {
       return item.printItem();
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Item (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Item (exception: "+re+")<br>\n");
     }
   }
   

@@ -490,9 +490,9 @@ public class SB_AboutMeBean implements SessionBean
     {
       return item.printItemUserHasBidOn(bid.getMaxBid())+"&nickname="+URLEncoder.encode(username)+"&password="+URLEncoder.encode(password)+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n";
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Item (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Item (exception: "+re+")<br>\n");
     }
   }
 
@@ -550,9 +550,9 @@ public class SB_AboutMeBean implements SessionBean
     {
       return comment.printComment(userName);
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Comment (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Comment (exception: "+re+")<br>\n");
     }
   }
 

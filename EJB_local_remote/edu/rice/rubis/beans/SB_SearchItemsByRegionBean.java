@@ -110,9 +110,9 @@ public class SB_SearchItemsByRegionBean implements SessionBean
     {
       return item.printItem();
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Item (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Item (exception: "+re+")<br>\n");
     }
   }
   

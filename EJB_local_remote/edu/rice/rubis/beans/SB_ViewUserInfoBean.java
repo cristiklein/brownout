@@ -170,9 +170,9 @@ public class SB_ViewUserInfoBean implements SessionBean
     {
       return comment.printComment(userName);
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Comment (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Comment (exception: "+re+")<br>\n");
     }
   }
 

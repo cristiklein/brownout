@@ -103,9 +103,9 @@ public class SB_BrowseRegionsBean implements SessionBean
       String name = region.getName();
       html = "<a href=\"/servlet/edu.rice.rubis.beans.servlets.BrowseCategories?region="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Region (exception: "+re+")");
+      throw new EJBException("Unable to print Region (exception: "+re+")");
     }
     return html;
   }

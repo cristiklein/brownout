@@ -75,7 +75,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
     else
     {
       // Authenticate the user who wants to sell items
-      if ((username != null && username !="") || (password != null && password !=""))
+      if ((username != null && !username.equals("")) || (password != null && !password.equals("")))
       {
         SB_AuthLocalHome authHome = null;
         SB_AuthLocal auth = null;
@@ -174,9 +174,9 @@ public class SB_BrowseCategoriesBean implements SessionBean
     {
       html = (category.printCategory());
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Category 1 (exception: "+re+")");
+      throw new EJBException("Unable to print Category 1 (exception: "+re+")");
     }
     return html;
   }
@@ -193,9 +193,9 @@ public class SB_BrowseCategoriesBean implements SessionBean
     {
       html = (category.printCategoryByRegion(regionId));
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Category 2 (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Category 2 (exception: "+re+")<br>\n");
     }
     return html;
   }
@@ -212,9 +212,9 @@ public class SB_BrowseCategoriesBean implements SessionBean
     {
       html = (category.printCategoryToSellItem(userId));
     }
-    catch (RemoteException re)
+    catch (EJBException re)
     {
-      throw new RemoteException("Unable to print Category 3 (exception: "+re+")<br>\n");
+      throw new EJBException("Unable to print Category 3 (exception: "+re+")<br>\n");
     }
     return html;
   }
