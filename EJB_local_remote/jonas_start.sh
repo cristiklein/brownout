@@ -13,5 +13,8 @@ JAVA_OPTS="-Xms128m -Xmx768m -Xss16k"
 
 export JAVA_OPTS
 
-#registry &
-EJBServer &
+# jonas<2.6
+#EJBServer &
+
+# since jonas 2.6
+jonas start
