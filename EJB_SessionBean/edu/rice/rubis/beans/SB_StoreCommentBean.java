@@ -73,6 +73,7 @@ public class SB_StoreCommentBean implements SessionBean
        throw new RemoteException("Error while storing the comment (got exception: " +e+")<br>");
       }
       // Try to find the user corresponding to the 'to' ID
+      PreparedStatement pstmt = null;
       try
       {
         stmt = conn.prepareStatement("SELECT rating FROM users WHERE id=?");
@@ -83,23 +84,24 @@ public class SB_StoreCommentBean implements SessionBean
         {
           int userRating = rs.getInt("rating");
           userRating = userRating + rating;
- 
-          stmt = conn.prepareStatement("UPDATE users SET rating=? WHERE id=?");
-          stmt.setInt(1, userRating);
-          stmt.setInt(2, toId.intValue());
-          stmt.executeUpdate();
-          
+          pstmt =conn.prepareStatement("UPDATE users SET rating=? WHERE id=?");
+          pstmt.setInt(1, userRating);
+          pstmt.setInt(2, toId.intValue());
+          pstmt.executeUpdate();
+          pstmt.close();
         }
         stmt.close();
       }
       catch (SQLException e)
       {
+        try { pstmt.close(); } catch (Exception ignore) {}
         try { stmt.close(); } catch (Exception ignore) {}
         try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Error while updating user's rating (got exception: " +e+")<br>");
       }
-      if (conn != null) conn.close();
+     
       utx.commit();
+      conn.close();
     }
     catch (Exception e)
     {
