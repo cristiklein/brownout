@@ -91,7 +91,7 @@
                  <select>
                    <ejb-name>Item</ejb-name>
                  </select>
-                 <from>items, users</from>
+                 <from>, users</from>
                 <where><![CDATA[items.category={0} AND users.id = items.seller AND users.region={1} AND end_date>=NOW()]]></where>
                 <other><![CDATA[LIMIT {2},{3}]]></other>
               </declared-sql>
@@ -165,8 +165,8 @@
                  <select>
                    <ejb-name>Item</ejb-name>
                  </select>
-                 <from>items, bids</from>
-                 <where><![CDATA[bids.user_id={0} AND bids.item_id=items.id AND bids.max_bid>=items.max_bid AND items.max_bid<=bids.bid AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30]]></where>
+                 <from>, bids</from>
+                 <where><![CDATA[bids.user_id={0} AND bids.item_id=items.id AND bids.max_bid>=items.max_bid AND items.max_bid<=bids.bid AND TO_DAYS(NOW()) - TO_DAYS(items.end_date) < 30 AND items.end_date>=NOW()]]></where>
               </declared-sql>
            </query>
             <query>
@@ -180,7 +180,7 @@
                  <select>
                    <ejb-name>Bid</ejb-name>
                  </select>
-                 <from>items, bids</from>
+                 <from>, items</from>
                  <where><![CDATA[bids.user_id={0} AND bids.item_id=items.id AND bids.max_bid>=items.max_bid AND items.max_bid<=bids.bid AND items.end_date>=NOW()]]></where>
               </declared-sql>
            </query>
@@ -525,6 +525,24 @@
               </ejb-relationship-role>
               <ejb-relationship-role>
                 <ejb-relationship-role-name>many-items-belong-to-one-user</ejb-relationship-role-name>
+                <key-fields/>
+             </ejb-relationship-role>
+        </ejb-relation>
+
+        <ejb-relation>
+           <ejb-relation-name>User-Bid</ejb-relation-name>
+           <foreign-key-mapping/>
+              <ejb-relationship-role>
+                <ejb-relationship-role-name>one-user-puts-many-bids</ejb-relationship-role-name>
+                <key-fields>
+                  <key-field>
+                    <field-name>id</field-name>
+                    <column-name>fk_user_id</column-name>
+                  </key-field>
+               </key-fields>
+              </ejb-relationship-role>
+              <ejb-relationship-role>
+                <ejb-relationship-role-name>many-bids-belong-to-one-user</ejb-relationship-role-name>
                 <key-fields/>
              </ejb-relationship-role>
         </ejb-relation>

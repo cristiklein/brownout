@@ -176,7 +176,7 @@ public class SB_AboutMeBean implements SessionBean
     
     if ((pastItemList == null) || (pastItemList.isEmpty()))
     {
-      sell.append("<br><h3>You didn't sell any item.</h3>");
+      sell.append(printHTMLHighlighted("<br><h3>You didn't sell any item in the last 30 days.</h3>"));
       return sell.toString();
     }
     // display past sellings
@@ -231,7 +231,7 @@ public class SB_AboutMeBean implements SessionBean
     }
     if ((buyList == null) || (buyList.isEmpty()))
     {
-      return "<br><h3>You didn't buy any item in the last 30 days.</h3><br>";
+      return printHTMLHighlighted("<br><h3>You didn't buy any item in the last 30 days.</h3><br>");
     }
     html.append(printUserBoughtItemHeader());
     
@@ -277,7 +277,7 @@ public class SB_AboutMeBean implements SessionBean
       Iterator it = wonList.iterator();
       if ((wonList == null) || (!it.hasNext()))
       {
-        return "<br><h3>You didn't win any item in the last 30 days.</h3><br>";
+        return printHTMLHighlighted("<br><h3>You didn't win any item in the last 30 days.</h3><br>");
       }
     html = new StringBuffer(printUserWonItemHeader());
       while (it.hasNext()) 
@@ -291,47 +291,6 @@ public class SB_AboutMeBean implements SessionBean
     }
   html.append(printItemFooter());
     return html.toString();
-
-//     Collection  wonList=null;
-//     QueryLocal        q;
-//     ItemLocal         item;
-//     float        price;
-//     String       name;
-//     StringBuffer html;
-
-//     // Get the list of the user's won items
-//     try 
-//     {
-//       q = qHome.create();
-//       wonList = q.getUserWonItems(userId).elements();
-//     }
-//     catch (Exception e)
-//     {
-//       throw new RemoteException("Exception getting won items list: " +e+"<br>");
-//     }
-
-//     if ((wonList == null) || (!wonList.hasMoreElements()))
-//     {
-//       return "<br><h3>You didn't win any item in the last 30 days.</h3><br>";
-//     }
-//     html = new StringBuffer(printUserWonItemHeader());
-
-//     while (wonList.hasMoreElements()) 
-//     {
-//       // Get the name of the items
-//       try
-//       {
-//         item = iHome.findByPrimaryKey((ItemPK)wonList.nextElement());
-//         // display information about the item
-//         html.append(item.printUserWonItem());
-//       }
-//       catch (Exception e) 
-//       {
-//         throw new RemoteException("Exception getting item: " + e +"<br>");
-//       }
-//     }
-//     html.append(printItemFooter());
-//     return html.toString();
   }
 
 
@@ -415,69 +374,6 @@ public class SB_AboutMeBean implements SessionBean
     }
   html.append(printItemFooter());
     return html.toString();
-
-//     Enumeration  bidList=null;
-//     QueryLocal        q;
-//     BidLocalHome      bidHome;
-//     BidLocal          bid;
-//     ItemLocal         item;
-//     float        price;
-//     String       name;
-//     StringBuffer html;
-
-//     // Get the list of the user's last bids
-//     try 
-//     {
-//       q = qHome.create();
-//       bidList = q.getUserBids(userId).elements();
-//     }
-//     catch (Exception e)
-//     {
-//       throw new RemoteException("Exception getting bids list: " +e+"<br>");
-//     }
-//     if ((bidList == null) || (!bidList.hasMoreElements()))
-//     {
-//       return printHTMLHighlighted("<h3>You didn't put any bid.</h3>");
-//     }
-
-//     // Lookup bid home interface
-//     try 
-//     {
-//       bidHome = (BidLocalHome)initialContext.lookup("java:comp/env/ejb/Bid");
-//     } 
-//     catch (Exception e)
-//     {
-//       throw new RemoteException("Cannot lookup Bid: " +e+"<br>");
-//     }
-
-//     html = new StringBuffer(printUserBidsHeader());
-
-//     while (bidList.hasMoreElements()) 
-//     {
-//       // Get the amount of the last bids
-//       try
-//       {
-//         bid = bidHome.findByPrimaryKey((BidPK)bidList.nextElement());
-//       }
-//       catch (Exception e) 
-//       {
-//         throw new RemoteException("Exception getting bid: " + e +"<br>");
-//       }
-
-//       // Get the name of the items
-//       try
-//       {
-//         item = iHome.findByPrimaryKey(new ItemPK(bid.getItemId()));
-//         html.append(printItemUserHasBidOn(bid, item, username, password));
-//       }
-//       catch (Exception e) 
-//       {
-//         throw new RemoteException("Exception getting item: " + e +"<br>");
-//       }
-//       //  display information about user's bids
-//     }
-//     html.append(printItemFooter());
-//     return html.toString();
   }
 
   /** 

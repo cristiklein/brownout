@@ -224,8 +224,8 @@ public abstract class UserBean implements EntityBean
    public abstract void setItems(Collection items);
 
   // This entity bean has a one to many relationship with the bid entity.
-//   public abstract Collection getBids();
-//   public abstract void setBids(Collection bids);
+  public abstract Collection getBids();
+  public abstract void setBids(Collection bids);
 
   // This entity bean has a one to many relationship with the buyNow entity.
 

@@ -252,16 +252,7 @@ This is the JBoss 3.0 EJB deployment descriptor for RUBiS.
         <resource-name>rubis</resource-name>
       </resource-ref>
     </session>
-<!--
-    <session>
-      <ejb-name>Query</ejb-name>
-      <jndi-name>QueryHome</jndi-name>
-      <resource-ref>
-        <res-ref-name>jdbc/rubis</res-ref-name>
-        <resource-name>rubis</resource-name>
-      </resource-ref>
-    </session>
--->
+
   </enterprise-beans>
 
 
