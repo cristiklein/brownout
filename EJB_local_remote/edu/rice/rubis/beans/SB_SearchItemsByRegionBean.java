@@ -30,7 +30,7 @@ public class SB_SearchItemsByRegionBean implements SessionBean
   protected SessionContext sessionContext;
   protected Context initialContext = null;
   protected DataSource dataSource = null;
-  private UserTransaction utx = null;
+  //  private UserTransaction utx = null;
 
 
   /**
@@ -67,11 +67,11 @@ public class SB_SearchItemsByRegionBean implements SessionBean
       throw new RemoteException("Cannot lookup Item: " +e);
     }
 
-    utx = sessionContext.getUserTransaction();
+    //    utx = sessionContext.getUserTransaction();
 
     try 
     {
-      utx.begin();
+      //utx.begin();
       list = query.getCurrentItemsInCategoryAndRegion(categoryId, regionId, page*nbOfItems, nbOfItems).elements();
         while (list.hasMoreElements()) 
         {
@@ -79,19 +79,19 @@ public class SB_SearchItemsByRegionBean implements SessionBean
           item = iHome.findByPrimaryKey(itemPK);
           html.append(printItem(item));
         }
-      utx.commit();
+        //utx.commit();
     } 
     catch (Exception e)
     {
-      try
-      {
-        utx.rollback();
+      //      try
+      //      {
+      //        utx.rollback();
         throw new RemoteException("Cannot get items list: " +e);
-      }
-      catch (Exception se) 
-      {
-        throw new RemoteException("Transaction rollback failed: " + e);
-      }
+        //      }
+        //      catch (Exception se) 
+        //      {
+        //        throw new RemoteException("Transaction rollback failed: " + e);
+        //      }
     }
     return html.toString();
   }
