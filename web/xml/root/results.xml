@@ -70,7 +70,7 @@ for the experiments (SQL dump in ASCII format compressed with gzip).</p>
 <p> Download JOnAS configuration files: <a href="../results/config_files/JOnAS-RMI.tgz">JOnAS-RMI</a> 
  version, <a href="../results/config_files/JOnAS-Jeremie.tgz">JOnAS-Jeremie</a>  version,
  <a href="../results/config_files/JOnAS-2.5.tgz">JOnAS 2.5</a> (EJB 2.0) version. </p>
-<p> Download JBoss configuration files: <a href="JBoss.tgz">JBoss</a>  version,
+<p> Download JBoss configuration files: <a href="/results/config_files/JBoss.tgz">JBoss</a>  version,
 <a href="../results/config_files/JBoss-opt.tgz">JBoss optimized calls </a> version,
 <a href="../results/config_files/JBoss-3.0.tgz">JBoss 3.0</a> (EJB 2.0) version.</p>
 <p> Download
