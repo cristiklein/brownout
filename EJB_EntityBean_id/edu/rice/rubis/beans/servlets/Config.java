@@ -26,8 +26,9 @@ public class Config
 
   /**
    * Return the UserTransaction name to look for since JBoss does not support full class names
-   * JOnAS looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("java:comp/UserTransaction");
+   * JOnAS 2.4 and 2.5 looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("java:comp/UserTransaction");
+   * JOnAS 2.6 looks like: utx = (UserTransaction)initialContext.lookup("javax.transaction.UserTransaction");
    * JBoss looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("UserTransaction");
    */
-  public static final String UserTransaction = "java:comp/UserTransaction";
+  public static final String UserTransaction = "javax.transaction.UserTransaction";
 }
