@@ -2,6 +2,7 @@ package edu.rice.rubis.beans.servlets;
 
 import javax.naming.Context;
 import javax.rmi.PortableRemoteObject;
+import javax.servlet.http.HttpServlet;
 
 import edu.rice.rubis.beans.User;
 import edu.rice.rubis.beans.UserHome;
@@ -11,7 +12,7 @@ import edu.rice.rubis.beans.UserHome;
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public class Auth
+public class Auth extends HttpServlet
 {
 
   private Context servletContext;
