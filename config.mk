@@ -22,7 +22,7 @@ MKDIR = /bin/mkdir
 
 
 # EJB server: supported values are jonas or jboss
-EJB_SERVER = jonas
+EJB_SERVER = jboss
 
 # DB server: supported values are MySQL or PostgreSQL
 DB_SERVER = MySQL
