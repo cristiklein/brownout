@@ -128,11 +128,12 @@ public class StoreComment extends HttpServlet
       return ;
     }
     // Try to find the user corresponding to the 'to' ID
-    UserHome uHome;
+    User to;
     try 
     {
-      uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"),
-                                                    UserHome.class);
+      UserHome uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"),
+                                                             UserHome.class);
+      to = uHome.findByPrimaryKey(new UserPK(toId));
     } 
     catch (Exception e)
     {
@@ -165,7 +166,6 @@ public class StoreComment extends HttpServlet
     try
     {
       Comment c = cHome.create(fromId, toId, itemId, rating.intValue(), comment);
-      User    to = uHome.findByPrimaryKey(new UserPK(toId));
       to.updateRating(rating.intValue());
       utx.commit();
       sp.printHTMLheader("RUBiS: Comment posting");
