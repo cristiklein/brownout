@@ -28,9 +28,9 @@ import edu.rice.rubis.beans.ItemPK;
 
 public class BuyNow extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Buy now");
     sp.printHTML(
@@ -50,6 +50,7 @@ public class BuyNow extends HttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
     String pass = request.getParameter("password");
@@ -62,7 +63,7 @@ public class BuyNow extends HttpServlet
       || (pass == null)
       || (pass.equals("")))
     {
-      printError("Item id, name and password are required - Cannot process the request<br>");
+      printError("Item id, name and password are required - Cannot process the request<br>", sp);
       return;
     }
 
@@ -73,7 +74,7 @@ public class BuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      printError("Cannot get initial context for JNDI: " + e + "<br>", sp);
       return;
     }
 
@@ -82,7 +83,7 @@ public class BuyNow extends HttpServlet
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      printError(" You don't have an account on RUBiS!<br>You have to register first.<br>");
+      printError(" You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
       return;
     }
 
@@ -97,7 +98,7 @@ public class BuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup Item: " + e + "<br>");
+      printError("Cannot lookup Item: " + e + "<br>", sp);
       return;
     }
     try
@@ -110,7 +111,7 @@ public class BuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Exception getting the item: " + e + "<br>");
+      printError("Exception getting the item: " + e + "<br>", sp);
     }
 
     sp.printHTMLfooter();

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SellItemForm extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
   /**
    * Call the <code>doGet</code> method.
@@ -43,7 +43,8 @@ public class SellItemForm extends HttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
-    String categoryId = null, userId = null;
+    ServletPrinter sp = null;
+    String  categoryId=null, userId=null;
     Context initialContext = null;
 
     sp = new ServletPrinter(response, "SellItemForm");

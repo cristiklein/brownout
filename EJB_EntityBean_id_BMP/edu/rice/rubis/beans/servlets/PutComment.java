@@ -33,9 +33,9 @@ import edu.rice.rubis.beans.UserPK;
 
 public class PutComment extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: PutComment");
     sp.printHTML(
@@ -55,6 +55,7 @@ public class PutComment extends HttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String toStr = request.getParameter("to");
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
@@ -70,7 +71,7 @@ public class PutComment extends HttpServlet
       || (pass == null)
       || (pass.equals("")))
     {
-      printError("User id, name and password are required - Cannot process the request<br>");
+      printError("User id, name and password are required - Cannot process the request<br>", sp);
       return;
     }
 
@@ -81,7 +82,7 @@ public class PutComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      printError("Cannot get initial context for JNDI: " + e + "<br>", sp);
       return;
     }
 
@@ -90,7 +91,7 @@ public class PutComment extends HttpServlet
     int userId = auth.authenticate(name, pass);
     if (userId == -1)
     {
-      printError("You don't have an account on RUBiS!<br>You have to register first.<br>");
+      printError("You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
       return;
     }
 
@@ -110,7 +111,7 @@ public class PutComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup User or Item: " + e + "<br>");
+      printError("Cannot lookup User or Item: " + e + "<br>", sp);
       return;
     }
 
@@ -162,7 +163,7 @@ public class PutComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("This item does not exist (got exception: " + e + ")<br>");
+      printError("This item does not exist (got exception: " + e + ")<br>", sp);
       return;
     }
 
