@@ -55,7 +55,7 @@ public abstract class IDManagerBean implements EntityBean
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextCategoryID()
+  public synchronized Integer getNextCategoryID()
   {
     setCategoryCount(new Integer(getCategoryCount().intValue()+1));
     isDirty = true; // the bean content has been modified
@@ -68,7 +68,7 @@ public abstract class IDManagerBean implements EntityBean
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextRegionID()
+  public synchronized Integer getNextRegionID()
   {
     setRegionCount(new Integer(getRegionCount().intValue()+1));
     isDirty = true; // the bean content has been modified
@@ -81,7 +81,7 @@ public abstract class IDManagerBean implements EntityBean
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextUserID()
+  public synchronized Integer getNextUserID()
   {
     setUserCount(new Integer(getUserCount().intValue()+1));
     isDirty = true; // the bean content has been modified
@@ -94,7 +94,7 @@ public abstract class IDManagerBean implements EntityBean
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextItemID()
+  public synchronized Integer getNextItemID()
   {
     setItemCount(new Integer(getItemCount().intValue()+1));
     isDirty = true; // the bean content has been modified
@@ -107,7 +107,7 @@ public abstract class IDManagerBean implements EntityBean
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextCommentID()
+  public synchronized Integer getNextCommentID()
   {
     setCommentCount(new Integer(getCommentCount().intValue()+1));
     isDirty = true; // the bean content has been modified
@@ -120,7 +120,7 @@ public abstract class IDManagerBean implements EntityBean
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextBidID()
+  public synchronized Integer getNextBidID()
   {
     setBidCount(new Integer(getBidCount().intValue()+1));
     isDirty = true; // the bean content has been modified
@@ -133,7 +133,7 @@ public abstract class IDManagerBean implements EntityBean
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextBuyNowID()
+  public synchronized Integer getNextBuyNowID()
   {
     setBuyNowCount(new Integer(getBuyNowCount().intValue()+1));
     isDirty = true; // the bean content has been modified
