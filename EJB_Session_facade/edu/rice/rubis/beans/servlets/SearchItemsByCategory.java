@@ -78,18 +78,18 @@ public class SearchItemsByCategory extends HttpServlet
         {
           sp.printHTML("<h2>Sorry, but there are no more items available in this category !</h2>");
           //          sp.printItemHeader();
-          sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+          sp.printItemFooter("<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>", "");
         }
         return ;
       }
       if (page == 0)
-        sp.printItemFooter("", "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+        sp.printItemFooter("", "<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
       else
-        sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+        sp.printItemFooter("<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>",
-                           "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+                           "<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
     } 
     catch (Exception e) 

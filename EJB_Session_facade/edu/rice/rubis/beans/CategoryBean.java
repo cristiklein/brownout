@@ -191,7 +191,7 @@ public class CategoryBean implements EntityBean
    */
   public String printCategory() throws RemoteException
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
                   "&categoryName="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
   }
 
@@ -204,7 +204,7 @@ public class CategoryBean implements EntityBean
    */
   public String printCategoryByRegion(int regionId) throws RemoteException
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
       "&categoryName="+URLEncoder.encode(name)+"&region="+regionId+"\">"+name+"</a><br>\n";
   }
 
@@ -231,6 +231,6 @@ public class CategoryBean implements EntityBean
    */
   public String printCategoryToSellItem(int userId) throws RemoteException
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
   }
 }
