@@ -476,7 +476,7 @@ public class ServletPrinter
                   "<td><input type=text size=5 name=qty></td></tr></table></center>\n");
       else
         printHTML("<input type=hidden name=qty value=1>\n");
-      printHTML("</table><p><center><input type=submit value=\"Buy now!\"></center><p>\n");
+      printHTML("<p><center><input type=submit value=\"Buy now!\"></center><p>\n");
     }
     catch (Exception e)
     {
