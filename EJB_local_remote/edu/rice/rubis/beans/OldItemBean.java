@@ -65,7 +65,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Integer getId() throws RemoteException
+  public Integer getId()
   {
     return id;
   }
@@ -77,7 +77,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getName() throws RemoteException
+  public String getName()
   {
     return name;
   }
@@ -89,7 +89,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getDescription() throws RemoteException
+  public String getDescription()
   {
     return description;
   }
@@ -101,7 +101,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getInitialPrice() throws RemoteException
+  public float getInitialPrice()
   {
     return initialPrice;
   }
@@ -113,7 +113,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public int getQuantity() throws RemoteException
+  public int getQuantity()
   {
     return quantity;
   }
@@ -125,7 +125,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getReservePrice() throws RemoteException
+  public float getReservePrice()
   {
     return reservePrice;
   }
@@ -137,7 +137,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getBuyNow() throws RemoteException
+  public float getBuyNow()
   {
     return buyNow;
   }
@@ -149,7 +149,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public float getMaxBid() throws RemoteException
+  public float getMaxBid()
   {
     return maxBid;
   }
@@ -161,7 +161,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public int getNbOfBids() throws RemoteException
+  public int getNbOfBids()
   {
     return nbOfBids;
   }
@@ -173,7 +173,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getStartDate() throws RemoteException
+  public String getStartDate()
   {
     return startDate;
   }
@@ -185,7 +185,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getEndDate() throws RemoteException
+  public String getEndDate()
   {
     return endDate;
   }
@@ -197,7 +197,7 @@ public class OldItemBean implements EntityBean
    * @since 1.0
    * @exception RemoteException if an error occurs
    */
-  public Integer getSellerId() throws RemoteException
+  public Integer getSellerId()
   {
     return sellerId;
   }
@@ -210,7 +210,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Integer getCategoryId() throws RemoteException
+  public Integer getCategoryId()
   {
     return categoryId;
   }
@@ -224,7 +224,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getSellerNickname() throws RemoteException
+  public String getSellerNickname()
   {
     Context initialContext = null;
     try
@@ -268,7 +268,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getCategoryName() throws RemoteException
+  public String getCategoryName()
   {
     Context initialContext = null;
     try
@@ -312,7 +312,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setId(Integer newId) throws RemoteException
+  public void setId(Integer newId)
   {
     id = newId;
     isDirty = true; // the bean content has been modified
@@ -325,7 +325,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setName(String newName) throws RemoteException 
+  public void setName(String newName) 
   {
     name = newName;
     isDirty = true; // the bean content has been modified
@@ -338,7 +338,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setDescription(String newDescription) throws RemoteException 
+  public void setDescription(String newDescription) 
   {
     description = newDescription;
     isDirty = true; // the bean content has been modified
@@ -351,7 +351,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setInitialPrice(float newInitialPrice) throws RemoteException
+  public void setInitialPrice(float newInitialPrice)
   {
     initialPrice = newInitialPrice;
     isDirty = true; // the bean content has been modified
@@ -377,7 +377,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setReservePrice(float newReservePrice) throws RemoteException
+  public void setReservePrice(float newReservePrice)
   {
     reservePrice = newReservePrice;
     isDirty = true; // the bean content has been modified
@@ -390,7 +390,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setBuyNow(float newBuyNow) throws RemoteException
+  public void setBuyNow(float newBuyNow) 
   {
     buyNow = newBuyNow;
     isDirty = true; // the bean content has been modified
@@ -404,7 +404,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public void setMaxBid(float newMaxBid) throws RemoteException
+  public void setMaxBid(float newMaxBid)
   {
     if (newMaxBid > maxBid)
       maxBid = newMaxBid;
@@ -418,7 +418,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public void setNbOfBids(int newNbOfBids) throws RemoteException
+  public void setNbOfBids(int newNbOfBids) 
   {
     nbOfBids = newNbOfBids;
     isDirty = true; // the bean content has been modified
@@ -430,7 +430,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public void addOneBid() throws RemoteException
+  public void addOneBid()
   {
     nbOfBids++;
     isDirty = true; // the bean content has been modified
@@ -443,7 +443,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setStartDate(String newDate) throws RemoteException
+  public void setStartDate(String newDate)
   {
     startDate = newDate;
     isDirty = true; // the bean content has been modified
@@ -456,7 +456,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setEndDate(String newDate) throws RemoteException
+  public void setEndDate(String newDate) 
   {
     endDate = newDate;
     isDirty = true; // the bean content has been modified
@@ -470,7 +470,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setSellerId(Integer id) throws RemoteException
+  public void setSellerId(Integer id) 
   {
     sellerId = id;
     isDirty = true; // the bean content has been modified
@@ -484,7 +484,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setCategoryId(Integer id) throws RemoteException
+  public void setCategoryId(Integer id)
   {
     categoryId = id;
     isDirty = true; // the bean content has been modified
@@ -516,7 +516,7 @@ public class OldItemBean implements EntityBean
    */
   public OldItemPK ejbCreate(Integer itemId, String itemName, String itemDescription, float itemInitialPrice,
                           int itemQuantity, float itemReservePrice, float itemBuyNow, int duration,
-                          Integer itemSellerId, Integer itemCategoryId) throws CreateException, RemoteException, RemoveException
+                          Integer itemSellerId, Integer itemCategoryId) throws CreateException, RemoveException
   {
     GregorianCalendar start = new GregorianCalendar();
 
@@ -550,17 +550,17 @@ public class OldItemBean implements EntityBean
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbStore() throws RemoteException
+  public void ejbStore()
   {
     isDirty = false;
   }
 
   /** This method is empty because persistence is managed by the container */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbRemove() throws RemoteException, RemoveException {}
+  public void ejbRemove() throws RemoveException {}
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -579,7 +579,7 @@ public class OldItemBean implements EntityBean
    *                           higher specification should throw the javax.ejb.EJBException 
    *                           instead of this exception. 
    */
-  public void setEntityContext(EntityContext context) throws RemoteException
+  public void setEntityContext(EntityContext context)
   {
     entityContext = context;
   }
@@ -601,7 +601,7 @@ public class OldItemBean implements EntityBean
    *                           higher specification should throw the javax.ejb.EJBException 
    *                           instead of this exception.
    */
-  public void unsetEntityContext() throws RemoteException
+  public void unsetEntityContext()
   {
     entityContext = null;
   }

@@ -55,7 +55,7 @@ public class UserBean implements EntityBean
    * @return user id
    * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException
+  public Integer getId()
   {
     return id;
   }
@@ -66,7 +66,7 @@ public class UserBean implements EntityBean
    * @return user first name
    * @exception RemoteException if an error occurs
    */
-  public String getFirstName() throws RemoteException
+  public String getFirstName()
   {
     return firstName;
   }
@@ -77,7 +77,7 @@ public class UserBean implements EntityBean
    * @return user last name
    * @exception RemoteException if an error occurs
    */
-  public String getLastName() throws RemoteException
+  public String getLastName()
   {
     return lastName;
   }
@@ -88,7 +88,7 @@ public class UserBean implements EntityBean
    * @return user nick name
    * @exception RemoteException if an error occurs
    */
-  public String getNickName() throws RemoteException
+  public String getNickName()
   {
     return nickName;
   }
@@ -99,7 +99,7 @@ public class UserBean implements EntityBean
    * @return user password
    * @exception RemoteException if an error occurs
    */
-  public String getPassword() throws RemoteException
+  public String getPassword()
   {
     return password;
   }
@@ -110,7 +110,7 @@ public class UserBean implements EntityBean
    * @return user email address
    * @exception RemoteException if an error occurs
    */
-  public String getEmail() throws RemoteException
+  public String getEmail()
   {
     return email;
   }
@@ -121,7 +121,7 @@ public class UserBean implements EntityBean
    * @return user rating
    * @exception RemoteException if an error occurs
    */
-  public int getRating() throws RemoteException
+  public int getRating()
   {
     return rating;
   }
@@ -133,7 +133,7 @@ public class UserBean implements EntityBean
    * @return user's account current balance
    * @exception RemoteException if an error occurs
    */
-  public float getBalance() throws RemoteException
+  public float getBalance() 
   {
     return balance;
   }
@@ -144,7 +144,7 @@ public class UserBean implements EntityBean
    * @return user creation date
    * @exception RemoteException if an error occurs
    */
-  public String getCreationDate() throws RemoteException
+  public String getCreationDate() 
   {
     return creationDate;
   }
@@ -155,7 +155,7 @@ public class UserBean implements EntityBean
    * @return region id of the user
    * @exception RemoteException if an error occurs
    */
-  public Integer getRegionId() throws RemoteException
+  public Integer getRegionId() 
   {
     return regionId;
   }
@@ -167,7 +167,7 @@ public class UserBean implements EntityBean
    * @param newName user first name
    * @exception RemoteException if an error occurs
    */
-  public void setFirstName(String newName) throws RemoteException 
+  public void setFirstName(String newName) 
   {
     firstName = newName;
     isDirty = true; // the bean content has been modified
@@ -179,7 +179,7 @@ public class UserBean implements EntityBean
    * @param newName user last name
    * @exception RemoteException if an error occurs
    */
-  public void setLastName(String newName) throws RemoteException 
+  public void setLastName(String newName)  
   {
     lastName = newName;
     isDirty = true; // the bean content has been modified
@@ -191,7 +191,7 @@ public class UserBean implements EntityBean
    * @param newName user nick name
    * @exception RemoteException if an error occurs
    */
-  public void setNickName(String newName) throws RemoteException 
+  public void setNickName(String newName)  
   {
     nickName = newName;
     isDirty = true; // the bean content has been modified
@@ -203,7 +203,7 @@ public class UserBean implements EntityBean
    * @param newPassword a <code>String</code> value
    * @exception RemoteException if an error occurs
    */
-  public void setPassword(String newPassword) throws RemoteException
+  public void setPassword(String newPassword) 
   {
     password = newPassword;
     isDirty = true; // the bean content has been modified
@@ -215,7 +215,7 @@ public class UserBean implements EntityBean
    * @param newEmail a <code>String</code> value
    * @exception RemoteException if an error occurs
    */
-  public void setEmail(String newEmail) throws RemoteException
+  public void setEmail(String newEmail) 
   {
     email = newEmail;
     isDirty = true; // the bean content has been modified
@@ -227,7 +227,7 @@ public class UserBean implements EntityBean
    * @param newCreationDate a <code>String</code> value
    * @exception RemoteException if an error occurs
    */
-  public void setCreationDate(String newCreationDate) throws RemoteException
+  public void setCreationDate(String newCreationDate) 
   {
     creationDate = newCreationDate;
     isDirty = true; // the bean content has been modified
@@ -240,7 +240,7 @@ public class UserBean implements EntityBean
    * @param id region id
    * @exception RemoteException if an error occurs
    */
-  public void setRegionId(Integer id) throws RemoteException
+  public void setRegionId(Integer id) 
   {
     regionId = id;
     isDirty = true; // the bean content has been modified
@@ -252,7 +252,7 @@ public class UserBean implements EntityBean
    * @param newRating new user rating
    * @exception RemoteException if an error occurs
    */
-  public void setRating(int newRating) throws RemoteException
+  public void setRating(int newRating) 
   {
     rating = newRating;
     isDirty = true; // the bean content has been modified
@@ -265,7 +265,7 @@ public class UserBean implements EntityBean
    * @param diff value to add to the rating
    * @exception RemoteException if an error occurs
    */
-  public void updateRating(int diff) throws RemoteException
+  public void updateRating(int diff) 
   {
     rating += diff;
     isDirty = true; // the bean content has been modified
@@ -278,7 +278,7 @@ public class UserBean implements EntityBean
    * @param newBalance set user's account current balance
    * @exception RemoteException if an error occurs
    */
-  public void setBalance(float newBalance) throws RemoteException
+  public void setBalance(float newBalance) 
   {
     balance = newBalance;
     isDirty = true; // the bean content has been modified
@@ -292,7 +292,7 @@ public class UserBean implements EntityBean
    * @return string containing general user information
    * @exception RemoteException if an error occurs
    */
-  public String getHTMLGeneralUserInformation() throws RemoteException
+  public String getHTMLGeneralUserInformation() 
   {
     String result = new String();
 
@@ -325,7 +325,7 @@ public class UserBean implements EntityBean
    * @exception RemoveException if an error occurs
    */
   public UserPK ejbCreate(String userFirstName, String userLastName, String userNickName, String userEmail, 
-                          String userPassword, Integer userRegionId) throws CreateException, RemoteException, RemoveException
+                          String userPassword, Integer userRegionId) throws CreateException, RemoveException
   {
      // Connecting to IDManager Home interface thru JNDI
       IDManagerLocalHome home = null;
@@ -378,17 +378,17 @@ public class UserBean implements EntityBean
 
   /** Persistence is managed by the container and the bean
       becomes up to date */
-  public void ejbStore() throws RemoteException
+  public void ejbStore() 
   {
     isDirty = false;
   }
 
   /** This method is empty because persistence is managed by the container */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate(){}
   /** This method is empty because persistence is managed by the container */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbRemove() throws RemoteException, RemoveException {}
+  public void ejbRemove() throws RemoveException {}
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -407,7 +407,7 @@ public class UserBean implements EntityBean
    *                           higher specification should throw the javax.ejb.EJBException 
    *                           instead of this exception. 
    */
-  public void setEntityContext(EntityContext context) throws RemoteException
+  public void setEntityContext(EntityContext context)
   {
     entityContext = context;
   }
