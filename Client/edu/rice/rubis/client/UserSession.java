@@ -580,6 +580,10 @@ public class UserSession extends Thread
         time = System.currentTimeMillis();
         lastHTMLReply = callHTTPServer(lastURL);
         stats.updateTime(next, System.currentTimeMillis() - time);
+        if (lastHTMLReply == null)
+        {
+          System.out.println("Thread "+this.getName()+": Cannot connect to HTTP server.");
+        }
 
         // If an error occured, reset to Home page
         if (lastHTMLReply.indexOf("ERROR") != -1)
