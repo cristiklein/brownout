@@ -65,6 +65,11 @@
 	<include name="*.css"/>
       </fileset>
     </copy>
+
+    <!-- copy js into ${html.dest} -->
+    <copy todir="${html.dest}/js">
+      <fileset dir="${common.dir}/js" />
+    </copy>
     
     <!-- copy common images into ${html.dest}/images -->
     <copy todir="${html.dest}/images">
