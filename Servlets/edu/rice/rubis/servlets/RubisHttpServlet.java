@@ -178,7 +178,7 @@ public abstract class RubisHttpServlet extends HttpServlet
     freeConnections.push(c);
     // Wake up one servlet waiting for a connection (if any)
     if (mustNotify)
-      notify();
+      notifyAll();
   }
 
   /**
