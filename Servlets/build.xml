@@ -16,8 +16,6 @@
 
   <!-- dist rule creates a jar file containing the servlets -->
   <target name="dist" depends="init, compile">
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}"/>
      <jar destfile="${dist}/rubis_ejb_servlets.jar">
 	<fileset dir="${build}/RUBiS-${version}"
 		 includes="edu/rice/rubis/beans/servlets/*.class"/>
@@ -57,7 +55,9 @@
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
-    <delete dir="${dist}"/>
+    <delete>
+      <fileset dir="${dist}" includes="rubis_ejb_servlets.jar"/>
+    </delete>
     <delete>
       <fileset dir="edu" includes="**/*.class"/>
     </delete>

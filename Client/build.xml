@@ -26,8 +26,6 @@
 
   <!-- Create the jar file -->
   <target name="dist" depends="init, compile">
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}"/>
      <jar destfile="${dist}/rubis_client.jar">
 	<fileset dir="${build}/RUBiS-${version}"
 		 includes="edu/rice/rubis/client/**/*.class"/>
@@ -53,7 +51,9 @@
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
-    <delete dir="${dist}"/>
+    <delete>
+      <fileset dir="${dist}" includes="rubis_client.jar"/>
+    </delete>
     <delete>
       <fileset dir="edu" includes="**/*.class"/>
     </delete>

@@ -12,9 +12,7 @@
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}/RUBiS-${version}"/>
-    <!-- Create the distribution directory -->
-    <mkdir dir="${dist}"/>
-    <!-- check the ejb server value -->
+     <!-- check the ejb server value -->
      <condition property="jonas">
        <equals trim="true"
        arg1="${ejb.server}" arg2="jonas" />
@@ -136,7 +134,12 @@
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
-    <delete dir="${dist}"/>
+    <delete>
+      <fileset dir="${dist}" includes="*.jar"/>
+    </delete>
+    <delete>
+      <fileset dir="${dist}" includes="*.war"/>
+    </delete>
     <delete>
       <fileset dir="${src}/META-INF" includes="*.xml"/>
     </delete>
