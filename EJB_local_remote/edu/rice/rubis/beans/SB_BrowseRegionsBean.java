@@ -101,7 +101,7 @@ public class SB_BrowseRegionsBean implements SessionBean
     try
     {
       String name = region.getName();
-      html = "<a href=\"/servlet/edu.rice.rubis.beans.servlets.BrowseCategories?region="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
+      html = "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.BrowseCategories?region="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
     }
     catch (EJBException re)
     {
