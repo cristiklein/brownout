@@ -137,7 +137,7 @@ public class StoreComment extends HttpServlet
       // create a connection to the JMS provider
       connection = topicFactory.createTopicConnection();
       // lookup the destination
-      topic = (Topic) initialContext.lookup("topic/topicStoreComment");
+      topic = (Topic) initialContext.lookup(Config.PrefixTopicName+"topicStoreComment");
       // create a session
       session  = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
     } 

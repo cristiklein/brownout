@@ -74,7 +74,7 @@ public class ViewItem extends HttpServlet
       // create a connection to the JMS provider
       connection = topicFactory.createTopicConnection();
       // lookup the destination
-      topic = (Topic) initialContext.lookup("topic/topicViewItem");
+      topic = (Topic) initialContext.lookup(Config.PrefixTopicName+"topicViewItem");
       // create a session
       session  = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
     } 

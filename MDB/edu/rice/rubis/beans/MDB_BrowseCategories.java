@@ -157,7 +157,7 @@ public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
           // create a connection
           authConnection = connectionFactory.createTopicConnection();
           // lookup the destination
-          authTopic = (Topic) initialContext.lookup("topic/topicAuth");
+          authTopic = (Topic) initialContext.lookup(BeanConfig.PrefixTopicName+"topicAuth");
           // create a session
           authSession  = authConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
         } 

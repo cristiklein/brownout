@@ -26,6 +26,13 @@ public class BeanConfig
   public static final String TopicConnectionFactoryName = "RMIConnectionFactory";
 
   /**
+   * Return the prefix to add to the topic name at lookup time
+   * JOnAS looks like: 
+   * JBoss looks like: topic/
+   */
+  public static final String PrefixTopicName = "topic/";
+
+  /**
    * Return the UserTransaction name to look for since JBoss does not support full class names
    * JOnAS looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("java:comp/UserTransaction");
    * JBoss looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("UserTransaction");

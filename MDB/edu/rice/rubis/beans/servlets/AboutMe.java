@@ -97,7 +97,7 @@ public class AboutMe extends HttpServlet
       // create a connection to the JMS provider
       connection = topicFactory.createTopicConnection();
       // lookup the destination
-      topic = (Topic) initialContext.lookup("topic/topicAboutMe");
+      topic = (Topic) initialContext.lookup(Config.PrefixTopicName+"topicAboutMe");
       // create a session
       session  = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
     } 

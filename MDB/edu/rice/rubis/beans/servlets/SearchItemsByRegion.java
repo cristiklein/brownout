@@ -46,7 +46,7 @@ public class SearchItemsByRegion extends HttpServlet
       // create a connection to the JMS provider
       connection = topicFactory.createTopicConnection();
       // lookup the destination
-      topic = (Topic) initialContext.lookup("topic/topicSearchItemsByRegion");
+      topic = (Topic) initialContext.lookup(Config.PrefixTopicName+"topicSearchItemsByRegion");
       // create a session
       session  = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
     } 
@@ -59,7 +59,6 @@ public class SearchItemsByRegion extends HttpServlet
     {
       // create a requestor to receive the reply
       TopicRequestor requestor = new TopicRequestor(session, topic);
-      System.out.println("create requestor");
       // create a message
       MapMessage message = session.createMapMessage();
       // set parameters

@@ -26,6 +26,13 @@ public class Config
   public static final String TopicConnectionFactoryName = "JTCF";
 
   /**
+   * Return the prefix to add to the topic name at lookup time
+   * JOnAS looks like: 
+   * JBoss looks like: topic/
+   */
+  public static final String PrefixTopicName = "";
+
+  /**
    * Returns the path to the directory where the HTML header and footer are stored.
    */
   public static final String HTMLFilesPath = "/home/margueri/proton/RUBiS/EJB_HTML";

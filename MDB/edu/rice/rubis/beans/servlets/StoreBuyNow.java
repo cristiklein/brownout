@@ -149,7 +149,7 @@ public class StoreBuyNow extends HttpServlet
       // create a connection to the JMS provider
       connection = topicFactory.createTopicConnection();
       // lookup the destination
-      topic = (Topic) initialContext.lookup("topic/topicStoreBuyNow");
+      topic = (Topic) initialContext.lookup(Config.PrefixTopicName+"topicStoreBuyNow");
       // create a session
       session  = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
     } 

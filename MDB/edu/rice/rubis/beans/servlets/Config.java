@@ -26,10 +26,17 @@ public class Config
   public static final String TopicConnectionFactoryName = "RMIConnectionFactory";
 
   /**
+   * Return the prefix to add to the topic name at lookup time
+   * JOnAS looks like: 
+   * JBoss looks like: topic/
+   */
+  public static final String PrefixTopicName = "topic/";
+
+  /**
    * Returns the path to the directory where the HTML header and footer are stored.
    */
   //public static final String HTMLFilesPath = "/users/cecchet/RUBiS/EJB_HTML";
-  public static final String HTMLFilesPath = "/home/margueri/proton/RUBiS/ejb_rubis_web";
+  public static final String HTMLFilesPath = "/home/margueri/RUBiS/ejb_rubis_web";
 
 
   /**
