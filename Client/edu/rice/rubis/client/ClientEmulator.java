@@ -19,7 +19,7 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  *
  * Initial developer(s): Emmanuel Cecchet, Julie Marguerite
- * Contributor(s): Jeremy Philippe
+ * Contributor(s): Jeremy Philippe, Niraj Tolia
  */
  
 package edu.rice.rubis.client;
@@ -115,6 +115,47 @@ public class ClientEmulator
   public static synchronized boolean isEndOfSimulation()
   {
     return endOfSimulation;
+  }
+
+  /**
+   * As the monitoring program now logs activity in a temporary
+   * location, we need to scp the files over
+   ** 
+   * @param node node to launch monitoring program on
+   * @param fileName full path and name of file that has the monitoring data
+   * @param outputDir full path name of the local directory the log
+   *                  file shoudl be copied into
+   */
+  private void getMonitoredData(String node, String fileName, 
+				String outputDir)
+  {
+      String [] scpCmd = new String[3];
+
+      scpCmd[0] = rubis.getMonitoringScp();
+      scpCmd[1] = node + ":"+fileName;
+      scpCmd[2] = outputDir+"/";    
+      try
+      {
+          System.out.println(
+                             "&nbsp &nbsp Command is: "
+                             + scpCmd[0]
+                             + " "
+                             + scpCmd[1]
+                             + " "
+                             + scpCmd[2]
+                             + "<br>\n");
+
+          Runtime.getRuntime().exec(scpCmd);
+
+      }
+      catch (IOException ioe)
+      {
+	  System.out.println(
+			     "An error occured while executing "
+			     + "monitoring program ("
+			     + ioe.getMessage()
+			     + ")");
+      }
   }
 
   /**
@@ -226,6 +267,7 @@ public class ClientEmulator
     Process[] remoteClientMonitor = null;
     Process[] remoteClient = null;
     String reportDir = "";
+    String tmpDir = "/tmp/";
     boolean           isMainClient = (args.length <= 2); // Check if we are the main client
      String propertiesFileName;
 
@@ -338,11 +380,11 @@ public class ClientEmulator
           rcmdClient[2] =
             client.rubis.getClientsRemoteCommand()
               + " "
-              + reportDir
+              + tmpDir
               + "trace_client"
               + (i + 1)
               + ".html "
-              + reportDir
+              + tmpDir
               + "stat_client"
               + (i + 1)
               + ".html"
@@ -379,7 +421,7 @@ public class ClientEmulator
       webServerMonitor =
         client.startMonitoringProgram(
           client.rubis.getWebServerName(),
-          reportDir + "web_server");
+          tmpDir + "web_server");
 
       if (client.rubis.getDBServerNames().size() > 0)
         dbServerMonitor = new Process[client.rubis.getDBServerNames().size()];       
@@ -387,7 +429,7 @@ public class ClientEmulator
       for (int i = 0; i < client.rubis.getDBServerNames().size(); i++)
       {
         System.out.println("ClientEmulator: Starting monitoring program on Database server "+client.rubis.getDBServerNames().get(i)+"<br>\n");
-        dbServerMonitor[i] = client.startMonitoringProgram((String)client.rubis.getDBServerNames().get(i), reportDir+"db_server"+i);
+        dbServerMonitor[i] = client.startMonitoringProgram((String)client.rubis.getDBServerNames().get(i), tmpDir+"db_server"+i);
       }
         
       if (client.rubis.getServletsServerNames().size() > 0)
@@ -396,7 +438,7 @@ public class ClientEmulator
       for (int i = 0; i < client.rubis.getServletsServerNames().size(); i++)
       {
         System.out.println("ClientEmulator: Starting monitoring program on Servlets server "+client.rubis.getServletsServerNames().get(i)+"<br>\n");
-        servletsServerMonitor[i] = client.startMonitoringProgram((String)client.rubis.getServletsServerNames().get(i), reportDir+"servlets_server"+i);
+        servletsServerMonitor[i] = client.startMonitoringProgram((String)client.rubis.getServletsServerNames().get(i), tmpDir+"servlets_server"+i);
       }
      
       if (client.rubis.getEJBServerNames().size() > 0)
@@ -405,7 +447,7 @@ public class ClientEmulator
       for (int i = 0; i < client.rubis.getEJBServerNames().size(); i++)
       {
         System.out.println("ClientEmulator: Starting monitoring program on EJB server "+client.rubis.getEJBServerNames().get(i)+"<br>\n");
-        ejbServerMonitor[i] = client.startMonitoringProgram((String)client.rubis.getEJBServerNames().get(i), reportDir+"ejb_server"+i);
+        ejbServerMonitor[i] = client.startMonitoringProgram((String)client.rubis.getEJBServerNames().get(i), tmpDir+"ejb_server"+i);
       }
 
       // Monitor local client
@@ -423,7 +465,7 @@ public class ClientEmulator
         remoteClientMonitor[i] =
           client.startMonitoringProgram(
             (String) client.rubis.getRemoteClients().get(i),
-            reportDir + "client" + (i + 1));
+            tmpDir + "client" + (i + 1));
       }
 
       // Redirect output for traces
@@ -1036,6 +1078,62 @@ public class ClientEmulator
           "An error occured while waiting for remote processes termination ("
             + e.getMessage()
             + ")");
+      }
+
+      // Time to transfer (scp all the files over)
+      try 
+      {
+	  for (int i = 0; i < client.rubis.getRemoteClients().size(); i++)
+	  {
+	      client.getMonitoredData(
+				      (String) client.rubis.getRemoteClients().get(i),
+				      tmpDir + "client" + (i + 1),
+				      reportDir);
+	  }
+
+	  for (int i = 0; i < dbServerMonitor.length; i++)
+	  {
+	      client.getMonitoredData((String)client.rubis.getDBServerNames().get(i), 
+                                  tmpDir+"db_server"+i, 
+                                  reportDir);
+	  }
+
+	  // Web server
+	  client.getMonitoredData(client.rubis.getWebServerName(),
+                              tmpDir + "web_server",
+                              reportDir);
+      
+	  if (servletsServerMonitor != null)
+	  {
+	      for (int i = 0; i < servletsServerMonitor.length; i++)
+		  client.getMonitoredData((String)client.rubis.getServletsServerNames().get(i), 
+                                  tmpDir+"servlets_server"+i,
+                                  reportDir);
+	  }
+	  if (ejbServerMonitor != null)
+      {
+              for (int i = 0; i < ejbServerMonitor.length; i++)
+                  client.getMonitoredData((String)client.rubis.getEJBServerNames().get(i), 
+                                          tmpDir+"ejb_server"+i,
+                                          reportDir);
+      }
+      // Now transfer the remote client html files
+      for (int i = 0; i < client.rubis.getRemoteClients().size(); i++)
+      {
+          client.getMonitoredData((String) client.rubis.getRemoteClients().get(i),
+                                  tmpDir + "trace_client" + (i + 1) + ".html ",
+                                  reportDir);
+          client.getMonitoredData((String) client.rubis.getRemoteClients().get(i),
+                                  tmpDir + "stat_client" + (i + 1) + ".html ",
+                                  reportDir);
+      }
+      }
+      catch (Exception e)
+      {
+          System.out.println(
+                             "An error occured while transferring log files ("
+                             + e.getMessage()
+                             + ")");
       }
 
       // Generate the graphics 

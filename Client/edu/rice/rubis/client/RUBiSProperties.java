@@ -19,7 +19,7 @@
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
  *
  * Initial developer(s): Emmanuel Cecchet, Julie Marguerite
- * Contributor(s): Jeremy Philippe
+ * Contributor(s): Jeremy Philippe, Niraj Tolia
  */
  package edu.rice.rubis.client;
 
@@ -102,6 +102,7 @@ public class RUBiSProperties
   private String  monitoringOptions;
   private Integer monitoringSampling;
   private String  monitoringRsh;
+  private String  monitoringScp;
   private String  monitoringGnuPlot;
   
   /**
@@ -415,6 +416,9 @@ public class RUBiSProperties
       System.out.print("Monitoring rsh                 : ");
       monitoringRsh      = getProperty("monitoring_rsh");
       System.out.println(monitoringRsh+"<br>");
+      System.out.print("Monitoring scp                 : ");
+      monitoringScp      = getProperty("monitoring_scp");
+      System.out.println(monitoringScp+"<br>");
       System.out.print("Monitoring Gnuplot Terminal    : ");
       monitoringGnuPlot  = getProperty("monitoring_gnuplot_terminal");
       System.out.println(monitoringGnuPlot+"<br>");
@@ -874,6 +878,17 @@ public class RUBiSProperties
   public String getMonitoringRsh()
   {
     return monitoringRsh;
+  }
+
+
+  /**
+   * Get scp program path that should be used to fetch remote files
+   *
+   * @return rsh program path
+   */
+  public String getMonitoringScp()
+  {
+    return monitoringScp;
   }
 
 
