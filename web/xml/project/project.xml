@@ -11,37 +11,37 @@
 
   <body>    
     <menu>
-      <connect href="index.xml">RUBiS</connect>
-      <menuitem><a href="http://debian-sf.objectweb.org/projects/rubis/">Download</a></menuitem>
-      <menuitem><connect href="doc/index.xml">Documentation</connect></menuitem>
+      <a href="index.html">RUBiS</a>
+      <menuitem><a href="http://debian-sf.objectweb.org/project/showfiles.php?group_id=44">Download</a></menuitem>
+      <menuitem><a href="doc/index.html">Documentation</a></menuitem>
       <menuitem><a href="http://www.objectweb.org/wws/info/jmob">Mailing List</a></menuitem>
-      <menuitem><connect href="results.xml">Experimental results</connect></menuitem>
-      <menuitem><connect href="license.xml">License</connect></menuitem>
-      <menuitem><connect href="history.xml">History</connect></menuitem>
+      <menuitem><a href="results.html">Experimental Results</a></menuitem>
+      <menuitem><a href="license.html">License</a></menuitem>
+      <menuitem><a href="history.html">History</a></menuitem>
     </menu>
 
     <menu>
-      <legend>Developers' corner</legend>
-      <menuitem><connect href="dev/contrib.xml">Getting involved</connect></menuitem>
-      <menuitem><a href="http://debian-sf.objectweb.org/projects/rubis/">ObjectWeb Forge site</a></menuitem>
-      <menuitem><a href="http://debian-sf.objectweb.org/cvs/?group_id=44">CVS repository</a></menuitem>
+      <legend>Developers' Corner</legend>
+      <menuitem><a href="dev/contrib.html">Getting Involved</a></menuitem>
+      <menuitem><a href="http://debian-sf.objectweb.org/projects/rubis/">ObjectWeb Forge Site</a></menuitem>
+      <menuitem><a href="http://debian-sf.objectweb.org/cvs/?group_id=44">CVS Repository</a></menuitem>
     </menu>
 
     <menu>
       <legend>About RUBiS</legend>
       <menuitem><a href="mailto:jmob@objectweb.org">Contacts</a></menuitem>
-      <menuitem><connect href="team.xml">Team</connect></menuitem>
-      <menuitem><a href="http://www.objectweb.org/jmob/">JMOB</a></menuitem>
+      <menuitem><a href="team.html">Team</a></menuitem>
+      <menuitem><a href="http://jmob.objectweb.org/">JMOB</a></menuitem>
     </menu>
 
     <menu>
-      <legend>ObjectWeb resources</legend>
+      <legend>ObjectWeb Resources</legend>
       <menuitem><a href="http://www.objectweb.org/faq">FAQ</a></menuitem>
-      <menuitem><a href="http://www.objectweb.org/wws">Mailing lists</a></menuitem>
-      <menuitem><connect href="../resources/cvs.xml">CVS repositories</connect></menuitem>
-      <menuitem><connect href="../resources/search.xml">Search</connect></menuitem>
+      <menuitem><a href="http://www.objectweb.org/wws">Mailing Lists</a></menuitem>
+      <menuitem><a href="http://www.objectweb.org/resources/cvs.html">CVS Repositories</a></menuitem>
+      <menuitem><a href="http://www.objectweb.org/resources/search.html">Search</a></menuitem>
       <menuitem><a href="http://debian-sf.objectweb.org/">ObjectWeb Forge</a></menuitem>
-      <menuitem><connect href="../mirrors.xml">Mirror sites</connect></menuitem>
+      <menuitem><a href="http://www.objectweb.org/mirrors.html">Mirror Sites</a></menuitem>
     </menu>
   </body>
 </project>
