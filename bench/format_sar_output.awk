@@ -15,6 +15,7 @@ BEGIN {
 {
   if ($1 ~ /Average/)
     { # Skip the Average values
+      n = "";
       next;
     }
 
@@ -23,8 +24,9 @@ BEGIN {
       print $3 > FILENAME".cpu.user.dat";
 #	  print $4 > FILENAME".cpu.nice.dat";
       print $5 > FILENAME".cpu.system.dat";
-      print $6 > FILENAME".cpu.idle.dat";
-      print 100-$6 > FILENAME".cpu.busy.dat";
+#     print $6 > FILENAME".cpu.iowait.dat";
+      print $7 > FILENAME".cpu.idle.dat";
+      print 100-$7 > FILENAME".cpu.busy.dat";
     }
   if ($2 ~ /eth0/)
     { # This is the eth0 network info
@@ -73,12 +75,12 @@ BEGIN {
       if (n == "proc/s")
 	{ # This is the proc/s info
 	  print $2 > FILENAME".proc.dat";
-	  n = "";
+#	  n = "";
 	}
       if (n == "cswch/s")
 	{ # This is the context switches per second info
 	  print $2 > FILENAME".ctxsw.dat";
-	  n = "";
+#	  n = "";
 	}
       if (n == "tps")
 	{ # This is the disk info
@@ -87,20 +89,21 @@ BEGIN {
 	  print $4 > FILENAME".disk.wtps.dat"; # write requests per second
 	  print $5 > FILENAME".disk.brdps.dat"; # block reads per second
 	  print $6 > FILENAME".disk.bwrps.dat"; # block writes per second
-	  n = "";
+#	  n = "";
 	}
       if (n == "kbmemfree")
 	{ # This is the mem info
 	  print $2 > FILENAME".mem.kbmemfree.dat"; # Amount of free memory available in kilobytes.
 	  print $3 > FILENAME".mem.kbmemused.dat"; # Amount of used memory in kilobytes. This does not take into account memory used by the kernel itself.
 	  print $4 > FILENAME".mem.memused.dat"; # Percentage of used memory.
-#	  print $5 > FILENAME".mem.kbmemshrd.dat"; # Amount of memory shared by the system in kilobytes.  Always zero with 2.4 kernels.
-#	  print $6 > FILENAME".mem.kbbuffers.dat"; # Amount of memory used as buffers by the kernel in kilobytes.
-	  print $7 > FILENAME".mem.kbcached.dat"; # Amount of memory used to cache data by the kernel in kilobytes.
-#	  print $8 > FILENAME".mem.kbswpfree.dat"; # Amount of free swap space in kilobytes.
-#	  print $9 > FILENAME".mem.kbswpused.dat"; # Amount of used swap space in kilobytes.
-	  print $10 > FILENAME".mem.swpused.dat"; # Percentage of used swap space.
-	  n = "";
+#         It appears the kbmemshrd has been removed from the sysstat output - ntolia
+#	  print $X > FILENAME".mem.kbmemshrd.dat"; # Amount of memory shared by the system in kilobytes.  Always zero with 2.4 kernels.
+#	  print $5 > FILENAME".mem.kbbuffers.dat"; # Amount of memory used as buffers by the kernel in kilobytes.
+	  print $6 > FILENAME".mem.kbcached.dat"; # Amount of memory used to cache data by the kernel in kilobytes.
+#	  print $7 > FILENAME".mem.kbswpfree.dat"; # Amount of free swap space in kilobytes.
+#	  print $8 > FILENAME".mem.kbswpused.dat"; # Amount of used swap space in kilobytes.
+	  print $9 > FILENAME".mem.swpused.dat"; # Percentage of used swap space.
+#	  n = "";
  	}
       if (n == "totsck")
 	{ # This is the socket info
@@ -109,7 +112,7 @@ BEGIN {
 #	  print $4 > FILENAME".sock.udpsck.dat"; # Number of UDP sockets currently in use.
 #	  print $5 > FILENAME".sock.rawsck.dat"; # Number of RAW sockets currently in use.
 #	  print $6 > FILENAME".sock.ip-frag.dat"; # Number of IP fragments currently in use.
-	  n = "";
+#	  n = "";
  	}
     }
 }
