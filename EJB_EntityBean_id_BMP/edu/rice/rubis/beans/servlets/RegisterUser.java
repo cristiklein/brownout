@@ -35,10 +35,9 @@ import edu.rice.rubis.beans.UserHome;
 
 public class RegisterUser extends HttpServlet
 {
-  private UserTransaction utx = null;
-  private ServletPrinter sp = null;
+ 
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Register user");
     sp.printHTML(
@@ -58,6 +57,8 @@ public class RegisterUser extends HttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    UserTransaction utx = null;
+    ServletPrinter sp = null;
     String firstname = null,
       lastname = null,
       nickname = null,
@@ -76,14 +77,14 @@ public class RegisterUser extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      printError("Cannot get initial context for JNDI: " + e + "<br>", sp);
       return;
     }
 
     String value = request.getParameter("firstname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a first name!<br>");
+      printError("You must provide a first name!<br>", sp);
       return;
     }
     else
@@ -92,7 +93,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("lastname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a last name!<br>");
+      printError("You must provide a last name!<br>", sp);
       return;
     }
     else
@@ -101,7 +102,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("nickname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a nick name!<br>");
+      printError("You must provide a nick name!<br>", sp);
       return;
     }
     else
@@ -110,7 +111,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("email");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide an email address!<br>");
+      printError("You must provide an email address!<br>", sp);
       return;
     }
     else
@@ -119,7 +120,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("password");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a password!<br>");
+      printError("You must provide a password!<br>", sp);
       return;
     }
     else
@@ -128,7 +129,7 @@ public class RegisterUser extends HttpServlet
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a valid region!<br>");
+      printError("You must provide a valid region!<br>", sp);
       return;
     }
     else
@@ -145,7 +146,7 @@ public class RegisterUser extends HttpServlet
       catch (Exception e)
       {
         printError(
-          "RUBiS internal error: Cannot lookup Region: " + e + "<br>\n");
+          "RUBiS internal error: Cannot lookup Region: " + e + "<br>\n", sp);
         return;
       }
       try
@@ -160,7 +161,7 @@ public class RegisterUser extends HttpServlet
             + value
             + " does not exist in the database!<br>(got exception: "
             + e
-            + ")<br>\n");
+            + ")<br>\n", sp);
         return;
       }
     }
@@ -178,7 +179,7 @@ public class RegisterUser extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("RUBiS internal error: Cannot lookup User: " + e + "<br>");
+      printError("RUBiS internal error: Cannot lookup User: " + e + "<br>", sp);
       return;
     }
     try
@@ -186,7 +187,7 @@ public class RegisterUser extends HttpServlet
       user = userHome.findByNickName(nickname);
       /* If an exception has not be thrown at this point, it means that
          the nickname already exists. */
-      printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
+      printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>", sp);
       return;
     }
     catch (FinderException fe)
@@ -210,7 +211,7 @@ public class RegisterUser extends HttpServlet
         printError(
           "RUBiS internal error: User registration failed (got exception: "
             + e
-            + ")<br>");
+            + ")<br>", sp);
         return;
       }
     }

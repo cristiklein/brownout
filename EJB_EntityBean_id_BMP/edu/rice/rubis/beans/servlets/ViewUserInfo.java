@@ -30,11 +30,8 @@ import edu.rice.rubis.beans.UserPK;
 
 public class ViewUserInfo extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
-  private UserTransaction utx = null;
-
-  private void commentList(CommentHome home, Integer userId)
+  
+  private void commentList(CommentHome home, Integer userId, ServletPrinter sp, Context initialContext, UserTransaction utx )
   {
     Collection list;
     Comment comment;
@@ -129,6 +126,9 @@ public class ViewUserInfo extends HttpServlet
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+    UserTransaction utx = null;
     String value = request.getParameter("userId");
     Integer userId;
 
@@ -212,7 +212,7 @@ public class ViewUserInfo extends HttpServlet
       sp.printHTMLfooter();
       return;
     }
-    commentList(cHome, userId);
+    commentList(cHome, userId, sp, initialContext, utx);
     sp.printHTMLfooter();
   }
 

@@ -26,9 +26,9 @@ import edu.rice.rubis.beans.ItemPK;
 
 public class ViewItem extends HttpServlet
 {
-  private ServletPrinter sp = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: View item");
     sp.printHTML(
@@ -48,12 +48,13 @@ public class ViewItem extends HttpServlet
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "ViewItem");
 
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("No item identifier received - Cannot process the request<br>");
+      printError("No item identifier received - Cannot process the request<br>", sp);
       return;
     }
 
@@ -64,7 +65,7 @@ public class ViewItem extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      printError("Cannot get initial context for JNDI: " + e + "<br>", sp);
       return;
     }
 
@@ -79,7 +80,7 @@ public class ViewItem extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup Item: " + e + "<br>");
+      printError("Cannot lookup Item: " + e + "<br>", sp);
       return;
     }
     try
@@ -90,7 +91,7 @@ public class ViewItem extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("This item does not exist (got exception: " + e + ")<br>");
+      printError("This item does not exist (got exception: " + e + ")<br>", sp);
       return;
     }
 

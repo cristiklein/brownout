@@ -32,12 +32,10 @@ import edu.rice.rubis.beans.QueryHome;
 
 public class ViewBidHistory extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
-  private UserTransaction utx = null;
+  
 
   /** List the bids corresponding to an item */
-  private void listBids(Integer itemId)
+  private void listBids(Integer itemId, ServletPrinter sp, Context initialContext)
   {
     Enumeration bidList = null;
     ItemHome iHome;
@@ -140,6 +138,9 @@ public class ViewBidHistory extends HttpServlet
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+    UserTransaction utx = null;
     String value = request.getParameter("itemId");
     Integer itemId;
 
@@ -215,7 +216,7 @@ public class ViewBidHistory extends HttpServlet
       return;
     }
 
-    listBids(itemId);
+    listBids(itemId, sp, initialContext);
     sp.printHTMLfooter();
   }
 

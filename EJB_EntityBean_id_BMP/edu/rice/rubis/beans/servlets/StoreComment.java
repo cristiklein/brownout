@@ -36,10 +36,9 @@ import edu.rice.rubis.beans.UserPK;
 
 public class StoreComment extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreComment");
     sp.printHTML(
@@ -73,6 +72,8 @@ public class StoreComment extends HttpServlet
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     Integer toId; // to user id
     Integer fromId; // from user id
     Integer itemId; // item id
@@ -86,7 +87,7 @@ public class StoreComment extends HttpServlet
     String value = request.getParameter("to");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'to user' identifier !<br></h3>");
+      printError("<h3>You must provide a 'to user' identifier !<br></h3>", sp);
       return;
     }
     else
@@ -95,7 +96,7 @@ public class StoreComment extends HttpServlet
     value = request.getParameter("from");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'from user' identifier !<br></h3>");
+      printError("<h3>You must provide a 'from user' identifier !<br></h3>", sp);
       return;
     }
     else
@@ -104,7 +105,7 @@ public class StoreComment extends HttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return;
     }
     else
@@ -113,7 +114,7 @@ public class StoreComment extends HttpServlet
     value = request.getParameter("rating");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a rating !<br></h3>");
+      printError("<h3>You must provide a rating !<br></h3>", sp);
       return;
     }
     else
@@ -122,7 +123,7 @@ public class StoreComment extends HttpServlet
     comment = request.getParameter("comment");
     if ((comment == null) || (comment.equals("")))
     {
-      printError("<h3>You must provide a comment !<br></h3>");
+      printError("<h3>You must provide a comment !<br></h3>", sp);
       return;
     }
     try
@@ -131,7 +132,7 @@ public class StoreComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      printError("Cannot get initial context for JNDI: " + e + "<br>", sp);
       return;
     }
     // Try to find the user corresponding to the 'to' ID
@@ -146,7 +147,7 @@ public class StoreComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup User or Item: " + e + "<br>");
+      printError("Cannot lookup User or Item: " + e + "<br>", sp);
       return;
     }
     CommentHome cHome;
@@ -159,7 +160,7 @@ public class StoreComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup Comment: " + e + "<br>");
+      printError("Cannot lookup Comment: " + e + "<br>", sp);
       return;
     }
     // We want to start transactions from client
@@ -173,7 +174,7 @@ public class StoreComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup UserTransaction: " + e + "<br>");
+      printError("Cannot lookup UserTransaction: " + e + "<br>", sp);
       return;
     }
     try
@@ -189,14 +190,14 @@ public class StoreComment extends HttpServlet
     catch (Exception e)
     {
       printError(
-        "Error while storing the comment (got exception: " + e + ")<br>");
+        "Error while storing the comment (got exception: " + e + ")<br>", sp);
       try
       {
         utx.rollback();
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e + "<br>");
+        printError("Transaction rollback failed: " + e + "<br>", sp);
       }
       return;
     }

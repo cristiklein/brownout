@@ -32,10 +32,9 @@ import edu.rice.rubis.beans.BidHome;
 
 public class StoreBid extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBid");
     sp.printHTML(
@@ -69,6 +68,8 @@ public class StoreBid extends HttpServlet
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     Integer userId; // item id
     Integer itemId; // user id
     float minBid; // minimum acceptable bid for this item
@@ -84,7 +85,7 @@ public class StoreBid extends HttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>");
+      printError("<h3>You must provide a user identifier !<br></h3>", sp);
       return;
     }
     else
@@ -93,7 +94,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return;
     }
     else
@@ -102,7 +103,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("minBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a minimum bid !<br></h3>");
+      printError("<h3>You must provide a minimum bid !<br></h3>", sp);
       return;
     }
     else
@@ -114,7 +115,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("bid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a bid !<br></h3>");
+      printError("<h3>You must provide a bid !<br></h3>", sp);
       return;
     }
     else
@@ -126,7 +127,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("maxBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum bid !<br></h3>");
+      printError("<h3>You must provide a maximum bid !<br></h3>", sp);
       return;
     }
     else
@@ -138,7 +139,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>");
+      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
       return;
     }
     else
@@ -150,7 +151,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>");
+      printError("<h3>You must provide a quantity !<br></h3>", sp);
       return;
     }
     else
@@ -168,7 +169,7 @@ public class StoreBid extends HttpServlet
           + qty
           + " items because only "
           + maxQty
-          + " are proposed !<br></h3>");
+          + " are proposed !<br></h3>", sp);
       return;
     }
     if (bid < minBid)
@@ -178,7 +179,7 @@ public class StoreBid extends HttpServlet
           + bid
           + " is not acceptable because it is below the $"
           + minBid
-          + " minimum bid !<br></h3>");
+          + " minimum bid !<br></h3>", sp);
       return;
     }
     if (maxBid < minBid)
@@ -188,7 +189,7 @@ public class StoreBid extends HttpServlet
           + maxBid
           + " is not acceptable because it is below the $"
           + minBid
-          + " minimum bid !<br></h3>");
+          + " minimum bid !<br></h3>", sp);
       return;
     }
     if (maxBid < bid)
@@ -198,7 +199,7 @@ public class StoreBid extends HttpServlet
           + maxBid
           + " is not acceptable because it is below your current bid of $"
           + bid
-          + " !<br></h3>");
+          + " !<br></h3>", sp);
       return;
     }
 
@@ -208,7 +209,7 @@ public class StoreBid extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      printError("Cannot get initial context for JNDI: " + e + "<br>", sp);
       return;
     }
     BidHome bHome;
@@ -221,7 +222,7 @@ public class StoreBid extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup Bid: " + e + "<br>");
+      printError("Cannot lookup Bid: " + e + "<br>", sp);
       return;
     }
     try
@@ -233,7 +234,7 @@ public class StoreBid extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Error while storing the bid (got exception: " + e + ")<br>");
+      printError("Error while storing the bid (got exception: " + e + ")<br>", sp);
       return;
     }
 

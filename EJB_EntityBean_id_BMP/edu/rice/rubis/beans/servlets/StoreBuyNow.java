@@ -36,10 +36,9 @@ import edu.rice.rubis.beans.TimeManagement;
 
 public class StoreBuyNow extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
+  
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBuyNow");
     sp.printHTML(
@@ -73,6 +72,8 @@ public class StoreBuyNow extends HttpServlet
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     Integer userId; // item id
     Integer itemId; // user id
     float minBuyNow; // minimum acceptable BuyNow for this item
@@ -88,7 +89,7 @@ public class StoreBuyNow extends HttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>");
+      printError("<h3>You must provide a user identifier !<br></h3>", sp);
       return;
     }
     else
@@ -97,7 +98,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return;
     }
     else
@@ -106,7 +107,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>");
+      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
       return;
     }
     else
@@ -118,7 +119,7 @@ public class StoreBuyNow extends HttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>");
+      printError("<h3>You must provide a quantity !<br></h3>", sp);
       return;
     }
     else
@@ -136,7 +137,7 @@ public class StoreBuyNow extends HttpServlet
           + qty
           + " items because only "
           + maxQty
-          + " are proposed !<br></h3>");
+          + " are proposed !<br></h3>", sp);
       return;
     }
 
@@ -146,7 +147,7 @@ public class StoreBuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      printError("Cannot get initial context for JNDI: " + e + "<br>", sp);
       return;
     }
     // We want to start transactions from client
@@ -160,7 +161,7 @@ public class StoreBuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot lookup UserTransaction: " + e + "<br>");
+      printError("Cannot lookup UserTransaction: " + e + "<br>", sp);
       return;
     }
 
@@ -179,14 +180,14 @@ public class StoreBuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot update Item: " + e + "<br>");
+      printError("Cannot update Item: " + e + "<br>", sp);
       try
       {
         utx.rollback();
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e + "<br>");
+        printError("Transaction rollback failed: " + e + "<br>", sp);
       }
       return;
     }
@@ -209,14 +210,14 @@ public class StoreBuyNow extends HttpServlet
     catch (Exception e)
     {
       printError(
-        "Error while storing the BuyNow (got exception: " + e + ")<br>");
+        "Error while storing the BuyNow (got exception: " + e + ")<br>", sp);
       try
       {
         utx.rollback();
       }
       catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e + "<br>");
+        printError("Transaction rollback failed: " + e + "<br>", sp);
       }
       return;
     }
