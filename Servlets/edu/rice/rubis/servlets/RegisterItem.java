@@ -48,7 +48,7 @@ public class RegisterItem extends RubisHttpServlet
  */
   private void printError(String errorMsg, ServletPrinter sp)
   {
-    sp.printHTMLheader("RUBiS ERROR: Register user");
+    sp.printHTMLheader("RUBiS ERROR: Register Item");
     sp.printHTML(
       "<h2>Your registration has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
