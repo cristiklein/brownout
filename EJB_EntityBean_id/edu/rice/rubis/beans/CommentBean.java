@@ -334,7 +334,7 @@ public class CommentBean implements EntityBean
    */
   public String printComment(String userName) throws RemoteException
   {
-    return "<DT><b><BIG><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
+    return "<DT><b><BIG><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+fromUserId+"\">"+userName+"</a></BIG></b>"+
       " wrote the "+date+"<DD><i>"+comment+"</i><p>\n";
   }
 }

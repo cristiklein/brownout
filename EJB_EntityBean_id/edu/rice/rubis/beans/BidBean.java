@@ -394,7 +394,7 @@ public class BidBean implements EntityBean
    */
   public String printBidHistory() throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+userId+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+userId+
       "\">"+getBidderNickName()+"<TD>"+bid+"<TD>"+date+"\n";
   }
 }

@@ -635,11 +635,11 @@ public class ItemBean implements EntityBean
    */
   public String printItem() throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+maxBid+
       "<TD>"+nbOfBids+
       "<TD>"+endDate+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n";
   }
 
   /**
@@ -651,9 +651,9 @@ public class ItemBean implements EntityBean
    */
   public String printUserBoughtItem(int qty) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
       "<TD>"+qty+"\n"+"<TD>"+buyNow+"\n"+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+getSellerNickname()+"</a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+getSellerNickname()+"</a>\n";
   }
 
   /**
@@ -665,10 +665,10 @@ public class ItemBean implements EntityBean
    */
   public String printItemUserHasBidOn(float bidMaxBid) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+initialPrice+"<TD>"+maxBid+"<TD>"+bidMaxBid+"<TD>"+quantity+"<TD>"+startDate+"<TD>"+endDate+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+getSellerNickname()+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBid?itemId="+id;
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+getSellerNickname()+
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutBid?itemId="+id;
   }
 
 
@@ -681,7 +681,7 @@ public class ItemBean implements EntityBean
    */
   public String printSell() throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+initialPrice+"<TD>"+maxBid+"<TD>"+quantity+"<TD>"+reservePrice+"<TD>"+buyNow+"<TD>"+startDate+"<TD>"+endDate+"\n";
   }
 
@@ -694,9 +694,9 @@ public class ItemBean implements EntityBean
    */
   public String printUserWonItem() throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+"</a>\n"+
       "<TD>"+maxBid+"\n"+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+getSellerNickname()+"</a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+getSellerNickname()+"</a>\n";
   }
 
   /**
