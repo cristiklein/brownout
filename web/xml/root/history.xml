@@ -14,6 +14,27 @@
 
     <s1 name="History">
     
+    <s2 name="New Contributions to RUBiS (December 2003)">
+    <p>Mark Brody and George Candea from <a href="http://www.stanford.edu/">
+       Stanford University</a> wrote a 
+       <a href="http://crash.stanford.edu/resources/rubis.html">guide to install 
+       RUBiS 1.4.1 on JBoss 3.2.2</a>.<br></br>
+       Daniel Pfeifer from <a href="http://www.ipd.uka.de/">University of Karlsruhe</a>
+       contributed his version of RUBiS which is fully controlled by ANT and includes
+       a client emulator for Windows.
+       The things he changed in RUBiS for his experiments are described in Section 5.1 of 
+       his <a href="http://www.ipd.uka.de/~pfeifer/publications/techreport_2003_11.pdf">
+       paper</a>. <a href="http://forge.objectweb.org/project/showfiles.php?group_id=44">
+       Download</a><br></br>
+       Remigius Kuzyna from <a href="http://www.uni-muenster.de/en/">University of
+       Muenster</a> added some changes to the client emulator: LogWriter, 
+       initialization methods, etc. 
+       <a href="http://forge.objectweb.org/project/showfiles.php?group_id=44">
+       Download</a><br></br>
+    </p>
+    </s2>
+    
+    
     <s2 name="RUBiS version 1.4.1 (August 2003)">
         <p>Fixed Javadoc generation.</p>
       </s2>
