@@ -1,3 +1,4 @@
+
 package edu.rice.rubis.servlets;
 
 import java.io.FileInputStream;
@@ -14,18 +15,18 @@ import java.util.Stack;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-/** Provides the method to initialize connection to the database. All the servlets inherit from this class */
+/**
+ * Provides the method to initialize connection to the database. All the
+ * servlets inherit from this class
+ */
 public abstract class RubisHttpServlet extends HttpServlet
 {
 
   /** Stack of available connections (pool) */
-  private Stack freeConnections = null;
-  private int poolSize;
-  private int currentConn = 0;
-  private Properties dbProperties = null;
+  private Stack      freeConnections = null;
+  private int        poolSize;
+  private Properties dbProperties    = null;
 
   public abstract int getPoolSize(); // Get the pool size for this class
 
@@ -48,23 +49,23 @@ public abstract class RubisHttpServlet extends HttpServlet
     }
     catch (FileNotFoundException f)
     {
-      throw new UnavailableException(
-        "Couldn't find file mysql.properties: " + f + "<br>");
+      throw new UnavailableException("Couldn't find file mysql.properties: "
+          + f + "<br>");
     }
     catch (IOException io)
     {
-      throw new UnavailableException(
-        "Cannot open read mysql.properties: " + io + "<br>");
+      throw new UnavailableException("Cannot open read mysql.properties: " + io
+          + "<br>");
     }
     catch (ClassNotFoundException c)
     {
-      throw new UnavailableException(
-        "Couldn't load database driver: " + c + "<br>");
+      throw new UnavailableException("Couldn't load database driver: " + c
+          + "<br>");
     }
     catch (SQLException s)
     {
-      throw new UnavailableException(
-        "Couldn't get database connection: " + s + "<br>");
+      throw new UnavailableException("Couldn't get database connection: " + s
+          + "<br>");
     }
     finally
     {
@@ -80,10 +81,9 @@ public abstract class RubisHttpServlet extends HttpServlet
   }
 
   /**
-   * Initialize the pool of connections to the database.
-   * The caller must ensure that the driver has already been
-   * loaded else an exception will be thrown.
-   *
+   * Initialize the pool of connections to the database. The caller must ensure
+   * that the driver has already been loaded else an exception will be thrown.
+   * 
    * @exception SQLException if an error occurs
    */
   public synchronized void initializeConnections() throws SQLException
@@ -91,36 +91,18 @@ public abstract class RubisHttpServlet extends HttpServlet
     for (int i = 0; i < poolSize; i++)
     {
       // Get connections to the database
-      freeConnections.push(
-        DriverManager.getConnection(
-          dbProperties.getProperty("datasource.url"),
-          dbProperties.getProperty("datasource.username"),
-          dbProperties.getProperty("datasource.password")));
+      freeConnections.push(DriverManager.getConnection(dbProperties
+          .getProperty("datasource.url"), dbProperties
+          .getProperty("datasource.username"), dbProperties
+          .getProperty("datasource.password")));
     }
   }
 
-  //  public Connection getConnection()
-  //  {
-  //    //    currentConn = (currentConn + 1) % poolSize;
-  //    //    return conn[currentConn];
-  //    try
-  //    {
-  //      return DriverManager.getConnection(
-  //        dbProperties.getProperty("datasource.url"),
-  //        dbProperties.getProperty("datasource.username"),
-  //        dbProperties.getProperty("datasource.password"));
-  //    }
-  //    catch (SQLException e)
-  //    {
-  //      return null;
-  //    }
-  //
-  //  }
-
   /**
-  * Closes a <code>Connection</code>.
-  * @param connection to close 
-  */
+   * Closes a <code>Connection</code>.
+   * 
+   * @param connection to close
+   */
   public void closeConnection(Connection connection)
   {
     try
@@ -135,9 +117,8 @@ public abstract class RubisHttpServlet extends HttpServlet
 
   /**
    * Gets a connection from the pool (round-robin)
-   *
-   * @return a <code>Connection</code> or 
-   * null if no connection is available
+   * 
+   * @return a <code>Connection</code> or null if no connection is available
    */
   public synchronized Connection getConnection()
   {
@@ -168,7 +149,7 @@ public abstract class RubisHttpServlet extends HttpServlet
 
   /**
    * Releases a connection to the pool.
-   *
+   * 
    * @param c the connection to release
    */
   public synchronized void releaseConnection(Connection c)
@@ -183,7 +164,7 @@ public abstract class RubisHttpServlet extends HttpServlet
 
   /**
    * Release all the connections to the database.
-   *
+   * 
    * @exception SQLException if an error occurs
    */
   public synchronized void finalizeConnections() throws SQLException
@@ -194,18 +175,6 @@ public abstract class RubisHttpServlet extends HttpServlet
       c = (Connection) freeConnections.pop();
       c.close();
     }
-  }
-
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-
-  }
-
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException
-  {
-
   }
 
   /**
