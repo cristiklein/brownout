@@ -1,12 +1,17 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.SB_BrowseRegions;
+import edu.rice.rubis.beans.SB_BrowseRegionsHome;
 
 
 /**
@@ -16,9 +21,8 @@ import javax.servlet.http.*;
  */
 public class BrowseRegions extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Browse Regions");
     sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
@@ -36,6 +40,7 @@ public class BrowseRegions extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "BrowseRegions");
     sp.printHTMLheader("RUBiS: Available regions");
     sp.printHTML("<h2>Currently available regions</h2><br>");
@@ -47,7 +52,7 @@ public class BrowseRegions extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " +e+"<br>");
+      printError("Cannot get initial context for JNDI: " +e+"<br>", sp);
       return ;
     }
 
@@ -62,7 +67,7 @@ public class BrowseRegions extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_BrowseRegions: " +e+"<br>");
+      printError("Cannot lookup SB_BrowseRegions: " +e+"<br>", sp);
       return ;
     }
     String list;
@@ -72,7 +77,7 @@ public class BrowseRegions extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot get the list of regions: " +e+"<br>");
+      printError("Cannot get the list of regions: " +e+"<br>", sp);
       return ;
     }
 

@@ -1,14 +1,17 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.SB_StoreComment;
+import edu.rice.rubis.beans.SB_StoreCommentHome;
 
 /** This servlets records a comment in the database and display
  * the result of the transaction.
@@ -29,11 +32,8 @@ import java.util.Enumeration;
 
 public class StoreComment extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
 
-
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreComment");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -65,6 +65,9 @@ public class StoreComment extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
+
     Integer toId;    // to user id
     Integer fromId;  // from user id
     Integer itemId;  // item id
@@ -78,7 +81,7 @@ public class StoreComment extends HttpServlet
     String value = request.getParameter("to");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'to user' identifier !<br></h3>");
+      printError("<h3>You must provide a 'to user' identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -87,7 +90,7 @@ public class StoreComment extends HttpServlet
     value = request.getParameter("from");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a 'from user' identifier !<br></h3>");
+      printError("<h3>You must provide a 'from user' identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -96,7 +99,7 @@ public class StoreComment extends HttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -105,7 +108,7 @@ public class StoreComment extends HttpServlet
     value = request.getParameter("rating");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a rating !<br></h3>");
+      printError("<h3>You must provide a rating !<br></h3>", sp);
       return ;
     }
     else
@@ -114,7 +117,7 @@ public class StoreComment extends HttpServlet
     comment = request.getParameter("comment");
     if ((comment == null) || (comment.equals("")))
     {
-      printError("<h3>You must provide a comment !<br></h3>");
+      printError("<h3>You must provide a comment !<br></h3>", sp);
       return ;
     }
     try
@@ -123,7 +126,7 @@ public class StoreComment extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
     SB_StoreCommentHome scHome;
@@ -136,7 +139,7 @@ public class StoreComment extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_StoreComment: " +e+"<br>");
+      printError("Cannot lookup SB_StoreComment: " +e+"<br>", sp);
       return ;
     }
     try
@@ -148,7 +151,7 @@ public class StoreComment extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Error while storing the comment (got exception: " +e+")<br>");
+      printError("Error while storing the comment (got exception: " +e+")<br>", sp);
     }
 
   }

@@ -1,14 +1,17 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.GregorianCalendar;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.SB_BuyNow;
+import edu.rice.rubis.beans.SB_BuyNowHome;
 
 /** This servlets display the page allowing a user to buy an item
  * It must be called this way :
@@ -25,9 +28,8 @@ import java.util.GregorianCalendar;
 
 public class BuyNow extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Buy Now");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -46,6 +48,7 @@ public class BuyNow extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
     String pass = request.getParameter("password");
@@ -55,7 +58,7 @@ public class BuyNow extends HttpServlet
         (name == null) || (name.equals(""))||
         (pass == null) || (pass.equals("")))
     {
-      printError("Item id, name and password are required - Cannot process the request<br>");
+      printError("Item id, name and password are required - Cannot process the request<br>", sp);
       return ;
     }
 
@@ -66,7 +69,7 @@ public class BuyNow extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
 
@@ -80,7 +83,7 @@ public class BuyNow extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_BuyNow: " +e+"<br>");
+      printError("Cannot lookup SB_BuyNow: " +e+"<br>", sp);
       return ;
     }
 
@@ -95,7 +98,7 @@ public class BuyNow extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Cannot get Buy Now form: " +e+"<br>");
+      printError("Cannot get Buy Now form: " +e+"<br>", sp);
     } 
    
   }

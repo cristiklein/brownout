@@ -1,14 +1,11 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.Enumeration;
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** This servlets display the page authentifying the user 
  * to allow him to put a bid on an item.
@@ -23,7 +20,6 @@ import java.util.Enumeration;
 
 public class PutBidAuth extends HttpServlet
 {
-  private ServletPrinter sp = null;
 
   /**
    * Describe <code>doGet</code> method here.
@@ -35,6 +31,7 @@ public class PutBidAuth extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "PubBidAuth");
     
     String value = request.getParameter("itemId");
