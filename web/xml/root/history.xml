@@ -13,6 +13,16 @@
   <body>
 
     <s1 name="History">
+
+    <s2 name="February 4th 2004: Online Demo Available">
+
+    <p>An online demo of RUBiS is now <a
+    href="http://demos.objectweb.org/rubis/">available</a>. This demo
+    is powered by <a href="http://jonas.objectweb.org/">JOnAS</a>
+    3.3.1 and uses the EJB CMP 2.0 version of the RUBiS benchmark
+    (latest CVS version).</p>
+
+    </s2>
     
     <s2 name="New Contributions to RUBiS (December 2003)">
     <p>Mark Brody and George Candea from <a href="http://www.stanford.edu/">
