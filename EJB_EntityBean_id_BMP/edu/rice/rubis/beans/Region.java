@@ -1,14 +1,16 @@
 package edu.rice.rubis.beans;
 
-import javax.ejb.*;
-import java.rmi.*;
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
 
 /**
  * This is the Remote Interface of the Region Bean
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public interface Region extends EJBObject {
+public interface Region extends EJBObject
+{
   /**
    * Get region's id.
    *
@@ -32,6 +34,5 @@ public interface Region extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public void setName(String newName) throws RemoteException;
-
 
 }

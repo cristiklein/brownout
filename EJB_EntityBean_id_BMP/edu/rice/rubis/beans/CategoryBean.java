@@ -1,18 +1,23 @@
 package edu.rice.rubis.beans;
 
 import java.net.URLEncoder;
-import java.rmi.*;
-import javax.rmi.PortableRemoteObject;
-import javax.ejb.*;
-import java.util.Collection;
-import java.util.LinkedList;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.EntityBean;
+import javax.ejb.EntityContext;
+import javax.ejb.FinderException;
+import javax.ejb.RemoveException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.rmi.PortableRemoteObject;
+import javax.sql.DataSource;
 
 /**
  * CategoryBean is an entity bean with "bean managed persistence". 
@@ -29,18 +34,17 @@ import java.sql.SQLException;
  * @version 1.0
  */
 
-public class CategoryBean implements EntityBean 
+public class CategoryBean implements EntityBean
 {
-  private EntityContext     entityContext;
+  private EntityContext entityContext;
   private transient boolean isDirty; // used for the isModified function
-  private Context           initialContext;
-  private DataSource        datasource;
+  private Context initialContext;
+  private DataSource datasource;
 
   /* Class member variables */
 
   public Integer id;
-  public String  name;
-
+  public String name;
 
   /**
    * Get category's id.
@@ -53,7 +57,6 @@ public class CategoryBean implements EntityBean
     return id;
   }
 
-
   /**
    * Get the category name.
    *
@@ -65,19 +68,17 @@ public class CategoryBean implements EntityBean
     return name;
   }
 
-
   /**
    * Set category's name
    *
    * @param newName category name
    * @exception RemoteException if an error occurs
    */
-  public void setName(String newName) throws RemoteException 
+  public void setName(String newName) throws RemoteException
   {
     name = newName;
     isDirty = true; // the bean content has been modified
   }
-
 
   /**
    * Retrieve a connection..
@@ -85,7 +86,7 @@ public class CategoryBean implements EntityBean
    * @return connection
    * @exception Exception if an error occurs
    */
-  public Connection getConnection () throws Exception 
+  public Connection getConnection() throws Exception
   {
     try
     {
@@ -93,16 +94,16 @@ public class CategoryBean implements EntityBean
       {
         // Finds DataSource from JNDI
         initialContext = new InitialContext();
-        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
+        datasource =
+          (DataSource) initialContext.lookup("java:comp/env/jdbc/rubis");
       }
       return datasource.getConnection();
     }
-    catch (Exception e) 
+    catch (Exception e)
     {
       throw new Exception("Cannot retrieve the connection.");
     }
-  } 
-
+  }
 
   /**
    * This method is used to retrieve a Category Bean from its primary key,
@@ -114,9 +115,10 @@ public class CategoryBean implements EntityBean
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public CategoryPK ejbFindByPrimaryKey(CategoryPK id) throws FinderException, RemoteException
+  public CategoryPK ejbFindByPrimaryKey(CategoryPK id)
+    throws FinderException, RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -137,14 +139,17 @@ public class CategoryBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to retrieve object category: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to retrieve object category: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve a Category Bean from its name.
@@ -155,9 +160,10 @@ public class CategoryBean implements EntityBean
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public CategoryPK ejbFindByName(String categoryName) throws FinderException, RemoteException
+  public CategoryPK ejbFindByName(String categoryName)
+    throws FinderException, RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -179,14 +185,17 @@ public class CategoryBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to retrieve object category: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to retrieve object category: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve all categories from the database!
@@ -195,9 +204,10 @@ public class CategoryBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection ejbFindAllCategories() throws RemoteException, FinderException
+  public Collection ejbFindAllCategories()
+    throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -213,7 +223,7 @@ public class CategoryBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new CategoryPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -224,14 +234,17 @@ public class CategoryBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to get all categories: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to get all categories: " + e);
     }
   }
-
 
   /**
    * This method is used to create a new Category Bean. Note that the category
@@ -245,52 +258,60 @@ public class CategoryBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public CategoryPK ejbCreate(String categoryName) throws CreateException, RemoteException, RemoveException
+  public CategoryPK ejbCreate(String categoryName)
+    throws CreateException, RemoteException, RemoveException
   {
     // Connecting to IDManager Home interface thru JNDI
     IDManagerHome home = null;
     IDManager idManager = null;
-      
-    try 
+
+    try
     {
       InitialContext initialContext = new InitialContext();
-      home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
-                                                                              "java:comp/env/ejb/IDManager"), IDManagerHome.class);
-    } 
+      home =
+        (IDManagerHome) PortableRemoteObject.narrow(
+          initialContext.lookup("java:comp/env/ejb/IDManager"),
+          IDManagerHome.class);
+    }
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup IDManager: " +e);
+      throw new EJBException("Cannot lookup IDManager: " + e);
     }
-    try 
+    try
     {
       IDManagerPK idPK = new IDManagerPK();
       idManager = home.findByPrimaryKey(idPK);
       id = idManager.getNextCategoryID();
       name = categoryName;
-    } 
+    }
     catch (Exception e)
     {
-      throw new EJBException("Cannot create category: " +e);
+      throw new EJBException("Cannot create category: " + e);
     }
-    return null; 
+    return null;
   }
 
   /** This method does currently nothing */
-  public void ejbPostCreate(String categoryName) {}
+  public void ejbPostCreate(String categoryName)
+  {
+  }
 
   /** Mandatory methods */
-  public void ejbActivate() throws RemoteException {}
-  public void ejbPassivate() throws RemoteException {}
-
+  public void ejbActivate() throws RemoteException
+  {
+  }
+  public void ejbPassivate() throws RemoteException
+  {
+  }
 
   /**
    * This method delete the record from the database.
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public void ejbRemove() throws RemoteException, RemoveException   
+  public void ejbRemove() throws RemoteException, RemoveException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -305,15 +326,18 @@ public class CategoryBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to remove object category: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to remove object category: " + e);
     }
-    
-  }
 
+  }
 
   /**
    * Update the record.
@@ -321,30 +345,34 @@ public class CategoryBean implements EntityBean
    */
   public void ejbStore() throws RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     if (isDirty)
     {
       isDirty = false;
       try
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("UPDATE categories SET name=? WHERE id=?");
-	stmt.setString(1,name);
-	stmt.setInt(2, id.intValue());
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
+        conn = getConnection();
+        stmt = conn.prepareStatement("UPDATE categories SET name=? WHERE id=?");
+        stmt.setString(1, name);
+        stmt.setInt(2, id.intValue());
+        stmt.executeUpdate();
+        stmt.close();
+        conn.close();
       }
       catch (Exception e)
       {
-	try
+        try
         {
-          if(stmt != null) stmt.close();
-          if(conn != null) conn.close();
+          if (stmt != null)
+            stmt.close();
+          if (conn != null)
+            conn.close();
         }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to update object category: " +e);
+        catch (Exception ignore)
+        {
+        }
+        throw new EJBException("Failed to update object category: " + e);
       }
     }
   }
@@ -356,11 +384,11 @@ public class CategoryBean implements EntityBean
   public void ejbLoad() throws RemoteException
   {
     isDirty = false;
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
-      CategoryPK pk = (CategoryPK)entityContext.getPrimaryKey();
+      CategoryPK pk = (CategoryPK) entityContext.getPrimaryKey();
       id = pk.getId();
       conn = getConnection();
       stmt = conn.prepareStatement("SELECT name FROM categories WHERE id=?");
@@ -379,14 +407,17 @@ public class CategoryBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to update object category: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to update object category: " + e);
     }
   }
-
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -410,8 +441,6 @@ public class CategoryBean implements EntityBean
     entityContext = context;
   }
 
-
-
   /**
    * Unsets the associated entity context. The container calls this method 
    *  before removing the instance. This is the last method that the container 
@@ -434,7 +463,6 @@ public class CategoryBean implements EntityBean
     entityContext = null;
   }
 
-
   /**
    * Display category information for the BrowseCategories servlet
    *
@@ -444,10 +472,16 @@ public class CategoryBean implements EntityBean
    */
   public String printCategory() throws RemoteException
   {
-    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
-      "&categoryName="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
+    return "<a href=\""
+      + BeanConfig.context
+      + "/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="
+      + id
+      + "&categoryName="
+      + URLEncoder.encode(name)
+      + "\">"
+      + name
+      + "</a><br>\n";
   }
-
 
   /**
    * Display category information for the BrowseCategories servlet
@@ -459,10 +493,18 @@ public class CategoryBean implements EntityBean
    */
   public String printCategoryByRegion(int regionId) throws RemoteException
   {
-    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
-      "&categoryName="+URLEncoder.encode(name)+"&region="+regionId+"\">"+name+"</a><br>\n";
+    return "<a href=\""
+      + BeanConfig.context
+      + "/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="
+      + id
+      + "&categoryName="
+      + URLEncoder.encode(name)
+      + "&region="
+      + regionId
+      + "\">"
+      + name
+      + "</a><br>\n";
   }
-
 
   /**
    * Display category information for the BrowseCategories servlet
@@ -474,6 +516,14 @@ public class CategoryBean implements EntityBean
    */
   public String printCategoryToSellItem(int userId) throws RemoteException
   {
-    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
+    return "<a href=\""
+      + BeanConfig.context
+      + "/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="
+      + id
+      + "&user="
+      + userId
+      + "\">"
+      + name
+      + "</a><br>\n";
   }
 }

@@ -1,15 +1,17 @@
 package edu.rice.rubis.beans;
 
+import java.rmi.RemoteException;
+import java.util.Collection;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
 import javax.ejb.RemoveException;
-import java.rmi.RemoteException;
-import java.util.Collection;
 
 /** This is the Home interface of the Category Bean */
 
-public interface CategoryHome extends EJBHome {
+public interface CategoryHome extends EJBHome
+{
 
   /**
    * This method is used to create a new Category Bean. Note that the category
@@ -20,8 +22,8 @@ public interface CategoryHome extends EJBHome {
    *
    * @return pk primary key set to null
    */
-  public Category create(String name) throws CreateException, RemoteException, RemoveException;
-
+  public Category create(String name)
+    throws CreateException, RemoteException, RemoveException;
 
   /**
    * This method is used to retrieve a Category Bean from its primary key,
@@ -31,8 +33,8 @@ public interface CategoryHome extends EJBHome {
    *
    * @return the Category if found else null
    */
-  public Category findByPrimaryKey(CategoryPK id) throws FinderException, RemoteException;
-
+  public Category findByPrimaryKey(CategoryPK id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve a Category Bean from its name.
@@ -41,13 +43,14 @@ public interface CategoryHome extends EJBHome {
    *
    * @return the Category if found else null
    */
-  public Category findByName(String categoryName) throws FinderException, RemoteException;
-
+  public Category findByName(String categoryName)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all categories from the database!
    *
    * @return List of all categories (eventually empty)
    */
-  public Collection findAllCategories() throws RemoteException, FinderException;
+  public Collection findAllCategories()
+    throws RemoteException, FinderException;
 }

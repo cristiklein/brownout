@@ -1,12 +1,14 @@
 package edu.rice.rubis.beans;
 
 import java.rmi.RemoteException;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 
 /** This is the Home interface of the Query Bean */
 
-public interface QueryHome extends EJBHome {
+public interface QueryHome extends EJBHome
+{
 
   /**
    * This method is used to create a new Region Bean. Note that the region

@@ -1,14 +1,16 @@
 package edu.rice.rubis.beans;
 
-import javax.ejb.*;
-import java.rmi.*;
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
 
 /**
  * This is the Remote Interface of the Old Item Bean.
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.1
  */
-public interface OldItem extends EJBObject {
+public interface OldItem extends EJBObject
+{
   /**
    * Get item id.
    *
@@ -144,7 +146,6 @@ public interface OldItem extends EJBObject {
    * @since 1.0
    */
   public String getCategoryName() throws RemoteException;
-
 
   /**
    * Set a new item identifier

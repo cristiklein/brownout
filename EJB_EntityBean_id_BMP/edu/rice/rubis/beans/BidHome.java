@@ -2,6 +2,7 @@ package edu.rice.rubis.beans;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
@@ -12,7 +13,8 @@ import javax.ejb.RemoveException;
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public interface BidHome extends EJBHome {
+public interface BidHome extends EJBHome
+{
   /**
    * This method is used to create a new Bid Bean.
    * The date is automatically set to the current date when the method is called.
@@ -28,7 +30,13 @@ public interface BidHome extends EJBHome {
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public Bid create(Integer bidUserId, Integer bidItemId, float userBid, float userMaxBid, int quantity) throws CreateException, RemoteException, RemoveException;
+  public Bid create(
+    Integer bidUserId,
+    Integer bidItemId,
+    float userBid,
+    float userMaxBid,
+    int quantity)
+    throws CreateException, RemoteException, RemoveException;
 
   /**
    * This method is used to retrieve a Bid Bean from its primary key,
@@ -40,7 +48,8 @@ public interface BidHome extends EJBHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Bid findByPrimaryKey(BidPK id) throws FinderException, RemoteException;
+  public Bid findByPrimaryKey(BidPK id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all Bid Beans related to one item.
@@ -52,7 +61,8 @@ public interface BidHome extends EJBHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByItem(Integer id) throws FinderException, RemoteException;
+  public Collection findByItem(Integer id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all Bid Beans belonging to
@@ -64,7 +74,8 @@ public interface BidHome extends EJBHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByUser(Integer id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all bids from the database!

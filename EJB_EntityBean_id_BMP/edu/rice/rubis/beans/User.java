@@ -1,14 +1,16 @@
 package edu.rice.rubis.beans;
 
-import javax.ejb.*;
-import java.rmi.*;
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
 
 /**
  * This is the Remote Interface of the User Bean.
  * @author <a href="mailto:">Emmanuel Cecchet</a>
  * @version 1.0
  */
-public interface User extends EJBObject {
+public interface User extends EJBObject
+{
   /**
    * Get user's id.
    *
@@ -56,7 +58,7 @@ public interface User extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public String getEmail() throws RemoteException;
-  
+
   /**
    * Get user rating. The higher the rating is, the most reliable the user is.
    *
@@ -64,7 +66,7 @@ public interface User extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public int getRating() throws RemoteException;
-  
+
   /**
    * Get user's account current balance. This account is used when a user want to sell items.
    * There is a charge for each item to sell.
@@ -81,7 +83,7 @@ public interface User extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public String getCreationDate() throws RemoteException;
-  
+
   /**
    * Get region identifier of user's region.
    *
@@ -89,7 +91,6 @@ public interface User extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public Integer getRegionId() throws RemoteException;
-    
 
   /**
    * Set user's first name
@@ -164,7 +165,7 @@ public interface User extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public void updateRating(int diff) throws RemoteException;
-  
+
   /**
    * Set user's account current balance. This account is used when a user want to sell items.
    * There is a charge for each sold item.
@@ -173,7 +174,6 @@ public interface User extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public void setBalance(float newBalance) throws RemoteException;
-
 
   /**
    * Returns a string displaying general information about the user.

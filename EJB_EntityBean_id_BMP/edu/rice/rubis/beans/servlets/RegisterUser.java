@@ -1,15 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
+import javax.ejb.FinderException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import javax.ejb.*;
+
+import edu.rice.rubis.beans.Region;
+import edu.rice.rubis.beans.RegionHome;
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
 
 /** This servlet register a new user in the database and display
  * the result of the transaction.
@@ -35,7 +41,8 @@ public class RegisterUser extends HttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: Register user");
-    sp.printHTML("<h2>Your registration has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your registration has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
@@ -48,31 +55,36 @@ public class RegisterUser extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String firstname=null, lastname=null, nickname=null, email=null, password=null;
-    int    regionId = 0;
-    int    userId;
+    String firstname = null,
+      lastname = null,
+      nickname = null,
+      email = null,
+      password = null;
+    int regionId = 0;
+    int userId;
     String creationDate;
 
     sp = new ServletPrinter(response, "RegisterUser");
-      
+
     Context initialContext = null;
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
-      return ;
+      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      return;
     }
 
     String value = request.getParameter("firstname");
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a first name!<br>");
-      return ;
+      return;
     }
     else
       firstname = value;
@@ -81,7 +93,7 @@ public class RegisterUser extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a last name!<br>");
-      return ;
+      return;
     }
     else
       lastname = value;
@@ -90,7 +102,7 @@ public class RegisterUser extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a nick name!<br>");
-      return ;
+      return;
     }
     else
       nickname = value;
@@ -99,7 +111,7 @@ public class RegisterUser extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide an email address!<br>");
-      return ;
+      return;
     }
     else
       email = value;
@@ -108,30 +120,33 @@ public class RegisterUser extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a password!<br>");
-      return ;
+      return;
     }
     else
       password = value;
-
 
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a valid region!<br>");
-      return ;
+      return;
     }
     else
     {
       RegionHome regionHome;
-      try 
+      try
       {
         // Connecting to Home thru JNDI
-        regionHome = (RegionHome)PortableRemoteObject.narrow(initialContext.lookup("RegionHome"), RegionHome.class);
-      } 
+        regionHome =
+          (RegionHome) PortableRemoteObject.narrow(
+            initialContext.lookup("RegionHome"),
+            RegionHome.class);
+      }
       catch (Exception e)
       {
-        printError("RUBiS internal error: Cannot lookup Region: " +e+"<br>\n");
-        return ;
+        printError(
+          "RUBiS internal error: Cannot lookup Region: " + e + "<br>\n");
+        return;
       }
       try
       {
@@ -140,24 +155,31 @@ public class RegisterUser extends HttpServlet
       }
       catch (Exception e)
       {
-        printError(" Region "+value+" does not exist in the database!<br>(got exception: " +e+")<br>\n");
-        return ;
+        printError(
+          " Region "
+            + value
+            + " does not exist in the database!<br>(got exception: "
+            + e
+            + ")<br>\n");
+        return;
       }
     }
 
     // Try to create a new user
     UserHome userHome;
-    User     user;
-    try 
+    User user;
+    try
     {
       // Connecting to Home thru JNDI
-      userHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"),
-                                                       UserHome.class);
-    } 
+      userHome =
+        (UserHome) PortableRemoteObject.narrow(
+          initialContext.lookup("UserHome"),
+          UserHome.class);
+    }
     catch (Exception e)
     {
-      printError("RUBiS internal error: Cannot lookup User: " +e+"<br>");
-      return ;
+      printError("RUBiS internal error: Cannot lookup User: " + e + "<br>");
+      return;
     }
     try
     {
@@ -165,44 +187,56 @@ public class RegisterUser extends HttpServlet
       /* If an exception has not be thrown at this point, it means that
          the nickname already exists. */
       printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
-      return ;
+      return;
     }
     catch (FinderException fe)
     {
       try
       {
-        user = userHome.create(firstname, lastname, nickname, email, password, new Integer(regionId));
+        user =
+          userHome.create(
+            firstname,
+            lastname,
+            nickname,
+            email,
+            password,
+            new Integer(regionId));
         user = userHome.findByNickName(nickname);
         userId = user.getId().intValue();
         creationDate = user.getCreationDate();
       }
       catch (Exception e)
       {
-        printError("RUBiS internal error: User registration failed (got exception: " +e+")<br>");
-        return ;
+        printError(
+          "RUBiS internal error: User registration failed (got exception: "
+            + e
+            + ")<br>");
+        return;
       }
     }
 
-    sp.printHTMLheader("RUBiS: Welcome to "+nickname);
-    sp.printHTML("<h2>Your registration has been processed successfully</h2><br>\n");
-    sp.printHTML("<h3>Welcome "+nickname+"</h3>\n");
+    sp.printHTMLheader("RUBiS: Welcome to " + nickname);
+    sp.printHTML(
+      "<h2>Your registration has been processed successfully</h2><br>\n");
+    sp.printHTML("<h3>Welcome " + nickname + "</h3>\n");
     sp.printHTML("RUBiS has stored the following information about you:<br>\n");
-    sp.printHTML("First Name : "+firstname+"<br>\n");
-    sp.printHTML("Last Name  : "+lastname+"<br>\n");
-    sp.printHTML("Nick Name  : "+nickname+"<br>\n");
-    sp.printHTML("Email      : "+email+"<br>\n");
-    sp.printHTML("Password   : "+password+"<br>\n");
-    sp.printHTML("Region     : "+value+"<br>\n"); // Note that it is really dirty to reuse value here !!
-    sp.printHTML("<br>The following information has been automatically generated by RUBiS:<br>\n");
-    sp.printHTML("User id       :"+userId+"<br>\n");
-    sp.printHTML("Creation date :"+creationDate+"<br>\n");
-    sp.printHTML("Rating        :"+user.getRating()+"<br>\n");
-    sp.printHTML("Balance       :"+user.getBalance()+"<br>\n");
-      
+    sp.printHTML("First Name : " + firstname + "<br>\n");
+    sp.printHTML("Last Name  : " + lastname + "<br>\n");
+    sp.printHTML("Nick Name  : " + nickname + "<br>\n");
+    sp.printHTML("Email      : " + email + "<br>\n");
+    sp.printHTML("Password   : " + password + "<br>\n");
+    sp.printHTML("Region     : " + value + "<br>\n");
+    // Note that it is really dirty to reuse value here !!
+    sp.printHTML(
+      "<br>The following information has been automatically generated by RUBiS:<br>\n");
+    sp.printHTML("User id       :" + userId + "<br>\n");
+    sp.printHTML("Creation date :" + creationDate + "<br>\n");
+    sp.printHTML("Rating        :" + user.getRating() + "<br>\n");
+    sp.printHTML("Balance       :" + user.getBalance() + "<br>\n");
+
     sp.printHTMLfooter();
   }
-    
- 
+
   /**
    * Call the <code>doGet</code> method here.
    *
@@ -211,7 +245,8 @@ public class RegisterUser extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }

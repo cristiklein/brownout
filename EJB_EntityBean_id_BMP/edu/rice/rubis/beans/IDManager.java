@@ -1,14 +1,17 @@
 package edu.rice.rubis.beans;
 
-import javax.ejb.*;
-import java.rmi.*;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
 
 /**
  * This is the Remote Interface of the IDManager Bean
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.1
  */
-public interface IDManager extends EJBObject, Remote {
+public interface IDManager extends EJBObject, Remote
+{
 
   /** 
    * Generate the category id.

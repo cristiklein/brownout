@@ -1,14 +1,18 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.GregorianCalendar;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
 
 /** This servlets display the page allowing a user to buy an item
  * It must be called this way :
@@ -22,7 +26,6 @@ import java.util.GregorianCalendar;
  * @version 1.0
  */
 
-
 public class BuyNow extends HttpServlet
 {
   private ServletPrinter sp = null;
@@ -30,11 +33,11 @@ public class BuyNow extends HttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: Buy now");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
-
 
   /**
    * Authenticate the user and end the display a buy now form
@@ -44,30 +47,34 @@ public class BuyNow extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     String itemStr = request.getParameter("itemId");
     String name = request.getParameter("nickname");
     String pass = request.getParameter("password");
     sp = new ServletPrinter(response, "BuyNow");
-    
-    if ((itemStr == null) || (itemStr.equals("")) ||
-        (name == null) || (name.equals(""))||
-        (pass == null) || (pass.equals("")))
+
+    if ((itemStr == null)
+      || (itemStr.equals(""))
+      || (name == null)
+      || (name.equals(""))
+      || (pass == null)
+      || (pass.equals("")))
     {
       printError("Item id, name and password are required - Cannot process the request<br>");
-      return ;
+      return;
     }
 
     Context initialContext = null;
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
-      return ;
+      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      return;
     }
 
     // Authenticate the user who want to bid
@@ -76,20 +83,22 @@ public class BuyNow extends HttpServlet
     if (userId == -1)
     {
       printError(" You don't have an account on RUBiS!<br>You have to register first.<br>");
-      return ;	
+      return;
     }
 
     // Try to find the Item corresponding to the Item ID
     ItemHome itemHome;
-    try 
+    try
     {
-      itemHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"),
-                                                       ItemHome.class);
-    } 
+      itemHome =
+        (ItemHome) PortableRemoteObject.narrow(
+          initialContext.lookup("ItemHome"),
+          ItemHome.class);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup Item: " +e+"<br>");
-      return ;
+      printError("Cannot lookup Item: " + e + "<br>");
+      return;
     }
     try
     {
@@ -98,12 +107,12 @@ public class BuyNow extends HttpServlet
 
       // Display the form for bidding
       sp.printItemDescriptionToBuyNow(item, userId);
-    } 
-    catch (Exception e) 
-    {
-      printError("Exception getting the item: "+ e +"<br>");
     }
- 
+    catch (Exception e)
+    {
+      printError("Exception getting the item: " + e + "<br>");
+    }
+
     sp.printHTMLfooter();
   }
 
@@ -115,7 +124,8 @@ public class BuyNow extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }

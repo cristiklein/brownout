@@ -2,6 +2,7 @@ package edu.rice.rubis.beans;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
@@ -9,7 +10,8 @@ import javax.ejb.RemoveException;
 
 /** This is the Home interface of the Region Bean */
 
-public interface RegionHome extends EJBHome {
+public interface RegionHome extends EJBHome
+{
 
   /**
    * This method is used to create a new Region Bean. Note that the region
@@ -20,8 +22,8 @@ public interface RegionHome extends EJBHome {
    *
    * @return pk primary key set to null
    */
-  public Region create(String name) throws CreateException, RemoteException, RemoveException;
-
+  public Region create(String name)
+    throws CreateException, RemoteException, RemoveException;
 
   /**
    * This method is used to retrieve a Region Bean from its primary key,
@@ -31,8 +33,8 @@ public interface RegionHome extends EJBHome {
    *
    * @return the Region if found else null
    */
-  public Region findByPrimaryKey(RegionPK id) throws FinderException, RemoteException;
-
+  public Region findByPrimaryKey(RegionPK id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve a Region Bean from its name.
@@ -41,8 +43,8 @@ public interface RegionHome extends EJBHome {
    *
    * @return the Region if found else null
    */
-  public Region findByName(String regionName) throws FinderException, RemoteException;
-
+  public Region findByName(String regionName)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all categories from the database!

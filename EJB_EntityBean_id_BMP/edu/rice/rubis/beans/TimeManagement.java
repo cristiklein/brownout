@@ -1,7 +1,6 @@
 package edu.rice.rubis.beans;
 
 import java.util.GregorianCalendar;
-import java.lang.String;
 
 /** This class provides additionnal functions that the GregorianCalendar
  * class does not provide. It is mainly to compute time differences and

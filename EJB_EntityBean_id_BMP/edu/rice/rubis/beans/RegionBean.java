@@ -1,17 +1,22 @@
 package edu.rice.rubis.beans;
 
-import java.rmi.*;
-import javax.ejb.*;
-import javax.rmi.PortableRemoteObject;
-import java.util.Collection;
-import java.util.LinkedList;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.EntityBean;
+import javax.ejb.EntityContext;
+import javax.ejb.FinderException;
+import javax.ejb.RemoveException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.rmi.PortableRemoteObject;
+import javax.sql.DataSource;
 
 /**
  * RegionBean is an entity bean with "bean managed persistence". 
@@ -28,7 +33,7 @@ import java.sql.SQLException;
  * @version 1.0
  */
 
-public class RegionBean implements EntityBean 
+public class RegionBean implements EntityBean
 {
   private EntityContext entityContext;
   private Context initialContext;
@@ -38,7 +43,7 @@ public class RegionBean implements EntityBean
   /* Class member variables */
 
   public Integer id;
-  public String  name;
+  public String name;
 
   /**
    * Get region's id.
@@ -68,12 +73,11 @@ public class RegionBean implements EntityBean
    * @param newName region name
    * @exception RemoteException if an error occurs
    */
-  public void setName(String newName) throws RemoteException 
+  public void setName(String newName) throws RemoteException
   {
     name = newName;
     isDirty = true; // the bean content has been modified
   }
-
 
   /**
    * Retrieve a connection..
@@ -81,7 +85,7 @@ public class RegionBean implements EntityBean
    * @return connection
    * @exception Exception if an error occurs
    */
-  public Connection getConnection () throws Exception 
+  public Connection getConnection() throws Exception
   {
     try
     {
@@ -89,16 +93,16 @@ public class RegionBean implements EntityBean
       {
         // Finds DataSource from JNDI
         initialContext = new InitialContext();
-        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
+        datasource =
+          (DataSource) initialContext.lookup("java:comp/env/jdbc/rubis");
       }
       return datasource.getConnection();
     }
-    catch (Exception e) 
+    catch (Exception e)
     {
       throw new Exception("Cannot retrieve the connection.");
     }
-  } 
-
+  }
 
   /**
    * This method is used to retrieve a Region Bean from its primary key,
@@ -110,9 +114,10 @@ public class RegionBean implements EntityBean
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public RegionPK ejbFindByPrimaryKey(RegionPK id) throws FinderException, RemoteException
+  public RegionPK ejbFindByPrimaryKey(RegionPK id)
+    throws FinderException, RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -133,14 +138,17 @@ public class RegionBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Cannot find object region: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Cannot find object region: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve a Region Bean from its name.
@@ -151,9 +159,10 @@ public class RegionBean implements EntityBean
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public RegionPK ejbFindByName(String regionName) throws FinderException, RemoteException
+  public RegionPK ejbFindByName(String regionName)
+    throws FinderException, RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -175,14 +184,17 @@ public class RegionBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Cannot find object region: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Cannot find object region: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve all categories from the database!
@@ -193,7 +205,7 @@ public class RegionBean implements EntityBean
    */
   public Collection ejbFindAllRegions() throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -209,7 +221,7 @@ public class RegionBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new RegionPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -220,14 +232,17 @@ public class RegionBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Cannot find the list of regions: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Cannot find the list of regions: " + e);
     }
   }
-
 
   /**
    * This method is used to create a new Region Bean and insert a record in the database.
@@ -239,23 +254,26 @@ public class RegionBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public RegionPK ejbCreate(String regionName) throws CreateException, RemoteException, RemoveException
+  public RegionPK ejbCreate(String regionName)
+    throws CreateException, RemoteException, RemoveException
   {
     // Connecting to IDManager Home interface thru JNDI
     IDManagerHome home = null;
     IDManager idManager = null;
-      
-    try 
+
+    try
     {
       initialContext = new InitialContext();
-      home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
-                                                                              "java:comp/env/ejb/IDManager"), IDManagerHome.class);
-    } 
+      home =
+        (IDManagerHome) PortableRemoteObject.narrow(
+          initialContext.lookup("java:comp/env/ejb/IDManager"),
+          IDManagerHome.class);
+    }
     catch (Exception e)
     {
-      throw new EJBException("Cannot lookup IDManager: " +e);
+      throw new EJBException("Cannot lookup IDManager: " + e);
     }
-    try 
+    try
     {
       IDManagerPK idPK = new IDManagerPK();
       idManager = home.findByPrimaryKey(idPK);
@@ -264,31 +282,35 @@ public class RegionBean implements EntityBean
     }
     catch (Exception e)
     {
-      throw new EJBException("Cannot create region: " +e);
+      throw new EJBException("Cannot create region: " + e);
     }
 
     return null;
   }
 
-
   /**
    * This method does currently nothing
    */
-  public void ejbPostCreate(String regionName) {}
+  public void ejbPostCreate(String regionName)
+  {
+  }
 
   /** Mandatory methods */
-  public void ejbActivate() throws RemoteException {}
-  public void ejbPassivate() throws RemoteException {}
-
+  public void ejbActivate() throws RemoteException
+  {
+  }
+  public void ejbPassivate() throws RemoteException
+  {
+  }
 
   /**
    * This method delete the record from the database.
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public void ejbRemove() throws RemoteException, RemoveException   
+  public void ejbRemove() throws RemoteException, RemoveException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -303,14 +325,17 @@ public class RegionBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to remove object region: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to remove object region: " + e);
     }
   }
-
 
   /**
    * Update the record.
@@ -319,13 +344,13 @@ public class RegionBean implements EntityBean
   public void ejbStore() throws RemoteException
   {
     isDirty = false;
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
       conn = getConnection();
       stmt = conn.prepareStatement("UPDATE regions SET name=? WHERE id=?");
-      stmt.setString(1,name);
+      stmt.setString(1, name);
       stmt.setInt(2, id.intValue());
       stmt.executeUpdate();
       stmt.close();
@@ -335,14 +360,17 @@ public class RegionBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to update object region: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to update object region: " + e);
     }
   }
-
 
   /**
    * Read the reccord from the database and update the bean.
@@ -351,11 +379,11 @@ public class RegionBean implements EntityBean
   public void ejbLoad() throws RemoteException
   {
     isDirty = false;
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
-      RegionPK pk = (RegionPK)entityContext.getPrimaryKey();
+      RegionPK pk = (RegionPK) entityContext.getPrimaryKey();
       id = pk.getId();
       conn = getConnection();
       stmt = conn.prepareStatement("SELECT name FROM regions WHERE id=?");
@@ -374,14 +402,17 @@ public class RegionBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to update object region: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to update object region: " + e);
     }
   }
-
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -404,7 +435,6 @@ public class RegionBean implements EntityBean
   {
     entityContext = context;
   }
-
 
   /**
    * Unsets the associated entity context. The container calls this method 

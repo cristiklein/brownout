@@ -1,16 +1,19 @@
 package edu.rice.rubis.beans;
 
 import java.rmi.RemoteException;
-import java.util.Properties;
-import javax.ejb.*;
-import java.io.Serializable;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.EntityBean;
+import javax.ejb.EntityContext;
+import javax.ejb.FinderException;
+import javax.ejb.RemoveException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 /**
  * IDManagerBean BMP is used to generate id since the AUTO_INCREMENT
@@ -20,7 +23,7 @@ import java.sql.SQLException;
  * @version 1.1
  */
 
-public class IDManagerBean implements EntityBean 
+public class IDManagerBean implements EntityBean
 {
   private EntityContext entityContext;
   private Context initialContext;
@@ -39,8 +42,6 @@ public class IDManagerBean implements EntityBean
   public Integer bidCount;
   public Integer buyNowCount;
 
-  
-
   /**
    * Generate the category id.
    *
@@ -50,7 +51,7 @@ public class IDManagerBean implements EntityBean
    */
   public Integer getNextCategoryID() throws RemoteException
   {
-    categoryCount = new Integer(categoryCount.intValue()+1);
+    categoryCount = new Integer(categoryCount.intValue() + 1);
     isDirty = true; // the bean content has been modified
     return categoryCount;
   }
@@ -64,7 +65,7 @@ public class IDManagerBean implements EntityBean
    */
   public Integer getNextRegionID() throws RemoteException
   {
-    regionCount = new Integer(regionCount.intValue()+1);
+    regionCount = new Integer(regionCount.intValue() + 1);
     isDirty = true; // the bean content has been modified
     return regionCount;
   }
@@ -78,7 +79,7 @@ public class IDManagerBean implements EntityBean
    */
   public Integer getNextUserID() throws RemoteException
   {
-    userCount = new Integer(userCount.intValue()+1);
+    userCount = new Integer(userCount.intValue() + 1);
     isDirty = true; // the bean content has been modified
     return userCount;
   }
@@ -92,7 +93,7 @@ public class IDManagerBean implements EntityBean
    */
   public Integer getNextItemID() throws RemoteException
   {
-    itemCount = new Integer(itemCount.intValue()+1);
+    itemCount = new Integer(itemCount.intValue() + 1);
     isDirty = true; // the bean content has been modified
     return itemCount;
   }
@@ -106,7 +107,7 @@ public class IDManagerBean implements EntityBean
    */
   public Integer getNextCommentID() throws RemoteException
   {
-    commentCount = new Integer(commentCount.intValue()+1);
+    commentCount = new Integer(commentCount.intValue() + 1);
     isDirty = true; // the bean content has been modified
     return commentCount;
   }
@@ -120,7 +121,7 @@ public class IDManagerBean implements EntityBean
    */
   public Integer getNextBidID() throws RemoteException
   {
-    bidCount = new Integer(bidCount.intValue()+1);
+    bidCount = new Integer(bidCount.intValue() + 1);
     isDirty = true; // the bean content has been modified
     return bidCount;
   }
@@ -134,11 +135,10 @@ public class IDManagerBean implements EntityBean
    */
   public Integer getNextBuyNowID() throws RemoteException
   {
-    buyNowCount = new Integer(buyNowCount.intValue()+1);
+    buyNowCount = new Integer(buyNowCount.intValue() + 1);
     isDirty = true; // the bean content has been modified
     return buyNowCount;
   }
-
 
   /**
    * Retrieve a connection..
@@ -146,7 +146,7 @@ public class IDManagerBean implements EntityBean
    * @return connection
    * @exception Exception if an error occurs
    */
-  public Connection getConnection () throws Exception 
+  public Connection getConnection() throws Exception
   {
     try
     {
@@ -154,15 +154,16 @@ public class IDManagerBean implements EntityBean
       {
         // Finds DataSource from JNDI
         initialContext = new InitialContext();
-        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
+        datasource =
+          (DataSource) initialContext.lookup("java:comp/env/jdbc/rubis");
       }
       return datasource.getConnection();
     }
-    catch (Exception e) 
+    catch (Exception e)
     {
       throw new Exception("Cannot retrieve the connection.");
     }
-  } 
+  }
 
   // ======================== EJB related methods ============================
 
@@ -176,9 +177,10 @@ public class IDManagerBean implements EntityBean
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public IDManagerPK ejbFindByPrimaryKey(IDManagerPK id) throws FinderException, RemoteException
+  public IDManagerPK ejbFindByPrimaryKey(IDManagerPK id)
+    throws FinderException, RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -199,14 +201,17 @@ public class IDManagerBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to retrieve object IDManager: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to retrieve object IDManager: " + e);
     }
   }
-
 
   /**
    * This method is used to create a new IDManager Bean but should never be called.
@@ -216,29 +221,34 @@ public class IDManagerBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public IDManagerPK ejbCreate() throws CreateException, RemoteException, RemoveException
+  public IDManagerPK ejbCreate()
+    throws CreateException, RemoteException, RemoveException
   {
-    throw new CreateException();    
+    throw new CreateException();
   }
 
-
   /** This method does currently nothing */
-  public void ejbPostCreate() {}
+  public void ejbPostCreate()
+  {
+  }
 
   /** Mandatory methods */
-  public void ejbActivate() throws RemoteException {}
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbActivate() throws RemoteException
+  {
+  }
+  public void ejbPassivate() throws RemoteException
+  {
+  }
 
   /**
    * This method delete a record from the database but should never be called.
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public void ejbRemove() throws RemoteException, RemoveException 
+  public void ejbRemove() throws RemoteException, RemoveException
   {
     throw new RemoveException();
   }
-
 
   /**
    * Update the record.
@@ -246,41 +256,46 @@ public class IDManagerBean implements EntityBean
    */
   public void ejbStore() throws RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     if (isDirty)
     {
       isDirty = false;
       try
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("UPDATE ids SET category=?, region=?, users=?, item=?, comment=?, bid=?, buyNow=? WHERE id=?");
-	stmt.setInt(1, categoryCount.intValue());
-	stmt.setInt(2, regionCount.intValue());
-	stmt.setInt(3, userCount.intValue());
-	stmt.setInt(4, itemCount.intValue());
-	stmt.setInt(5, commentCount.intValue());
-	stmt.setInt(6, bidCount.intValue());
-	stmt.setInt(7, buyNowCount.intValue());
-	stmt.setInt(8, id.intValue());
-	stmt.executeUpdate();
+        conn = getConnection();
+        stmt =
+          conn.prepareStatement(
+            "UPDATE ids SET category=?, region=?, users=?, item=?, comment=?, bid=?, buyNow=? WHERE id=?");
+        stmt.setInt(1, categoryCount.intValue());
+        stmt.setInt(2, regionCount.intValue());
+        stmt.setInt(3, userCount.intValue());
+        stmt.setInt(4, itemCount.intValue());
+        stmt.setInt(5, commentCount.intValue());
+        stmt.setInt(6, bidCount.intValue());
+        stmt.setInt(7, buyNowCount.intValue());
+        stmt.setInt(8, id.intValue());
+        stmt.executeUpdate();
 
-	stmt.close();
-	conn.close();
+        stmt.close();
+        conn.close();
       }
       catch (Exception e)
       {
-	try
+        try
         {
-          if(stmt != null) stmt.close();
-          if(conn != null) conn.close();
+          if (stmt != null)
+            stmt.close();
+          if (conn != null)
+            conn.close();
         }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to update object idManager: " +e);
+        catch (Exception ignore)
+        {
+        }
+        throw new EJBException("Failed to update object idManager: " + e);
       }
     }
   }
-
 
   /**
    * Read the reccord from the database and update the bean.
@@ -288,11 +303,11 @@ public class IDManagerBean implements EntityBean
    */
   public void ejbLoad() throws RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
-      IDManagerPK pk = (IDManagerPK)entityContext.getPrimaryKey();
+      IDManagerPK pk = (IDManagerPK) entityContext.getPrimaryKey();
       id = pk.getId();
       conn = getConnection();
       stmt = conn.prepareStatement("SELECT * FROM ids WHERE id=?");
@@ -318,14 +333,17 @@ public class IDManagerBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to update object idManager: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to update object idManager: " + e);
     }
   }
-
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -348,7 +366,6 @@ public class IDManagerBean implements EntityBean
   {
     entityContext = context;
   }
-
 
   /**
    * Unsets the associated entity context. The container calls this method 

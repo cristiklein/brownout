@@ -1,15 +1,33 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.Bid;
+import edu.rice.rubis.beans.BidHome;
+import edu.rice.rubis.beans.BidPK;
+import edu.rice.rubis.beans.BuyNowHome;
+import edu.rice.rubis.beans.Comment;
+import edu.rice.rubis.beans.CommentHome;
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
+import edu.rice.rubis.beans.Query;
+import edu.rice.rubis.beans.QueryHome;
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
+import edu.rice.rubis.beans.UserPK;
 
 /**
  * This servlets displays general information about the user loged in
@@ -23,31 +41,30 @@ public class AboutMe extends HttpServlet
   private Context initialContext = null;
   private UserTransaction utx = null;
 
-
   private void printError(String errorMsg)
   {
     //sp.printHTMLheader("RUBiS ERROR: About me");
-    sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
+    sp.printHTML(
+      "<h3>Your request has not been processed due to the following error :</h3><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
 
-
   /** List items the user is currently selling and sold in the past 30 days */
-  private void listItem(Integer userId, ItemHome iHome) 
+  private void listItem(Integer userId, ItemHome iHome)
   {
-    Item       item;
+    Item item;
     Collection currentItemList, pastItemList;
 
-    try 
+    try
     {
       currentItemList = iHome.findUserCurrentSellings(userId);
       pastItemList = iHome.findUserPastSellings(userId);
     }
     catch (Exception e)
     {
-      printError("Exception getting item list: " +e+"<br>");
-      return ;
+      printError("Exception getting item list: " + e + "<br>");
+      return;
     }
 
     if ((currentItemList == null) || (currentItemList.isEmpty()))
@@ -61,16 +78,16 @@ public class AboutMe extends HttpServlet
       sp.printSellHeader("Items you are currently selling.");
 
       Iterator it = currentItemList.iterator();
-      while (it.hasNext()) 
+      while (it.hasNext())
       {
         // Get the name of the items
         try
         {
-          item = (Item)it.next();
+          item = (Item) it.next();
         }
-        catch (Exception e) 
+        catch (Exception e)
         {
-          printError("Exception getting item: " + e +"<br>");
+          printError("Exception getting item: " + e + "<br>");
           return;
         }
         // display information about the item
@@ -79,28 +96,27 @@ public class AboutMe extends HttpServlet
       sp.printItemFooter();
     }
 
-
     if ((pastItemList == null) || (pastItemList.isEmpty()))
     {
       sp.printHTML("<br>");
       sp.printHTMLHighlighted("<h3>You didn't sell any item.</h3>");
-      return ;
+      return;
     }
     // display past sellings
     sp.printHTML("<br>");
     sp.printSellHeader("Items you sold in the last 30 days.");
 
     Iterator it = pastItemList.iterator();
-    while (it.hasNext()) 
+    while (it.hasNext())
     {
       // Get the name of the items
       try
       {
-        item = (Item)it.next();
+        item = (Item) it.next();
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e + "<br>");
         return;
       }
       // display information about the item
@@ -110,66 +126,69 @@ public class AboutMe extends HttpServlet
   }
 
   /** List items the user bought in the last 30 days*/
-  private void listBoughtItems(Integer userId, ItemHome iHome) 
+  private void listBoughtItems(Integer userId, ItemHome iHome)
   {
     BuyNowHome buyHome;
     edu.rice.rubis.beans.BuyNow buy;
-    Item       item;
-    Collection buyList=null;
-    int        quantity;
+    Item item;
+    Collection buyList = null;
+    int quantity;
 
     // Get the list of items the user bought
-    try 
+    try
     {
-      buyHome = (BuyNowHome)PortableRemoteObject.narrow(initialContext.lookup("BuyNowHome"),
-                                                        BuyNowHome.class);
-    } 
+      buyHome =
+        (BuyNowHome) PortableRemoteObject.narrow(
+          initialContext.lookup("BuyNowHome"),
+          BuyNowHome.class);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup BuyNow: " +e+"<br>");
-      return ;
+      printError("Cannot lookup BuyNow: " + e + "<br>");
+      return;
     }
-    try 
+    try
     {
       buyList = buyHome.findUserBuyNow(userId);
     }
     catch (Exception e)
     {
-      printError("Exception getting item list (buy now): " +e+"<br>");
-      return ;
+      printError("Exception getting item list (buy now): " + e + "<br>");
+      return;
     }
 
     if ((buyList == null) || (buyList.isEmpty()))
     {
       sp.printHTML("<br>");
-      sp.printHTMLHighlighted("<h3>You didn't buy any item in the last 30 days.</h3>");
+      sp.printHTMLHighlighted(
+        "<h3>You didn't buy any item in the last 30 days.</h3>");
       sp.printHTML("<br>");
-      return ;
+      return;
     }
     sp.printUserBoughtItemHeader();
-    
+
     Iterator it = buyList.iterator();
-    while (it.hasNext()) 
+    while (it.hasNext())
     {
       // Get the name of the items
       try
       {
-        buy = (edu.rice.rubis.beans.BuyNow)it.next();
+        buy = (edu.rice.rubis.beans.BuyNow) it.next();
         //buy = buyHome.findByPrimaryKey((BuyNowPK)it.next());
-	quantity = buy.getQuantity();
+        quantity = buy.getQuantity();
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
-        printError("Exception getting buyNow: " + e +"<br>");
+        printError("Exception getting buyNow: " + e + "<br>");
         return;
       }
       try
       {
-	item = iHome.findByPrimaryKey(new ItemPK(buy.getItemId()));
+        item = iHome.findByPrimaryKey(new ItemPK(buy.getItemId()));
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e + "<br>");
         return;
       }
       // display information about the item
@@ -180,44 +199,45 @@ public class AboutMe extends HttpServlet
   }
 
   /** List items the user won in the last 30 days*/
-  private void listWonItems(Integer userId, ItemHome iHome, QueryHome qHome) 
+  private void listWonItems(Integer userId, ItemHome iHome, QueryHome qHome)
   {
-    Enumeration wonList=null;
-    Query       q;
-    Item        item;
-    float       price;
-    String      name;
+    Enumeration wonList = null;
+    Query q;
+    Item item;
+    float price;
+    String name;
 
     // Get the list of the user's won items
-    try 
+    try
     {
       q = qHome.create();
       wonList = q.getUserWonItems(userId).elements();
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting won items list: " +e+"<br>");
-      return ;
+      sp.printHTML("Exception getting won items list: " + e + "<br>");
+      return;
     }
     if ((wonList == null) || (!wonList.hasMoreElements()))
     {
       sp.printHTML("<br>");
-      sp.printHTMLHighlighted("<h3>You didn't win any item in the last 30 days.</h3>");
+      sp.printHTMLHighlighted(
+        "<h3>You didn't win any item in the last 30 days.</h3>");
       sp.printHTML("<br>");
-      return ;
+      return;
     }
     sp.printUserWonItemHeader();
 
-    while (wonList.hasMoreElements()) 
+    while (wonList.hasMoreElements())
     {
       // Get the name of the items
       try
       {
-        item = iHome.findByPrimaryKey((ItemPK)wonList.nextElement());
+        item = iHome.findByPrimaryKey((ItemPK) wonList.nextElement());
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e + "<br>");
         return;
       }
       // display information about the item
@@ -227,29 +247,29 @@ public class AboutMe extends HttpServlet
 
   }
 
-
   /** List comments about the user */
-  private void listComment(CommentHome home, Integer userId, UserHome uHome) 
+  private void listComment(CommentHome home, Integer userId, UserHome uHome)
   {
     Collection list;
-    Comment    comment;
+    Comment comment;
 
-    try 
+    try
     {
-      utx.begin();	// faster if made inside a Tx
+      utx.begin(); // faster if made inside a Tx
       list = home.findByToUser(userId);
       sp.printHTML("<br>");
-      if (list.isEmpty()) 
-        sp.printHTMLHighlighted("<h3>There is no comment yet for this user.</h3>");
+      if (list.isEmpty())
+        sp.printHTMLHighlighted(
+          "<h3>There is no comment yet for this user.</h3>");
       else
         sp.printHTMLHighlighted("<h3>Comments for this user</h3>");
       sp.printHTML("<br>");
       sp.printCommentHeader();
       // Display each comment and the name of its author
       Iterator it = list.iterator();
-      while (it.hasNext()) 
+      while (it.hasNext())
       {
-        comment = (Comment)it.next();
+        comment = (Comment) it.next();
         String userName;
         try
         {
@@ -258,34 +278,40 @@ public class AboutMe extends HttpServlet
         }
         catch (Exception e)
         {
-          sp.printHTML("This author does not exist (got exception: " +e+")<br>");
+          sp.printHTML(
+            "This author does not exist (got exception: " + e + ")<br>");
           sp.printHTMLfooter();
-          return ;
+          return;
         }
         sp.printComment(userName, comment);
       }
       sp.printCommentFooter();
       utx.commit();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e +"<br>");
+      sp.printHTML("Exception getting comment list: " + e + "<br>");
       try
       {
         utx.rollback();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        sp.printHTML("Transaction rollback failed: " + e +"<br>");
+        sp.printHTML("Transaction rollback failed: " + e + "<br>");
       }
     }
   }
 
   /** List items the user put a bid on in the last 30 days*/
-  private void listBids(Integer userId, String username, String password, ItemHome iHome, QueryHome qHome) 
+  private void listBids(
+    Integer userId,
+    String username,
+    String password,
+    ItemHome iHome,
+    QueryHome qHome)
   {
-    Enumeration bidList=null;
-    Query       q;
+    Enumeration bidList = null;
+    Query q;
     BidHome bidHome;
     Bid bid;
     Item item;
@@ -293,46 +319,48 @@ public class AboutMe extends HttpServlet
     String name;
 
     // Get the list of the user's last bids
-    try 
+    try
     {
       q = qHome.create();
       bidList = q.getUserBids(userId).elements();
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting bids list: " +e+"<br>");
-      return ;
+      sp.printHTML("Exception getting bids list: " + e + "<br>");
+      return;
     }
     if ((bidList == null) || (!bidList.hasMoreElements()))
     {
       sp.printHTMLHighlighted("<h3>You didn't put any bid.</h3>");
-      return ;
+      return;
     }
 
     // Lookup bid home interface
-    try 
+    try
     {
-      bidHome = (BidHome)PortableRemoteObject.narrow(initialContext.lookup("BidHome"),
-                                                     BidHome.class);
-    } 
+      bidHome =
+        (BidHome) PortableRemoteObject.narrow(
+          initialContext.lookup("BidHome"),
+          BidHome.class);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup Bid: " +e+"<br>");
-      return ;
+      printError("Cannot lookup Bid: " + e + "<br>");
+      return;
     }
 
     sp.printUserBidsHeader();
 
-    while (bidList.hasMoreElements()) 
+    while (bidList.hasMoreElements())
     {
       // Get the amount of the last bids
       try
       {
-        bid = bidHome.findByPrimaryKey((BidPK)bidList.nextElement());
+        bid = bidHome.findByPrimaryKey((BidPK) bidList.nextElement());
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
-        printError("Exception getting bid: " + e +"<br>");
+        printError("Exception getting bid: " + e + "<br>");
         return;
       }
 
@@ -341,18 +369,17 @@ public class AboutMe extends HttpServlet
       {
         item = iHome.findByPrimaryKey(new ItemPK(bid.getItemId()));
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
-        printError("Exception getting item: " + e +"<br>");
+        printError("Exception getting item: " + e + "<br>");
         return;
       }
       //  display information about user's bids
-	  
+
       sp.printItemUserHasBidOn(bid, item, username, password);
     }
     sp.printItemFooter();
   }
-
 
   /**
    * Call <code>doPost</code> method.
@@ -362,11 +389,11 @@ public class AboutMe extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
-
 
   /** 
    * Check username and password and build the web page that display the information about
@@ -377,113 +404,128 @@ public class AboutMe extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  password=null, username=null; 
-    Integer userId=null;
-    
+    String password = null, username = null;
+    Integer userId = null;
+
     sp = new ServletPrinter(response, "About me");
 
     username = request.getParameter("nickname");
-    password = request.getParameter("password");    
+    password = request.getParameter("password");
     // Authenticate the user
-    if ((username != null && username !="") || (password != null && password !=""))
+    if ((username != null && username != "")
+      || (password != null && password != ""))
     {
       try
       {
         initialContext = new InitialContext();
-      } 
-      catch (Exception e) 
+      }
+      catch (Exception e)
       {
-        printError("Cannot get initial context for JNDI: " + e+"<br>");
-        return ;
+        printError("Cannot get initial context for JNDI: " + e + "<br>");
+        return;
       }
       Auth auth = new Auth(initialContext, sp);
       int id = auth.authenticate(username, password);
       if (id == -1)
       {
         printError("You don't have an account on RUBiS!<br>You have to register first.<br>");
-        return ;	
+        return;
       }
       userId = new Integer(id);
     }
     else
     {
       printError(" You must provide valid username and password.");
-      return ;
+      return;
     }
 
     // We want to start transactions from client: get UserTransaction
     try
     {
-      utx = (javax.transaction.UserTransaction)initialContext.lookup(Config.UserTransaction);
-    } 
+      utx =
+        (javax.transaction.UserTransaction) initialContext.lookup(
+          Config.UserTransaction);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup UserTransaction: "+e+"<br>");
-      return ;
+      printError("Cannot lookup UserTransaction: " + e + "<br>");
+      return;
     }
 
     // Try to find the user corresponding to the userId
     UserHome uHome;
-    try 
+    try
     {
-      uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"), UserHome.class);
-    } 
+      uHome =
+        (UserHome) PortableRemoteObject.narrow(
+          initialContext.lookup("UserHome"),
+          UserHome.class);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup User: " +e+"<br>");
-      return ;
+      printError("Cannot lookup User: " + e + "<br>");
+      return;
     }
     try
     {
       User u = uHome.findByPrimaryKey(new UserPK(userId));
-      sp.printHTMLheader("RUBiS: About "+u.getNickName());
+      sp.printHTMLheader("RUBiS: About " + u.getNickName());
       sp.printHTML(u.getHTMLGeneralUserInformation());
-      
+
     }
     catch (Exception e)
     {
-      printError("This user does not exist (got exception: " +e+")<br>");
-      return ;
+      printError("This user does not exist (got exception: " + e + ")<br>");
+      return;
     }
 
     // Try to find the comments corresponding for this user
     CommentHome cHome;
-    try 
+    try
     {
-      cHome = (CommentHome)PortableRemoteObject.narrow(initialContext.lookup("CommentHome"), CommentHome.class);
-    } 
-    catch (Exception e)
-    {
-      sp.printHTML("Cannot lookup Comment: " +e+"<br>");
-      sp.printHTMLfooter();
-      return ;
+      cHome =
+        (CommentHome) PortableRemoteObject.narrow(
+          initialContext.lookup("CommentHome"),
+          CommentHome.class);
     }
-    
-    // Retrieve ItemHome
-    ItemHome iHome;
-    try 
-    {
-      iHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"), ItemHome.class);
-    } 
     catch (Exception e)
     {
-      printError("Cannot lookup item: " +e+"<br>");
-      return ;
+      sp.printHTML("Cannot lookup Comment: " + e + "<br>");
+      sp.printHTMLfooter();
+      return;
     }
 
+    // Retrieve ItemHome
+    ItemHome iHome;
+    try
+    {
+      iHome =
+        (ItemHome) PortableRemoteObject.narrow(
+          initialContext.lookup("ItemHome"),
+          ItemHome.class);
+    }
+    catch (Exception e)
+    {
+      printError("Cannot lookup item: " + e + "<br>");
+      return;
+    }
 
     // Connecting to Query Home thru JNDI
     QueryHome qHome;
-    try 
+    try
     {
-      qHome = (QueryHome)PortableRemoteObject.narrow(initialContext.lookup("QueryHome"), QueryHome.class);
-    } 
+      qHome =
+        (QueryHome) PortableRemoteObject.narrow(
+          initialContext.lookup("QueryHome"),
+          QueryHome.class);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup Query: " +e+"<br>");
-      return ;
+      printError("Cannot lookup Query: " + e + "<br>");
+      return;
     }
 
     listBids(userId, username, password, iHome, qHome);

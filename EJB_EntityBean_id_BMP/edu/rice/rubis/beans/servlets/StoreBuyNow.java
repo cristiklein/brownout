@@ -1,15 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.BuyNowHome;
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
+import edu.rice.rubis.beans.TimeManagement;
 
 /** This servlet records a BuyNow in the database and display
  * the result of the transaction.
@@ -36,11 +42,11 @@ public class StoreBuyNow extends HttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBuyNow");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
-
 
   /**
    * Call the <code>doPost</code> method.
@@ -50,7 +56,8 @@ public class StoreBuyNow extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
@@ -63,15 +70,16 @@ public class StoreBuyNow extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     Integer userId; // item id
     Integer itemId; // user id
-    float   minBuyNow; // minimum acceptable BuyNow for this item
-    float   BuyNow;    // user BuyNow
-    float   maxBuyNow; // maximum BuyNow the user wants
-    int     maxQty; // maximum quantity available for this item
-    int     qty;    // quantity asked by the user
+    float minBuyNow; // minimum acceptable BuyNow for this item
+    float BuyNow; // user BuyNow
+    float maxBuyNow; // maximum BuyNow the user wants
+    int maxQty; // maximum quantity available for this item
+    int qty; // quantity asked by the user
 
     sp = new ServletPrinter(response, "StoreBuyNow");
 
@@ -81,7 +89,7 @@ public class StoreBuyNow extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a user identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       userId = new Integer(value);
@@ -90,17 +98,16 @@ public class StoreBuyNow extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide an item identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       itemId = new Integer(value);
-
 
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a maximum quantity !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -112,7 +119,7 @@ public class StoreBuyNow extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a quantity !<br></h3>");
-      return ;
+      return;
     }
     else
     {
@@ -124,82 +131,96 @@ public class StoreBuyNow extends HttpServlet
 
     if (qty > maxQty)
     {
-      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>");
-      return ;
-    }      
+      printError(
+        "<h3>You cannot request "
+          + qty
+          + " items because only "
+          + maxQty
+          + " are proposed !<br></h3>");
+      return;
+    }
 
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
-      return ;
+      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      return;
     }
     // We want to start transactions from client
     UserTransaction utx = null;
     try
     {
-      utx = (javax.transaction.UserTransaction)initialContext.lookup(Config.UserTransaction);
-      utx.begin();	
-    } 
+      utx =
+        (javax.transaction.UserTransaction) initialContext.lookup(
+          Config.UserTransaction);
+      utx.begin();
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup UserTransaction: "+e+"<br>");
-      return ;
+      printError("Cannot lookup UserTransaction: " + e + "<br>");
+      return;
     }
 
     // Try to find the Item corresponding to the Item ID
     Item item;
-    try 
+    try
     {
-      ItemHome itemHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"),
-                                                                ItemHome.class);
+      ItemHome itemHome =
+        (ItemHome) PortableRemoteObject.narrow(
+          initialContext.lookup("ItemHome"),
+          ItemHome.class);
       item = itemHome.findByPrimaryKey(new ItemPK(itemId));
       item.setQuantity(item.getQuantity() - qty);
       if (item.getQuantity() == 0)
         item.setEndDate(TimeManagement.currentDateToString());
-    } 
+    }
     catch (Exception e)
     {
-      printError("Cannot update Item: " +e+"<br>");
+      printError("Cannot update Item: " + e + "<br>");
       try
       {
         utx.rollback();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e +"<br>");
+        printError("Transaction rollback failed: " + e + "<br>");
       }
-      return ;
+      return;
     }
-    try 
+    try
     {
-      BuyNowHome bHome = (BuyNowHome)PortableRemoteObject.narrow(initialContext.lookup("BuyNowHome"),
-                                                      BuyNowHome.class);
+      BuyNowHome bHome =
+        (BuyNowHome) PortableRemoteObject.narrow(
+          initialContext.lookup("BuyNowHome"),
+          BuyNowHome.class);
       edu.rice.rubis.beans.BuyNow b = bHome.create(userId, itemId, qty);
       utx.commit();
       sp.printHTMLheader("RUBiS: BuyNow result");
       if (qty == 1)
-        sp.printHTML("<center><h2>Your have successfully bought this item.</h2></center>\n");
+        sp.printHTML(
+          "<center><h2>Your have successfully bought this item.</h2></center>\n");
       else
-        sp.printHTML("<center><h2>Your have successfully bought these items.</h2></center>\n");
+        sp.printHTML(
+          "<center><h2>Your have successfully bought these items.</h2></center>\n");
     }
     catch (Exception e)
     {
-      printError("Error while storing the BuyNow (got exception: " +e+")<br>");
+      printError(
+        "Error while storing the BuyNow (got exception: " + e + ")<br>");
       try
       {
         utx.rollback();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e +"<br>");
+        printError("Transaction rollback failed: " + e + "<br>");
       }
-      return ;
+      return;
     }
-		
+
     sp.printHTMLfooter();
   }
 

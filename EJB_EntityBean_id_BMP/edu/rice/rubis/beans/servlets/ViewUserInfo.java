@@ -1,15 +1,23 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.Comment;
+import edu.rice.rubis.beans.CommentHome;
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
+import edu.rice.rubis.beans.UserPK;
 
 /** This servlets displays general information about a user.
  * It must be called this way :
@@ -26,26 +34,29 @@ public class ViewUserInfo extends HttpServlet
   private Context initialContext = null;
   private UserTransaction utx = null;
 
-  private void commentList(CommentHome home, Integer userId) 
+  private void commentList(CommentHome home, Integer userId)
   {
     Collection list;
-    Comment    comment;
-    UserHome   uHome;
+    Comment comment;
+    UserHome uHome;
     // Retrieve UserHome to get the names of the comment authors
-    try 
+    try
     {
-      uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"), UserHome.class);
-    } 
+      uHome =
+        (UserHome) PortableRemoteObject.narrow(
+          initialContext.lookup("UserHome"),
+          UserHome.class);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup users: " +e+"<br>");
+      sp.printHTML("Cannot lookup users: " + e + "<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
 
-    try 
+    try
     {
-      utx.begin();	// faster if made inside a Tx
+      utx.begin(); // faster if made inside a Tx
       list = home.findByToUser(userId);
       if (list.isEmpty())
         sp.printHTML("<h3>There is no comment yet for this user.</h3><br>");
@@ -58,39 +69,40 @@ public class ViewUserInfo extends HttpServlet
         Iterator it = list.iterator();
         while (it.hasNext())
         {
-          comment = (Comment)it.next();
+          comment = (Comment) it.next();
           String userName;
           try
           {
-            User u = uHome.findByPrimaryKey(new UserPK(comment.getFromUserId()));
+            User u =
+              uHome.findByPrimaryKey(new UserPK(comment.getFromUserId()));
             userName = u.getNickName();
           }
           catch (Exception e)
           {
-            sp.printHTML("This author does not exist (got exception: " +e+")<br>");
+            sp.printHTML(
+              "This author does not exist (got exception: " + e + ")<br>");
             sp.printHTMLfooter();
-            return ;
+            return;
           }
           sp.printComment(userName, comment);
         }
         sp.printCommentFooter();
       }
       utx.commit();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Exception getting comment list: " + e +"<br>");
+      sp.printHTML("Exception getting comment list: " + e + "<br>");
       try
       {
         utx.rollback();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        sp.printHTML("Transaction rollback failed: " + e +"<br>");
+        sp.printHTML("Transaction rollback failed: " + e + "<br>");
       }
     }
   }
-
 
   /**
    * Call the <code>doPost</code> method.
@@ -100,7 +112,8 @@ public class ViewUserInfo extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
@@ -113,11 +126,12 @@ public class ViewUserInfo extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  value = request.getParameter("userId");
+    String value = request.getParameter("userId");
     Integer userId;
-    
+
     sp = new ServletPrinter(response, "ViewUserInfo");
 
     if ((value == null) || (value.equals("")))
@@ -125,7 +139,7 @@ public class ViewUserInfo extends HttpServlet
       sp.printHTMLheader("RUBiS ERROR: View user information");
       sp.printHTML("<h3>You must provide a user identifier !<br></h3>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
     else
       userId = new Integer(value);
@@ -135,37 +149,41 @@ public class ViewUserInfo extends HttpServlet
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Cannot get initial context for JNDI: " + e+"<br>");
+      sp.printHTML("Cannot get initial context for JNDI: " + e + "<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
 
     // We want to start transactions from client: get UserTransaction
     try
     {
-      utx = (javax.transaction.UserTransaction)initialContext.lookup(Config.UserTransaction);
-    } 
+      utx =
+        (javax.transaction.UserTransaction) initialContext.lookup(
+          Config.UserTransaction);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup UserTransaction: "+e+"<br>");
-      return ;
+      sp.printHTML("Cannot lookup UserTransaction: " + e + "<br>");
+      return;
     }
 
     // Try to find the user corresponding to the userId
     UserHome uHome;
-    try 
+    try
     {
-      uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"),
-                                                    UserHome.class);
-    } 
+      uHome =
+        (UserHome) PortableRemoteObject.narrow(
+          initialContext.lookup("UserHome"),
+          UserHome.class);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup Seller: " +e+"<br>");
+      sp.printHTML("Cannot lookup Seller: " + e + "<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
     try
     {
@@ -174,23 +192,25 @@ public class ViewUserInfo extends HttpServlet
     }
     catch (Exception e)
     {
-      sp.printHTML("This user does not exist (got exception: " +e+")<br>");
+      sp.printHTML("This user does not exist (got exception: " + e + ")<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
-		
+
     // Try to find the comments corresponding for this user
     CommentHome cHome;
-    try 
+    try
     {
-      cHome = (CommentHome)PortableRemoteObject.narrow(initialContext.lookup("CommentHome"),
-                                                       CommentHome.class);
-    } 
+      cHome =
+        (CommentHome) PortableRemoteObject.narrow(
+          initialContext.lookup("CommentHome"),
+          CommentHome.class);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup Comment: " +e+"<br>");
+      sp.printHTML("Cannot lookup Comment: " + e + "<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
     commentList(cHome, userId);
     sp.printHTMLfooter();

@@ -5,7 +5,8 @@ package edu.rice.rubis.beans;
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public class BidPK implements java.io.Serializable {
+public class BidPK implements java.io.Serializable
+{
 
   public Integer id;
 
@@ -13,8 +14,10 @@ public class BidPK implements java.io.Serializable {
    * Creates a new <code>BidPK</code> instance.
    *
    */
-  public BidPK() {}
-    
+  public BidPK()
+  {
+  }
+
   /**
    * Creates a new <code>BidPK</code> instance.
    *
@@ -30,36 +33,36 @@ public class BidPK implements java.io.Serializable {
    *
    * @return the hash code
    */
-  public int hashCode() 
+  public int hashCode()
   {
     if (id == null)
       return 0;
     else
       return id.intValue();
   }
-  
+
   /**
    * Specific <code>equals</code> method.
    *
    * @param other the <code>Object</code> to compare with
    * @return true if both objects have the same primary key
    */
-  public boolean equals(Object other) 
+  public boolean equals(Object other)
   {
     boolean isEqual = false;
     if (other instanceof BidPK)
     {
       if (id == null)
-        isEqual = (id == ((BidPK)other).id);
+        isEqual = (id == ((BidPK) other).id);
       else
-        isEqual = (id.intValue() == ((BidPK)other).id.intValue());
+        isEqual = (id.intValue() == ((BidPK) other).id.intValue());
     }
     return isEqual;
   }
 
- /**
-   * Get the value of the primary key
-   */
+  /**
+    * Get the value of the primary key
+    */
   public Integer getId()
   {
     return id;

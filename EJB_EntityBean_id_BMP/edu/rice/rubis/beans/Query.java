@@ -1,15 +1,18 @@
 package edu.rice.rubis.beans;
 
-import javax.ejb.*;
-import java.rmi.*;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Vector;
+
+import javax.ejb.EJBObject;
 
 /**
  * This is the Remote Interface of the Region Bean
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.1
  */
-public interface Query extends EJBObject, Remote {
+public interface Query extends EJBObject, Remote
+{
   /**
   /** 
    * Get all the items that match a specific category and that are still
@@ -26,7 +29,11 @@ public interface Query extends EJBObject, Remote {
    * @return Vector of items primary keys
    * @since 1.1
    */
-  public Vector getCurrentItemsInCategory(Integer categoryId, int startingRow, int nbOfRows) throws RemoteException;
+  public Vector getCurrentItemsInCategory(
+    Integer categoryId,
+    int startingRow,
+    int nbOfRows)
+    throws RemoteException;
 
   /** 
    * Get all the items that match a specific category and region and
@@ -43,7 +50,12 @@ public interface Query extends EJBObject, Remote {
    * @return Vector of items primary keys
    * @since 1.1
    */
-  public Vector getCurrentItemsInCategoryAndRegion(Integer categoryId, Integer regionId, int startingRow, int nbOfRows) throws RemoteException;
+  public Vector getCurrentItemsInCategoryAndRegion(
+    Integer categoryId,
+    Integer regionId,
+    int startingRow,
+    int nbOfRows)
+    throws RemoteException;
 
   /**
    * Get the maximum bid (winning bid) for an item.
@@ -55,7 +67,7 @@ public interface Query extends EJBObject, Remote {
    * @since 1.0
    */
   public float getItemMaxBid(Integer itemId) throws RemoteException;
-  
+
   /**
    * Get the first <i>maxToCollect</i> bids for an item sorted from the
    * maximum to the minimum.
@@ -67,8 +79,9 @@ public interface Query extends EJBObject, Remote {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getItemQtyMaxBid(int maxToCollect, Integer itemId) throws RemoteException;
-  
+  public Vector getItemQtyMaxBid(int maxToCollect, Integer itemId)
+    throws RemoteException;
+
   /**
    * Get the number of bids for an item.
    *
@@ -79,7 +92,7 @@ public interface Query extends EJBObject, Remote {
    * @since 1.0
    */
   public int getItemNbOfBids(Integer itemId) throws RemoteException;
-  
+
   /**
    * Get the bid history for an item sorted from the last bid to the
    * first bid (oldest one).
@@ -91,7 +104,7 @@ public interface Query extends EJBObject, Remote {
    * @since 1.0
    */
   public Vector getItemBidHistory(Integer itemId) throws RemoteException;
-  
+
   /**
    * Get all the latest bids for each item the user has bid on.
    *
@@ -113,9 +126,5 @@ public interface Query extends EJBObject, Remote {
    * @since 1.0
    */
   public Vector getUserWonItems(Integer userId) throws RemoteException;
-
-
- 
-
 
 }

@@ -2,6 +2,7 @@ package edu.rice.rubis.beans;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
@@ -12,7 +13,8 @@ import javax.ejb.RemoveException;
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public interface BuyNowHome extends EJBHome {
+public interface BuyNowHome extends EJBHome
+{
   /**
    * This method is used to create a new BuyNow Bean.
    * The date is automatically set to the current date when the method is called.
@@ -26,7 +28,11 @@ public interface BuyNowHome extends EJBHome {
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public BuyNow create(Integer BuyNowUserId, Integer BuyNowItemId, int quantity) throws CreateException, RemoteException, RemoveException;
+  public BuyNow create(
+    Integer BuyNowUserId,
+    Integer BuyNowItemId,
+    int quantity)
+    throws CreateException, RemoteException, RemoveException;
 
   /**
    * This method is used to retrieve a BuyNow Bean from its primary key,
@@ -38,7 +44,8 @@ public interface BuyNowHome extends EJBHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public BuyNow findByPrimaryKey(BuyNowPK id) throws FinderException, RemoteException;
+  public BuyNow findByPrimaryKey(BuyNowPK id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all BuyNow Beans related to one item.
@@ -50,7 +57,8 @@ public interface BuyNowHome extends EJBHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByItem(Integer id) throws FinderException, RemoteException;
+  public Collection findByItem(Integer id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all BuyNow Beans belonging to
@@ -62,7 +70,8 @@ public interface BuyNowHome extends EJBHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByUser(Integer id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all BuyNows from the database!
@@ -81,6 +90,7 @@ public interface BuyNowHome extends EJBHome {
    * @return Vector of items primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
    */
-    public Collection findUserBuyNow(Integer userId) throws RemoteException, FinderException;
+  public Collection findUserBuyNow(Integer userId)
+    throws RemoteException, FinderException;
 
 }

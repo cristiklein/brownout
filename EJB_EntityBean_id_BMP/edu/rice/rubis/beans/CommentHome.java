@@ -2,6 +2,7 @@ package edu.rice.rubis.beans;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 import javax.ejb.FinderException;
@@ -9,7 +10,8 @@ import javax.ejb.RemoveException;
 
 /** This is the Home interface of the Comment Bean */
 
-public interface CommentHome extends EJBHome {
+public interface CommentHome extends EJBHome
+{
   /**
    * This method is used to create a new Comment Bean. 
    * The date is automatically set to the current date when the method is called.
@@ -22,7 +24,13 @@ public interface CommentHome extends EJBHome {
    *
    * @return pk primary key set to null
    */
-  public Comment create(Integer FromUserId, Integer ToUserId, Integer ItemId, int Rating, String Comment) throws CreateException, RemoteException, RemoveException;
+  public Comment create(
+    Integer FromUserId,
+    Integer ToUserId,
+    Integer ItemId,
+    int Rating,
+    String Comment)
+    throws CreateException, RemoteException, RemoveException;
 
   /**
    * This method is used to retrieve a Comment Bean from its primary key,
@@ -32,7 +40,8 @@ public interface CommentHome extends EJBHome {
    *
    * @return the Comment if found else null
    */
-  public Comment findByPrimaryKey(CommentPK id) throws FinderException, RemoteException;
+  public Comment findByPrimaryKey(CommentPK id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all Comment Beans related to one item.
@@ -42,7 +51,8 @@ public interface CommentHome extends EJBHome {
    *
    * @return List of Comments found (eventually empty)
    */
-  public Collection findByItem(Integer id) throws FinderException, RemoteException;
+  public Collection findByItem(Integer id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all Comment Beans belonging to
@@ -52,7 +62,8 @@ public interface CommentHome extends EJBHome {
    *
    * @return List of Comments found (eventually empty)
    */
-  public Collection findByFromUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByFromUser(Integer id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all Comment Beans related to
@@ -62,7 +73,8 @@ public interface CommentHome extends EJBHome {
    *
    * @return List of Comments found (eventually empty)
    */
-  public Collection findByToUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByToUser(Integer id)
+    throws FinderException, RemoteException;
 
   /**
    * This method is used to retrieve all comments from the database!

@@ -1,14 +1,22 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Enumeration;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.Enumeration;
-import java.net.URLEncoder;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
+import edu.rice.rubis.beans.Query;
+import edu.rice.rubis.beans.QueryHome;
 
 /** This servlets displays a list of items belonging to a specific category.
  * It must be called this way :
@@ -29,7 +37,8 @@ public class SearchItemsByCategory extends HttpServlet
 
   private void printError(String errorMsg)
   {
-    sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>We cannot process your request due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
   }
 
@@ -38,23 +47,29 @@ public class SearchItemsByCategory extends HttpServlet
     try
     {
       Enumeration list;
-      ItemPK      itemPK;
-      ItemHome    iHome;
-      Item        item;
-      Query       query;
-      QueryHome   qHome;
+      ItemPK itemPK;
+      ItemHome iHome;
+      Item item;
+      Query query;
+      QueryHome qHome;
 
-      qHome = (QueryHome)initialContext.lookup("QueryHome");
+      qHome = (QueryHome) initialContext.lookup("QueryHome");
       //qHome = (QueryHome)PortableRemoteObject.narrow(initialContext.lookup("QueryHome"), QueryHome.class);
       query = qHome.create();
-      iHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"), ItemHome.class);
-      list = query.getCurrentItemsInCategory(categoryId, page*nbOfItems, nbOfItems).elements();
+      iHome =
+        (ItemHome) PortableRemoteObject.narrow(
+          initialContext.lookup("ItemHome"),
+          ItemHome.class);
+      list =
+        query
+          .getCurrentItemsInCategory(categoryId, page * nbOfItems, nbOfItems)
+          .elements();
       if (list.hasMoreElements())
       {
         sp.printItemHeader();
-        while (list.hasMoreElements()) 
+        while (list.hasMoreElements())
         {
-          itemPK = (ItemPK)list.nextElement();
+          itemPK = (ItemPK) list.nextElement();
           item = iHome.findByPrimaryKey(itemPK);
           sp.printItem(item);
         }
@@ -62,31 +77,73 @@ public class SearchItemsByCategory extends HttpServlet
       else
       {
         if (page == 0)
-          sp.printHTML("<h2>Sorry, but there are no items available in this category !</h2>");
+          sp.printHTML(
+            "<h2>Sorry, but there are no items available in this category !</h2>");
         else
         {
-          sp.printHTML("<h2>Sorry, but there are no more items available in this category !</h2>");
+          sp.printHTML(
+            "<h2>Sorry, but there are no more items available in this category !</h2>");
           sp.printItemHeader();
-          sp.printItemFooter("<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
-                           "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>", "");
+          sp.printItemFooter(
+            "<a href=\""
+              + Config.context
+              + "/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="
+              + categoryId
+              + "&categoryName="
+              + URLEncoder.encode(categoryName)
+              + "&page="
+              + (page - 1)
+              + "&nbOfItems="
+              + nbOfItems
+              + "\">Previous page</a>",
+            "");
         }
-        return ;
+        return;
       }
       if (page == 0)
-        sp.printItemFooter("", "<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
-                           "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
+        sp.printItemFooter(
+          "",
+          "<a href=\""
+            + Config.context
+            + "/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="
+            + categoryId
+            + "&categoryName="
+            + URLEncoder.encode(categoryName)
+            + "&page="
+            + (page + 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Next page</a>");
       else
-        sp.printItemFooter("<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
-                           "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>",
-                           "<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
-                           "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
-    } 
-    catch (Exception e) 
+        sp.printItemFooter(
+          "<a href=\""
+            + Config.context
+            + "/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="
+            + categoryId
+            + "&categoryName="
+            + URLEncoder.encode(categoryName)
+            + "&page="
+            + (page - 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Previous page</a>",
+          "<a href=\""
+            + Config.context
+            + "/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="
+            + categoryId
+            + "&categoryName="
+            + URLEncoder.encode(categoryName)
+            + "&page="
+            + (page + 1)
+            + "&nbOfItems="
+            + nbOfItems
+            + "\">Next page</a>");
+    }
+    catch (Exception e)
     {
-      printError("Exception getting item list: " + e +"<br>");
+      printError("Exception getting item list: " + e + "<br>");
     }
   }
-
 
   /**
    * Describe <code>doGet</code> method here.
@@ -96,9 +153,10 @@ public class SearchItemsByCategory extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  value = request.getParameter("category");
+    String value = request.getParameter("category");
     Integer categoryId;
     Integer page;
     Integer nbOfItems;
@@ -108,7 +166,7 @@ public class SearchItemsByCategory extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a category identifier!<br>");
-      return ;
+      return;
     }
     else
       categoryId = new Integer(value);
@@ -128,11 +186,11 @@ public class SearchItemsByCategory extends HttpServlet
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
-      return ;
+      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      return;
     }
 
     if (categoryName == null)
@@ -142,15 +200,14 @@ public class SearchItemsByCategory extends HttpServlet
     }
     else
     {
-      sp.printHTMLheader("RUBiS: Items in category "+categoryName);
-      sp.printHTML("<h2>Items in category "+categoryName+"</h2><br><br>");
+      sp.printHTMLheader("RUBiS: Items in category " + categoryName);
+      sp.printHTML("<h2>Items in category " + categoryName + "</h2><br><br>");
     }
 
     itemList(categoryId, page.intValue(), nbOfItems.intValue());
-		
+
     sp.printHTMLfooter();
   }
-
 
   /**
    * Call the <code>doGet</code> method.
@@ -160,7 +217,8 @@ public class SearchItemsByCategory extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }

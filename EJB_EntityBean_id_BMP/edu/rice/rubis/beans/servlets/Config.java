@@ -18,17 +18,17 @@ public class Config
   Config()
   {
   }
-  
+
   /**
    * Returns the context used by the web container for html files and servlets (this isthe name of the war file).
    */
   public static final String context = "/ejb_rubis_web";
 
-
   /**
    * Returns the path to the directory where the HTML header and footer are stored.
    */
-  public static final String HTMLFilesPath = "/home/margueri/workspace/RUBiS/ejb_rubis_web";
+  public static final String HTMLFilesPath =
+    "/home/margueri/workspace/RUBiS/ejb_rubis_web";
 
   /**
    * Return the UserTransaction name to look for since JBoss does not support full class names
@@ -36,5 +36,6 @@ public class Config
    * JOnAS 2.6 looks like: utx = (UserTransaction)initialContext.lookup("javax.transaction.UserTransaction");
    * JBoss looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("UserTransaction");
    */
-  public static final String UserTransaction = "javax.transaction.UserTransaction";
+  public static final String UserTransaction =
+    "javax.transaction.UserTransaction";
 }

@@ -1,14 +1,18 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
 
 /** This servlets displays the full description of a given item
  * and allows the user to bid on this item.
@@ -20,7 +24,6 @@ import java.util.Enumeration;
  * @version 1.0
  */
 
-
 public class ViewItem extends HttpServlet
 {
   private ServletPrinter sp = null;
@@ -28,7 +31,8 @@ public class ViewItem extends HttpServlet
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: View item");
-    sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>We cannot process your request due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
@@ -41,39 +45,42 @@ public class ViewItem extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     sp = new ServletPrinter(response, "ViewItem");
-    
+
     String value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")))
     {
       printError("No item identifier received - Cannot process the request<br>");
-      return ;
+      return;
     }
 
     Context initialContext = null;
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
-      return ;
+      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      return;
     }
 
     // Try to find the Item corresponding to the Item ID
     ItemHome itemHome;
-    try 
+    try
     {
-      itemHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"),
-                                                       ItemHome.class);
-    } 
+      itemHome =
+        (ItemHome) PortableRemoteObject.narrow(
+          initialContext.lookup("ItemHome"),
+          ItemHome.class);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup Item: " +e+"<br>");
-      return ;
+      printError("Cannot lookup Item: " + e + "<br>");
+      return;
     }
     try
     {
@@ -83,8 +90,8 @@ public class ViewItem extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("This item does not exist (got exception: " +e+")<br>");
-      return ;
+      printError("This item does not exist (got exception: " + e + ")<br>");
+      return;
     }
 
     sp.printHTMLfooter();
@@ -98,7 +105,8 @@ public class ViewItem extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }

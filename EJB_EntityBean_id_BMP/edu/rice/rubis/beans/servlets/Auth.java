@@ -1,12 +1,10 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
-import javax.servlet.*;
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import javax.servlet.http.*;
-import java.rmi.RemoteException;
+
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
 
 /**
  * This class is not a servlet but it provides user authentication services to servlets.
@@ -18,7 +16,6 @@ public class Auth
 
   private Context servletContext;
   private ServletPrinter sp;
-
 
   /**
    * Creates a new <code>Auth</code> instance.
@@ -32,7 +29,6 @@ public class Auth
     sp = printer;
   }
 
-
   /**
    * Describe <code>authenticate</code> method here.
    *
@@ -40,20 +36,22 @@ public class Auth
    * @param password user password
    * @return an <code>int</code> value corresponding to the user id or -1 on error
    */
-  public int authenticate (String name, String password)
+  public int authenticate(String name, String password)
   {
     int userId = -1;
 
     // Connecting to user Home interface thru JNDI
     UserHome userHome = null;
-    try 
+    try
     {
-      userHome = (UserHome)PortableRemoteObject.narrow(servletContext.lookup("UserHome"),
-                                                       UserHome.class);
-    } 
+      userHome =
+        (UserHome) PortableRemoteObject.narrow(
+          servletContext.lookup("UserHome"),
+          UserHome.class);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup User: " +e+"<br>");
+      sp.printHTML("Cannot lookup User: " + e + "<br>");
       return userId;
     }
     // get the User ID
@@ -68,8 +66,13 @@ public class Auth
     }
     catch (Exception e)
     {
-      sp.printHTML(" User "+name+" does not exist in the database!<br>(got exception: " +e+")<br>");
-      return userId ;
+      sp.printHTML(
+        " User "
+          + name
+          + " does not exist in the database!<br>(got exception: "
+          + e
+          + ")<br>");
+      return userId;
     }
     return userId;
   }

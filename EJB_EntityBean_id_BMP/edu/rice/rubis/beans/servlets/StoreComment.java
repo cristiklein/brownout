@@ -1,15 +1,21 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.Comment;
+import edu.rice.rubis.beans.CommentHome;
+import edu.rice.rubis.beans.User;
+import edu.rice.rubis.beans.UserHome;
+import edu.rice.rubis.beans.UserPK;
 
 /** This servlets records a comment in the database and display
  * the result of the transaction.
@@ -33,15 +39,14 @@ public class StoreComment extends HttpServlet
   private ServletPrinter sp = null;
   private Context initialContext = null;
 
-
   private void printError(String errorMsg)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreComment");
-    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
+    sp.printHTML(
+      "<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
-
 
   /**
    * Call the <code>doPost</code> method.
@@ -51,7 +56,8 @@ public class StoreComment extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
@@ -64,13 +70,14 @@ public class StoreComment extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    Integer toId;    // to user id
-    Integer fromId;  // from user id
-    Integer itemId;  // item id
-    String  comment; // user comment
-    Integer rating;  // user rating
+    Integer toId; // to user id
+    Integer fromId; // from user id
+    Integer itemId; // item id
+    String comment; // user comment
+    Integer rating; // user rating
 
     sp = new ServletPrinter(response, "StoreComment");
 
@@ -80,7 +87,7 @@ public class StoreComment extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a 'to user' identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       toId = new Integer(value);
@@ -89,7 +96,7 @@ public class StoreComment extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a 'from user' identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       fromId = new Integer(value);
@@ -98,7 +105,7 @@ public class StoreComment extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide an item identifier !<br></h3>");
-      return ;
+      return;
     }
     else
       itemId = new Integer(value);
@@ -107,7 +114,7 @@ public class StoreComment extends HttpServlet
     if ((value == null) || (value.equals("")))
     {
       printError("<h3>You must provide a rating !<br></h3>");
-      return ;
+      return;
     }
     else
       rating = new Integer(value);
@@ -116,75 +123,84 @@ public class StoreComment extends HttpServlet
     if ((comment == null) || (comment.equals("")))
     {
       printError("<h3>You must provide a comment !<br></h3>");
-      return ;
+      return;
     }
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
-      return ;
+      printError("Cannot get initial context for JNDI: " + e + "<br>");
+      return;
     }
     // Try to find the user corresponding to the 'to' ID
     User to;
-    try 
+    try
     {
-      UserHome uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"),
-                                                             UserHome.class);
+      UserHome uHome =
+        (UserHome) PortableRemoteObject.narrow(
+          initialContext.lookup("UserHome"),
+          UserHome.class);
       to = uHome.findByPrimaryKey(new UserPK(toId));
-    } 
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup User or Item: " +e+"<br>");
-      return ;
+      printError("Cannot lookup User or Item: " + e + "<br>");
+      return;
     }
     CommentHome cHome;
-    try 
+    try
     {
-      cHome = (CommentHome)PortableRemoteObject.narrow(initialContext.lookup("CommentHome"),
-                                                       CommentHome.class);
-    } 
+      cHome =
+        (CommentHome) PortableRemoteObject.narrow(
+          initialContext.lookup("CommentHome"),
+          CommentHome.class);
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup Comment: " +e+"<br>");
-      return ;
+      printError("Cannot lookup Comment: " + e + "<br>");
+      return;
     }
     // We want to start transactions from client
     UserTransaction utx = null;
     try
     {
-      utx = (javax.transaction.UserTransaction)initialContext.lookup(Config.UserTransaction);
-      utx.begin();	
-    } 
+      utx =
+        (javax.transaction.UserTransaction) initialContext.lookup(
+          Config.UserTransaction);
+      utx.begin();
+    }
     catch (Exception e)
     {
-      printError("Cannot lookup UserTransaction: "+e+"<br>");
-      return ;
+      printError("Cannot lookup UserTransaction: " + e + "<br>");
+      return;
     }
     try
     {
-      Comment c = cHome.create(fromId, toId, itemId, rating.intValue(), comment);
+      Comment c =
+        cHome.create(fromId, toId, itemId, rating.intValue(), comment);
       to.updateRating(rating.intValue());
       utx.commit();
       sp.printHTMLheader("RUBiS: Comment posting");
-      sp.printHTML("<center><h2>Your comment has been successfully posted.</h2></center>\n");
+      sp.printHTML(
+        "<center><h2>Your comment has been successfully posted.</h2></center>\n");
     }
     catch (Exception e)
     {
-      printError("Error while storing the comment (got exception: " +e+")<br>");
+      printError(
+        "Error while storing the comment (got exception: " + e + ")<br>");
       try
       {
         utx.rollback();
       }
-      catch (Exception se) 
+      catch (Exception se)
       {
-        printError("Transaction rollback failed: " + e +"<br>");
+        printError("Transaction rollback failed: " + e + "<br>");
       }
-      return ;
+      return;
     }
-		
+
     sp.printHTMLfooter();
   }
 

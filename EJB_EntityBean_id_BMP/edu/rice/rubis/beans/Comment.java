@@ -1,14 +1,16 @@
 package edu.rice.rubis.beans;
 
-import javax.ejb.*;
-import java.rmi.*;
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
 
 /**
  * This is the Remote Interface for the Comment Bean
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public interface Comment extends EJBObject {
+public interface Comment extends EJBObject
+{
   /**
    * Get comment's id.
    *
@@ -56,7 +58,7 @@ public interface Comment extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public String getDate() throws RemoteException;
-  
+
   /**
    * Get the comment text.
    *
@@ -64,7 +66,6 @@ public interface Comment extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public String getComment() throws RemoteException;
-
 
   /**
    * Set a new user identifier for the author of the comment. 

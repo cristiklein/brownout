@@ -1,18 +1,23 @@
 package edu.rice.rubis.beans;
 
-import java.rmi.*;
-import javax.ejb.*;
-import javax.rmi.PortableRemoteObject;
-import java.util.GregorianCalendar;
-import java.util.Collection;
-import java.util.LinkedList;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.LinkedList;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+import javax.ejb.EntityBean;
+import javax.ejb.EntityContext;
+import javax.ejb.FinderException;
+import javax.ejb.RemoveException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.rmi.PortableRemoteObject;
+import javax.sql.DataSource;
 
 /**
  * OldItemBean is an entity bean with "bean managed persistence".
@@ -44,9 +49,9 @@ import java.sql.SQLException;
  * @version 1.1
  */
 
-public class OldItemBean implements EntityBean 
+public class OldItemBean implements EntityBean
 {
-  private  EntityContext entityContext;
+  private EntityContext entityContext;
   private transient boolean isDirty; // used for the isModified function
   private Context initialContext;
   private DataSource datasource;
@@ -54,19 +59,18 @@ public class OldItemBean implements EntityBean
   /* Class member variables */
 
   public Integer id;
-  public String  name;
-  public String  description;
-  public float   initialPrice;
-  public int     quantity;
-  public float   reservePrice;
-  public float   buyNow;
-  public int     nbOfBids;
-  public float   maxBid;
-  public String  startDate;
-  public String  endDate;
+  public String name;
+  public String description;
+  public float initialPrice;
+  public int quantity;
+  public float reservePrice;
+  public float buyNow;
+  public int nbOfBids;
+  public float maxBid;
+  public String startDate;
+  public String endDate;
   public Integer sellerId;
   public Integer categoryId;
-
 
   /**
    * Get item id.
@@ -212,7 +216,6 @@ public class OldItemBean implements EntityBean
     return sellerId;
   }
 
-
   /**
    * Give the category id of the item
    *
@@ -225,7 +228,6 @@ public class OldItemBean implements EntityBean
     return categoryId;
   }
 
-  
   /**
    * Get the seller's nickname by finding the Bean corresponding
    * to the user. 
@@ -240,8 +242,8 @@ public class OldItemBean implements EntityBean
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
       System.err.print("Cannot get initial context for JNDI: " + e);
       return null;
@@ -249,14 +251,16 @@ public class OldItemBean implements EntityBean
 
     // Try to find the user nick name corresponding to the sellerId
     UserHome uHome;
-    try 
+    try
     {
-      uHome = (UserHome)PortableRemoteObject.narrow(initialContext.lookup("UserHome"),
-                                                    UserHome.class);
-    } 
+      uHome =
+        (UserHome) PortableRemoteObject.narrow(
+          initialContext.lookup("UserHome"),
+          UserHome.class);
+    }
     catch (Exception e)
     {
-      System.err.print("Cannot lookup User: " +e);
+      System.err.print("Cannot lookup User: " + e);
       return null;
     }
     try
@@ -266,11 +270,11 @@ public class OldItemBean implements EntityBean
     }
     catch (Exception e)
     {
-      System.err.print("This user does not exist (got exception: " +e+")<br>");
+      System.err.print(
+        "This user does not exist (got exception: " + e + ")<br>");
       return null;
     }
   }
-  
 
   /**
    * Get the category name by finding the Bean corresponding to the category Id.
@@ -285,8 +289,8 @@ public class OldItemBean implements EntityBean
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
       System.err.print("Cannot get initial context for JNDI: " + e);
       return null;
@@ -294,14 +298,16 @@ public class OldItemBean implements EntityBean
 
     // Try to find the CategoryName corresponding to the categoryId
     CategoryHome cHome;
-    try 
+    try
     {
-      cHome = (CategoryHome)PortableRemoteObject.narrow(initialContext.lookup("CategoryHome"),
-                                                        CategoryHome.class);
-    } 
+      cHome =
+        (CategoryHome) PortableRemoteObject.narrow(
+          initialContext.lookup("CategoryHome"),
+          CategoryHome.class);
+    }
     catch (Exception e)
     {
-      System.err.print("Cannot lookup Category: " +e);
+      System.err.print("Cannot lookup Category: " + e);
       return null;
     }
     try
@@ -311,11 +317,11 @@ public class OldItemBean implements EntityBean
     }
     catch (Exception e)
     {
-      System.err.print("This category does not exist (got exception: " +e+")<br>");
+      System.err.print(
+        "This category does not exist (got exception: " + e + ")<br>");
       return null;
     }
   }
-
 
   /**
    * Set a new item identifier
@@ -336,7 +342,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setName(String newName) throws RemoteException 
+  public void setName(String newName) throws RemoteException
   {
     name = newName;
     isDirty = true; // the bean content has been modified
@@ -349,7 +355,7 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setDescription(String newDescription) throws RemoteException 
+  public void setDescription(String newDescription) throws RemoteException
   {
     description = newDescription;
     isDirty = true; // the bean content has been modified
@@ -503,14 +509,13 @@ public class OldItemBean implements EntityBean
     isDirty = true; // the bean content has been modified
   }
 
-
   /**
    * Retrieve a connection..
    *
    * @return connection
    * @exception Exception if an error occurs
    */
-  public Connection getConnection () throws Exception 
+  public Connection getConnection() throws Exception
   {
     try
     {
@@ -518,16 +523,16 @@ public class OldItemBean implements EntityBean
       {
         // Finds DataSource from JNDI
         initialContext = new InitialContext();
-        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
+        datasource =
+          (DataSource) initialContext.lookup("java:comp/env/jdbc/rubis");
       }
       return datasource.getConnection();
     }
-    catch (Exception e) 
+    catch (Exception e)
     {
       throw new Exception("Cannot retrieve the connection.");
     }
-  } 
-
+  }
 
   /**
    * This method is used to retrieve an OldItem Bean from its primary key,
@@ -539,9 +544,10 @@ public class OldItemBean implements EntityBean
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public OldItemPK ejbFindByPrimaryKey(OldItemPK id) throws FinderException, RemoteException
+  public OldItemPK ejbFindByPrimaryKey(OldItemPK id)
+    throws FinderException, RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -562,14 +568,17 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to retrieve object old_item: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to retrieve object old_item: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve all OldItem Beans belonging to
@@ -581,9 +590,10 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection ejbFindBySeller(Integer id) throws RemoteException, FinderException
+  public Collection ejbFindBySeller(Integer id)
+    throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -600,7 +610,7 @@ public class OldItemBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new OldItemPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -611,14 +621,17 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to get all old_items by seller: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to get all old_items by seller: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve all OldItem Beans belonging to
@@ -630,9 +643,10 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection ejbFindByCategory(Integer id) throws RemoteException, FinderException
+  public Collection ejbFindByCategory(Integer id)
+    throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -649,7 +663,7 @@ public class OldItemBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new OldItemPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -660,14 +674,17 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to get all old items by category: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to get all old items by category: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve OldItem Beans belonging to a specific category
@@ -680,14 +697,17 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection ejbFindCurrentByCategory(Integer id) throws RemoteException, FinderException
+  public Collection ejbFindCurrentByCategory(Integer id)
+    throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
       conn = getConnection();
-      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE where category=? AND end_date>=NOW()");
+      stmt =
+        conn.prepareStatement(
+          "SELECT id FROM old_items WHERE where category=? AND end_date>=NOW()");
       stmt.setInt(1, id.intValue());
       ResultSet rs = stmt.executeQuery();
       LinkedList results = new LinkedList();
@@ -699,7 +719,7 @@ public class OldItemBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new OldItemPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -710,14 +730,18 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to get old items with ongoing auction by category: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException(
+        "Failed to get old items with ongoing auction by category: " + e);
     }
   }
-
 
   /**
    * Get all the old items the user is currently selling.
@@ -728,14 +752,17 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection ejbFindUserCurrentSellings(Integer userId) throws RemoteException, FinderException
+  public Collection ejbFindUserCurrentSellings(Integer userId)
+    throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
       conn = getConnection();
-      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE old_items.seller=? AND old_items.end_date>=NOW()");
+      stmt =
+        conn.prepareStatement(
+          "SELECT id FROM old_items WHERE old_items.seller=? AND old_items.end_date>=NOW()");
       stmt.setInt(1, id.intValue());
       ResultSet rs = stmt.executeQuery();
       LinkedList results = new LinkedList();
@@ -747,7 +774,7 @@ public class OldItemBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new OldItemPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -758,14 +785,18 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to get old items a user is currently selling: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException(
+        "Failed to get old items a user is currently selling: " + e);
     }
   }
-
 
   /**
    * Get all the items the user sold in the last 30 days.
@@ -776,14 +807,17 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection ejbFindUserPastSellings(Integer userId) throws RemoteException, FinderException
+  public Collection ejbFindUserPastSellings(Integer userId)
+    throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
       conn = getConnection();
-      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) &lt; 30");
+      stmt =
+        conn.prepareStatement(
+          "SELECT id FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) &lt; 30");
       stmt.setInt(1, id.intValue());
       ResultSet rs = stmt.executeQuery();
       LinkedList results = new LinkedList();
@@ -795,7 +829,7 @@ public class OldItemBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new OldItemPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -806,14 +840,18 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to get old items a user sold in the past 30 days: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException(
+        "Failed to get old items a user sold in the past 30 days: " + e);
     }
   }
-
 
   /**
    * This method is used to retrieve all old items from the database!
@@ -822,9 +860,10 @@ public class OldItemBean implements EntityBean
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection ejbFindAllOldItems() throws RemoteException, FinderException
+  public Collection ejbFindAllOldItems()
+    throws RemoteException, FinderException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -840,7 +879,7 @@ public class OldItemBean implements EntityBean
           pk = rs.getInt("id");
           results.add(new OldItemPK(new Integer(pk)));
         }
-        while(rs.next());
+        while (rs.next());
       }
       rs.close();
       stmt.close();
@@ -851,14 +890,17 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to get all old items: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to get all old items: " + e);
     }
   }
-
 
   /**
    * This method is used to create a new OldItem Bean. Note that the item id
@@ -883,36 +925,66 @@ public class OldItemBean implements EntityBean
    * @exception RemoveException if an error occurs
    * @since 1.0
    */
-  public OldItemPK ejbCreate(Integer itemId, String itemName, String itemDescription, float itemInitialPrice,
-                             int itemQuantity, float itemReservePrice, float itemBuyNow, int duration,
-                             Integer itemSellerId, Integer itemCategoryId) throws CreateException, RemoteException, RemoveException
+  public OldItemPK ejbCreate(
+    Integer itemId,
+    String itemName,
+    String itemDescription,
+    float itemInitialPrice,
+    int itemQuantity,
+    float itemReservePrice,
+    float itemBuyNow,
+    int duration,
+    Integer itemSellerId,
+    Integer itemCategoryId)
+    throws CreateException, RemoteException, RemoveException
   {
     GregorianCalendar start = new GregorianCalendar();
 
-    id           = itemId;
-    name         = itemName;
-    description  = itemDescription;
+    id = itemId;
+    name = itemName;
+    description = itemDescription;
     initialPrice = itemInitialPrice;
-    quantity     = itemQuantity;
+    quantity = itemQuantity;
     reservePrice = itemReservePrice;
-    buyNow       = itemBuyNow;
-    sellerId     = itemSellerId;
-    categoryId   = itemCategoryId;
-    nbOfBids     = 0;
-    maxBid       = 0;
-    startDate    = TimeManagement.dateToString(start);
-    endDate      = TimeManagement.dateToString(TimeManagement.addDays(start, duration));
+    buyNow = itemBuyNow;
+    sellerId = itemSellerId;
+    categoryId = itemCategoryId;
+    nbOfBids = 0;
+    maxBid = 0;
+    startDate = TimeManagement.dateToString(start);
+    endDate =
+      TimeManagement.dateToString(TimeManagement.addDays(start, duration));
 
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
       conn = getConnection();
-      stmt = conn.prepareStatement("INSERT INTO old_items VALUES ("+id+", \""+name+
-                                   "\", \""+description+"\", \""+initialPrice+"\", \""+
-                                   quantity+"\", \""+reservePrice+"\", \""+buyNow+
-                                   "\", 0, 0, \""+startDate+"\", \""+endDate+"\", "+sellerId+
-                                   ", "+ categoryId+")");
+      stmt =
+        conn.prepareStatement(
+          "INSERT INTO old_items VALUES ("
+            + id
+            + ", \""
+            + name
+            + "\", \""
+            + description
+            + "\", \""
+            + initialPrice
+            + "\", \""
+            + quantity
+            + "\", \""
+            + reservePrice
+            + "\", \""
+            + buyNow
+            + "\", 0, 0, \""
+            + startDate
+            + "\", \""
+            + endDate
+            + "\", "
+            + sellerId
+            + ", "
+            + categoryId
+            + ")");
       stmt.executeUpdate();
       stmt.close();
       conn.close();
@@ -921,33 +993,50 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to create object old item: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to create object old item: " + e);
     }
     return null;
   }
 
   /** This method does currently nothing */
-  public void ejbPostCreate(Integer itemId, String itemName, String itemDescription, float itemInitialPrice,
-			    int itemQuantity, float itemReservePrice, float itemBuyNow, int duration,
-			    Integer itemSellerId, Integer itemCategoryId) {}
+  public void ejbPostCreate(
+    Integer itemId,
+    String itemName,
+    String itemDescription,
+    float itemInitialPrice,
+    int itemQuantity,
+    float itemReservePrice,
+    float itemBuyNow,
+    int duration,
+    Integer itemSellerId,
+    Integer itemCategoryId)
+  {
+  }
 
   /** Mandatory methods */
-  public void ejbActivate() throws RemoteException {}
-  public void ejbPassivate() throws RemoteException {}
-
+  public void ejbActivate() throws RemoteException
+  {
+  }
+  public void ejbPassivate() throws RemoteException
+  {
+  }
 
   /**
    * This method delete the record from the database.
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public void ejbRemove() throws RemoteException, RemoveException   
+  public void ejbRemove() throws RemoteException, RemoveException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
@@ -962,15 +1051,18 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to remove object old item: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to remove object old item: " + e);
     }
-    
-  }
 
+  }
 
   /**
    * Update the record.
@@ -978,45 +1070,50 @@ public class OldItemBean implements EntityBean
    */
   public void ejbStore() throws RemoteException
   {
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     if (isDirty)
     {
       isDirty = false;
       try
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("UPDATE old_items SET name=?, description=?, initial_price=?, quantity=?, reserve_price=?, buy_now=?, nb_of_bids=?, max_bid=?, start_date=?, end_date=?, seller=?, category=? WHERE id=?");
-	stmt.setString(1,name);
-	stmt.setString(2,description);
-	stmt.setFloat(3, initialPrice);
-	stmt.setInt(4, quantity);
-	stmt.setFloat(5, reservePrice);
-	stmt.setFloat(6, buyNow);
-	stmt.setInt(7, nbOfBids);
-	stmt.setFloat(8, maxBid);
-	stmt.setString(9, startDate);
-	stmt.setString(10, endDate);
-	stmt.setInt(11, sellerId.intValue());
-	stmt.setInt(12, categoryId.intValue());
-	stmt.setInt(13, id.intValue());
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
+        conn = getConnection();
+        stmt =
+          conn.prepareStatement(
+            "UPDATE old_items SET name=?, description=?, initial_price=?, quantity=?, reserve_price=?, buy_now=?, nb_of_bids=?, max_bid=?, start_date=?, end_date=?, seller=?, category=? WHERE id=?");
+        stmt.setString(1, name);
+        stmt.setString(2, description);
+        stmt.setFloat(3, initialPrice);
+        stmt.setInt(4, quantity);
+        stmt.setFloat(5, reservePrice);
+        stmt.setFloat(6, buyNow);
+        stmt.setInt(7, nbOfBids);
+        stmt.setFloat(8, maxBid);
+        stmt.setString(9, startDate);
+        stmt.setString(10, endDate);
+        stmt.setInt(11, sellerId.intValue());
+        stmt.setInt(12, categoryId.intValue());
+        stmt.setInt(13, id.intValue());
+        stmt.executeUpdate();
+        stmt.close();
+        conn.close();
       }
       catch (Exception e)
       {
-	try
+        try
         {
-          if(stmt != null) stmt.close();
-          if(conn != null) conn.close();
+          if (stmt != null)
+            stmt.close();
+          if (conn != null)
+            conn.close();
         }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to update object old item: " +e);
+        catch (Exception ignore)
+        {
+        }
+        throw new EJBException("Failed to update object old item: " + e);
       }
     }
   }
-
 
   /**
    * Read the reccord from the database and update the bean.
@@ -1025,11 +1122,11 @@ public class OldItemBean implements EntityBean
   public void ejbLoad() throws RemoteException
   {
     isDirty = false;
-    PreparedStatement stmt= null;
+    PreparedStatement stmt = null;
     Connection conn = null;
     try
     {
-      OldItemPK pk = (OldItemPK)entityContext.getPrimaryKey();
+      OldItemPK pk = (OldItemPK) entityContext.getPrimaryKey();
       id = pk.getId();
       conn = getConnection();
       stmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
@@ -1059,14 +1156,17 @@ public class OldItemBean implements EntityBean
     {
       try
       {
-        if(stmt != null) stmt.close();
-        if(conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
-      catch (Exception ignore){}
-      throw new EJBException("Failed to update old item bean: " +e);
+      catch (Exception ignore)
+      {
+      }
+      throw new EJBException("Failed to update old item bean: " + e);
     }
   }
-
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -1089,7 +1189,6 @@ public class OldItemBean implements EntityBean
   {
     entityContext = context;
   }
-
 
   /**
    * Unsets the associated entity context. The container calls this method 

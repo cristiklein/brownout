@@ -1,14 +1,16 @@
 package edu.rice.rubis.beans;
 
-import javax.ejb.*;
-import java.rmi.*;
+import java.rmi.RemoteException;
+
+import javax.ejb.EJBObject;
 
 /**
  * This is the Remote Interface for the Bid Bean
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public interface Bid extends EJBObject {
+public interface Bid extends EJBObject
+{
   /**
    * Get bid's id.
    *
@@ -72,7 +74,6 @@ public interface Bid extends EJBObject {
    * @exception RemoteException if an error occurs
    */
   public String getBidderNickName() throws RemoteException;
-  
 
   /**
    * Set a new user identifier. This id must match

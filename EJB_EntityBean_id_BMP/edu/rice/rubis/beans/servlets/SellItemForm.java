@@ -1,12 +1,13 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Builds the html page that display the form to register a new item to sell.
@@ -17,7 +18,6 @@ public class SellItemForm extends HttpServlet
 {
   private ServletPrinter sp = null;
 
-
   /**
    * Call the <code>doGet</code> method.
    *
@@ -26,7 +26,8 @@ public class SellItemForm extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doGet(request, response);
   }
@@ -39,9 +40,10 @@ public class SellItemForm extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  categoryId=null, userId=null;
+    String categoryId = null, userId = null;
     Context initialContext = null;
 
     sp = new ServletPrinter(response, "SellItemForm");
@@ -50,27 +52,33 @@ public class SellItemForm extends HttpServlet
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Cannot get initial context for JNDI: " +e+"<br>");
+      sp.printHTML("Cannot get initial context for JNDI: " + e + "<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
 
     categoryId = request.getParameter("category");
     userId = request.getParameter("user");
-    if ((categoryId == null) || categoryId.equals("") || (userId == null) || userId.equals(""))
+    if ((categoryId == null)
+      || categoryId.equals("")
+      || (userId == null)
+      || userId.equals(""))
     {
       sp.printHTMLheader("RUBiS ERROR: SellItemForm");
-      sp.printHTML("No category or user identifier received - Cannot process the request<br>");
+      sp.printHTML(
+        "No category or user identifier received - Cannot process the request<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
-    
-    sp.printFile(Config.HTMLFilesPath+"/sellItemForm.html");
-    sp.printHTML("<input type=hidden name=\"userId\" value=\""+userId+"\"> ");
-    sp.printHTML("<input type=hidden name=\"categoryId\" value=\""+categoryId+"\"> ");
+
+    sp.printFile(Config.HTMLFilesPath + "/sellItemForm.html");
+    sp.printHTML(
+      "<input type=hidden name=\"userId\" value=\"" + userId + "\"> ");
+    sp.printHTML(
+      "<input type=hidden name=\"categoryId\" value=\"" + categoryId + "\"> ");
     sp.printHTMLfooter();
   }
 }

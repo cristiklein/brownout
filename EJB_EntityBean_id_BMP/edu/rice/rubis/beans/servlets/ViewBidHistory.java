@@ -1,15 +1,25 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+import java.util.Enumeration;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+
+import edu.rice.rubis.beans.Bid;
+import edu.rice.rubis.beans.BidHome;
+import edu.rice.rubis.beans.BidPK;
+import edu.rice.rubis.beans.Item;
+import edu.rice.rubis.beans.ItemHome;
+import edu.rice.rubis.beans.ItemPK;
+import edu.rice.rubis.beans.Query;
+import edu.rice.rubis.beans.QueryHome;
 
 /** This servlets displays the list of bids regarding an item.
  * It must be called this way :
@@ -26,14 +36,13 @@ public class ViewBidHistory extends HttpServlet
   private Context initialContext = null;
   private UserTransaction utx = null;
 
- 
   /** List the bids corresponding to an item */
-  private void listBids(Integer itemId) 
+  private void listBids(Integer itemId)
   {
-    Enumeration bidList=null;
+    Enumeration bidList = null;
     ItemHome iHome;
-    QueryHome   qHome = null;
-    Query       q;
+    QueryHome qHome = null;
+    Query q;
     BidHome bidHome;
     Bid bid;
     Item item;
@@ -41,58 +50,62 @@ public class ViewBidHistory extends HttpServlet
     String name;
 
     // Connecting to Query Home thru JNDI
-    try 
+    try
     {
-      qHome = (QueryHome)PortableRemoteObject.narrow(initialContext.lookup("QueryHome"),
-                                                     QueryHome.class);
-    } 
+      qHome =
+        (QueryHome) PortableRemoteObject.narrow(
+          initialContext.lookup("QueryHome"),
+          QueryHome.class);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup Query: " +e+"<br>");
-      return ;
+      sp.printHTML("Cannot lookup Query: " + e + "<br>");
+      return;
     }
     // Get the list of the user's last bids
-    try 
+    try
     {
       q = qHome.create();
       bidList = q.getItemBidHistory(itemId).elements();
     }
     catch (Exception e)
     {
-      sp.printHTML("Exception getting bids list: " +e+"<br>");
-      return ;
+      sp.printHTML("Exception getting bids list: " + e + "<br>");
+      return;
     }
     if ((bidList == null) || (!bidList.hasMoreElements()))
     {
       sp.printHTML("<h3>There is no bid corresponding to this item.</h3><br>");
-      return ;
+      return;
     }
 
     // Lookup bid home interface
-    try 
+    try
     {
-      bidHome = (BidHome)PortableRemoteObject.narrow(initialContext.lookup("BidHome"),
-                                                     BidHome.class);
-    } 
+      bidHome =
+        (BidHome) PortableRemoteObject.narrow(
+          initialContext.lookup("BidHome"),
+          BidHome.class);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup Bid: " +e+"<br>");
-      return ;
+      sp.printHTML("Cannot lookup Bid: " + e + "<br>");
+      return;
     }
- 
+
     sp.printBidHistoryHeader();
 
-    while (bidList.hasMoreElements()) 
+    while (bidList.hasMoreElements())
     {
       // Get the bids
       try
       {
-        bid = bidHome.findByPrimaryKey((BidPK)bidList.nextElement());
-	      
+        bid = bidHome.findByPrimaryKey((BidPK) bidList.nextElement());
+
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
-        sp.printHTML("Exception getting bid: " + e +"<br>");
+        sp.printHTML("Exception getting bid: " + e + "<br>");
         sp.printHTMLfooter();
         return;
       }
@@ -102,7 +115,6 @@ public class ViewBidHistory extends HttpServlet
     sp.printBidHistoryFooter();
   }
 
-
   /**
    * Call the <code>doPost</code> method.
    *
@@ -111,7 +123,8 @@ public class ViewBidHistory extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
     doPost(request, response);
   }
@@ -124,11 +137,12 @@ public class ViewBidHistory extends HttpServlet
    * @exception IOException if an error occurs
    * @exception ServletException if an error occurs
    */
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException, ServletException
   {
-    String  value = request.getParameter("itemId");
+    String value = request.getParameter("itemId");
     Integer itemId;
-    
+
     sp = new ServletPrinter(response, "ViewBidHistory");
 
     if ((value == null) || (value.equals("")))
@@ -136,7 +150,7 @@ public class ViewBidHistory extends HttpServlet
       sp.printHTMLheader("RUBiS ERROR: View bids history");
       sp.printHTML("<h3>You must provide an item identifier !<br></h3>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
     else
       itemId = new Integer(value);
@@ -144,7 +158,7 @@ public class ViewBidHistory extends HttpServlet
     if (itemId.intValue() == -1)
     {
       sp.printHTML("ERROR: ItemId is -1.<br>");
-      return ;
+      return;
     }
 
     sp.printHTMLheader("RUBiS: Bid history");
@@ -152,50 +166,55 @@ public class ViewBidHistory extends HttpServlet
     try
     {
       initialContext = new InitialContext();
-    } 
-    catch (Exception e) 
+    }
+    catch (Exception e)
     {
-      sp.printHTML("Cannot get initial context for JNDI: " + e+"<br>");
+      sp.printHTML("Cannot get initial context for JNDI: " + e + "<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
 
     // We want to start transactions from client: get UserTransaction
     try
     {
-      utx = (javax.transaction.UserTransaction)initialContext.lookup(Config.UserTransaction);
-    } 
+      utx =
+        (javax.transaction.UserTransaction) initialContext.lookup(
+          Config.UserTransaction);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup UserTransaction: "+e+"<br>");
-      return ;
+      sp.printHTML("Cannot lookup UserTransaction: " + e + "<br>");
+      return;
     }
 
     // Try to find the item corresponding to the itemId
     ItemHome iHome;
-    try 
+    try
     {
-      iHome = (ItemHome)PortableRemoteObject.narrow(initialContext.lookup("ItemHome"),
-                                                    ItemHome.class);
-    } 
+      iHome =
+        (ItemHome) PortableRemoteObject.narrow(
+          initialContext.lookup("ItemHome"),
+          ItemHome.class);
+    }
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup item: " +e+"<br>");
+      sp.printHTML("Cannot lookup item: " + e + "<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
     try
     {
       Item item = iHome.findByPrimaryKey(new ItemPK(itemId));
-      sp.printHTML("<center><h3>Bid History for "+item.getName()+"<br></h3></center>");
+      sp.printHTML(
+        "<center><h3>Bid History for " + item.getName() + "<br></h3></center>");
     }
     catch (Exception e)
     {
-      sp.printHTML("This item does not exist (got exception: " +e+")<br>");
+      sp.printHTML("This item does not exist (got exception: " + e + ")<br>");
       sp.printHTMLfooter();
-      return ;
+      return;
     }
-		
+
     listBids(itemId);
     sp.printHTMLfooter();
   }
