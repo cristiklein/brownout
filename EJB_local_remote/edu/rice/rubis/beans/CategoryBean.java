@@ -131,7 +131,7 @@ public class CategoryBean implements EntityBean
   /** This method is empty because persistence is managed by the container */
   public void ejbPassivate() {}
   /** This method is empty because persistence is managed by the container */
-  public void ejbRemove() {}
+  public void ejbRemove() throws RemoveException {}
 
   /**
    * Sets the associated entity context. The container invokes this method 
