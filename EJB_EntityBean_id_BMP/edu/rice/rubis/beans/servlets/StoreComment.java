@@ -169,8 +169,7 @@ public class StoreComment extends HttpServlet
     {
       utx =
         (javax.transaction.UserTransaction) initialContext.lookup(
-          Config.UserTransaction);
-      utx.begin();
+          Config.UserTransaction);    
     }
     catch (Exception e)
     {
@@ -179,6 +178,7 @@ public class StoreComment extends HttpServlet
     }
     try
     {
+      utx.begin();
       Comment c =
         cHome.create(fromId, toId, itemId, rating.intValue(), comment);
       to.updateRating(rating.intValue());
