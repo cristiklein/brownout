@@ -106,7 +106,7 @@ public class SB_ViewItemBean implements SessionBean
         qty = rs.getInt("quantity");
         sellerId = rs.getInt("seller");
         
-        maxBid = rs.getFloat("max_bid");
+        maxBid = rs.getFloat("max_bid"); // current price
         nbOfBids = rs.getInt("nb_of_bids");
         
         PreparedStatement sellerStmt = null;
@@ -137,12 +137,13 @@ public class SB_ViewItemBean implements SessionBean
 
       if (maxBid == 0)
       {
-        firstBid = "none";
-        maxBid = initialPrice;
+        firstBid = "none"; // current bid
+        maxBid = initialPrice; // current price
         buyNow = rs.getFloat("buy_now");
       }
       else
       {
+        // current bid = current price for the specified quantity
         if (qty > 1)
         {
           PreparedStatement bidStmt = null;
@@ -200,6 +201,12 @@ public class SB_ViewItemBean implements SessionBean
           Float foo = new Float(maxBid);
           firstBid = foo.toString();
         }
+       else
+       {
+        // qty <= 1, current bid is maxBid
+        Float foo = new Float(maxBid);
+        firstBid = foo.toString();
+       }
       }
       if (stmt != null) stmt.close();
       if (conn != null) conn.close();
