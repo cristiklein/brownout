@@ -231,6 +231,14 @@
 				<local>edu.rice.rubis.beans.SB_AuthLocal</local>
 				<ejb-link>SB_Auth</ejb-link>
             </ejb-local-ref>
+            <ejb-local-ref>
+                <description>This is the reference to the Query  bean</description>
+                <ejb-ref-name>ejb/Query</ejb-ref-name>
+		        <ejb-ref-type>Session</ejb-ref-type>	
+				<local-home>edu.rice.rubis.beans.QueryLocalHome</local-home>
+				<local>edu.rice.rubis.beans.QueryLocal</local>	
+				<ejb-link>Query</ejb-link>				
+            </ejb-local-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
                 <res-type>javax.sql.DataSource</res-type>
@@ -423,6 +431,14 @@
 				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
 				<local>edu.rice.rubis.beans.ItemLocal</local>
 				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+            <ejb-local-ref>
+                <description>This is the reference to the Query  bean</description>
+                <ejb-ref-name>ejb/Query</ejb-ref-name>
+		        <ejb-ref-type>Session</ejb-ref-type>	
+				<local-home>edu.rice.rubis.beans.QueryLocalHome</local-home>
+				<local>edu.rice.rubis.beans.QueryLocal</local>	
+				<ejb-link>Query</ejb-link>				
             </ejb-local-ref>
             <resource-ref>
                 <res-ref-name>jdbc/rubis</res-ref-name>
