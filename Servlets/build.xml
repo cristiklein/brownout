@@ -70,7 +70,8 @@
   <!-- Generate Javadoc documentation -->
   <target name="doc">
      <mkdir dir="docs/api"/>
-     <javadoc packagenames="edu.rice.rubis.*.*"
+     <javadoc classpathref="base.classpath"
+           packagenames="edu.rice.rubis.*.*"
            sourcepath="."
            defaultexcludes="yes"
            destdir="docs/api"
