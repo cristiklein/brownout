@@ -63,6 +63,9 @@
              orb="${orb}"/>
       <include name="**/ejb-jar.xml"/>
       <exclude name="**/jonas-ejb-jar.xml"/>
+      <support dir="${classes.dir}">
+            <include name="edu/rice/rubis/beans/TimeManagement.class"/>
+      </support>
     </ejbjar>
 
   </target>

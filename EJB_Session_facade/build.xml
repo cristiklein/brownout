@@ -13,11 +13,6 @@
 
  <!-- Set the uncustomizable properties -->
  
-  <property name="src" value="." />
-  <property name="dist" value="." />
-  <property name="build" value="build" />
-  <property name="classes.dir" value="${build}" />
-  <property name="web.dir" value="../ejb_rubis_web" />
   <property name="lib.dir" value="${jonas.root}/lib" />
 
 
@@ -70,9 +65,13 @@
              orb="${orb}"/>
       <include name="**/ejb-jar.xml"/>
       <exclude name="**/jonas-ejb-jar.xml"/>
+      <support dir="${classes.dir}">
+            <include name="edu/rice/rubis/beans/TimeManagement.class"/>
+      </support>
     </ejbjar>
-
   </target>
+
+
 
   <!-- Create the rubis.jar file that contains the beans for Jboss--> 
   <target name="jboss_jar" if="jboss" depends="init, compile">

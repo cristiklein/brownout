@@ -1,6 +1,6 @@
 
 <project name="EntityBean_BMP" default="dist" basedir=".">
-  <!-- EntityBean CMP Ant build file -->
+  <!-- EntityBean BMP Ant build file -->
 
   <!-- set global properties for this build -->
   <property file="../build.properties" />
@@ -64,6 +64,9 @@
              orb="${orb}"/>
       <include name="**/ejb-jar.xml"/>
       <exclude name="**/jonas-ejb-jar.xml"/>
+      <support dir="${classes.dir}">
+            <include name="edu/rice/rubis/beans/TimeManagement.class"/>
+      </support>
     </ejbjar>
 
   </target>
