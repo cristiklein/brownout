@@ -48,7 +48,7 @@ public class QueryBean implements SessionBean
    * @return Vector of items primary keys
    * @since 1.1
    */
-  public Vector getCurrentItemsInCategory(Integer categoryId, int startingRow, int nbOfRows) throws RemoteException
+  public Vector getCurrentItemsInCategory(Integer categoryId, int startingRow, int nbOfRows)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -71,7 +71,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -103,7 +103,7 @@ public class QueryBean implements SessionBean
    * @return Vector of items primary keys
    * @since 1.1
    */
-  public Vector getCurrentItemsInCategoryAndRegion(Integer categoryId, Integer regionId, int startingRow, int nbOfRows) throws RemoteException
+  public Vector getCurrentItemsInCategoryAndRegion(Integer categoryId, Integer regionId, int startingRow, int nbOfRows)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -128,7 +128,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -154,7 +154,7 @@ public class QueryBean implements SessionBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getItemMaxBid(Integer itemId) throws RemoteException
+  public float getItemMaxBid(Integer itemId)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -173,7 +173,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -201,7 +201,7 @@ public class QueryBean implements SessionBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getItemQtyMaxBid(int maxToCollect, Integer itemId) throws RemoteException
+  public Vector getItemQtyMaxBid(int maxToCollect, Integer itemId)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -224,7 +224,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -250,7 +250,7 @@ public class QueryBean implements SessionBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public int getItemNbOfBids(Integer itemId) throws RemoteException
+  public int getItemNbOfBids(Integer itemId)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -269,7 +269,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -296,7 +296,7 @@ public class QueryBean implements SessionBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getItemBidHistory(Integer itemId) throws RemoteException
+  public Vector getItemBidHistory(Integer itemId)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -318,7 +318,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -344,7 +344,7 @@ public class QueryBean implements SessionBean
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getUserWonItems(Integer userId) throws RemoteException
+  public Vector getUserWonItems(Integer userId)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -366,7 +366,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -391,7 +391,7 @@ public class QueryBean implements SessionBean
    * @return Vector of bids primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
    */
-  public Vector getUserBids(Integer userId) throws RemoteException
+  public Vector getUserBids(Integer userId)
   {
     Connection        conn = null;
     PreparedStatement stmt = null;
@@ -413,7 +413,7 @@ public class QueryBean implements SessionBean
     }
     catch (SQLException e)
     {
-      throw new RemoteException("Failed to executeQuery " +e);
+      throw new EJBException("Failed to executeQuery " +e);
     }
     finally
     {
@@ -435,16 +435,16 @@ public class QueryBean implements SessionBean
   /**
    * This method is empty for a stateless session bean
    */
-  public void ejbCreate() throws CreateException, RemoteException
+  public void ejbCreate() throws CreateException
   {
   }
 
   /** This method is empty for a stateless session bean */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate() {}
   /** This method is empty for a stateless session bean */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() {}
   /** This method is empty for a stateless session bean */
-  public void ejbRemove() throws RemoteException {}
+  public void ejbRemove() {}
 
 
   /** 
