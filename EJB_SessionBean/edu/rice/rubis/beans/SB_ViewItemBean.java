@@ -27,7 +27,7 @@ import java.net.URLEncoder;
  * @version 1.1
  */
 
-public class SB_ViewItemBean implements SessionBean 
+public class SB_ViewItemBean implements SessionBean
 {
   protected SessionContext sessionContext;
   protected Context initialContext = null;
@@ -40,17 +40,22 @@ public class SB_ViewItemBean implements SessionBean
    * @param item an <code>Item</code> value
    * @param userId an authenticated user id
    */
-  public String getItemDescription(Integer itemId, int userId) throws RemoteException
+  public String getItemDescription(Integer itemId, int userId)
+    throws RemoteException
   {
     StringBuffer html = new StringBuffer();
-    Connection        conn = null;
+    Connection conn = null;
     PreparedStatement stmt = null;
-    ResultSet rs           = null; 
+    ResultSet rs = null;
 
-    String itemName=null, endDate=null, startDate=null, description=null, sellerName=null;
-    float maxBid=0, initialPrice=0, buyNow=0, reservePrice=0;
-    int qty=0, sellerId=-1, nbOfBids=0;
-    String  firstBid=null;
+    String itemName = null,
+      endDate = null,
+      startDate = null,
+      description = null,
+      sellerName = null;
+    float maxBid = 0, initialPrice = 0, buyNow = 0, reservePrice = 0;
+    int qty = 0, sellerId = -1, nbOfBids = 0;
+    String firstBid = null;
 
     try
     {
@@ -64,15 +69,17 @@ public class SB_ViewItemBean implements SessionBean
     {
       try
       {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
       catch (Exception ignore)
       {
       }
-      throw new RemoteException("Failed to get the item: " +e);
+      throw new RemoteException("Failed to get the item: " + e);
     }
-    try 
+    try
     {
       if (!rs.first())
       {
@@ -85,13 +92,15 @@ public class SB_ViewItemBean implements SessionBean
     {
       try
       {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
+        if (stmt != null)
+          stmt.close();
+        if (conn != null)
+          conn.close();
       }
       catch (Exception ignore)
       {
       }
-      throw new RemoteException("Failed to get the item from old items: " +e);
+      throw new RemoteException("Failed to get the item from old items: " + e);
     }
     try
     {
@@ -105,33 +114,36 @@ public class SB_ViewItemBean implements SessionBean
         reservePrice = rs.getFloat("reserve_price");
         qty = rs.getInt("quantity");
         sellerId = rs.getInt("seller");
-        
+
         maxBid = rs.getFloat("max_bid"); // current price
         nbOfBids = rs.getInt("nb_of_bids");
-        
+
         PreparedStatement sellerStmt = null;
         ResultSet sellerResult = null;
-        try 
+        try
         {
-          sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+          sellerStmt =
+            conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           sellerStmt.setInt(1, sellerId);
           sellerResult = sellerStmt.executeQuery();
           // Get the seller's name		 
-          if (sellerResult.first()) 
+          if (sellerResult.first())
             sellerName = sellerResult.getString("nickname");
-          sellerStmt.close();	// close statement
+          sellerStmt.close(); // close statement
         }
         catch (SQLException e)
         {
           try
           {
-            if (sellerStmt != null) sellerStmt.close();	// close statement
-            if (conn != null) conn.close();
+            if (sellerStmt != null)
+              sellerStmt.close(); // close statement
+            if (conn != null)
+              conn.close();
           }
           catch (Exception ignore)
           {
           }
-          throw new RemoteException("Failed to execute Query for seller: " +e);
+          throw new RemoteException("Failed to execute Query for seller: " + e);
         }
       }
 
@@ -148,23 +160,27 @@ public class SB_ViewItemBean implements SessionBean
         {
           PreparedStatement bidStmt = null;
           ResultSet bidResult = null;
-          try 
+          try
           {
             /* Get the qty max first bids and parse bids in this order
                until qty is reached. The bid that reaches qty is the
                current minimum bid. */
-            bidStmt = conn.prepareStatement("SELECT bids.id, bids.qty, bids.bid FROM bids WHERE item_id=? ORDER BY bid DESC LIMIT ?");
+            bidStmt =
+              conn.prepareStatement(
+                "SELECT bids.id, bids.qty, bids.bid FROM bids WHERE item_id=? ORDER BY bid DESC LIMIT ?");
             bidStmt.setInt(1, itemId.intValue());
             bidStmt.setInt(2, qty);
             bidResult = bidStmt.executeQuery();
-            bidStmt.close();	// close statement
+            bidStmt.close(); // close statement
           }
           catch (SQLException e)
           {
             try
             {
-              if (bidStmt != null) bidStmt.close();	// close statement
-              if (conn != null) conn.close();
+              if (bidStmt != null)
+                bidStmt.close(); // close statement
+              if (conn != null)
+                conn.close();
             }
             catch (Exception ignore)
             {
@@ -174,8 +190,8 @@ public class SB_ViewItemBean implements SessionBean
           try
           {
             float bidValue;
-            int   numberOfItems = 0;
-            while (bidResult.next()) 
+            int numberOfItems = 0;
+            while (bidResult.next())
             {
               bidValue = bidResult.getFloat("bid");
               numberOfItems += bidResult.getInt("qty");
@@ -185,42 +201,45 @@ public class SB_ViewItemBean implements SessionBean
                 break;
               }
             }
-          } 
+          }
           catch (Exception e)
           {
             try
             {
-              if (stmt != null) stmt.close();
-              if (conn != null) conn.close();
+              if (stmt != null)
+                stmt.close();
+              if (conn != null)
+                conn.close();
             }
             catch (Exception ignore)
             {
             }
-            throw new RemoteException("Problem while computing current bid: "+e+"<br>");
+            throw new RemoteException(
+              "Problem while computing current bid: " + e + "<br>");
           }
-          Float foo = new Float(maxBid);
-          firstBid = foo.toString();
         }
-       else
-       {
-        // qty <= 1, current bid is maxBid
         Float foo = new Float(maxBid);
         firstBid = foo.toString();
-       }
       }
-      if (stmt != null) stmt.close();
-      if (conn != null) conn.close();
-     
-      if (userId>0)
+      if (stmt != null)
+        stmt.close();
+      if (conn != null)
+        conn.close();
+
+      if (userId > 0)
       {
-        html.append(printHTMLHighlighted("You are ready to bid on: "+itemName));
+        html.append(
+          printHTMLHighlighted("You are ready to bid on: " + itemName));
       }
       else
       {
         html.append(printHTMLHighlighted(itemName));
       }
-      html.append("<TABLE>\n"+
-                  "<TR><TD>Currently<TD><b><BIG>"+maxBid+"</BIG></b>\n");
+      html.append(
+        "<TABLE>\n"
+          + "<TR><TD>Currently<TD><b><BIG>"
+          + maxBid
+          + "</BIG></b>\n");
       // Check if the reservePrice has been met (if any)
       if (reservePrice > 0)
       { // Has the reserve price been met ?
@@ -229,53 +248,96 @@ public class SB_ViewItemBean implements SessionBean
         else
           html.append("(The reserve price has NOT been met)\n");
       }
-      html.append("<TR><TD>Quantity<TD><b><BIG>"+qty+"</BIG></b>\n"+
-                  "<TR><TD>First bid<TD><b><BIG>"+firstBid+"</BIG></b>\n"+
-                  "<TR><TD># of bids<TD><b><BIG>"+nbOfBids+"</BIG></b> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewBidHistory?itemId="+itemId+"\">bid history</a>)\n"+
-                  "<TR><TD>Seller<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+sellerName+"</a> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="+sellerId+"&itemId="+itemId+"\">Leave a comment on this user</a>)\n"+
-                  "<TR><TD>Started<TD>"+startDate+"\n"+
-                  "<TR><TD>Ends<TD>"+endDate+"\n"+
-                  "</TABLE>");
+      html.append(
+        "<TR><TD>Quantity<TD><b><BIG>"
+          + qty
+          + "</BIG></b>\n"
+          + "<TR><TD>First bid<TD><b><BIG>"
+          + firstBid
+          + "</BIG></b>\n"
+          + "<TR><TD># of bids<TD><b><BIG>"
+          + nbOfBids
+          + "</BIG></b> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewBidHistory?itemId="
+          + itemId
+          + "\">bid history</a>)\n"
+          + "<TR><TD>Seller<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="
+          + sellerId
+          + "\">"
+          + sellerName
+          + "</a> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="
+          + sellerId
+          + "&itemId="
+          + itemId
+          + "\">Leave a comment on this user</a>)\n"
+          + "<TR><TD>Started<TD>"
+          + startDate
+          + "\n"
+          + "<TR><TD>Ends<TD>"
+          + endDate
+          + "\n"
+          + "</TABLE>");
       // Can the user buy this item now ?
       if (buyNow > 0)
-        html.append("<p><a href=\"/servlet/edu.rice.rubis.beans.servlets.BuyNowAuth?itemId="+itemId+"\">"+
-                    "<IMG SRC=\"/EJB_HTML/buy_it_now.jpg\" height=22 width=150></a>"+
-                    "  <BIG><b>You can buy this item right now for only $"+buyNow+"</b></BIG><br><p>\n");
+        html.append(
+          "<p><a href=\"/servlet/edu.rice.rubis.beans.servlets.BuyNowAuth?itemId="
+            + itemId
+            + "\">"
+            + "<IMG SRC=\"/EJB_HTML/buy_it_now.jpg\" height=22 width=150></a>"
+            + "  <BIG><b>You can buy this item right now for only $"
+            + buyNow
+            + "</b></BIG><br><p>\n");
 
-      if (userId<=0)
+      if (userId <= 0)
       {
-        html.append("<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+itemId+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90> on this item</a>\n");
+        html.append(
+          "<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="
+            + itemId
+            + "\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90> on this item</a>\n");
       }
 
       html.append(printHTMLHighlighted("Item description"));
       html.append(description);
       html.append("<br><p>\n");
 
-      if (userId>0)
+      if (userId > 0)
       {
         html.append(printHTMLHighlighted("Bidding"));
-        float minBid = maxBid+1;
-        html.append("<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreBid\" method=POST>\n"+
-                  "<input type=hidden name=minBid value="+minBid+">\n"+
-                  "<input type=hidden name=userId value="+userId+">\n"+
-                  "<input type=hidden name=itemId value="+itemId+">\n"+
-                  "<input type=hidden name=maxQty value="+qty+">\n"+
-                  "<center><table>\n"+
-                  "<tr><td>Your bid (minimum bid is "+minBid+"):</td>\n"+
-                  "<td><input type=text size=10 name=bid></td></tr>\n"+
-                  "<tr><td>Your maximum bid:</td>\n"+
-                  "<td><input type=text size=10 name=maxBid></td></tr>\n");
+        float minBid = maxBid + 1;
+        html.append(
+          "<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreBid\" method=POST>\n"
+            + "<input type=hidden name=minBid value="
+            + minBid
+            + ">\n"
+            + "<input type=hidden name=userId value="
+            + userId
+            + ">\n"
+            + "<input type=hidden name=itemId value="
+            + itemId
+            + ">\n"
+            + "<input type=hidden name=maxQty value="
+            + qty
+            + ">\n"
+            + "<center><table>\n"
+            + "<tr><td>Your bid (minimum bid is "
+            + minBid
+            + "):</td>\n"
+            + "<td><input type=text size=10 name=bid></td></tr>\n"
+            + "<tr><td>Your maximum bid:</td>\n"
+            + "<td><input type=text size=10 name=maxBid></td></tr>\n");
         if (qty > 1)
-          html.append("<tr><td>Quantity:</td>\n"+
-                    "<td><input type=text size=5 name=qty></td></tr>\n");
+          html.append(
+            "<tr><td>Quantity:</td>\n"
+              + "<td><input type=text size=5 name=qty></td></tr>\n");
         else
           html.append("<input type=hidden name=qty value=1>\n");
-        html.append("</table><p><input type=submit value=\"Bid now!\"></center><p>\n");
+        html.append(
+          "</table><p><input type=submit value=\"Bid now!\"></center><p>\n");
       }
     }
     catch (Exception e)
     {
-      throw new RemoteException("Unable to print Item description (exception: "+e+")<br>\n");
+      throw new RemoteException(
+        "Unable to print Item description (exception: " + e + ")<br>\n");
     }
     return html.toString();
   }
@@ -288,9 +350,10 @@ public class SB_ViewItemBean implements SessionBean
    */
   public String printHTMLHighlighted(String msg)
   {
-    return "<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n<TR><TD align=\"center\" width=\"100%\"><FONT size=\"4\" color=\"#000000\"><B>"+msg+"</B></FONT></TD></TR>\n</TABLE><p>\n";
+    return "<TABLE width=\"100%\" bgcolor=\"#CCCCFF\">\n<TR><TD align=\"center\" width=\"100%\"><FONT size=\"4\" color=\"#000000\"><B>"
+      + msg
+      + "</B></FONT></TD></TR>\n</TABLE><p>\n";
   }
-
 
   // ======================== EJB related methods ============================
 
@@ -302,12 +365,17 @@ public class SB_ViewItemBean implements SessionBean
   }
 
   /** This method is empty for a stateless session bean */
-  public void ejbActivate() throws RemoteException {}
+  public void ejbActivate() throws RemoteException
+  {
+  }
   /** This method is empty for a stateless session bean */
-  public void ejbPassivate() throws RemoteException {}
+  public void ejbPassivate() throws RemoteException
+  {
+  }
   /** This method is empty for a stateless session bean */
-  public void ejbRemove() throws RemoteException {}
-
+  public void ejbRemove() throws RemoteException
+  {
+  }
 
   /** 
    * Sets the associated session context. The container calls this method 
@@ -318,19 +386,21 @@ public class SB_ViewItemBean implements SessionBean
    * @exception RemoteException - Thrown if the instance could not perform the function 
    *            requested by the container because of a system-level error. 
    */
-  public void setSessionContext(SessionContext sessionContext) throws RemoteException
+  public void setSessionContext(SessionContext sessionContext)
+    throws RemoteException
   {
     this.sessionContext = sessionContext;
     if (dataSource == null)
     {
       // Finds DataSource from JNDI
- 
+
       try
       {
-        initialContext = new InitialContext(); 
-        dataSource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
+        initialContext = new InitialContext();
+        dataSource =
+          (DataSource) initialContext.lookup("java:comp/env/jdbc/rubis");
       }
-      catch (Exception e) 
+      catch (Exception e)
       {
         throw new RemoteException("Cannot get JNDI InitialContext");
       }
