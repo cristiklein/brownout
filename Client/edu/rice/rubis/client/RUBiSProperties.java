@@ -1,4 +1,27 @@
-package edu.rice.rubis.client;
+/*
+ * RUBiS
+ * Copyright (C) 2002, 2003, 2004 French National Institute For Research In Computer
+ * Science And Control (INRIA).
+ * Contact: jmob@objectweb.org
+ * 
+ * This library is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation; either version 2.1 of the License, or any later
+ * version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation,
+ * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ *
+ * Initial developer(s): Emmanuel Cecchet, Julie Marguerite
+ * Contributor(s): Jeremy Philippe
+ */
+ package edu.rice.rubis.client;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,10 +45,10 @@ public class RUBiSProperties
   // Information about web server
   private String webSiteName;
   private int    webSitePort;
-  private String EJBServer;
+  private Vector EJBServers;
   private String EJBHTMLPath;
   private String EJBScriptPath;
-  private String ServletsServer;
+  private Vector ServletsServers;
   private String ServletsHTMLPath;
   private String ServletsScriptPath;
   private String PHPHTMLPath;
@@ -49,7 +72,7 @@ public class RUBiSProperties
   private float   downSlowdown;
 
   // Policy to generate database information
-  private String  dbServerName;
+  private Vector  dbServers;
   
   private Integer nbOfUsers;
 
@@ -159,8 +182,17 @@ public class RUBiSProperties
       System.out.println(webSitePort+"<br><br>");
 
       System.out.print("EJB Server            : ");
-      EJBServer  = getProperty("ejb_server");
-      System.out.println(EJBServer+"<br>");
+      StringTokenizer nodes = new StringTokenizer(getProperty("ejb_server"),",");
+      EJBServers = new Vector(nodes.countTokens());
+      while (nodes.hasMoreTokens())
+      {
+        String name = nodes.nextToken().trim();
+        EJBServers.add(name);
+        System.out.print(name);
+        if (nodes.hasMoreTokens())
+          System.out.print(", ");
+      }
+      System.out.println("<br>");
       System.out.print("EJB HTML files path   : ");
       EJBHTMLPath  = getProperty("ejb_html_path");
       System.out.println(EJBHTMLPath+"<br>");
@@ -169,8 +201,17 @@ public class RUBiSProperties
       System.out.println(EJBScriptPath+"<br><br>");
 
       System.out.print("Servlets server            : ");
-      ServletsServer  = getProperty("servlets_server");
-      System.out.println(ServletsServer+"<br>");
+      nodes = new StringTokenizer(getProperty("servlets_server"),",");
+      ServletsServers = new Vector(nodes.countTokens());
+      while (nodes.hasMoreTokens())
+      {
+        String name = nodes.nextToken().trim();
+        ServletsServers.add(name);
+        System.out.print(name);
+        if (nodes.hasMoreTokens())
+          System.out.print(", ");
+      }
+      System.out.println("<br>");
       System.out.print("Servlets HTML files path   : ");
       ServletsHTMLPath  = getProperty("servlets_html_path");
       System.out.println(ServletsHTMLPath+"<br>");
@@ -188,12 +229,17 @@ public class RUBiSProperties
       // # Workload
       System.out.println("\n<h3><br>### Workload ###</h3>");
       System.out.print("Remote client nodes            : ");
-      StringTokenizer nodes = new StringTokenizer(getProperty("workload_remote_client_nodes"),",");
+      nodes = new StringTokenizer(getProperty("workload_remote_client_nodes"),",");
       remoteClients = new Vector(nodes.countTokens());
       while (nodes.hasMoreTokens())
-        remoteClients.add(nodes.nextToken().trim());
-      nbOfClients = remoteClients.size();
-      System.out.println(nbOfClients+"<br>");
+      {
+        String name = nodes.nextToken().trim();
+        remoteClients.add(name);
+        System.out.print(name);
+        if (nodes.hasMoreTokens())
+        System.out.print(", ");
+      }
+      System.out.println("<br>");
       System.out.print("Remote client command          : ");
       remoteCommand  = getProperty("workload_remote_client_command");
       System.out.println(remoteCommand+"<br>");
@@ -251,8 +297,17 @@ public class RUBiSProperties
       // # Database Information
       System.out.println("\n<h3><br>### Database Information ###</h3>");
       System.out.print("Database server                        : ");
-      dbServerName = getProperty("database_server");
-      System.out.println(dbServerName+"<br>");
+      nodes = new StringTokenizer(getProperty("database_server"),",");
+      dbServers = new Vector(nodes.countTokens());
+      while (nodes.hasMoreTokens())
+      {
+        String name = nodes.nextToken().trim();
+        dbServers.add(name);
+        System.out.print(name);
+        if (nodes.hasMoreTokens())
+          System.out.print(", ");
+      }
+      System.out.println("<br>");
 
       // # Users policy
       System.out.println("\n<h3><br>### Users policy ###</h3>");
@@ -405,9 +460,9 @@ public class RUBiSProperties
    *
    * @return database server name
    */
-  public String getDBServerName()
+  public Vector getDBServerNames()
   {
-    return dbServerName;
+    return dbServers;
   }
 
 
@@ -416,9 +471,9 @@ public class RUBiSProperties
    *
    * @return EJB server name
    */
-  public String getEJBServerName()
+  public Vector getEJBServerNames()
   {
-    return EJBServer;
+    return EJBServers;
   }
 
 
@@ -427,9 +482,9 @@ public class RUBiSProperties
    *
    * @return Servlets server name
    */
-  public String getServletsServerName()
+  public Vector getServletsServerNames()
   {
-    return ServletsServer;
+    return ServletsServers;
   }
 
 
