@@ -38,9 +38,10 @@ import java.sql.SQLException;
 
 public class CommentBean implements EntityBean 
 {
-  private EntityContext entityContext;
-  private Context initialContext;
-  private DataSource datasource;
+  private EntityContext     entityContext;
+  private Context           initialContext;
+  private DataSource        datasource;
+  private transient boolean isDirty; // used for the isModified function
 
   /* Class member variables */
 
@@ -140,6 +141,7 @@ public class CommentBean implements EntityBean
   public void setFromUserId(Integer id) throws RemoteException
   {
     fromUserId = id;
+    isDirty = true; // the bean content has been modified
   }
 
   /**
@@ -152,6 +154,7 @@ public class CommentBean implements EntityBean
   public void setToUserId(Integer id) throws RemoteException
   {
     toUserId = id;
+    isDirty = true; // the bean content has been modified
   }
 
   /**
@@ -164,6 +167,7 @@ public class CommentBean implements EntityBean
   public void setItemId(Integer id) throws RemoteException
   {
     itemId = id;
+    isDirty = true; // the bean content has been modified
   }
 
   /**
@@ -175,6 +179,7 @@ public class CommentBean implements EntityBean
   public void setRating(int Rating) throws RemoteException
   {
     rating = Rating;
+    isDirty = true; // the bean content has been modified
   }
 
   /**
@@ -186,6 +191,7 @@ public class CommentBean implements EntityBean
   public void setDate(String newDate) throws RemoteException
   {
     date = newDate;
+    isDirty = true; // the bean content has been modified
   }
 
   /**
@@ -197,6 +203,7 @@ public class CommentBean implements EntityBean
   public void setComment(String newComment) throws RemoteException
   {
     comment = newComment;
+    isDirty = true; // the bean content has been modified
   }
 
 
@@ -208,20 +215,21 @@ public class CommentBean implements EntityBean
   public Connection getConnection () throws Exception 
   {
     try
+    {
+      if (datasource == null)
       {
-	if (datasource == null)
-	  {
-	    // Finds DataSource from JNDI
-	    initialContext = new InitialContext();
-	    datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
-	  }
-	return datasource.getConnection();
+        // Finds DataSource from JNDI
+        initialContext = new InitialContext();
+        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
       }
+      return datasource.getConnection();
+    }
     catch (Exception e) 
-      {
-        throw new Exception("Cannot retrieve the connection.");
-      }
+    {
+      throw new Exception("Cannot retrieve the connection.");
+    }
   } 
+
 
   /**
    * This method is used to retrieve a Comment Bean from its primary key,
@@ -236,31 +244,32 @@ public class CommentBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT comment FROM comments WHERE id=?");
+      stmt.setInt(1, id.getId().intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT comment FROM comments WHERE id=?");
-	stmt.setInt(1, id.getId().intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  return null;
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return id;
+        return null;
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return id;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to retrieve object comment: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to retrieve object comment: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve all Comment Beans related to one item.
@@ -275,38 +284,39 @@ public class CommentBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM comments WHERE item_id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM comments WHERE item_id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new CommentPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new CommentPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to get all comments by items: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to get all comments by items: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve all Comment Beans belonging to
@@ -321,38 +331,39 @@ public class CommentBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM comments WHERE from_user_id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM comments WHERE from_user_id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new CommentPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new CommentPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to get all comments by author: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to get all comments by author: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve all Comment Beans related to
@@ -367,38 +378,39 @@ public class CommentBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM comments WHERE to_user_id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM comments WHERE to_user_id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new CommentPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new CommentPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to get all comments by toUser: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to get all comments by toUser: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve all comments from the database!
@@ -410,37 +422,38 @@ public class CommentBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM comments");
+      ResultSet rs = stmt.executeQuery();
+      int pk;
+      LinkedList results = new LinkedList();
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM comments");
-	ResultSet rs = stmt.executeQuery();
-	int pk;
-	LinkedList results = new LinkedList();
-	if (rs.first())
-	  {
-	    do
-	      {
-		pk = rs.getInt("id");
-		results.add(new CommentPK(new Integer(pk)));
-	      }
-	    while(rs.next());
-	  }
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new CommentPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to get all comments: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to get all comments: " +e);
+    }
   }
+
 
   /**
    * This method is used to create a new Comment Bean. 
@@ -459,61 +472,62 @@ public class CommentBean implements EntityBean
    */
   public CommentPK ejbCreate(Integer FromUserId, Integer ToUserId, Integer ItemId, int Rating, String Comment) throws CreateException, RemoteException, RemoveException
   {
-      // Connecting to IDManager Home interface thru JNDI
-      IDManagerHome home = null;
-      IDManager idManager = null;
+    // Connecting to IDManager Home interface thru JNDI
+    IDManagerHome home = null;
+    IDManager idManager = null;
       
-      try 
-      {
-        InitialContext initialContext = new InitialContext();
-        home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
-               "java:comp/env/ejb/IDManager"), IDManagerHome.class);
-      } 
-      catch (Exception e)
-      {
-        throw new EJBException("Cannot lookup IDManager: " +e);
-      }
-     try 
-      {
-        IDManagerPK idPK = new IDManagerPK();
-        idManager = home.findByPrimaryKey(idPK);
-        id = idManager.getNextCommentID();
-        fromUserId = FromUserId;
-        toUserId   = ToUserId;
-        itemId     = ItemId;
-        rating     = Rating;
-        date       = TimeManagement.currentDateToString();
-        comment    = Comment;
-      } 
-      catch (Exception e)
-      {
-        throw new CreateException("Cannot create id for comment: " +e);
-      }
+    try 
+    {
+      InitialContext initialContext = new InitialContext();
+      home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
+                                                                              "java:comp/env/ejb/IDManager"), IDManagerHome.class);
+    } 
+    catch (Exception e)
+    {
+      throw new EJBException("Cannot lookup IDManager: " +e);
+    }
+    try 
+    {
+      IDManagerPK idPK = new IDManagerPK();
+      idManager = home.findByPrimaryKey(idPK);
+      id = idManager.getNextCommentID();
+      fromUserId = FromUserId;
+      toUserId   = ToUserId;
+      itemId     = ItemId;
+      rating     = Rating;
+      date       = TimeManagement.currentDateToString();
+      comment    = Comment;
+    } 
+    catch (Exception e)
+    {
+      throw new CreateException("Cannot create id for comment: " +e);
+    }
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("INSERT INTO comments VALUES ("+id.intValue()+", \""+
-                                     fromUserId.intValue()+
-                                     "\", \""+toUserId.intValue()+"\", \""+itemId.intValue()+
-                                     "\", \""+ rating+"\", \""+date+"\",\""+comment+"\")");
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("INSERT INTO comments VALUES ("+id.intValue()+", \""+
+                                   fromUserId.intValue()+
+                                   "\", \""+toUserId.intValue()+"\", \""+itemId.intValue()+
+                                   "\", \""+ rating+"\", \""+date+"\",\""+comment+"\")");
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new CreateException("Failed to create object comment: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new CreateException("Failed to create object comment: " +e);
+    }
     return new CommentPK(id);
   }
+
 
   /** This method does currently nothing */
   public void ejbPostCreate(Integer FromUserId, Integer ToUserId, Integer ItemId, int Rating, String Comment) 
@@ -524,6 +538,7 @@ public class CommentBean implements EntityBean
   public void ejbActivate() throws RemoteException {}
   public void ejbPassivate() throws RemoteException {}
 
+
   /**
    * This method delete the record from the database.
    */
@@ -532,26 +547,27 @@ public class CommentBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("DELETE FROM comments WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("DELETE FROM comments WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new RemoveException("Failed to remove object comment: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new RemoveException("Failed to remove object comment: " +e);
+    }
     
   }
+
 
   /** 
    * Update the record.
@@ -560,7 +576,10 @@ public class CommentBean implements EntityBean
   {
     PreparedStatement stmt= null;
     Connection conn = null;
-    try
+    if (isDirty)
+    {
+      isDirty = false;
+      try
       {
 	conn = getConnection();
 	stmt = conn.prepareStatement("UPDATE comments SET from_user_id=?, to_user_id=?, item_id=?, rating=?, date=?, comment=? WHERE id=?");
@@ -575,17 +594,19 @@ public class CommentBean implements EntityBean
 	stmt.close();
 	conn.close();
       }
-    catch (Exception e)
+      catch (Exception e)
       {
 	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
+        {
+          if(stmt != null) stmt.close();
+          if(conn != null) conn.close();
+        }
 	catch (Exception ignore){}
         throw new RemoteException("Failed to update the record for comment: " +e);
       }
+    }
   }
+
 
   /** 
    * Read the reccord from the database and update the bean.
@@ -595,38 +616,39 @@ public class CommentBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      CommentPK pk = (CommentPK)entityContext.getPrimaryKey();
+      id = pk.getId();
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT * FROM comments WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	CommentPK pk = (CommentPK)entityContext.getPrimaryKey();
-	id = pk.getId();
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT * FROM comments WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new EJBException("Object comment not found");
-	}
-	fromUserId = new Integer(rs.getInt("from_user_id"));
-	toUserId = new Integer(rs.getInt("to_user_id"));
-	itemId =new Integer( rs.getInt("item_id"));
-	rating = rs.getInt("rating");
-	date = rs.getString("date");
-	comment = rs.getString("comment");
-	rs.close();
-	stmt.close();
-	conn.close();
+        throw new EJBException("Object comment not found");
       }
+      fromUserId = new Integer(rs.getInt("from_user_id"));
+      toUserId = new Integer(rs.getInt("to_user_id"));
+      itemId =new Integer( rs.getInt("item_id"));
+      rating = rs.getInt("rating");
+      date = rs.getString("date");
+      comment = rs.getString("comment");
+      rs.close();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new RemoteException("Failed to update comment bean: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new RemoteException("Failed to update comment bean: " +e);
+    }
   }
+
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -651,7 +673,6 @@ public class CommentBean implements EntityBean
   }
 
 
-
   /**
    * Unsets the associated entity context. The container calls this method 
    *  before removing the instance. This is the last method that the container 
@@ -673,6 +694,7 @@ public class CommentBean implements EntityBean
   {
     entityContext = null;
   }
+
 
   /**
    * Display comment information as an HTML table row

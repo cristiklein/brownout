@@ -254,23 +254,24 @@ public class BidBean implements EntityBean
    * Retieve a connection..
    *
    * @return connection
+   * @exception Exception if an error occurs
    */
   public Connection getConnection () throws Exception 
   {
     try
+    {
+      if (datasource == null)
       {
-	if (datasource == null)
-	  {
-	    // Finds DataSource from JNDI
-	    initialContext = new InitialContext();
-	    datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
-	  }
-	return datasource.getConnection();
+        // Finds DataSource from JNDI
+        initialContext = new InitialContext();
+        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
       }
+      return datasource.getConnection();
+    }
     catch (Exception e) 
-      {
-        throw new Exception("Cannot retrieve the connection.");
-      }
+    {
+      throw new Exception("Cannot retrieve the connection.");
+    }
   } 
 
 
@@ -289,30 +290,30 @@ public class BidBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT bid FROM bids WHERE id=?");
+      stmt.setInt(1, id.getId().intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT bid FROM bids WHERE id=?");
-	stmt.setInt(1, id.getId().intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  return null;
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return id;
+        return null;
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return id;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to retrieve object bid: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to retrieve object bid: " +e);
+    }
   }
 
   /**
@@ -330,37 +331,37 @@ public class BidBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM bids WHERE item_id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM bids WHERE item_id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new BidPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new BidPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all bids by item: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all bids by item: " +e);
+    }
   }
 
   /**
@@ -378,37 +379,37 @@ public class BidBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM bids WHERE user_id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM bids WHERE user_id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new BidPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new BidPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all bids by user: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all bids by user: " +e);
+    }
   }
 
   /**
@@ -423,36 +424,36 @@ public class BidBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM bids");
+      ResultSet rs = stmt.executeQuery();
+      int pk;
+      LinkedList results = new LinkedList();
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM bids");
-	ResultSet rs = stmt.executeQuery();
-	int pk;
-	LinkedList results = new LinkedList();
-	if (rs.first())
-	  {
-	    do
-	      {
-		pk = rs.getInt("id");
-		results.add(new BidPK(new Integer(pk)));
-	      }
-	    while(rs.next());
-	  }
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new BidPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all bids: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all bids: " +e);
+    }
   }
 
   /**
@@ -488,57 +489,57 @@ public class BidBean implements EntityBean
     item.setMaxBid(userBid);
     item.addOneBid();
 
-     // Connecting to IDManager Home interface thru JNDI
-      IDManagerHome home = null;
-      IDManager idManager = null;
+    // Connecting to IDManager Home interface thru JNDI
+    IDManagerHome home = null;
+    IDManager idManager = null;
       
-      try 
-      {
-        home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
-               "java:comp/env/ejb/IDManager"), IDManagerHome.class);
-      } 
-      catch (Exception e)
-      {
-        throw new EJBException("Cannot lookup IDManager: " +e);
-      }
-     try 
-      {
-        IDManagerPK idPK = new IDManagerPK();
-        idManager = home.findByPrimaryKey(idPK);
-        id = idManager.getNextBidID();
-        userId = bidUserId;
-        itemId = bidItemId;
-        bid    = userBid;
-        maxBid = userMaxBid;
-        qty    = quantity;
-        date   = TimeManagement.currentDateToString();
-      } 
-     catch (Exception e)
-     {
-       throw new EJBException("Cannot create id for bid: " +e);
-     }
+    try 
+    {
+      home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
+                                                                              "java:comp/env/ejb/IDManager"), IDManagerHome.class);
+    } 
+    catch (Exception e)
+    {
+      throw new EJBException("Cannot lookup IDManager: " +e);
+    }
+    try 
+    {
+      IDManagerPK idPK = new IDManagerPK();
+      idManager = home.findByPrimaryKey(idPK);
+      id = idManager.getNextBidID();
+      userId = bidUserId;
+      itemId = bidItemId;
+      bid    = userBid;
+      maxBid = userMaxBid;
+      qty    = quantity;
+      date   = TimeManagement.currentDateToString();
+    } 
+    catch (Exception e)
+    {
+      throw new EJBException("Cannot create id for bid: " +e);
+    }
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("INSERT INTO bids VALUES ("+id.intValue()+", \""+userId+
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("INSERT INTO bids VALUES ("+id.intValue()+", \""+userId+
 				   "\", \""+itemId+"\", \""+qty+"\", \""+
 				   bid+"\", \""+maxBid+"\", \""+date+"\")");
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to create object bid: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to create object bid: " +e);
+    }
     return new BidPK(id);
   }
 
@@ -551,42 +552,47 @@ public class BidBean implements EntityBean
 
   /**
    * This method delete the record from the database.
+   * @exception RemoteException if an error occurs
+   * @exception RemoveException if an error occurs
    */
   public void ejbRemove() throws RemoteException, RemoveException   
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("DELETE FROM bids WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("DELETE FROM bids WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to remove object bid: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to remove object bid: " +e);
+    }
     
   }
 
-  /** 
+  /**
    * Update the record.
+   * @exception RemoteException if an error occurs
    */
   public void ejbStore() throws RemoteException
   {
-    isDirty = false;
     PreparedStatement stmt= null;
     Connection conn = null;
-    try
+    if (isDirty)
+    {
+      isDirty = false;
+      try
       {
 	conn = getConnection();
 	stmt = conn.prepareStatement("UPDATE bids SET user_id=?, item_id=?, qty=?, bid=?, max_bid=?, date=? WHERE id=?");
@@ -601,20 +607,22 @@ public class BidBean implements EntityBean
 	stmt.close();
 	conn.close();
       }
-    catch (Exception e)
+      catch (Exception e)
       {
 	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
+        {
+          if(stmt != null) stmt.close();
+          if(conn != null) conn.close();
+        }
 	catch (Exception ignore){}
         throw new EJBException("Failed to update the record for bid: " +e);
       }
+    }
   }
 
-  /** 
+  /**
    * Read the reccord from the database and update the bean.
+   * @exception RemoteException if an error occurs
    */
   public void ejbLoad() throws RemoteException
   {
@@ -622,37 +630,37 @@ public class BidBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      BidPK pk = (BidPK)entityContext.getPrimaryKey();
+      id = pk.getId();
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT * FROM bids WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	BidPK pk = (BidPK)entityContext.getPrimaryKey();
-	id = pk.getId();
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT * FROM bids WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new EJBException("Object bid not found");
-	}
-	userId = new Integer(rs.getInt("user_id"));
-	itemId = new Integer(rs.getInt("item_id"));
-	qty = rs.getInt("qty");
-	bid = rs.getInt("bid");
-	maxBid = rs.getFloat("max_bid");
-	date = rs.getString("date");
-	rs.close();
-	stmt.close();
-	conn.close();
+        throw new EJBException("Object bid not found");
       }
+      userId = new Integer(rs.getInt("user_id"));
+      itemId = new Integer(rs.getInt("item_id"));
+      qty = rs.getInt("qty");
+      bid = rs.getInt("bid");
+      maxBid = rs.getFloat("max_bid");
+      date = rs.getString("date");
+      rs.close();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to update bid bean: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to update bid bean: " +e);
+    }
   }
 
   /**

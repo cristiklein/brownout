@@ -155,6 +155,7 @@ public class AboutMe extends HttpServlet
       try
       {
         buy = (edu.rice.rubis.beans.BuyNow)it.next();
+        //buy = buyHome.findByPrimaryKey((BuyNowPK)it.next());
 	quantity = buy.getQuantity();
       }
       catch (Exception e) 

@@ -40,10 +40,10 @@ import java.sql.SQLException;
 
 public class UserBean implements EntityBean 
 {
-  protected  EntityContext entityContext;
+  protected  EntityContext  entityContext;
   private transient boolean isDirty; // used for the isModified function
-  private Context initialContext;
-  private DataSource datasource;
+  private Context           initialContext;
+  private DataSource        datasource;
 
   /* Class member variables */
 
@@ -314,28 +314,31 @@ public class UserBean implements EntityBean
     return result;
   }
 
+
   /**
-   * Retieve a connection..
+   * Retrieve a connection..
    *
    * @return connection
+   * @exception Exception if an error occurs
    */
   public Connection getConnection () throws Exception 
   {
     try
+    {
+      if (datasource == null)
       {
-	if (datasource == null)
-	  {
-	    // Finds DataSource from JNDI
-	    initialContext = new InitialContext();
-	    datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
-	  }
-	return datasource.getConnection();
+        // Finds DataSource from JNDI
+        initialContext = new InitialContext();
+        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
       }
+      return datasource.getConnection();
+    }
     catch (Exception e) 
-      {
-        throw new Exception("Cannot retrieve the connection.");
-      }
+    {
+      throw new Exception("Cannot retrieve the connection.");
+    }
   } 
+
 
   /**
    * This method is used to retrieve a User Bean from its primary key,
@@ -344,37 +347,40 @@ public class UserBean implements EntityBean
    * @param id User id (primary key)
    *
    * @return the user primary key if found else null
+   * @exception FinderException if an error occurs
+   * @exception RemoteException if an error occurs
    */
   public UserPK ejbFindByPrimaryKey(UserPK id) throws FinderException, RemoteException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM users WHERE id=?");
+      stmt.setInt(1, id.getId().intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM users WHERE id=?");
-	stmt.setInt(1, id.getId().intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  return null;
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return id;
+        return null;
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return id;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to retrieve object user: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to retrieve object user: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve a User Bean from its name.
@@ -382,79 +388,84 @@ public class UserBean implements EntityBean
    * @param nickName User nickname
    *
    * @return the primary key of the category if found else null
+   * @exception FinderException if an error occurs
+   * @exception RemoteException if an error occurs
    */
   public UserPK ejbFindByNickName(String nickName) throws FinderException, RemoteException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM users WHERE nickname=?");
+      stmt.setString(1, nickName);
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM users WHERE nickname=?");
-	stmt.setString(1, nickName);
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new FinderException("Object user not found.");
-	}
-	int pk = rs.getInt("id");
-	rs.close();
-	stmt.close();
-	conn.close();
-	return new UserPK(new Integer(pk));
+        throw new FinderException("Object user not found.");
       }
+      int pk = rs.getInt("id");
+      rs.close();
+      stmt.close();
+      conn.close();
+      return new UserPK(new Integer(pk));
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to retrieve object user: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to retrieve object user: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve all users from the database!
    *
    * @return List of all users primary keys (eventually empty)
+   * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
   public Collection ejbFindAllUsers() throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM users");
+      ResultSet rs = stmt.executeQuery();
+      int pk;
+      LinkedList results = new LinkedList();
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM users");
-	ResultSet rs = stmt.executeQuery();
-	int pk;
-	LinkedList results = new LinkedList();
-	if (rs.first())
-	  {
-	    do
-	      {
-		pk = rs.getInt("id");
-		results.add(new UserPK(new Integer(pk)));
-	      }
-	    while(rs.next());
-	  }
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new UserPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new FinderException("Failed to get all users: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new FinderException("Failed to get all users: " +e);
+    }
   }
 
 
@@ -480,62 +491,63 @@ public class UserBean implements EntityBean
   public UserPK ejbCreate(String userFirstName, String userLastName, String userNickName, String userEmail, 
                           String userPassword, Integer userRegionId) throws CreateException, RemoteException, RemoveException
   {
-     // Connecting to IDManager Home interface thru JNDI
-      IDManagerHome home = null;
-      IDManager idManager = null;
+    // Connecting to IDManager Home interface thru JNDI
+    IDManagerHome home = null;
+    IDManager idManager = null;
       
-      try 
-      {
-        InitialContext initialContext = new InitialContext();
-        home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
-               "java:comp/env/ejb/IDManager"), IDManagerHome.class);
-      } 
-      catch (Exception e)
-      {
-        throw new CreateException("Cannot lookup IDManager: " +e);
-      }
-     try 
-     {
-       IDManagerPK idPK = new IDManagerPK();
-       idManager = home.findByPrimaryKey(idPK);
-       id = idManager.getNextUserID();
-       firstName = userFirstName;
-       lastName  = userLastName;
-       nickName  = userNickName;
-       password  = userPassword;
-       email     = userEmail;
-       regionId  = userRegionId;
-       creationDate = TimeManagement.currentDateToString();
-     } 
-      catch (Exception e)
-      {
-        throw new CreateException("Cannot create id for user: " +e);
-      }
+    try 
+    {
+      InitialContext initialContext = new InitialContext();
+      home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
+                                                                              "java:comp/env/ejb/IDManager"), IDManagerHome.class);
+    } 
+    catch (Exception e)
+    {
+      throw new CreateException("Cannot lookup IDManager: " +e);
+    }
+    try 
+    {
+      IDManagerPK idPK = new IDManagerPK();
+      idManager = home.findByPrimaryKey(idPK);
+      id = idManager.getNextUserID();
+      firstName = userFirstName;
+      lastName  = userLastName;
+      nickName  = userNickName;
+      password  = userPassword;
+      email     = userEmail;
+      regionId  = userRegionId;
+      creationDate = TimeManagement.currentDateToString();
+    } 
+    catch (Exception e)
+    {
+      throw new CreateException("Cannot create id for user: " +e);
+    }
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("INSERT INTO users VALUES ("+id.intValue()+", \""+firstName+
-                                     "\", \""+lastName+"\", \""+nickName+"\", \""+
-                                     password+"\", \""+email+"\", 0, 0,\""+creationDate+"\", "+ 
-                                     regionId+")");
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("INSERT INTO users VALUES ("+id.intValue()+", \""+firstName+
+                                   "\", \""+lastName+"\", \""+nickName+"\", \""+
+                                   password+"\", \""+email+"\", 0, 0,\""+creationDate+"\", "+ 
+                                   regionId+")");
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new CreateException("Failed to create object user: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new CreateException("Failed to create object user: " +e);
+    }
     return new UserPK(id);
   }
+
 
   /** This method does currently nothing */
   public void ejbPostCreate(String userFirstName, String userLastName, String userNickName, String userEmail, 
@@ -545,44 +557,51 @@ public class UserBean implements EntityBean
   public void ejbActivate() throws RemoteException {}
   public void ejbPassivate() throws RemoteException {}
 
+
   /**
    * This method delete the record from the database.
+   * @exception RemoteException if an error occurs
+   * @exception RemoveException if an error occurs
    */
   public void ejbRemove() throws RemoteException, RemoveException   
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("DELETE FROM users WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("DELETE FROM users WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new RemoveException("Failed to remove object user: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new RemoveException("Failed to remove object user: " +e);
+    }
     
   }
 
-  /** 
+
+  /**
    * Update the record.
+   * @exception RemoteException if an error occurs
    */
   public void ejbStore() throws RemoteException
   {
-    isDirty = false;
     PreparedStatement stmt= null;
     Connection conn = null;
-    try
+    if (isDirty)
+    {
+      isDirty = false;
+      try
       {
 	conn = getConnection();
 	stmt = conn.prepareStatement("UPDATE users SET firstname=?, lastname=?, nickname=?, password=?, email=?, rating=?, balance=?, creation_date=?, region=? WHERE id=?");
@@ -601,20 +620,23 @@ public class UserBean implements EntityBean
 	stmt.close();
 	conn.close();
       }
-    catch (Exception e)
+      catch (Exception e)
       {
 	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
+        {
+          if(stmt != null) stmt.close();
+          if(conn != null) conn.close();
+        }
 	catch (Exception ignore){}
         throw new RemoteException("Failed to update the record for user: " +e);
       }
+    }
   }
 
-  /** 
+
+  /**
    * Read the reccord from the database and update the bean.
+   * @exception RemoteException if an error occurs
    */
   public void ejbLoad() throws RemoteException
   {
@@ -622,42 +644,43 @@ public class UserBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      UserPK pk = (UserPK)entityContext.getPrimaryKey();
+      id = pk.getId();
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	UserPK pk = (UserPK)entityContext.getPrimaryKey();
-	id = pk.getId();
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new RemoteException("Object user not found");
-	}
-	firstName = rs.getString("firstname");
-	lastName = rs.getString("lastname");
-	nickName = rs.getString("nickname");
-	password = rs.getString("password");
-	email = rs.getString("email");
-	rating = rs.getInt("rating");
-	balance = rs.getFloat("balance");
-	creationDate = rs.getString("creation_date");
-	regionId = new Integer(rs.getInt("region"));
+        throw new RemoteException("Object user not found");
+      }
+      firstName = rs.getString("firstname");
+      lastName = rs.getString("lastname");
+      nickName = rs.getString("nickname");
+      password = rs.getString("password");
+      email = rs.getString("email");
+      rating = rs.getInt("rating");
+      balance = rs.getFloat("balance");
+      creationDate = rs.getString("creation_date");
+      regionId = new Integer(rs.getInt("region"));
 
-	rs.close();
-	stmt.close();
-	conn.close();
-      }
+      rs.close();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new RemoteException("Failed to update user bean: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new RemoteException("Failed to update user bean: " +e);
+    }
   }
+
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -681,6 +704,7 @@ public class UserBean implements EntityBean
     entityContext = context;
   }
 
+
   /**
    * Unsets the associated entity context. The container calls this method 
    *  before removing the instance. This is the last method that the container 
@@ -702,6 +726,5 @@ public class UserBean implements EntityBean
   {
     entityContext = null;
   }
-
 
 }

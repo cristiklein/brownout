@@ -25,6 +25,7 @@ public class IDManagerBean implements EntityBean
   private EntityContext entityContext;
   private Context initialContext;
   private DataSource datasource;
+  private transient boolean isDirty; // used for the isModified function
 
   /* Class member variables */
 
@@ -40,112 +41,127 @@ public class IDManagerBean implements EntityBean
 
   
 
-  /** 
+  /**
    * Generate the category id.
    *
    * @return Value of the ID
+   * @exception RemoteException if an error occurs
    * @since 1.1
    */
   public Integer getNextCategoryID() throws RemoteException
   {
     categoryCount = new Integer(categoryCount.intValue()+1);
+    isDirty = true; // the bean content has been modified
     return categoryCount;
   }
 
-  /** 
+  /**
    * Generate the region id.
    *
    * @return Value of the ID
+   * @exception RemoteException if an error occurs
    * @since 1.1
    */
   public Integer getNextRegionID() throws RemoteException
   {
     regionCount = new Integer(regionCount.intValue()+1);
+    isDirty = true; // the bean content has been modified
     return regionCount;
   }
 
-  /** 
+  /**
    * Generate the user id.
    *
    * @return Value of the ID
+   * @exception RemoteException if an error occurs
    * @since 1.1
    */
   public Integer getNextUserID() throws RemoteException
   {
     userCount = new Integer(userCount.intValue()+1);
+    isDirty = true; // the bean content has been modified
     return userCount;
   }
 
-  /** 
+  /**
    * Generate the item id.
    *
    * @return Value of the ID
+   * @exception RemoteException if an error occurs
    * @since 1.1
    */
   public Integer getNextItemID() throws RemoteException
   {
     itemCount = new Integer(itemCount.intValue()+1);
+    isDirty = true; // the bean content has been modified
     return itemCount;
   }
 
-  /** 
+  /**
    * Generate the comment id.
    *
    * @return Value of the ID
+   * @exception RemoteException if an error occurs
    * @since 1.1
    */
   public Integer getNextCommentID() throws RemoteException
   {
     commentCount = new Integer(commentCount.intValue()+1);
+    isDirty = true; // the bean content has been modified
     return commentCount;
   }
 
-  /** 
+  /**
    * Generate the bid id.
    *
    * @return Value of the ID
+   * @exception RemoteException if an error occurs
    * @since 1.1
    */
   public Integer getNextBidID() throws RemoteException
   {
     bidCount = new Integer(bidCount.intValue()+1);
+    isDirty = true; // the bean content has been modified
     return bidCount;
   }
 
-  /** 
+  /**
    * Generate the buyNow id.
    *
    * @return Value of the ID
+   * @exception RemoteException if an error occurs
    * @since 1.1
    */
   public Integer getNextBuyNowID() throws RemoteException
   {
     buyNowCount = new Integer(buyNowCount.intValue()+1);
+    isDirty = true; // the bean content has been modified
     return buyNowCount;
   }
 
 
   /**
-   * Retieve a connection..
+   * Retrieve a connection..
    *
    * @return connection
+   * @exception Exception if an error occurs
    */
   public Connection getConnection () throws Exception 
   {
     try
+    {
+      if (datasource == null)
       {
-	if (datasource == null)
-	  {
-	    // Finds DataSource from JNDI
-	    initialContext = new InitialContext();
-	    datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
-	  }
-	return datasource.getConnection();
+        // Finds DataSource from JNDI
+        initialContext = new InitialContext();
+        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
       }
+      return datasource.getConnection();
+    }
     catch (Exception e) 
-      {
-        throw new Exception("Cannot retrieve the connection.");
-      }
+    {
+      throw new Exception("Cannot retrieve the connection.");
+    }
   } 
 
   // ======================== EJB related methods ============================
@@ -157,36 +173,38 @@ public class IDManagerBean implements EntityBean
    * @param id IDManager id (primary key)
    *
    * @return the primary key of the IDManager if found else null
+   * @exception FinderException if an error occurs
+   * @exception RemoteException if an error occurs
    */
   public IDManagerPK ejbFindByPrimaryKey(IDManagerPK id) throws FinderException, RemoteException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT category FROM ids WHERE id=?");
+      stmt.setInt(1, id.getId().intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT category FROM ids WHERE id=?");
-	stmt.setInt(1, id.getId().intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new EJBException("Object not found");
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return id;
+        throw new EJBException("Object not found");
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return id;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to retrieve object IDManager: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to retrieve object IDManager: " +e);
+    }
   }
 
 
@@ -213,20 +231,27 @@ public class IDManagerBean implements EntityBean
 
   /**
    * This method delete a record from the database but should never be called.
+   * @exception RemoteException if an error occurs
+   * @exception RemoveException if an error occurs
    */
   public void ejbRemove() throws RemoteException, RemoveException 
   {
     throw new RemoveException();
   }
 
-  /** 
+
+  /**
    * Update the record.
+   * @exception RemoteException if an error occurs
    */
   public void ejbStore() throws RemoteException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
-    try
+    if (isDirty)
+    {
+      isDirty = false;
+      try
       {
 	conn = getConnection();
 	stmt = conn.prepareStatement("UPDATE ids SET category=?, region=?, users=?, item=?, comment=?, bid=?, buyNow=? WHERE id=?");
@@ -243,60 +268,64 @@ public class IDManagerBean implements EntityBean
 	stmt.close();
 	conn.close();
       }
-    catch (Exception e)
+      catch (Exception e)
       {
 	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
+        {
+          if(stmt != null) stmt.close();
+          if(conn != null) conn.close();
+        }
 	catch (Exception ignore){}
         throw new EJBException("Failed to update object idManager: " +e);
       }
+    }
   }
 
-  /** 
+
+  /**
    * Read the reccord from the database and update the bean.
+   * @exception RemoteException if an error occurs
    */
   public void ejbLoad() throws RemoteException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      IDManagerPK pk = (IDManagerPK)entityContext.getPrimaryKey();
+      id = pk.getId();
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT * FROM ids WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	IDManagerPK pk = (IDManagerPK)entityContext.getPrimaryKey();
-	id = pk.getId();
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT * FROM ids WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new EJBException("Object not found");
-	}
-	categoryCount = new Integer(rs.getInt("category"));
-	regionCount = new Integer(rs.getInt("region"));
-	userCount = new Integer(rs.getInt("users"));
-	itemCount = new Integer(rs.getInt("item"));
-	commentCount = new Integer(rs.getInt("comment"));
-	bidCount = new Integer(rs.getInt("bid"));
-	buyNowCount = new Integer(rs.getInt("buyNow"));
+        throw new EJBException("Object not found");
+      }
+      categoryCount = new Integer(rs.getInt("category"));
+      regionCount = new Integer(rs.getInt("region"));
+      userCount = new Integer(rs.getInt("users"));
+      itemCount = new Integer(rs.getInt("item"));
+      commentCount = new Integer(rs.getInt("comment"));
+      bidCount = new Integer(rs.getInt("bid"));
+      buyNowCount = new Integer(rs.getInt("buyNow"));
 
-	rs.close();
-	stmt.close();
-	conn.close();
-      }
+      rs.close();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to update object idManager: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to update object idManager: " +e);
+    }
   }
+
 
   /**
    * Sets the associated entity context. The container invokes this method 
@@ -320,6 +349,7 @@ public class IDManagerBean implements EntityBean
     entityContext = context;
   }
 
+
   /**
    * Unsets the associated entity context. The container calls this method 
    *  before removing the instance. This is the last method that the container 
@@ -341,8 +371,5 @@ public class IDManagerBean implements EntityBean
   {
     entityContext = null;
   }
-
-
-
 
 }

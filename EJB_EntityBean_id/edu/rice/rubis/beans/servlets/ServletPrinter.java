@@ -118,11 +118,6 @@ public class ServletPrinter
     try
     {
       out.println(category.printCategory());
-/*
-      String name = category.getName();
-      out.println("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+category.getId()+
-                  "&categoryName="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n");
-*/
     }
     catch (RemoteException re)
     {
@@ -136,11 +131,6 @@ public class ServletPrinter
     try
     {
       out.println(category.printCategoryByRegion(regionId));
-/*
-      String name = category.getName();
-      out.println("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+category.getId()+
-                  "&categoryName="+URLEncoder.encode(name)+"&region="+regionId+"\">"+name+"</a><br>\n");
-*/
     }
     catch (RemoteException re)
     {
@@ -154,7 +144,6 @@ public class ServletPrinter
     try
     {
       out.println(category.printCategoryToSellItem(userId));
-//      out.println("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+category.getId()+"&user="+userId+"\">"+category.getName()+"</a><br>\n");
     }
     catch (RemoteException re)
     {
@@ -197,10 +186,6 @@ public class ServletPrinter
     try
     {
       out.println(bid.printBidHistory());
-      /*
-        out.println("<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+bid.getUserId()+
-        "\">"+bid.getBidderNickName()+"<TD>"+bid.getBid()+"<TD>"+bid.getDate()+"\n");
-      */
     }
     catch (RemoteException re)
     {
@@ -244,12 +229,6 @@ public class ServletPrinter
     try
     {
       out.println(item.printUserBoughtItem(quantity));
-/*
-      out.println("<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+item.getId()+"\">"+item.getName()+"</a>\n"+
-                  "<TD>"+quantity+"\n"+
-                  "<TD>"+item.getBuyNow()+"\n"+
-                  "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+item.getSellerId()+"\">"+item.getSellerNickname()+"</a>\n");
-*/
     }
     catch (RemoteException re)
     {
@@ -272,11 +251,6 @@ public class ServletPrinter
     try
     {
       out.println(item.printUserWonItem());
-/*
-      out.println("<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+item.getId()+"\">"+item.getName()+"</a>\n"+
-                  "<TD>"+item.getMaxBid()+"\n"+
-                  "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+item.getSellerId()+"\">"+item.getSellerNickname()+"</a>\n");
-*/
     }
     catch (RemoteException re)
     {
@@ -300,13 +274,6 @@ public class ServletPrinter
     try
     {
       out.println(item.printItemUserHasBidOn(bid.getMaxBid())+"&nickname="+URLEncoder.encode(username)+"&password="+URLEncoder.encode(password)+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n");
-/*
-      out.println("<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+item.getId()+"\">"+item.getName()+
-                  "<TD>"+item.getInitialPrice()+"<TD>"+item.getMaxBid()+"<TD>"+bid.getMaxBid()+"<TD>"+item.getQuantity()+
-                  "<TD>"+item.getStartDate()+"<TD>"+item.getEndDate()+
-                  "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+item.getSellerId()+"\">"+item.getSellerNickname()+
-                  "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBid?itemId="+item.getId()+"&nickname="+URLEncoder.encode(username)+"&password="+URLEncoder.encode(password)+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n");
-*/
     }
     catch (RemoteException re)
     {
@@ -331,12 +298,6 @@ public class ServletPrinter
     try
     {
       out.println(item.printSell());
-/*
-      out.println("<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+item.getId()+"\">"+item.getName()+
-                  "<TD>"+item.getInitialPrice()+"<TD>"+item.getMaxBid()+"<TD>"+item.getQuantity()+
-		  "<TD>"+item.getReservePrice()+"<TD>"+item.getBuyNow()+
-                  "<TD>"+item.getStartDate()+"<TD>"+item.getEndDate()+"\n");
-*/
     }
     catch (RemoteException re)
     {
@@ -357,14 +318,6 @@ public class ServletPrinter
     try
     {
       out.println(item.printItem());
-/*
-      Integer id = item.getId();
-      out.println("<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+item.getName()+
-                  "<TD>"+item.getMaxBid()+
-                  "<TD>"+item.getNbOfBids()+
-                  "<TD>"+item.getEndDate()+
-                  "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n");
-*/
     }
     catch (RemoteException re)
     {
@@ -540,30 +493,6 @@ public class ServletPrinter
       printHTMLheader("RUBiS: Buy Now");
       printHTMLHighlighted("You are ready to buy this item: "+itemName);
       out.println(item.printItemDescriptionToBuyNow(userId));
-      /*
-        out.println("<TABLE>\n"+
-        "<TR><TD>Quantity<TD><b><BIG>"+qty+"</BIG></b>\n"+
-        "<TR><TD>Seller<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+sellerId+"\">"+item.getSellerNickname()+"</a> (<a href=\"/servlet/edu.rice.rubis.beans.servlets.PutCommentAuth?to="+sellerId+"&itemId="+itemId+"\">Leave a comment on this user</a>)\n"+
-        "<TR><TD>Started<TD>"+item.getStartDate()+"\n"+
-        "<TR><TD>Ends<TD>"+item.getEndDate()+"\n"+
-        "</TABLE>");
-      
-        printHTMLHighlighted("Item description");
-        out.println(item.getDescription());
-        out.println("<br><p>\n");
-
-        printHTMLHighlighted("Buy Now");
-        printHTML("<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreBuyNow\" method=POST>\n"+
-        "<input type=hidden name=userId value="+userId+">\n"+
-        "<input type=hidden name=itemId value="+itemId+">\n"+
-        "<input type=hidden name=maxQty value="+qty+">\n");
-        if (qty > 1)
-        printHTML("<center><table><tr><td>Quantity:</td>\n"+
-        "<td><input type=text size=5 name=qty></td></tr></table></center>\n");
-        else
-        printHTML("<input type=hidden name=qty value=1>\n");
-        printHTML("</table><p><center><input type=submit value=\"Buy now!\"></center><p>\n");
-      */
     }
     catch (RemoteException re)
     {
@@ -583,10 +512,6 @@ public class ServletPrinter
     try
     {
       out.println(comment.printComment(userName));
-/*
-      out.println("<DT><b><BIG><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewUserInfo?userId="+comment.getFromUserId()+"\">"+userName+"</a></BIG></b>"+
-                  " wrote the "+comment.getDate()+"<DD><i>"+comment.getComment()+"</i><p>\n");
-*/
     }
     catch (RemoteException re)
     {

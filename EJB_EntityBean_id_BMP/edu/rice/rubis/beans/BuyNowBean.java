@@ -154,58 +154,71 @@ public class BuyNowBean implements EntityBean
     isDirty = true; // the bean content has been modified
   }
 
+
   /**
-   * Retieve a connection..
+   * Retrieve a connection..
    *
    * @return connection
+   * @exception Exception if an error occurs
    */
   public Connection getConnection () throws Exception 
   {
     try
+    {
+      if (datasource == null)
       {
-	if (datasource == null)
-	  {
-	    // Finds DataSource from JNDI
-	    initialContext = new InitialContext();
-	    datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
-	  }
-	return datasource.getConnection();
+        // Finds DataSource from JNDI
+        initialContext = new InitialContext();
+        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
       }
+      return datasource.getConnection();
+    }
     catch (Exception e) 
-      {
-        throw new Exception("Cannot retrieve the connection.");
-      }
+    {
+      throw new Exception("Cannot retrieve the connection.");
+    }
   } 
 
+
+  /**
+   * This method is used to retrieve a BuyNow Bean from its primary key,
+   * that is to say its id.
+   *
+   * @param id BuyNow id (primary key)
+   *
+   * @return the BuyNow if found else null
+   * @exception FinderException if an error occurs
+   * @exception RemoteException if an error occurs
+   */
   public BuyNowPK ejbFindByPrimaryKey(BuyNowPK id) throws FinderException, RemoteException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT bid FROM buy_now WHERE id=?");
+      stmt.setInt(1, id.getId().intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT bid FROM buy_now WHERE id=?");
-	stmt.setInt(1, id.getId().intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  return null;
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return id;
+        return null;
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return id;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to retrieve object buyNow: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to retrieve object buyNow: " +e);
+    }
   }
 
 
@@ -224,37 +237,37 @@ public class BuyNowBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM buy_now WHERE buyer_id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM buy_now WHERE buyer_id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new BuyNowPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new BuyNowPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all buyNow by item: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all buyNow by item: " +e);
+    }
   }
 
 
@@ -273,37 +286,37 @@ public class BuyNowBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM buy_now WHERE item_id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM buy_now WHERE item_id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new BuyNowPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new BuyNowPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all buyNow by user: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all buyNow by user: " +e);
+    }
   }
 
 
@@ -319,36 +332,36 @@ public class BuyNowBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM buy_now");
+      ResultSet rs = stmt.executeQuery();
+      int pk;
+      LinkedList results = new LinkedList();
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM buy_now");
-	ResultSet rs = stmt.executeQuery();
-	int pk;
-	LinkedList results = new LinkedList();
-	if (rs.first())
-	  {
-	    do
-	      {
-		pk = rs.getInt("id");
-		results.add(new BuyNowPK(new Integer(pk)));
-	      }
-	    while(rs.next());
-	  }
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new BuyNowPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all buyNows: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all buyNows: " +e);
+    }
   }
 
 
@@ -359,43 +372,44 @@ public class BuyNowBean implements EntityBean
    *
    * @return Collection of items primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
   public Collection ejbFindUserBuyNow(Integer userId) throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM buy_now WHERE buy_now.buyer_id=? AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30");
+      stmt.setInt(1, userId.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT item_id FROM buy_now WHERE buy_now.buyer_id=? AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30");
-	stmt.setInt(1, userId.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("item_id");
-	      results.add(new ItemPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new BuyNowPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get items a user bought in the past 30 days: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get items a user bought in the past 30 days: " +e);
+    }
   }
 
 
@@ -414,55 +428,55 @@ public class BuyNowBean implements EntityBean
    */
   public BuyNowPK ejbCreate(Integer BuyNowUserId, Integer BuyNowItemId, int quantity) throws CreateException, RemoteException, RemoveException
   {
-     // Connecting to IDManager Home interface thru JNDI
-      IDManagerHome home = null;
-      IDManager idManager = null;
+    // Connecting to IDManager Home interface thru JNDI
+    IDManagerHome home = null;
+    IDManager idManager = null;
       
-      try 
-      {
-        InitialContext initialContext = new InitialContext();
-        home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
-               "java:comp/env/ejb/IDManager"), IDManagerHome.class);
-      } 
-      catch (Exception e)
-      {
-        throw new EJBException("Cannot lookup IDManager: " +e);
-      }
-     try 
-      {
-        IDManagerPK idPK = new IDManagerPK();
-        idManager = home.findByPrimaryKey(idPK);
-        id = idManager.getNextBuyNowID();
-        buyerId = BuyNowUserId;
-        itemId  = BuyNowItemId;
-        qty     = quantity;
-        date    = TimeManagement.currentDateToString();
-      } 
-     catch (Exception e)
-     {
-        throw new EJBException("Cannot create id for buyNow: " +e);
-     }
+    try 
+    {
+      InitialContext initialContext = new InitialContext();
+      home = (IDManagerHome)PortableRemoteObject.narrow(initialContext.lookup(
+                                                                              "java:comp/env/ejb/IDManager"), IDManagerHome.class);
+    } 
+    catch (Exception e)
+    {
+      throw new EJBException("Cannot lookup IDManager: " +e);
+    }
+    try 
+    {
+      IDManagerPK idPK = new IDManagerPK();
+      idManager = home.findByPrimaryKey(idPK);
+      id = idManager.getNextBuyNowID();
+      buyerId = BuyNowUserId;
+      itemId  = BuyNowItemId;
+      qty     = quantity;
+      date    = TimeManagement.currentDateToString();
+    } 
+    catch (Exception e)
+    {
+      throw new EJBException("Cannot create id for buyNow: " +e);
+    }
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("INSERT INTO buy_now VALUES ("+id.intValue()+", \""+buyerId.intValue()+
-                                     "\", \""+itemId.intValue()+"\", \""+qty+"\", \""+date+"\")");
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("INSERT INTO buy_now VALUES ("+id.intValue()+", \""+buyerId.intValue()+
+                                   "\", \""+itemId.intValue()+"\", \""+qty+"\", \""+date+"\")");
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to create object buyNow: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to create object buyNow: " +e);
+    }
     return new BuyNowPK(id);
   }
 
@@ -475,68 +489,75 @@ public class BuyNowBean implements EntityBean
 
   /**
    * This method delete the record from the database.
+   * @exception RemoteException if an error occurs
+   * @exception RemoveException if an error occurs
    */
   public void ejbRemove() throws RemoteException, RemoveException   
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("DELETE FROM buy_now WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("DELETE FROM buy_now WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to remove object buyNow: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to remove object buyNow: " +e);
+    }
     
   }
 
-  /** 
+  /**
    * Update the record.
+   * @exception RemoteException if an error occurs
    */
   public void ejbStore() throws RemoteException
   {
-    isDirty = false;
     PreparedStatement stmt= null;
     Connection conn = null;
-    try
+    if (isDirty)
+    {
+      isDirty = false;
+      try
       {
 	conn = getConnection();
 	stmt = conn.prepareStatement("UPDATE buy_now SET buyer_id=?, item_id=?, qty=?, date=? WHERE id=?");
 	stmt.setInt(1,buyerId.intValue());
 	stmt.setInt(2,itemId.intValue());
 	stmt.setInt(3, qty);
-	stmt.setString(5, date);
-	stmt.setInt(6, id.intValue());
+	stmt.setString(4, date);
+	stmt.setInt(5, id.intValue());
 	stmt.executeUpdate();
 	stmt.close();
 	conn.close();
       }
-    catch (Exception e)
+      catch (Exception e)
       {
 	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
+        {
+          if(stmt != null) stmt.close();
+          if(conn != null) conn.close();
+        }
 	catch (Exception ignore){}
         throw new EJBException("Failed to update the record for buyNow: " +e);
       }
+    }
   }
 
-  /** 
+  /**
    * Read the reccord from the database and update the bean.
+   * @exception RemoteException if an error occurs
    */
   public void ejbLoad() throws RemoteException
   {
@@ -544,35 +565,35 @@ public class BuyNowBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      BuyNowPK pk = (BuyNowPK)entityContext.getPrimaryKey();
+      id = pk.getId();
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT * FROM buy_now WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	BuyNowPK pk = (BuyNowPK)entityContext.getPrimaryKey();
-	id = pk.getId();
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT * FROM buy_now WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new EJBException("Object buyNow not found");
-	}
-	buyerId = new Integer(rs.getInt("buyer_id"));
-	itemId = new Integer(rs.getInt("item_id"));
-	qty = rs.getInt("qty");
-	date = rs.getString("date");
-	rs.close();
-	stmt.close();
-	conn.close();
+        throw new EJBException("Object buyNow not found");
       }
+      buyerId = new Integer(rs.getInt("buyer_id"));
+      itemId = new Integer(rs.getInt("item_id"));
+      qty = rs.getInt("qty");
+      date = rs.getString("date");
+      rs.close();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to update buyNow bean: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to update buyNow bean: " +e);
+    }
   }
 
   /**

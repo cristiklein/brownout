@@ -204,8 +204,8 @@ public class OldItemBean implements EntityBean
    * Give the user id of the seller
    *
    * @return seller's user id
-   * @since 1.0
    * @exception RemoteException if an error occurs
+   * @since 1.0
    */
   public Integer getSellerId() throws RemoteException
   {
@@ -505,27 +505,29 @@ public class OldItemBean implements EntityBean
 
 
   /**
-   * Retieve a connection..
+   * Retrieve a connection..
    *
    * @return connection
+   * @exception Exception if an error occurs
    */
   public Connection getConnection () throws Exception 
   {
     try
+    {
+      if (datasource == null)
       {
-	if (datasource == null)
-	  {
-	    // Finds DataSource from JNDI
-	    initialContext = new InitialContext();
-	    datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
-	  }
-	return datasource.getConnection();
+        // Finds DataSource from JNDI
+        initialContext = new InitialContext();
+        datasource = (DataSource)initialContext.lookup("java:comp/env/jdbc/rubis");
       }
+      return datasource.getConnection();
+    }
     catch (Exception e) 
-      {
-        throw new Exception("Cannot retrieve the connection.");
-      }
+    {
+      throw new Exception("Cannot retrieve the connection.");
+    }
   } 
+
 
   /**
    * This method is used to retrieve an OldItem Bean from its primary key,
@@ -534,36 +536,38 @@ public class OldItemBean implements EntityBean
    * @param id OldItem id (primary key)
    *
    * @return the Item primary key if found else null
+   * @exception FinderException if an error occurs
+   * @exception RemoteException if an error occurs
    */
   public OldItemPK ejbFindByPrimaryKey(OldItemPK id) throws FinderException, RemoteException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT name FROM old_items WHERE id=?");
+      stmt.setInt(1, id.getId().intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT name FROM old_items WHERE id=?");
-	stmt.setInt(1, id.getId().intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  return null;
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return id;
+        return null;
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return id;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to retrieve object old_item: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to retrieve object old_item: " +e);
+    }
   }
 
 
@@ -574,44 +578,47 @@ public class OldItemBean implements EntityBean
    * @param id User id of the seller
    *
    * @return List of Old Items primary keys found (eventually empty)
+   * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
   public Collection ejbFindBySeller(Integer id) throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE seller=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM old_items WHERE seller=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new OldItemPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new OldItemPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all old_items by seller: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all old_items by seller: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve all OldItem Beans belonging to
@@ -620,43 +627,45 @@ public class OldItemBean implements EntityBean
    * @param id Category id
    *
    * @return List of old Items primary keys found (eventually empty)
+   * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
   public Collection ejbFindByCategory(Integer id) throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE category=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM old_items WHERE category=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new OldItemPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new OldItemPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all old items by category: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all old items by category: " +e);
+    }
   }
 
 
@@ -668,43 +677,45 @@ public class OldItemBean implements EntityBean
    * @param id Category id
    *
    * @return List of old Items primary keys found (eventually empty)
+   * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
   public Collection ejbFindCurrentByCategory(Integer id) throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE where category=? AND end_date>=NOW()");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM old_items WHERE where category=? AND end_date>=NOW()");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new OldItemPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new OldItemPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get old items with ongoing auction by category: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get old items with ongoing auction by category: " +e);
+    }
   }
 
 
@@ -715,132 +726,137 @@ public class OldItemBean implements EntityBean
    *
    * @return Vector of old items primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
   public Collection ejbFindUserCurrentSellings(Integer userId) throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE old_items.seller=? AND old_items.end_date>=NOW()");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM old_items WHERE old_items.seller=? AND old_items.end_date>=NOW()");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new OldItemPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new OldItemPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get old items a user is currently selling: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get old items a user is currently selling: " +e);
+    }
   }
 
 
- /**
+  /**
    * Get all the items the user sold in the last 30 days.
    *
    * @param userId user id
    *
    * @return Vector of items primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
-    public Collection ejbFindUserPastSellings(Integer userId) throws RemoteException, FinderException
+  public Collection ejbFindUserPastSellings(Integer userId) throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) &lt; 30");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList results = new LinkedList();
+      int pk;
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) &lt; 30");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	LinkedList results = new LinkedList();
-	int pk;
-	if (rs.first())
-	{
-	  do
-	    {
-	      pk = rs.getInt("id");
-	      results.add(new OldItemPK(new Integer(pk)));
-	    }
-	  while(rs.next());
-	}
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new OldItemPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get old items a user sold in the past 30 days: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get old items a user sold in the past 30 days: " +e);
+    }
   }
+
 
   /**
    * This method is used to retrieve all old items from the database!
    *
    * @return List of all old items primary keys (eventually empty)
+   * @exception RemoteException if an error occurs
+   * @exception FinderException if an error occurs
    */
   public Collection ejbFindAllOldItems() throws RemoteException, FinderException
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM old_items");
+      ResultSet rs = stmt.executeQuery();
+      int pk;
+      LinkedList results = new LinkedList();
+      if (rs.first())
       {
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT id FROM old_items");
-	ResultSet rs = stmt.executeQuery();
-	int pk;
-	LinkedList results = new LinkedList();
-	if (rs.first())
-	  {
-	    do
-	      {
-		pk = rs.getInt("id");
-		results.add(new OldItemPK(new Integer(pk)));
-	      }
-	    while(rs.next());
-	  }
-	rs.close();
-	stmt.close();
-	conn.close();
-	return results;
+        do
+        {
+          pk = rs.getInt("id");
+          results.add(new OldItemPK(new Integer(pk)));
+        }
+        while(rs.next());
       }
+      rs.close();
+      stmt.close();
+      conn.close();
+      return results;
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to get all old items: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to get all old items: " +e);
+    }
   }
 
 
@@ -868,8 +884,8 @@ public class OldItemBean implements EntityBean
    * @since 1.0
    */
   public OldItemPK ejbCreate(Integer itemId, String itemName, String itemDescription, float itemInitialPrice,
-                          int itemQuantity, float itemReservePrice, float itemBuyNow, int duration,
-                          Integer itemSellerId, Integer itemCategoryId) throws CreateException, RemoteException, RemoveException
+                             int itemQuantity, float itemReservePrice, float itemBuyNow, int duration,
+                             Integer itemSellerId, Integer itemCategoryId) throws CreateException, RemoteException, RemoveException
   {
     GregorianCalendar start = new GregorianCalendar();
 
@@ -890,27 +906,27 @@ public class OldItemBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("INSERT INTO old_items VALUES ("+id+", \""+name+
-                                     "\", \""+description+"\", \""+initialPrice+"\", \""+
-                                     quantity+"\", \""+reservePrice+"\", \""+buyNow+
-                                     "\", 0, 0, \""+startDate+"\", \""+endDate+"\", "+sellerId+
-                                     ", "+ categoryId+")");
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("INSERT INTO old_items VALUES ("+id+", \""+name+
+                                   "\", \""+description+"\", \""+initialPrice+"\", \""+
+                                   quantity+"\", \""+reservePrice+"\", \""+buyNow+
+                                   "\", 0, 0, \""+startDate+"\", \""+endDate+"\", "+sellerId+
+                                   ", "+ categoryId+")");
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to create object old item: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to create object old item: " +e);
+    }
     return null;
   }
 
@@ -923,44 +939,51 @@ public class OldItemBean implements EntityBean
   public void ejbActivate() throws RemoteException {}
   public void ejbPassivate() throws RemoteException {}
 
+
   /**
    * This method delete the record from the database.
+   * @exception RemoteException if an error occurs
+   * @exception RemoveException if an error occurs
    */
   public void ejbRemove() throws RemoteException, RemoveException   
   {
     PreparedStatement stmt= null;
     Connection conn = null;
     try
-      {
-	conn = getConnection();
-	stmt = conn.prepareStatement("DELETE FROM old_items WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	stmt.executeUpdate();
-	stmt.close();
-	conn.close();
-      }
+    {
+      conn = getConnection();
+      stmt = conn.prepareStatement("DELETE FROM old_items WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      stmt.executeUpdate();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to remove object old item: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to remove object old item: " +e);
+    }
     
   }
 
-  /** 
+
+  /**
    * Update the record.
+   * @exception RemoteException if an error occurs
    */
   public void ejbStore() throws RemoteException
   {
-    isDirty = false;
     PreparedStatement stmt= null;
     Connection conn = null;
-    try
+    if (isDirty)
+    {
+      isDirty = false;
+      try
       {
 	conn = getConnection();
 	stmt = conn.prepareStatement("UPDATE old_items SET name=?, description=?, initial_price=?, quantity=?, reserve_price=?, buy_now=?, nb_of_bids=?, max_bid=?, start_date=?, end_date=?, seller=?, category=? WHERE id=?");
@@ -981,20 +1004,23 @@ public class OldItemBean implements EntityBean
 	stmt.close();
 	conn.close();
       }
-    catch (Exception e)
+      catch (Exception e)
       {
 	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
+        {
+          if(stmt != null) stmt.close();
+          if(conn != null) conn.close();
+        }
 	catch (Exception ignore){}
         throw new EJBException("Failed to update object old item: " +e);
       }
+    }
   }
 
-  /** 
+
+  /**
    * Read the reccord from the database and update the bean.
+   * @exception RemoteException if an error occurs
    */
   public void ejbLoad() throws RemoteException
   {
@@ -1002,44 +1028,45 @@ public class OldItemBean implements EntityBean
     PreparedStatement stmt= null;
     Connection conn = null;
     try
+    {
+      OldItemPK pk = (OldItemPK)entityContext.getPrimaryKey();
+      id = pk.getId();
+      conn = getConnection();
+      stmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
+      stmt.setInt(1, id.intValue());
+      ResultSet rs = stmt.executeQuery();
+      if (!rs.first())
       {
-	OldItemPK pk = (OldItemPK)entityContext.getPrimaryKey();
-	id = pk.getId();
-	conn = getConnection();
-	stmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
-	stmt.setInt(1, id.intValue());
-	ResultSet rs = stmt.executeQuery();
-	if (!rs.first())
-	{
-	  throw new EJBException("Object not found");
-	}
-	name = rs.getString("name");
-	description = rs.getString("description");
-	initialPrice = rs.getFloat("initial_price");
-	quantity = rs.getInt("quantity");
-	reservePrice = rs.getFloat("reserve_price");
-	buyNow = rs.getFloat("buy_now");
-	nbOfBids = rs.getInt("nb_of_bids");
-	maxBid = rs.getFloat("max_bid");
-	startDate = rs.getString("start_date");
-	endDate = rs.getString("end_date");
-	sellerId = new Integer(rs.getInt("seller"));
-	categoryId = new Integer(rs.getInt("category"));
-	rs.close();
-	stmt.close();
-	conn.close();
+        throw new EJBException("Object not found");
       }
+      name = rs.getString("name");
+      description = rs.getString("description");
+      initialPrice = rs.getFloat("initial_price");
+      quantity = rs.getInt("quantity");
+      reservePrice = rs.getFloat("reserve_price");
+      buyNow = rs.getFloat("buy_now");
+      nbOfBids = rs.getInt("nb_of_bids");
+      maxBid = rs.getFloat("max_bid");
+      startDate = rs.getString("start_date");
+      endDate = rs.getString("end_date");
+      sellerId = new Integer(rs.getInt("seller"));
+      categoryId = new Integer(rs.getInt("category"));
+      rs.close();
+      stmt.close();
+      conn.close();
+    }
     catch (Exception e)
+    {
+      try
       {
-	try
-	  {
-	    if(stmt != null) stmt.close();
-	    if(conn != null) conn.close();
-	  }
-	catch (Exception ignore){}
-        throw new EJBException("Failed to update old item bean: " +e);
+        if(stmt != null) stmt.close();
+        if(conn != null) conn.close();
       }
+      catch (Exception ignore){}
+      throw new EJBException("Failed to update old item bean: " +e);
+    }
   }
+
 
   /**
    * Sets the associated entity context. The container invokes this method 

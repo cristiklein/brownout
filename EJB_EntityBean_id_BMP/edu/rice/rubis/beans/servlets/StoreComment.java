@@ -166,11 +166,8 @@ public class StoreComment extends HttpServlet
     try
     {
       Comment c = cHome.create(fromId, toId, itemId, rating.intValue(), comment);
-      System.out.println("after create\n");
       to.updateRating(rating.intValue());
-      System.out.println("before commit\n");
       utx.commit();
-      System.out.println("after commit\n");
       sp.printHTMLheader("RUBiS: Comment posting");
       sp.printHTML("<center><h2>Your comment has been successfully posted.</h2></center>\n");
     }
