@@ -38,7 +38,7 @@ emulator:
 #       Global rules       #
 ############################
 
-DIRS = Client Servlets EJB_DB_id EJB_EntityBean_id
+DIRS = Client Servlets EJB_DB_id EJB_EntityBean_id EJB_SessionBean EJB_Session_facade
 
 all: flush_cache
 	-for d in ${DIRS}; do (cd $$d ; ${MAKE} all); done
