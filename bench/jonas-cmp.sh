@@ -11,7 +11,7 @@ cp ./workload/browse_only_transitions_7.txt ./workload/transitions.txt
 
 # rubis.properties_20 rubis.properties_40 rubis.properties_60 rubis.properties_80 rubis.properties_100 rubis.properties_120 rubis.properties_140 rubis.properties_160 rubis.properties_180 rubis.properties_200 rubis.properties_220 rubis.properties_240  rubis.properties_260 rubis.properties_280 rubis.properties_300
 
-foreach i ( rubis.properties_140 rubis.properties_160 rubis.properties_180 rubis.properties_200 rubis.properties_220 rubis.properties_240  rubis.properties_260 rubis.properties_280 rubis.properties_300)
+foreach i ( rubis.properties_140 rubis.properties_160 rubis.properties_180 rubis.properties_200 rubis.properties_220 rubis.properties_240  rubis.properties_260 rubis.properties_280)
   cp bench/$i Client/rubis.properties
   ssh sci21 -n -l root ${EJBDIR}/tomcat_stop.sh 
   ssh sci20 ${EJBDIR}/jonas_stop.sh
