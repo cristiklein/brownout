@@ -6,7 +6,7 @@
   <properties>
     <author email="jmob@objectweb.org">jmob@objectweb.org</author>
     <title>Experimental Reports</title>
-    <filename>results_index.xml</filename>
+    <filename>results.xml</filename>
     <pathtoroot>.</pathtoroot>
   </properties>
 
