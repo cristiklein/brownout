@@ -76,6 +76,10 @@ config_jboss:
 ejb_servlets: config_$(EJB_SERVER) $(all_ejb_servlets_obj)
 	${JAR} cvf rubis_ejb_servlets.jar $(all_ejb_servlets_obj)
 
+##################
+#  Global rules  #
+##################
+
 all: ejb_servlets beans $(EJB_SERVER)-jar
 
 clean: clean_$(EJB_SERVER)
