@@ -1,6 +1,8 @@
 package edu.rice.rubis.beans.servlets;
 
-/** This class contains the configuration for the servlets
+/** 
+ * JOnAS version.
+ * This class contains the configuration for the servlets
  * like the path of HTML files, etc ...
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
