@@ -18,16 +18,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AboutMe extends RubisHttpServlet
 {
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+
 
   public int getPoolSize()
   {
     return Config.AboutMePoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -41,51 +42,45 @@ public class AboutMe extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     //sp.printHTMLheader("RUBiS ERROR: About me");
     sp.printHTML(
       "<h3>Your request has not been processed due to the following error :</h3><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
+    
   }
 
   /** List items the user is currently selling and sold in yhe past 30 days */
-  private void listItem(Integer userId)
+  private void listItem(Integer userId, Connection conn, ServletPrinter sp)
   {
     ResultSet currentSellings = null;
     ResultSet pastSellings = null;
+    PreparedStatement currentStmt = null;
+    PreparedStatement pastStmt = null;
 
     String itemName, endDate, startDate;
     float currentPrice, initialPrice, buyNow, reservePrice;
     int quantity, itemId;
 
-    // Retrieve ItemHome to get the names of the items the user sold
+    // current sellings
     try
     {
-      stmt =
+      currentStmt =
         conn.prepareStatement(
           "SELECT * FROM items WHERE items.seller=? AND items.end_date>=NOW()");
-      stmt.setInt(1, userId.intValue());
-      currentSellings = stmt.executeQuery();
+      currentStmt.setInt(1, userId.intValue());
+      currentSellings = currentStmt.executeQuery();
     }
     catch (Exception e)
     {
-      printError("Exception getting current sellings list: " + e + "<br>");
-      return;
-    }
-    try
-    {
-      stmt =
-        conn.prepareStatement(
-          "SELECT * FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30");
-      stmt.setInt(1, userId.intValue());
-      pastSellings = stmt.executeQuery();
-    }
-    catch (Exception e)
-    {
-      printError("Exception getting past sellings list: " + e + "<br>");
+      printError("Exception getting current sellings list: " + e + "<br>", sp);
+      closeConnection(currentStmt, conn);
       return;
     }
 
@@ -95,7 +90,7 @@ public class AboutMe extends RubisHttpServlet
       {
         sp.printHTML("<br>");
         sp.printHTMLHighlighted("<h3>You are currently selling no item.</h3>");
-
+        currentStmt.close();
       }
       else
       {
@@ -123,7 +118,8 @@ public class AboutMe extends RubisHttpServlet
           }
           catch (Exception e)
           {
-            printError("Exception getting item: " + e + "<br>");
+            printError("Exception getting item: " + e + "<br>", sp);
+            closeConnection(currentStmt, conn);
             return;
           }
           // display information about the item
@@ -139,12 +135,30 @@ public class AboutMe extends RubisHttpServlet
             currentPrice);
         }
         while (currentSellings.next());
+        currentStmt.close();
         sp.printItemFooter();
       }
     }
     catch (Exception e)
     {
-      printError("Exception getting current items in sell: " + e + "<br>");
+      printError("Exception getting current items in sell: " + e + "<br>", sp);
+      closeConnection(currentStmt, conn);
+      return;
+    }
+    
+    // Past sellings
+    try
+    {
+      pastStmt =
+        conn.prepareStatement(
+          "SELECT * FROM old_items WHERE old_items.seller=? AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30");
+      pastStmt.setInt(1, userId.intValue());
+      pastSellings = pastStmt.executeQuery();
+    }
+    catch (Exception e)
+    {
+      printError("Exception getting past sellings list: " + e + "<br>", sp);
+      closeConnection(pastStmt, conn);
       return;
     }
 
@@ -154,6 +168,7 @@ public class AboutMe extends RubisHttpServlet
       {
         sp.printHTML("<br>");
         sp.printHTMLHighlighted("<h3>You didn't sell any item.</h3>");
+        pastStmt.close();
         return;
       }
       // display past sellings
@@ -175,11 +190,13 @@ public class AboutMe extends RubisHttpServlet
 
           currentPrice = pastSellings.getFloat("max_bid");
           if (currentPrice < initialPrice)
-            currentPrice = initialPrice;
+            currentPrice = initialPrice;        
+         
         }
         catch (Exception e)
         {
-          printError("Exception getting sold item: " + e + "<br>");
+          printError("Exception getting sold item: " + e + "<br>", sp);
+          closeConnection(pastStmt, conn);
           return;
         }
         // display information about the item
@@ -195,17 +212,19 @@ public class AboutMe extends RubisHttpServlet
           currentPrice);
       }
       while (pastSellings.next());
+      pastStmt.close();
     }
     catch (Exception e)
     {
-      printError("Exception getting sold items: " + e + "<br>");
+      printError("Exception getting sold items: " + e + "<br>", sp);
+      closeConnection(pastStmt, conn);
       return;
     }
     sp.printItemFooter();
   }
 
   /** List items the user bought in the last 30 days*/
-  private void listBoughtItems(Integer userId)
+  private void listBoughtItems(Integer userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
     ResultSet buy = null;
     String itemName, sellerName;
@@ -226,12 +245,14 @@ public class AboutMe extends RubisHttpServlet
         sp.printHTMLHighlighted(
           "<h3>You didn't buy any item in the last 30 days.</h3>");
         sp.printHTML("<br>");
+        stmt.close();
         return;
       }
     }
     catch (Exception e)
     {
-      printError("Exception getting bought items list: " + e + "<br>");
+      printError("Exception getting bought items list: " + e + "<br>", sp);
+      closeConnection(stmt, conn);
       return;
     }
 
@@ -246,31 +267,37 @@ public class AboutMe extends RubisHttpServlet
         // Get the name of the items
         try
         {
+          PreparedStatement itemStmt = null;
           try
           {
             ResultSet itemRS = null;
-            PreparedStatement itemStmt =
+            itemStmt =
               conn.prepareStatement("SELECT * FROM items WHERE id=?");
             itemStmt.setInt(1, itemId);
             itemRS = itemStmt.executeQuery();
             if (!itemRS.first())
             {
               sp.printHTML("Couldn't find bought item.<br>");
+              itemStmt.close();
               return;
             }
             itemName = itemRS.getString("name");
             sellerId = itemRS.getInt("seller");
             buyNow = itemRS.getFloat("buy_now");
+            itemStmt.close();
           }
           catch (SQLException e)
           {
             sp.printHTML("Failed to execute Query for item (buy now): " + e);
-            closeConnection();
+            if (itemStmt != null) 
+             itemStmt.close();
+            closeConnection(stmt, conn);
             return;
           }
+          PreparedStatement sellerStmt = null;
           try
           {
-            PreparedStatement sellerStmt =
+            sellerStmt =
               conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
             sellerStmt.setInt(1, sellerId);
             ResultSet sellerResult = sellerStmt.executeQuery();
@@ -280,22 +307,26 @@ public class AboutMe extends RubisHttpServlet
             else
             {
               sp.printHTML("Unknown seller");
-              sellerStmt = null;
-              closeConnection();
+              sellerStmt.close();
+              closeConnection(stmt, conn);
               return;
             }
+            sellerStmt.close();
 
           }
           catch (SQLException e)
           {
             sp.printHTML("Failed to execute Query for seller (buy now): " + e);
-            closeConnection();
+            if (sellerStmt != null) 
+             sellerStmt.close();
+            closeConnection(stmt, conn);
             return;
           }
         }
         catch (Exception e)
         {
-          printError("Exception getting buyNow: " + e + "<br>");
+          printError("Exception getting buyNow: " + e + "<br>", sp);
+          closeConnection(stmt, conn);
           return;
         }
         // display information about the item
@@ -308,11 +339,12 @@ public class AboutMe extends RubisHttpServlet
           sellerName);
       }
       while (buy.next());
+      stmt.close();
     }
     catch (Exception e)
     {
-      printError("Exception getting bought items: " + e + "<br>");
-      closeConnection();
+      printError("Exception getting bought items: " + e + "<br>", sp);
+      closeConnection(stmt, conn);
       return;
     }
     sp.printItemFooter();
@@ -320,7 +352,7 @@ public class AboutMe extends RubisHttpServlet
   }
 
   /** List items the user won in the last 30 days*/
-  private void listWonItems(Integer userId)
+  private void listWonItems(Integer userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
     int sellerId, itemId;
     float currentPrice, initialPrice;
@@ -341,12 +373,14 @@ public class AboutMe extends RubisHttpServlet
         sp.printHTMLHighlighted(
           "<h3>You didn't win any item in the last 30 days.</h3>");
         sp.printHTML("<br>");
+        stmt.close();
         return;
       }
     }
     catch (Exception e)
     {
       sp.printHTML("Exception getting won items list: " + e + "<br>");
+      closeConnection(stmt, conn);
       return;
     }
 
@@ -359,16 +393,18 @@ public class AboutMe extends RubisHttpServlet
         // Get the name of the items
         try
         {
+          PreparedStatement itemStmt = null;
           try
           {
             ResultSet itemRS = null;
-            PreparedStatement itemStmt =
+            itemStmt =
               conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
             itemStmt.setInt(1, itemId);
             itemRS = itemStmt.executeQuery();
             if (!itemRS.first())
             {
               sp.printHTML("Couldn't find won item.<br>");
+              itemStmt.close();          
               return;
             }
             itemName = itemRS.getString("name");
@@ -378,11 +414,15 @@ public class AboutMe extends RubisHttpServlet
             currentPrice = itemRS.getFloat("max_bid");
             if (currentPrice < initialPrice)
               currentPrice = initialPrice;
+             
+            itemStmt.close();
           }
           catch (SQLException e)
           {
             sp.printHTML("Failed to execute Query for item (won items): " + e);
-            closeConnection();
+            if (itemStmt != null) 
+             itemStmt.close();
+            closeConnection(stmt, conn);
             return;
           }
           PreparedStatement sellerStmt = null;
@@ -398,17 +438,20 @@ public class AboutMe extends RubisHttpServlet
             else
             {
               sp.printHTML("Unknown seller");
-              sellerStmt = null;
-              closeConnection();
+              sellerStmt.close();
+              closeConnection(stmt, conn);
               return;
             }
+            sellerStmt.close();
 
           }
           catch (SQLException e)
           {
             sp.printHTML(
               "Failed to execute Query for seller (won items): " + e);
-            closeConnection();
+              if (sellerStmt != null) 
+             sellerStmt.close();
+            closeConnection(stmt, conn);
             sellerStmt = null;
             return;
           }
@@ -434,7 +477,8 @@ public class AboutMe extends RubisHttpServlet
         }
         catch (Exception e)
         {
-          printError("Exception getting item: " + e + "<br>");
+          printError("Exception getting item: " + e + "<br>", sp);
+          closeConnection(stmt, conn);
           return;
         }
         // display information about the item
@@ -446,11 +490,12 @@ public class AboutMe extends RubisHttpServlet
           sellerName);
       }
       while (won.next());
+      stmt.close();
     }
     catch (Exception e)
     {
       sp.printHTML("Exception getting won items: " + e + "<br>");
-      closeConnection();
+      closeConnection(stmt, conn);
       return;
     }
     sp.printItemFooter();
@@ -458,7 +503,7 @@ public class AboutMe extends RubisHttpServlet
   }
 
   /** List comments about the user */
-  private void listComment(Integer userId)
+  private void listComment(Integer userId, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
     ResultSet rs = null;
     String date, comment;
@@ -480,7 +525,7 @@ public class AboutMe extends RubisHttpServlet
       {
         sp.printHTML("Failed to execute Query for list of comments: " + e);
         conn.rollback();
-        closeConnection();
+        closeConnection(stmt, conn);
         return;
       }
       if (!rs.first())
@@ -490,6 +535,7 @@ public class AboutMe extends RubisHttpServlet
           "<h3>There is no comment yet for this user.</h3>");
         sp.printHTML("<br>");
         conn.commit();
+        stmt.close();        
         return;
       }
       else
@@ -505,26 +551,31 @@ public class AboutMe extends RubisHttpServlet
 
         String authorName = "none";
         ResultSet authorRS = null;
+        PreparedStatement authorStmt = null;
         try
         {
-          stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-          stmt.setInt(1, authorId);
-          authorRS = stmt.executeQuery();
+          authorStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+          authorStmt.setInt(1, authorId);
+          authorRS = authorStmt.executeQuery();
           if (authorRS.first())
             authorName = authorRS.getString("nickname");
+          authorStmt.close();
         }
         catch (Exception e)
         {
           sp.printHTML("Failed to execute Query for the comment author: " + e);
           conn.rollback();
-          closeConnection();
+          if (authorStmt != null)
+             authorStmt.close();
+          closeConnection(stmt, conn);
           return;
         }
         sp.printComment(authorName, authorId, date, comment);
       }
-      while (rs.next());
+      while (rs.next());      
       sp.printCommentFooter();
       conn.commit();
+      stmt.close();
     }
     catch (Exception e)
     {
@@ -532,19 +583,19 @@ public class AboutMe extends RubisHttpServlet
       try
       {
         conn.rollback();
-        closeConnection();
+        closeConnection(stmt, conn);
       }
       catch (Exception se)
       {
         sp.printHTML("Transaction rollback failed: " + e + "<br>");
-        closeConnection();
+        closeConnection(stmt, conn);
       }
-      closeConnection();
+      closeConnection(stmt, conn);
     }
   }
 
   /** List items the user put a bid on in the last 30 days*/
-  private void listBids(Integer userId, String username, String password)
+  private void listBids(Integer userId, String username, String password, PreparedStatement stmt, Connection conn, ServletPrinter sp)
   {
 
     float currentPrice, initialPrice, maxBid;
@@ -564,12 +615,14 @@ public class AboutMe extends RubisHttpServlet
       {
         sp.printHTMLHighlighted("<h3>You didn't put any bid.</h3>");
         sp.printHTML("<br>");
+        stmt.close();
         return;
       }
     }
     catch (Exception e)
     {
       sp.printHTML("Exception getting bids list: " + e + "<br>");
+      closeConnection(stmt, conn);
       return;
     }
 
@@ -592,7 +645,9 @@ public class AboutMe extends RubisHttpServlet
         {
           sp.printHTML(
             "Failed to execute Query for item the user has bid on: " + e);
-          closeConnection();
+          if (itemStmt != null)
+            itemStmt.close();
+          closeConnection(stmt, conn);
           return;
         }
 
@@ -602,6 +657,8 @@ public class AboutMe extends RubisHttpServlet
           if (!rs.first())
           {
             sp.printHTML("<h3>Failed to get items.</h3><br>");
+            itemStmt.close();
+            closeConnection(stmt, conn);
             return;
           }
           itemName = rs.getString("name");
@@ -614,6 +671,8 @@ public class AboutMe extends RubisHttpServlet
           currentPrice = rs.getFloat("max_bid");
           if (currentPrice < initialPrice)
             currentPrice = initialPrice;
+            
+          itemStmt.close();
 
           PreparedStatement sellerStmt = null;
           try
@@ -628,25 +687,29 @@ public class AboutMe extends RubisHttpServlet
             else
             {
               sp.printHTML("Unknown seller");
-              closeConnection();
+              closeConnection(stmt, conn);
               if (sellerStmt != null)
                 sellerStmt.close();
               return;
             }
+             sellerStmt.close();
 
           }
           catch (Exception e)
           {
-            sp.printHTML("Failed to execute Query for seller (bids): " + e);
-            closeConnection();
+            sp.printHTML("Failed to execute Query for seller (bids): " + e);          
+            if (itemStmt != null)
+            itemStmt.close();
             if (sellerStmt != null)
               sellerStmt.close();
+            closeConnection(stmt, conn);
             return;
           }
         }
         catch (Exception e)
         {
-          printError("Exception getting item: " + e + "<br>");
+          printError("Exception getting item: " + e + "<br>", sp);
+          closeConnection(stmt, conn);
           return;
         }
         //  display information about user's bids
@@ -665,10 +728,12 @@ public class AboutMe extends RubisHttpServlet
           password);
       }
       while (bid.next());
+      stmt.close();
     }
     catch (Exception e)
     {
-      printError("Exception getting items the user has bid on: " + e + "<br>");
+      printError("Exception getting items the user has bid on: " + e + "<br>", sp);
+      closeConnection(stmt, conn);
       return;
     }
     sp.printItemFooter();
@@ -703,6 +768,9 @@ public class AboutMe extends RubisHttpServlet
     String password = null, username = null;
     Integer userId = null;
     ResultSet rs = null;
+    PreparedStatement stmt = null;
+    Connection conn = null;
+    ServletPrinter sp = null;
 
     sp = new ServletPrinter(response, "About me");
 
@@ -717,14 +785,14 @@ public class AboutMe extends RubisHttpServlet
       int id = auth.authenticate(username, password);
       if (id == -1)
       {
-        printError("You don't have an account on RUBiS!<br>You have to register first.<br>");
+        printError("You don't have an account on RUBiS!<br>You have to register first.<br>", sp);
         return;
       }
       userId = new Integer(id);
     }
     else
     {
-      printError(" You must provide valid username and password.");
+      printError(" You must provide valid username and password.", sp);
       return;
     }
     // Try to find the user corresponding to the userId
@@ -737,7 +805,7 @@ public class AboutMe extends RubisHttpServlet
     catch (Exception e)
     {
       sp.printHTML("Failed to execute Query for user: " + e);
-      closeConnection();
+      closeConnection(stmt, conn);
       sp.printHTMLfooter();
       return;
     }
@@ -746,7 +814,7 @@ public class AboutMe extends RubisHttpServlet
       if (!rs.first())
       {
         sp.printHTML("<h2>This user does not exist!</h2>");
-        closeConnection();
+        closeConnection(stmt, conn);
         sp.printHTMLfooter();
         return;
       }
@@ -756,6 +824,7 @@ public class AboutMe extends RubisHttpServlet
       String email = rs.getString("email");
       String date = rs.getString("creation_date");
       int rating = rs.getInt("rating");
+      stmt.close();
 
       String result = new String();
 
@@ -772,19 +841,19 @@ public class AboutMe extends RubisHttpServlet
     catch (SQLException s)
     {
       sp.printHTML("Failed to get general information about the user: " + s);
-      closeConnection();
+      closeConnection(stmt, conn);
       sp.printHTMLfooter();
       return;
     }
 
-    listBids(userId, username, password);
-    listItem(userId);
-    listWonItems(userId);
-    listBoughtItems(userId);
-    listComment(userId);
+    listBids(userId, username, password, stmt, conn, sp);
+    listItem(userId, conn, sp);
+    listWonItems(userId, stmt, conn, sp);
+    listBoughtItems(userId, stmt, conn, sp);
+    listComment(userId, stmt, conn, sp);
 
     sp.printHTMLfooter();
-    closeConnection();
+    closeConnection(stmt, conn);
   }
 
   /**

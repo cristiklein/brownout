@@ -19,16 +19,17 @@ import javax.transaction.UserTransaction;
 public class RegisterUser extends RubisHttpServlet
 {
   private UserTransaction utx = null;
-  private ServletPrinter sp = null;
-  private PreparedStatement stmt = null;
-  private Connection conn = null;
+  
 
   public int getPoolSize()
   {
     return Config.RegisterUserPoolSize;
   }
 
-  private void closeConnection()
+/**
+ * Close both statement and connection.
+ */
+  private void closeConnection(PreparedStatement stmt, Connection conn)
   {
     try
     {
@@ -42,20 +43,27 @@ public class RegisterUser extends RubisHttpServlet
     }
   }
 
-  private void printError(String errorMsg)
+/**
+ * Display an error message.
+ * @param errorMsg the error message value
+ */
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: Register user");
     sp.printHTML(
       "<h2>Your registration has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
-    closeConnection();
+
 
   }
 
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
+    PreparedStatement stmt = null;
+    Connection conn = null;
+    
     String firstname = null,
       lastname = null,
       nickname = null,
@@ -65,12 +73,13 @@ public class RegisterUser extends RubisHttpServlet
     int userId;
     String creationDate, region;
 
+    ServletPrinter sp = null;
     sp = new ServletPrinter(response, "RegisterUser");
 
     String value = request.getParameter("firstname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a first name!<br>");
+      printError("You must provide a first name!<br>", sp);
       return;
     }
     else
@@ -79,7 +88,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("lastname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a last name!<br>");
+      printError("You must provide a last name!<br>", sp);
       return;
     }
     else
@@ -88,7 +97,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("nickname");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a nick name!<br>");
+      printError("You must provide a nick name!<br>", sp);
       return;
     }
     else
@@ -97,7 +106,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("email");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide an email address!<br>");
+      printError("You must provide an email address!<br>", sp);
       return;
     }
     else
@@ -106,7 +115,7 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("password");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a password!<br>");
+      printError("You must provide a password!<br>", sp);
       return;
     }
     else
@@ -115,12 +124,13 @@ public class RegisterUser extends RubisHttpServlet
     value = request.getParameter("region");
     if ((value == null) || (value.equals("")))
     {
-      printError("You must provide a valid region!<br>");
+      printError("You must provide a valid region!<br>", sp);
       return;
     }
     else
     {
       region = value;
+      
       try
       {
         conn = getConnection();
@@ -130,15 +140,17 @@ public class RegisterUser extends RubisHttpServlet
         if (!rs.first())
         {
           printError(
-            " Region " + value + " does not exist in the database!<br>");
+            " Region " + value + " does not exist in the database!<br>", sp);
+            closeConnection(stmt, conn);
           return;
         }
         regionId = rs.getInt("id");
+        stmt.close();
       }
       catch (SQLException e)
       {
-        printError("Failed to execute Query for region: " + e);
-        closeConnection();
+        printError("Failed to execute Query for region: " + e, sp);
+        closeConnection(stmt, conn);
         return;
       }
     }
@@ -151,14 +163,16 @@ public class RegisterUser extends RubisHttpServlet
       ResultSet rs = stmt.executeQuery();
       if (rs.first())
       {
-        printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
+        printError("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>", sp);
+        closeConnection(stmt, conn);
         return;
       }
+      stmt.close();
     }
     catch (SQLException e)
     {
-      printError("Failed to execute Query to check the nickname: " + e);
-      closeConnection();
+      printError("Failed to execute Query to check the nickname: " + e, sp);
+      closeConnection(stmt, conn);
       return;
     }
     try
@@ -182,14 +196,15 @@ public class RegisterUser extends RubisHttpServlet
             + regionId
             + ")");
       stmt.executeUpdate();
+      stmt.close();
     }
     catch (SQLException e)
     {
       printError(
         "RUBiS internal error: User registration failed (got exception: "
           + e
-          + ")<br>");
-      closeConnection();
+          + ")<br>", sp);
+      closeConnection(stmt, conn);
       return;
     }
     try
@@ -201,7 +216,8 @@ public class RegisterUser extends RubisHttpServlet
       ResultSet urs = stmt.executeQuery();
       if (!urs.first())
       {
-        printError("This user does not exist in the database.");
+        printError("This user does not exist in the database.", sp);
+        closeConnection(stmt, conn);
         return;
       }
       userId = urs.getInt("id");
@@ -209,13 +225,11 @@ public class RegisterUser extends RubisHttpServlet
     }
     catch (SQLException e)
     {
-      printError("Failed to execute Query for user: " + e);
+      printError("Failed to execute Query for user: " + e, sp);
+      closeConnection(stmt, conn);
       return;
     }
-    finally
-    {
-      closeConnection();
-    }
+
 
     sp.printHTMLheader("RUBiS: Welcome to " + nickname);
     sp.printHTML(
@@ -234,6 +248,7 @@ public class RegisterUser extends RubisHttpServlet
     sp.printHTML("Creation date :" + creationDate + "<br>");
 
     sp.printHTMLfooter();
+    closeConnection(stmt, conn);
   }
 
   public void doPost(HttpServletRequest request, HttpServletResponse response)
