@@ -200,6 +200,13 @@
       </tr>
 
       <tr>
+      <td><code>/RUBiS/MDB</code></td>
+
+      <td>EJB version of RUBiS with Message Driven Beans (works with JOnAS
+       and JBoss)</td>
+      </tr>
+
+      <tr>
       <td><code>/RUBiS/EJB_locale_remote_CMP2.0</code></td>
 
       <td>EJB version of RUBiS with fa&#231;ade Session beans and entity beans
@@ -351,14 +358,10 @@
       build.properties file. Each directory contains its own build.xml file that includes
       values defined in the top build.properties file. You have to set the value to
       match your configuration:</p>
-      <p>jonas.root = path to JOnAS installation directory</p>
-      <p>jboss.dist = path to JBoss installation directory</p>
-      <p>j2ee.home = path to the j2sdkee installation directory</p>
       <p>src = directory containing the source files</p>
-      <p>build = directory in which the .class files will be created</p>
+      <p>classes.dir = directory in which the .class files will be created</p>
       <p>dist = directory in which the jar and war files will be created</p>
-      <p>build.classpath = your classpath</p>
-      <p>orb = ORB used with JOnAS (either RMI or JEREMIE)</p>
+      <p>web.dir = directory containing the html files for building a war file</p>
       <p>ejb.server = choose the EJB Server you want to
       use (either jonas or jboss) - Warning, this value is case sensitive.</p>
       <p>db.server = choose the Database server you will
