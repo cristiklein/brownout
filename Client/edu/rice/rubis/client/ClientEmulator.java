@@ -134,6 +134,7 @@ public class ClientEmulator
       scpCmd[0] = rubis.getMonitoringScp();
       scpCmd[1] = node + ":"+fileName;
       scpCmd[2] = outputDir+"/";    
+
       try
       {
           System.out.println(
@@ -145,12 +146,22 @@ public class ClientEmulator
                              + scpCmd[2]
                              + "<br>\n");
 
-          Runtime.getRuntime().exec(scpCmd);
+          Process p = Runtime.getRuntime().exec(scpCmd);
+          p.waitFor();
+
+      }
+      catch (InterruptedException ie) 
+      {
+          System.out.println(
+			     "An error occured while executing "
+			     + "monitoring program ("
+			     + ie.getMessage()
+			     + ")");
 
       }
       catch (IOException ioe)
       {
-	  System.out.println(
+          System.out.println(
 			     "An error occured while executing "
 			     + "monitoring program ("
 			     + ioe.getMessage()
