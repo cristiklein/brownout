@@ -15,7 +15,7 @@ public interface IDManagerLocalHome extends EJBLocalHome {
    *
    * @return entity bean
    */
-  public IDManagerLocal create() throws CreateException, RemoteException, RemoveException;
+  public IDManagerLocal create() throws CreateException, RemoveException;
 
 
   /**
@@ -26,6 +26,6 @@ public interface IDManagerLocalHome extends EJBLocalHome {
    *
    * @return the IDManager if found else null
    */
-  public IDManagerLocal findByPrimaryKey(IDManagerPK id) throws FinderException, RemoteException;
+  public IDManagerLocal findByPrimaryKey(IDManagerPK id) throws FinderException;
 
 }

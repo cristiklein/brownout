@@ -13,6 +13,6 @@ public interface SB_AuthLocalHome extends EJBLocalHome {
    *
    * @return session bean
    */
-  public SB_AuthLocal create() throws CreateException, RemoteException;
+  public SB_AuthLocal create() throws CreateException;
 
 }

@@ -28,7 +28,7 @@ public interface BidLocalHome extends EJBLocalHome {
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public BidLocal create(Integer bidUserId, Integer bidItemId, float userBid, float userMaxBid, int quantity) throws CreateException, RemoteException, RemoveException;
+  public BidLocal create(Integer bidUserId, Integer bidItemId, float userBid, float userMaxBid, int quantity) throws CreateException, RemoveException;
 
   /**
    * This method is used to retrieve a Bid Bean from its primary key,
@@ -40,8 +40,7 @@ public interface BidLocalHome extends EJBLocalHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public BidLocal findByPrimaryKey(BidPK id) throws FinderException, RemoteException;
-
+  public BidLocal findByPrimaryKey(BidPK id) throws FinderException;
   /**
    * This method is used to retrieve all Bid Beans related to one item.
    * You must provide the item id.
@@ -52,7 +51,7 @@ public interface BidLocalHome extends EJBLocalHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByItem(Integer id) throws FinderException, RemoteException;
+  public Collection findByItem(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all Bid Beans belonging to
@@ -64,7 +63,7 @@ public interface BidLocalHome extends EJBLocalHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByUser(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all bids from the database!
@@ -73,5 +72,5 @@ public interface BidLocalHome extends EJBLocalHome {
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection findAllBids() throws RemoteException, FinderException;
+  public Collection findAllBids() throws FinderException;
 }

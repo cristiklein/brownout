@@ -26,7 +26,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @return Vector of items primary keys
    * @since 1.1
    */
-  public Vector getCurrentItemsInCategory(Integer categoryId, int startingRow, int nbOfRows) throws RemoteException;
+  public Vector getCurrentItemsInCategory(Integer categoryId, int startingRow, int nbOfRows);
 
   /** 
    * Get all the items that match a specific category and region and
@@ -43,7 +43,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @return Vector of items primary keys
    * @since 1.1
    */
-  public Vector getCurrentItemsInCategoryAndRegion(Integer categoryId, Integer regionId, int startingRow, int nbOfRows) throws RemoteException;
+  public Vector getCurrentItemsInCategoryAndRegion(Integer categoryId, Integer regionId, int startingRow, int nbOfRows);
 
   /**
    * Get the maximum bid (winning bid) for an item.
@@ -54,7 +54,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getItemMaxBid(Integer itemId) throws RemoteException;
+  public float getItemMaxBid(Integer itemId);
   
   /**
    * Get the first <i>maxToCollect</i> bids for an item sorted from the
@@ -67,7 +67,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getItemQtyMaxBid(int maxToCollect, Integer itemId) throws RemoteException;
+  public Vector getItemQtyMaxBid(int maxToCollect, Integer itemId);
   
   /**
    * Get the number of bids for an item.
@@ -78,7 +78,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public int getItemNbOfBids(Integer itemId) throws RemoteException;
+  public int getItemNbOfBids(Integer itemId);
   
   /**
    * Get the bid history for an item sorted from the last bid to the
@@ -90,7 +90,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getItemBidHistory(Integer itemId) throws RemoteException;
+  public Vector getItemBidHistory(Integer itemId);
   
   /**
    * Get all the latest bids for each item the user has bid on.
@@ -101,7 +101,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getUserBids(Integer userId) throws RemoteException;
+  public Vector getUserBids(Integer userId);
 
   /**
    * Get all the items the user won in the last 30 days.
@@ -112,7 +112,7 @@ public interface QueryLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Vector getUserWonItems(Integer userId) throws RemoteException;
+  public Vector getUserWonItems(Integer userId);
 
 
  

@@ -26,7 +26,7 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * @exception RemoteException if an error occurs
    * @exception RemoveException if an error occurs
    */
-  public BuyNowLocal create(Integer BuyNowUserId, Integer BuyNowItemId, int quantity) throws CreateException, RemoteException, RemoveException;
+  public BuyNowLocal create(Integer BuyNowUserId, Integer BuyNowItemId, int quantity) throws CreateException, RemoveException;
 
   /**
    * This method is used to retrieve a BuyNow Bean from its primary key,
@@ -38,7 +38,7 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public BuyNowLocal findByPrimaryKey(BuyNowPK id) throws FinderException, RemoteException;
+  public BuyNowLocal findByPrimaryKey(BuyNowPK id) throws FinderException;
 
   /**
    * This method is used to retrieve all BuyNow Beans related to one item.
@@ -50,7 +50,7 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByItem(Integer id) throws FinderException, RemoteException;
+  public Collection findByItem(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all BuyNow Beans belonging to
@@ -62,7 +62,7 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * @exception FinderException if an error occurs
    * @exception RemoteException if an error occurs
    */
-  public Collection findByUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByUser(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all BuyNows from the database!
@@ -71,7 +71,7 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * @exception RemoteException if an error occurs
    * @exception FinderException if an error occurs
    */
-  public Collection findAllBuyNows() throws RemoteException, FinderException;
+  public Collection findAllBuyNows() throws FinderException;
 
   /**
    * Get all the items the user bought using the buy-now option in the last 30 days.
@@ -81,6 +81,6 @@ public interface BuyNowLocalHome extends EJBLocalHome {
    * @return Vector of items primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
    */
-    public Collection findUserBuyNow(Integer userId) throws RemoteException, FinderException;
+    public Collection findUserBuyNow(Integer userId) throws FinderException;
 
 }

@@ -15,6 +15,6 @@ public interface QueryLocalHome extends EJBLocalHome {
    *
    * @return session bean
    */
-  public QueryLocal create() throws CreateException, RemoteException;
+  public QueryLocal create() throws CreateException;
 
 }

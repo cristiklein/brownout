@@ -15,7 +15,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @return comment id
    * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException;
+  public Integer getId();
 
   /**
    * Get the user id of the author of the comment
@@ -23,7 +23,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @return author user id
    * @exception RemoteException if an error occurs
    */
-  public Integer getFromUserId() throws RemoteException;
+  public Integer getFromUserId();
 
   /**
    * Get the user id of the user this comment is about.
@@ -31,7 +31,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @return user id this comment is about
    * @exception RemoteException if an error occurs
    */
-  public Integer getToUserId() throws RemoteException;
+  public Integer getToUserId();
 
   /**
    * Get the item id which is the primary key in the items table.
@@ -39,7 +39,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @return item id
    * @exception RemoteException if an error occurs
    */
-  public Integer getItemId() throws RemoteException;
+  public Integer getItemId();
 
   /**
    * Get the rating associated to this comment.
@@ -47,7 +47,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @return rating
    * @exception RemoteException if an error occurs
    */
-  public float getRating() throws RemoteException;
+  public float getRating();
 
   /**
    * Time of the Comment in the format 'YYYY-MM-DD hh:mm:ss'
@@ -55,7 +55,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @return comment time
    * @exception RemoteException if an error occurs
    */
-  public String getDate() throws RemoteException;
+  public String getDate();
   
   /**
    * Get the comment text.
@@ -63,7 +63,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @return comment text
    * @exception RemoteException if an error occurs
    */
-  public String getComment() throws RemoteException;
+  public String getComment();
 
 
   /**
@@ -73,7 +73,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @param id author user id
    * @exception RemoteException if an error occurs
    */
-  public void setFromUserId(Integer id) throws RemoteException;
+  public void setFromUserId(Integer id);
 
   /**
    * Set a new user identifier for the user this comment is about. 
@@ -82,7 +82,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @param id user id comment is about
    * @exception RemoteException if an error occurs
    */
-  public void setToUserId(Integer id) throws RemoteException;
+  public void setToUserId(Integer id);
 
   /**
    * Set a new item identifier. This id must match
@@ -91,7 +91,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @param id item id
    * @exception RemoteException if an error occurs
    */
-  public void setItemId(Integer id) throws RemoteException;
+  public void setItemId(Integer id);
 
   /**
    * Set a new rating for the ToUserId.
@@ -99,7 +99,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @param rating maximum comment price
    * @exception RemoteException if an error occurs
    */
-  public void setRating(int rating) throws RemoteException;
+  public void setRating(int rating);
 
   /**
    * Set a new date for this comment
@@ -107,7 +107,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @param newDate comment date
    * @exception RemoteException if an error occurs
    */
-  public void setDate(String newDate) throws RemoteException;
+  public void setDate(String newDate);
 
   /**
    * Set a new comment for ToUserId from FromUserId.
@@ -115,7 +115,7 @@ public interface CommentLocal extends EJBLocalObject {
    * @param newComment Comment
    * @exception RemoteException if an error occurs
    */
-  public void setComment(String newComment) throws RemoteException;
+  public void setComment(String newComment);
 
   /**
    * Display comment information as an HTML table row
@@ -124,6 +124,6 @@ public interface CommentLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printComment(String userName) throws RemoteException;
+  public String printComment(String userName);
 
 }

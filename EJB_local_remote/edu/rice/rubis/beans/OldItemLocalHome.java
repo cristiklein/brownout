@@ -30,7 +30,7 @@ public interface OldItemLocalHome extends EJBLocalHome {
    */
   public OldItemLocal create(Integer itemId, String itemName, String itemDescription, float itemInitialPrice,
                      int itemQuantity, float itemReservePrice, float itemBuyNow, int duration,
-                     Integer itemSellerId, Integer itemCategoryId) throws CreateException, RemoteException, RemoveException;
+                     Integer itemSellerId, Integer itemCategoryId) throws CreateException, RemoveException;
 
 
   /**
@@ -41,7 +41,7 @@ public interface OldItemLocalHome extends EJBLocalHome {
    *
    * @return the Old Item if found else null
    */
-  public OldItemLocal findByPrimaryKey(OldItemPK id) throws FinderException, RemoteException;
+  public OldItemLocal findByPrimaryKey(OldItemPK id) throws FinderException;
 
 
   /**
@@ -52,7 +52,7 @@ public interface OldItemLocalHome extends EJBLocalHome {
    *
    * @return List of OldItems found (eventually empty)
    */
-  public Collection findBySeller(Integer id) throws RemoteException, FinderException;
+  public Collection findBySeller(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all OldItem Beans belonging to
@@ -62,7 +62,7 @@ public interface OldItemLocalHome extends EJBLocalHome {
    *
    * @return List of OldItems found (eventually empty)
    */
-  public Collection findByCategory(Integer id) throws RemoteException, FinderException;
+  public Collection findByCategory(Integer id) throws FinderException;
 
 
   /**
@@ -74,7 +74,7 @@ public interface OldItemLocalHome extends EJBLocalHome {
    *
    * @return List of OldItems found (eventually empty)
    */
-  public Collection findCurrentByCategory(Integer id) throws RemoteException, FinderException;
+  public Collection findCurrentByCategory(Integer id) throws FinderException;
 
 
   /**
@@ -85,7 +85,7 @@ public interface OldItemLocalHome extends EJBLocalHome {
    * @return Vector of items primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
    */
-  public Collection findUserCurrentSellings(Integer userId) throws RemoteException, FinderException;
+  public Collection findUserCurrentSellings(Integer userId) throws FinderException;
 
 
  /**
@@ -96,12 +96,12 @@ public interface OldItemLocalHome extends EJBLocalHome {
    * @return Vector of items primary keys (can be less than maxToCollect)
    * @exception RemoteException if an error occurs
    */
-    public Collection findUserPastSellings(Integer userId) throws RemoteException, FinderException;
+    public Collection findUserPastSellings(Integer userId) throws FinderException;
 
   /**
    * This method is used to retrieve all items from the database!
    *
    * @return List of all items (eventually empty)
    */
-  public Collection findAllOldItems() throws RemoteException, FinderException;
+  public Collection findAllOldItems() throws FinderException;
 }

@@ -16,7 +16,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Integer getId() throws RemoteException;
+  public Integer getId();
 
   /**
    * Get item name. This description is usually a short description of the item.
@@ -25,7 +25,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getName() throws RemoteException;
+  public String getName();
 
   /**
    * Get item description . This is usually an HTML file describing the item.
@@ -34,7 +34,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getDescription() throws RemoteException;
+  public String getDescription();
 
   /**
    * Get item initial price set by the seller.
@@ -43,7 +43,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getInitialPrice() throws RemoteException;
+  public float getInitialPrice();
 
   /**
    * Get how many of this item are to be sold.
@@ -52,7 +52,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public int getQuantity() throws RemoteException;
+  public int getQuantity();
 
   /**
    * Get item reserve price set by the seller. The seller can refuse to sell if reserve price is not reached.
@@ -61,7 +61,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getReservePrice() throws RemoteException;
+  public float getReservePrice();
 
   /**
    * Get item Buy Now price set by the seller. A user can directly by the item at this price (no auction).
@@ -70,7 +70,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public float getBuyNow() throws RemoteException;
+  public float getBuyNow();
 
   /**
    * Get item maximum bid (if any) for this item. This value should be the same as doing <pre>SELECT MAX(bid) FROM bids WHERE item_id=?</pre>
@@ -79,7 +79,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public float getMaxBid() throws RemoteException;
+  public float getMaxBid();
 
   /**
    * Get number of bids for this item. This value should be the same as doing <pre>SELECT COUNT(*) FROM bids WHERE item_id=?</pre>
@@ -88,7 +88,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public int getNbOfBids() throws RemoteException;
+  public int getNbOfBids();
 
   /**
    * Start date of the auction in the format 'YYYY-MM-DD hh:mm:ss'
@@ -97,7 +97,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getStartDate() throws RemoteException;
+  public String getStartDate();
 
   /**
    * End date of the auction in the format 'YYYY-MM-DD hh:mm:ss'
@@ -106,7 +106,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getEndDate() throws RemoteException;
+  public String getEndDate();
 
   /**
    * Give the user id of the seller
@@ -115,7 +115,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Integer getSellerId() throws RemoteException;
+  public Integer getSellerId();
 
   /**
    * Give the category id of the item
@@ -124,7 +124,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Integer getCategoryId() throws RemoteException;
+  public Integer getCategoryId();
 
   /**
    * Get the seller's nickname by finding the Bean corresponding
@@ -134,7 +134,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getSellerNickname() throws RemoteException;
+  public String getSellerNickname();
 
   /**
    * Get the category name by finding the Bean corresponding to the category Id.
@@ -143,7 +143,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String getCategoryName() throws RemoteException;
+  public String getCategoryName();
 
 
   /**
@@ -153,7 +153,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setName(String newName) throws RemoteException;
+  public void setName(String newName);
 
   /**
    * Set a new item description
@@ -162,7 +162,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setDescription(String newDescription) throws RemoteException;
+  public void setDescription(String newDescription);
 
   /**
    * Set a new initial price for the item
@@ -171,7 +171,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setInitialPrice(float newInitialPrice) throws RemoteException;
+  public void setInitialPrice(float newInitialPrice);
 
   /**
    * Set a new item quantity
@@ -180,7 +180,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setQuantity(int qty) throws RemoteException;
+  public void setQuantity(int qty);
 
   /**
    * Set a new reserve price for the item
@@ -189,7 +189,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setReservePrice(float newReservePrice) throws RemoteException;
+  public void setReservePrice(float newReservePrice);
 
   /**
    * Set a new Buy Now price for the item
@@ -198,7 +198,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setBuyNow(float newBuyNow) throws RemoteException;
+  public void setBuyNow(float newBuyNow);
 
   /**
    * Set item maximum bid
@@ -207,7 +207,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public void setMaxBid(float newMaxBid) throws RemoteException;
+  public void setMaxBid(float newMaxBid);
 
   /**
    * Set the number of bids for this item
@@ -216,7 +216,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public void setNbOfBids(int newNbOfBids) throws RemoteException;
+  public void setNbOfBids(int newNbOfBids);
 
   /**
    * Add one bid for this item
@@ -224,7 +224,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.1
    */
-  public void addOneBid() throws RemoteException;
+  public void addOneBid();
 
   /**
    * Set a new beginning date for the auction
@@ -233,7 +233,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setStartDate(String newDate) throws RemoteException;
+  public void setStartDate(String newDate);
 
   /**
    * Set a new ending date for the auction
@@ -242,7 +242,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setEndDate(String newDate) throws RemoteException;
+  public void setEndDate(String newDate);
 
   /**
    * Set a new seller identifier. This id must match
@@ -252,7 +252,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setSellerId(Integer id) throws RemoteException;
+  public void setSellerId(Integer id);
 
   /**
    * Set a new category identifier. This id must match
@@ -262,7 +262,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public void setCategoryId(Integer id) throws RemoteException;
+  public void setCategoryId(Integer id);
 
   /**
    * Display item information as an HTML table row
@@ -271,7 +271,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printItem() throws RemoteException;
+  public String printItem();
 
   /**
    * Display item information for the AboutMe servlet
@@ -280,7 +280,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printUserBoughtItem(int qty) throws RemoteException;
+  public String printUserBoughtItem(int qty);
 
   /**
    * Display item information for the AboutMe servlet
@@ -289,7 +289,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printItemUserHasBidOn(float bidMaxBid) throws RemoteException;
+  public String printItemUserHasBidOn(float bidMaxBid);
 
   /**
    * Display item information as an HTML table row
@@ -298,7 +298,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printSell() throws RemoteException;
+  public String printSell();
 
   /**
    * Display item information for the AboutMe servlet
@@ -307,7 +307,7 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printUserWonItem() throws RemoteException;
+  public String printUserWonItem();
 
   /**
    * Display item information for the Buy Now servlet
@@ -316,5 +316,5 @@ public interface ItemLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public String printItemDescriptionToBuyNow(int userId) throws RemoteException;
+  public String printItemDescriptionToBuyNow(int userId);
 }

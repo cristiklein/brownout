@@ -17,7 +17,7 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @exception RemoteException if an error occurs
    * @since 1.0
    */
-  public Integer getId() throws RemoteException;
+  public Integer getId();
 
   /** 
    * Generate the category id.
@@ -25,7 +25,7 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @return Value of the ID
    * @since 1.1
    */
-    public Integer getNextCategoryID() throws RemoteException;
+    public Integer getNextCategoryID();
 
   /** 
    * Generate the region id.
@@ -33,7 +33,7 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @return Value of the ID
    * @since 1.1
    */
-    public Integer getNextRegionID() throws RemoteException;
+    public Integer getNextRegionID();
 
   /** 
    * Generate the user id.
@@ -41,7 +41,7 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextUserID() throws RemoteException;
+  public Integer getNextUserID();
 
   /** 
    * Generate the item id.
@@ -49,7 +49,7 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextItemID() throws RemoteException;
+  public Integer getNextItemID();
 
   /** 
    * Generate the comment id.
@@ -57,7 +57,7 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextCommentID() throws RemoteException;
+  public Integer getNextCommentID();
 
   /** 
    * Generate the bid id.
@@ -65,7 +65,7 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextBidID() throws RemoteException;
+  public Integer getNextBidID();
 
   /** 
    * Generate the buyNow id.
@@ -73,6 +73,6 @@ public interface IDManagerLocal extends EJBLocalObject {
    * @return Value of the ID
    * @since 1.1
    */
-  public Integer getNextBuyNowID() throws RemoteException;
+  public Integer getNextBuyNowID();
 
 }

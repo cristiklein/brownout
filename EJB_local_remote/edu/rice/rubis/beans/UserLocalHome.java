@@ -25,7 +25,7 @@ public interface UserLocalHome extends EJBLocalHome {
    *
    */
   public UserLocal create(String userFirstname, String userLastname, String userNickname, String userEmail, 
-                     String userPassword, Integer userRegionId) throws CreateException, RemoteException, RemoveException;
+                     String userPassword, Integer userRegionId) throws CreateException, RemoveException;
 
   /**
    * This method is used to retrieve a User Item Bean from its primary key,
@@ -35,7 +35,7 @@ public interface UserLocalHome extends EJBLocalHome {
    *
    * @return the User if found else null
    */
-  public UserLocal findByPrimaryKey(UserPK id) throws FinderException, RemoteException;
+  public UserLocal findByPrimaryKey(UserPK id) throws FinderException;
 
   /**
    * This method is used to retrieve a User from its nick name.
@@ -44,12 +44,12 @@ public interface UserLocalHome extends EJBLocalHome {
    *
    * @return the User if found else null
    */
-  public UserLocal findByNickName(String nickName) throws FinderException, RemoteException;
+  public UserLocal findByNickName(String nickName) throws FinderException;
 
   /**
    * This method is used to retrieve all users from the database!
    *
    * @return List of all bids (eventually empty)
    */
-  public Collection findAllUsers() throws RemoteException, FinderException;
+  public Collection findAllUsers() throws FinderException;
 }

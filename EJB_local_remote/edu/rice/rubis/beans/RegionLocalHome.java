@@ -18,7 +18,7 @@ public interface RegionLocalHome extends EJBLocalHome {
    *
    * @return pk primary key set to null
    */
-  public RegionLocal create(String name) throws CreateException, RemoteException, RemoveException;
+  public RegionLocal create(String name) throws CreateException, RemoveException;
 
 
   /**
@@ -29,7 +29,7 @@ public interface RegionLocalHome extends EJBLocalHome {
    *
    * @return the Region if found else null
    */
-  public RegionLocal findByPrimaryKey(RegionPK id) throws FinderException, RemoteException;
+  public RegionLocal findByPrimaryKey(RegionPK id) throws FinderException;
 
 
   /**
@@ -39,7 +39,7 @@ public interface RegionLocalHome extends EJBLocalHome {
    *
    * @return the Region if found else null
    */
-  public RegionLocal findByName(String regionName) throws FinderException, RemoteException;
+  public RegionLocal findByName(String regionName) throws FinderException;
 
 
   /**
@@ -47,5 +47,5 @@ public interface RegionLocalHome extends EJBLocalHome {
    *
    * @return List of all categories (eventually empty)
    */
-  public Collection findAllRegions() throws RemoteException, FinderException;
+  public Collection findAllRegions() throws FinderException;
 }

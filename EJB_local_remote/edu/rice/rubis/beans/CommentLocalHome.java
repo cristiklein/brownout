@@ -22,7 +22,7 @@ public interface CommentLocalHome extends EJBLocalHome {
    *
    * @return pk primary key set to null
    */
-  public CommentLocal create(Integer FromUserId, Integer ToUserId, Integer ItemId, int Rating, String Comment) throws CreateException, RemoteException, RemoveException;
+  public CommentLocal create(Integer FromUserId, Integer ToUserId, Integer ItemId, int Rating, String Comment) throws CreateException, RemoveException;
 
   /**
    * This method is used to retrieve a Comment Bean from its primary key,
@@ -32,7 +32,7 @@ public interface CommentLocalHome extends EJBLocalHome {
    *
    * @return the Comment if found else null
    */
-  public CommentLocal findByPrimaryKey(CommentPK id) throws FinderException, RemoteException;
+  public CommentLocal findByPrimaryKey(CommentPK id) throws FinderException;
 
   /**
    * This method is used to retrieve all Comment Beans related to one item.
@@ -42,7 +42,7 @@ public interface CommentLocalHome extends EJBLocalHome {
    *
    * @return List of Comments found (eventually empty)
    */
-  public Collection findByItem(Integer id) throws FinderException, RemoteException;
+  public Collection findByItem(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all Comment Beans belonging to
@@ -52,7 +52,7 @@ public interface CommentLocalHome extends EJBLocalHome {
    *
    * @return List of Comments found (eventually empty)
    */
-  public Collection findByFromUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByFromUser(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all Comment Beans related to
@@ -62,12 +62,12 @@ public interface CommentLocalHome extends EJBLocalHome {
    *
    * @return List of Comments found (eventually empty)
    */
-  public Collection findByToUser(Integer id) throws FinderException, RemoteException;
+  public Collection findByToUser(Integer id) throws FinderException;
 
   /**
    * This method is used to retrieve all comments from the database!
    *
    * @return List of all comments (eventually empty)
    */
-  public Collection findAllComments() throws RemoteException, FinderException;
+  public Collection findAllComments() throws FinderException;
 }

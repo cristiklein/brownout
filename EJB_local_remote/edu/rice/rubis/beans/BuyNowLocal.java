@@ -15,7 +15,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @return BuyNow id
    * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException;
+  public Integer getId();
 
   /**
    * Get the buyer id which is the primary key in the users table.
@@ -23,7 +23,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @return buyer id
    * @exception RemoteException if an error occurs
    */
-  public Integer getBuyerId() throws RemoteException;
+  public Integer getBuyerId();
 
   /**
    * Get the item id which is the primary key in the items table.
@@ -31,7 +31,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @return item id
    * @exception RemoteException if an error occurs
    */
-  public Integer getItemId() throws RemoteException;
+  public Integer getItemId();
 
   /**
    * Get how many of this item the buyer has bought.
@@ -39,7 +39,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @return quantity of items for this bid.
    * @exception RemoteException if an error occurs
    */
-  public int getQuantity() throws RemoteException;
+  public int getQuantity();
 
   /**
    * Time of the BuyNow in the format 'YYYY-MM-DD hh:mm:ss'
@@ -47,7 +47,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @return bid time
    * @exception RemoteException if an error occurs
    */
-  public String getDate() throws RemoteException;
+  public String getDate();
 
   /**
    * Set a new buyer identifier. This id must match
@@ -56,7 +56,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @param id buyer id
    * @exception RemoteException if an error occurs
    */
-  public void setBuyerId(Integer id) throws RemoteException;
+  public void setBuyerId(Integer id);
 
   /**
    * Set a new item identifier. This id must match
@@ -65,7 +65,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @param id item id
    * @exception RemoteException if an error occurs
    */
-  public void setItemId(Integer id) throws RemoteException;
+  public void setItemId(Integer id);
 
   /**
    * Set a new quantity for this buy
@@ -73,7 +73,7 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @param Qty quantity
    * @exception RemoteException if an error occurs
    */
-  public void setQuantity(int Qty) throws RemoteException;
+  public void setQuantity(int Qty);
 
   /**
    * Set a new date for this buy
@@ -81,5 +81,5 @@ public interface BuyNowLocal extends EJBLocalObject {
    * @param newDate bid date
    * @exception RemoteException if an error occurs
    */
-  public void setDate(String newDate) throws RemoteException;
+  public void setDate(String newDate);
 }

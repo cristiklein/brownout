@@ -15,7 +15,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user id
    * @exception RemoteException if an error occurs
    */
-  public Integer getId() throws RemoteException;
+  public Integer getId();
 
   /**
    * Get user first name.
@@ -23,7 +23,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user first name
    * @exception RemoteException if an error occurs
    */
-  public String getFirstName() throws RemoteException;
+  public String getFirstName();
 
   /**
    * Get user last name.
@@ -31,7 +31,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user last name
    * @exception RemoteException if an error occurs
    */
-  public String getLastName() throws RemoteException;
+  public String getLastName();
 
   /**
    * Get user nick name. This name is unique for each user and is used for login.
@@ -39,7 +39,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user nick name
    * @exception RemoteException if an error occurs
    */
-  public String getNickName() throws RemoteException;
+  public String getNickName();
 
   /**
    * Get user password.
@@ -47,7 +47,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user password
    * @exception RemoteException if an error occurs
    */
-  public String getPassword() throws RemoteException;
+  public String getPassword();
 
   /**
    * Get user email address.
@@ -55,7 +55,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user email address
    * @exception RemoteException if an error occurs
    */
-  public String getEmail() throws RemoteException;
+  public String getEmail();
   
   /**
    * Get user rating. The higher the rating is, the most reliable the user is.
@@ -63,7 +63,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user rating
    * @exception RemoteException if an error occurs
    */
-  public int getRating() throws RemoteException;
+  public int getRating();
   
   /**
    * Get user's account current balance. This account is used when a user want to sell items.
@@ -72,7 +72,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user's account current balance
    * @exception RemoteException if an error occurs
    */
-  public float getBalance() throws RemoteException;
+  public float getBalance();
 
   /**
    * Get user creation date.
@@ -80,7 +80,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return user creation date
    * @exception RemoteException if an error occurs
    */
-  public String getCreationDate() throws RemoteException;
+  public String getCreationDate();
   
   /**
    * Get region identifier of user's region.
@@ -88,7 +88,7 @@ public interface UserLocal extends EJBLocalObject {
    * @return region id of the user
    * @exception RemoteException if an error occurs
    */
-  public Integer getRegionId() throws RemoteException;
+  public Integer getRegionId();
     
 
   /**
@@ -97,7 +97,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newName user first name
    * @exception RemoteException if an error occurs
    */
-  public void setFirstName(String newName) throws RemoteException;
+  public void setFirstName(String newName);
 
   /**
    * Set user's last name
@@ -105,7 +105,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newName user last name
    * @exception RemoteException if an error occurs
    */
-  public void setLastName(String newName) throws RemoteException;
+  public void setLastName(String newName);
 
   /**
    * Set user's nick name
@@ -113,7 +113,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newName user nick name
    * @exception RemoteException if an error occurs
    */
-  public void setNickName(String newName) throws RemoteException;
+  public void setNickName(String newName);
 
   /**
    * Set user's password
@@ -121,7 +121,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newPassword a <code>String</code> value
    * @exception RemoteException if an error occurs
    */
-  public void setPassword(String newPassword) throws RemoteException;
+  public void setPassword(String newPassword);
 
   /**
    * Set user's email address
@@ -129,7 +129,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newEmail a <code>String</code> value
    * @exception RemoteException if an error occurs
    */
-  public void setEmail(String newEmail) throws RemoteException;
+  public void setEmail(String newEmail);
 
   /**
    * Set a new creation date for this user account
@@ -137,7 +137,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newCreationDate new user account creation date
    * @exception RemoteException if an error occurs
    */
-  public void setCreationDate(String newCreationDate) throws RemoteException;
+  public void setCreationDate(String newCreationDate);
 
   /**
    * Set a new region identifier. This id must match
@@ -146,7 +146,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param id region id
    * @exception RemoteException if an error occurs
    */
-  public void setRegionId(Integer id) throws RemoteException;
+  public void setRegionId(Integer id);
 
   /**
    * Set user rating. The higher the rating is, the most reliable the user is.
@@ -154,7 +154,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newRating new user rating
    * @exception RemoteException if an error occurs
    */
-  public void setRating(int newRating) throws RemoteException;
+  public void setRating(int newRating);
 
   /**
    * Update the current rating by adding a new value to it. This value can
@@ -163,7 +163,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param diff value to add to the rating
    * @exception RemoteException if an error occurs
    */
-  public void updateRating(int diff) throws RemoteException;
+  public void updateRating(int diff);
   
   /**
    * Set user's account current balance. This account is used when a user want to sell items.
@@ -172,7 +172,7 @@ public interface UserLocal extends EJBLocalObject {
    * @param newBalance set user's account current balance
    * @exception RemoteException if an error occurs
    */
-  public void setBalance(float newBalance) throws RemoteException;
+  public void setBalance(float newBalance);
 
 
   /**
@@ -182,5 +182,5 @@ public interface UserLocal extends EJBLocalObject {
    * @return string containing general user information
    * @exception RemoteException if an error occurs
    */
-  public String getHTMLGeneralUserInformation() throws RemoteException;
+  public String getHTMLGeneralUserInformation();
 }

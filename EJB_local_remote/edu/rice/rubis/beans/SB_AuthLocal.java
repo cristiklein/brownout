@@ -17,7 +17,7 @@ public interface SB_AuthLocal extends EJBLocalObject {
    * @param password user password
    * @return an <code>int</code> value corresponding to the user id or -1 on error
    */
-  public int authenticate (String name, String password) throws RemoteException;
+  public int authenticate (String name, String password);
 
 
 }

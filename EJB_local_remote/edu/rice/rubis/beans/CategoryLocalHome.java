@@ -20,7 +20,7 @@ public interface CategoryLocalHome extends EJBLocalHome {
    *
    * @return pk primary key set to null
    */
-  public CategoryLocal create(String name) throws CreateException, RemoteException, RemoveException;
+  public CategoryLocal create(String name) throws CreateException, RemoveException;
 
 
   /**
@@ -31,7 +31,7 @@ public interface CategoryLocalHome extends EJBLocalHome {
    *
    * @return the Category if found else null
    */
-  public CategoryLocal findByPrimaryKey(CategoryPK id) throws FinderException, RemoteException;
+  public CategoryLocal findByPrimaryKey(CategoryPK id) throws FinderException;
 
 
   /**
@@ -41,7 +41,7 @@ public interface CategoryLocalHome extends EJBLocalHome {
    *
    * @return the Category if found else null
    */
-  public CategoryLocal findByName(String categoryName) throws FinderException, RemoteException;
+  public CategoryLocal findByName(String categoryName) throws FinderException;
 
 
   /**
@@ -49,5 +49,5 @@ public interface CategoryLocalHome extends EJBLocalHome {
    *
    * @return List of all categories (eventually empty)
    */
-  public Collection findAllCategories() throws RemoteException, FinderException;
+  public Collection findAllCategories() throws FinderException;
 }
