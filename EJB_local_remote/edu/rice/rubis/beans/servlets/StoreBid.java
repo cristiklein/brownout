@@ -1,14 +1,17 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.SB_StoreBid;
+import edu.rice.rubis.beans.SB_StoreBidHome;
 
 /** This servlet records a bid in the database and display
  * the result of the transaction.
@@ -29,11 +32,8 @@ import java.util.Enumeration;
 
 public class StoreBid extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
 
-
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: StoreBid");
     sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
@@ -65,6 +65,8 @@ public class StoreBid extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     Integer userId; // item id
     Integer itemId; // user id
     float   minBid; // minimum acceptable bid for this item
@@ -80,7 +82,7 @@ public class StoreBid extends HttpServlet
     String value = request.getParameter("userId");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a user identifier !<br></h3>");
+      printError("<h3>You must provide a user identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -89,7 +91,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("itemId");
     if ((value == null) || (value.equals("")) || (value.equals("-1")))
     {
-      printError("<h3>You must provide an item identifier !<br></h3>");
+      printError("<h3>You must provide an item identifier !<br></h3>", sp);
       return ;
     }
     else
@@ -98,7 +100,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("minBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a minimum bid !<br></h3>");
+      printError("<h3>You must provide a minimum bid !<br></h3>", sp);
       return ;
     }
     else
@@ -110,7 +112,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("bid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a bid !<br></h3>");
+      printError("<h3>You must provide a bid !<br></h3>", sp);
       return ;
     }
     else
@@ -122,7 +124,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("maxBid");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum bid !<br></h3>");
+      printError("<h3>You must provide a maximum bid !<br></h3>", sp);
       return ;
     }
     else
@@ -134,7 +136,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("maxQty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a maximum quantity !<br></h3>");
+      printError("<h3>You must provide a maximum quantity !<br></h3>", sp);
       return ;
     }
     else
@@ -146,7 +148,7 @@ public class StoreBid extends HttpServlet
     value = request.getParameter("qty");
     if ((value == null) || (value.equals("")))
     {
-      printError("<h3>You must provide a quantity !<br></h3>");
+      printError("<h3>You must provide a quantity !<br></h3>", sp);
       return ;
     }
     else
@@ -159,22 +161,22 @@ public class StoreBid extends HttpServlet
 
     if (qty > maxQty)
     {
-      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>");
+      printError("<h3>You cannot request "+qty+" items because only "+maxQty+" are proposed !<br></h3>", sp);
       return ;
     }      
     if (bid < minBid)
     {
-      printError("<h3>Your bid of $"+bid+" is not acceptable because it is below the $"+minBid+" minimum bid !<br></h3>");
+      printError("<h3>Your bid of $"+bid+" is not acceptable because it is below the $"+minBid+" minimum bid !<br></h3>", sp);
       return ;
     }      
     if (maxBid < minBid)
     {
-      printError("<h3>Your maximum bid of $"+maxBid+" is not acceptable because it is below the $"+minBid+" minimum bid !<br></h3>");
+      printError("<h3>Your maximum bid of $"+maxBid+" is not acceptable because it is below the $"+minBid+" minimum bid !<br></h3>", sp);
       return ;
     }      
     if (maxBid < bid)
     {
-      printError("<h3>Your maximum bid of $"+maxBid+" is not acceptable because it is below your current bid of $"+bid+" !<br></h3>");
+      printError("<h3>Your maximum bid of $"+maxBid+" is not acceptable because it is below your current bid of $"+bid+" !<br></h3>", sp);
       return ;
     }      
 
@@ -184,7 +186,7 @@ public class StoreBid extends HttpServlet
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " + e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
       return ;
     }
     SB_StoreBidHome sbHome;
@@ -197,7 +199,7 @@ public class StoreBid extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_StoreBid: " +e+"<br>");
+      printError("Cannot lookup SB_StoreBid: " +e+"<br>", sp);
       return ;
     }
     try
@@ -209,7 +211,7 @@ public class StoreBid extends HttpServlet
     }
     catch (Exception e)
     {
-      printError("Error while storing the bid (got exception: " +e+")<br>");
+      printError("Error while storing the bid (got exception: " +e+")<br>", sp);
       return ;
     }
 		

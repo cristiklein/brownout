@@ -1,15 +1,17 @@
 package edu.rice.rubis.beans.servlets;
 
-import edu.rice.rubis.beans.*;
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.transaction.UserTransaction;
-import java.util.Enumeration;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import edu.rice.rubis.beans.SB_AboutMe;
+import edu.rice.rubis.beans.SB_AboutMeHome;
 
 /**
  * This servlets displays general information about the user loged in
@@ -19,20 +21,15 @@ import java.util.Enumeration;
  */
 public class AboutMe extends HttpServlet
 {
-  private ServletPrinter sp = null;
-  private Context initialContext = null;
 
 
-  private void printError(String errorMsg)
+  private void printError(String errorMsg, ServletPrinter sp)
   {
     sp.printHTMLheader("RUBiS ERROR: About me");
     sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
-
-
-
 
 
   /**
@@ -60,6 +57,8 @@ public class AboutMe extends HttpServlet
    */
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
+    ServletPrinter sp = null;
+    Context initialContext = null;
     String  password=null, username=null; 
     Integer userId=null;
     
@@ -76,13 +75,13 @@ public class AboutMe extends HttpServlet
       } 
       catch (Exception e) 
       {
-        printError("Cannot get initial context for JNDI: " + e+"<br>");
+        printError("Cannot get initial context for JNDI: " + e+"<br>", sp);
         return ;
       }
      }
     else
     {
-      printError(" You must provide valid username and password.");
+      printError(" You must provide valid username and password.", sp);
       return ;
     }
     sp.printHTMLheader("RUBiS: About Me");
@@ -96,7 +95,7 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      printError("Cannot lookup SB_AboutMe: " +e+"<br>");
+      printError("Cannot lookup SB_AboutMe: " +e+"<br>", sp);
       return ;
     }
     String html;
@@ -107,7 +106,7 @@ public class AboutMe extends HttpServlet
      } 
      catch (Exception e)
      {
-       printError("Cannot retrieve information about you: " +e+"<br>");
+       printError("Cannot retrieve information about you: " +e+"<br>", sp);
        return ;
      }
     sp.printHTMLfooter();
