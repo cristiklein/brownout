@@ -31,4 +31,9 @@ public class BeanConfig
    * JBoss looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("UserTransaction");
    */
   public static final String UserTransaction = "UserTransaction";
+
+  /**
+   * Returns the context used by the web container for html files and servlets (this isthe name of the war file).
+   */
+  public static final String context = "/ejb_rubis_web";
 }

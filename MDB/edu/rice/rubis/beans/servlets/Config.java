@@ -21,19 +21,27 @@ public class Config
   /**
    * Return the TopicConnectionFactory name to lookup
    * JOnAS looks like: JTCF
-   * JBoss looks like: RMIConnectionFactory
+   * JBoss looks like: RMIConnectionFactoryw
    */
-  public static final String TopicConnectionFactoryName = "JTCF";
+  public static final String TopicConnectionFactoryName = "RMIConnectionFactory";
 
   /**
    * Returns the path to the directory where the HTML header and footer are stored.
    */
-  public static final String HTMLFilesPath = "/users/cecchet/RUBiS/EJB_HTML";
+  //public static final String HTMLFilesPath = "/users/cecchet/RUBiS/EJB_HTML";
+  public static final String HTMLFilesPath = "/home/margueri/proton/RUBiS/ejb_rubis_web";
+
+
+  /**
+   * Returns the context used by the web container for html files and servlets (this isthe name of the war file).
+   */
+  public static final String context = "/ejb_rubis_web";
+
 
   /**
    * Return the UserTransaction name to look for since JBoss does not support full class names
    * JOnAS looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("java:comp/UserTransaction");
    * JBoss looks like: utx = (javax.transaction.UserTransaction)initialContext.lookup("UserTransaction");
    */
-  public static final String UserTransaction = "java:comp/UserTransaction";
+  public static final String UserTransaction = "UserTransaction";
 }

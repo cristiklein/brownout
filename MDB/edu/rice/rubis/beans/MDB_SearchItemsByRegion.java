@@ -45,10 +45,10 @@ public class MDB_SearchItemsByRegion implements MessageDrivenBean, MessageListen
     {
       MapMessage request = (MapMessage)message;
       String correlationID = request.getJMSCorrelationID();
-      Integer categoryId = new Integer(request.getIntProperty("categoryId"));
-      Integer regionId = new Integer(request.getIntProperty("regionId"));
-      int page = request.getIntProperty("page");
-      int nbOfItems = request.getIntProperty("nbOfItems");
+      Integer categoryId = new Integer(request.getInt("categoryId"));
+      Integer regionId = new Integer(request.getInt("regionId"));
+      int page = request.getInt("page");
+      int nbOfItems = request.getInt("nbItems");
 
         // Retrieve the connection factory
         connectionFactory = (TopicConnectionFactory) initialContext.lookup(BeanConfig.TopicConnectionFactoryName);
@@ -109,20 +109,10 @@ public class MDB_SearchItemsByRegion implements MessageDrivenBean, MessageListen
       stmt.setInt(3, page*nbOfItems);
       stmt.setInt(4, nbOfItems);
       rs = stmt.executeQuery();
-
-      stmt.close();
-      conn.close();
     }
     catch (SQLException e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+
       throw new RemoteException("Failed to get the items: " +e);
     }
     try 
@@ -139,9 +129,19 @@ public class MDB_SearchItemsByRegion implements MessageDrivenBean, MessageListen
           maxBid = initialPrice;
         html.append(printItem(itemName, itemId, maxBid, nbOfBids, endDate));
       }
+      stmt.close();
+      conn.close();
     } 
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
         throw new RemoteException("Cannot get items list: " +e);
     }
     return html.toString();
@@ -157,11 +157,11 @@ public class MDB_SearchItemsByRegion implements MessageDrivenBean, MessageListen
    */
   public String printItem(String name, int id, float maxBid, int nbOfBids, String endDate) throws RemoteException
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+maxBid+
       "<TD>"+nbOfBids+
       "<TD>"+endDate+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\""+BeanConfig.context+"/bid_now.jpg\" height=22 width=90></a>\n";
   }
   
 

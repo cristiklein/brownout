@@ -45,15 +45,18 @@ public class MDB_SearchItemsByCategory implements MessageDrivenBean, MessageList
     {
       MapMessage request = (MapMessage)message;
       String correlationID = request.getJMSCorrelationID();
-      Integer categoryId = new Integer(request.getIntProperty("categoryId"));
-      int page = request.getIntProperty("page");
-      int nbOfItems = request.getIntProperty("nbOfItems");
+      int id = request.getInt("categoryId");
+      Integer categoryId = new Integer(id);
+      int page = request.getInt("page");
+      int nbOfItems = request.getInt("nbItems");
 
         // Retrieve the connection factory
         connectionFactory = (TopicConnectionFactory) initialContext.lookup(BeanConfig.TopicConnectionFactoryName);
 
       // get the list of categories
       String html = getItems(categoryId, page, nbOfItems);
+      if ((html.equals("")) || (html == null))
+        System.out.println ("html is empty");
 
       // send the reply
       TemporaryTopic temporaryTopic = (TemporaryTopic) request.getJMSReplyTo();
@@ -109,19 +112,10 @@ public class MDB_SearchItemsByCategory implements MessageDrivenBean, MessageList
       stmt.setInt(3, nbOfItems);
       rs = stmt.executeQuery();
 
-      stmt.close();
-      conn.close();
     }
     catch (SQLException e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+
       throw new EJBException("Failed to get the items: " +e);
     }
     try 
@@ -138,9 +132,19 @@ public class MDB_SearchItemsByCategory implements MessageDrivenBean, MessageList
           maxBid = initialPrice;
         html.append(printItem(itemName, itemId, maxBid, nbOfBids, endDate));
       }
+      stmt.close();
+      conn.close();
     } 
     catch (Exception e)
     {
+      try
+      {
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
+      }
+      catch (Exception ignore)
+      {
+      }
       throw new EJBException("Cannot get items list: " +e);
     }
     return html.toString();
@@ -155,11 +159,11 @@ public class MDB_SearchItemsByCategory implements MessageDrivenBean, MessageList
    */
   public String printItem(String name, int id, float maxBid, int nbOfBids, String endDate)
   {
-    return "<TR><TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
+    return "<TR><TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.ViewItem?itemId="+id+"\">"+name+
       "<TD>"+maxBid+
       "<TD>"+nbOfBids+
       "<TD>"+endDate+
-      "<TD><a href=\"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\"/EJB_HTML/bid_now.jpg\" height=22 width=90></a>\n";
+      "<TD><a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.PutBidAuth?itemId="+id+"\"><IMG SRC=\""+BeanConfig.context+"/bid_now.jpg\" height=22 width=90></a>\n";
   }
 
   

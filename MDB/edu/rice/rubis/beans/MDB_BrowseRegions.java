@@ -125,7 +125,7 @@ public class MDB_BrowseRegions implements MessageDrivenBean, MessageListener
 
   public String printRegion(String name)
   {
-    return "<a href=\"/servlet/edu.rice.rubis.beans.servlets.BrowseCategories?region="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
+    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.BrowseCategories?region="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
 
   }
 

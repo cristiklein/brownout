@@ -7,10 +7,10 @@ include ../config.mk
 ####################
 
 MessageBeans = MDB_Auth MDB_BrowseRegions MDB_BrowseCategories \
-	MDB_SearchItemsByCategory MDB_SearchItemsByRegion
-#SB_ViewItem SB_ViewUserInfo \
-# 	SB_PutComment SB_StoreComment SB_RegisterUser SB_BuyNow SB_StoreBuyNow SB_PutBid \
-#	SB_ViewBidHistory SB_AboutMe
+	MDB_SearchItemsByCategory MDB_SearchItemsByRegion MDB_ViewItem MDB_ViewUserInfo \
+	MDB_PutComment MDB_StoreComment MDB_RegisterUser MDB_RegisterItem \
+	MDB_ViewBidHistory MDB_PutBid MDB_StoreBid \
+	MDB_BuyNow MDB_StoreBuyNow MDB_AboutMe
 
 all_beans_sources =  $(addprefix edu/rice/rubis/beans/, $(addsuffix .java, $(MessageBeans))) edu/rice/rubis/beans/TimeManagement.java edu/rice/rubis/beans/BeanConfig.java
 all_beans_obj = $(addprefix edu/rice/rubis/beans/, $(addsuffix .class, $(MessageBeans))) edu/rice/rubis/beans/TimeManagement.class edu/rice/rubis/beans/BeanConfig.class
@@ -60,11 +60,12 @@ clean_jboss:
 ##################
 
 EJB_Servlets = ServletPrinter Config BrowseRegions BrowseCategories \
-	   SearchItemsByCategory SearchItemsByRegion
-#ViewItem ViewUserInfo \
-#	   RegisterUser RegisterItem SellItemForm \
-#	   PutCommentAuth PutComment StoreComment BuyNow BuyNowAuth StoreBuyNow \
-#	   PutBidAuth PutBid StoreBid ViewBidHistory AboutMe
+	   SearchItemsByCategory SearchItemsByRegion ViewItem ViewUserInfo \
+	   PutCommentAuth PutComment StoreComment RegisterUser \
+	   RegisterUser RegisterItem SellItemForm \
+	   PutBidAuth PutBid ViewBidHistory StoreBid \
+	   BuyNow BuyNowAuth StoreBuyNow AboutMe
+
 
 all_ejb_servlets_sources =  $(addprefix edu/rice/rubis/beans/servlets/, $(addsuffix .java, $(EJB_Servlets)))
 all_ejb_servlets_obj = $(addprefix edu/rice/rubis/beans/servlets/, $(addsuffix .class, $(EJB_Servlets)))
@@ -72,6 +73,7 @@ all_ejb_servlets_obj = $(addprefix edu/rice/rubis/beans/servlets/, $(addsuffix .
 #config_$(EJB_SERVER)
 ejb_servlets: $(all_ejb_servlets_obj)
 	${JAR} cvf rubis_ejb_servlets.jar $(all_ejb_servlets_obj)
+
 
 ##################
 #  Global rules  #

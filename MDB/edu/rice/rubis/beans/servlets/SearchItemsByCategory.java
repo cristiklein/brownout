@@ -62,7 +62,6 @@ public class SearchItemsByCategory extends HttpServlet
     {
       // create a requestor to receive the reply
       TopicRequestor requestor = new TopicRequestor(session, topic);
-      System.out.println("create requestor");
       // create a message
       MapMessage message = session.createMapMessage();
       // set parameters
@@ -101,18 +100,18 @@ public class SearchItemsByCategory extends HttpServlet
         {
           sp.printHTML("<h2>Sorry, but there are no more items available in this category !</h2>");
           //          sp.printItemHeader();
-          sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+          sp.printItemFooter("<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>", "");
         }
         return ;
       }
       if (page == 0)
-        sp.printItemFooter("", "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+        sp.printItemFooter("", "<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
       else
-        sp.printItemFooter("<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+        sp.printItemFooter("<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page-1)+"&nbOfItems="+nbOfItems+"\">Previous page</a>",
-                           "<a href=\"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
+                           "<a href=\""+Config.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+categoryId+
                            "&categoryName="+URLEncoder.encode(categoryName)+"&page="+(page+1)+"&nbOfItems="+nbOfItems+"\">Next page</a>");
     } 
     catch (Exception e) 
@@ -132,13 +131,15 @@ public class SearchItemsByCategory extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
-    String  value = request.getParameter("category");
+    String  value;
     Integer categoryId;
     Integer page;
     Integer nbOfItems;
 
     categoryName = request.getParameter("categoryName");
     sp = new ServletPrinter(response, "SearchItemsByCategory");
+
+    value = request.getParameter("category");
     if ((value == null) || (value.equals("")))
     {
       printError("You must provide a category identifier!<br>");

@@ -5,30 +5,41 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 import java.io.*;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.jms.*;
 
-/**
- * Builds the html page with the list of all categories and provides links to browse all
- * items in a category or items in a category for a given region
+/** This servlets display the page allowing a user to put a bid
+ * on an item.
+ * It must be called this way :
+ * <pre>
+ * http://..../PutBid?itemId=xx&nickname=yy&password=zz
+ *    where xx is the id of the item
+ *          yy is the nick name of the user
+ *          zz is the user password
+ * </pre>
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.0
  */
-public class BrowseCategories extends HttpServlet
+
+
+public class PutBid extends HttpServlet
 {
   private ServletPrinter sp = null;
 
   private void printError(String errorMsg)
   {
-    sp.printHTMLheader("RUBiS ERROR: Browse Categories");
-    sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
+    sp.printHTMLheader("RUBiS ERROR: PutBid");
+    sp.printHTML("<h2>Your request has not been processed due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
   }
 
+
   /**
-   * Build the html page for the response
+   * Describe <code>doGet</code> method here.
+   *
    * @param request a <code>HttpServletRequest</code> value
    * @param response a <code>HttpServletResponse</code> value
    * @exception IOException if an error occurs
@@ -36,26 +47,30 @@ public class BrowseCategories extends HttpServlet
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
   {
-    String  region=null;
-    String  username=null, password=null;
-    Context initialContext = null;
+    String itemStr = request.getParameter("itemId");
+    String name = request.getParameter("nickname");
+    String pass = request.getParameter("password");
+    sp = new ServletPrinter(response, "PubBid");
+    
+    if ((itemStr == null) || (itemStr.equals("")) ||
+        (name == null) || (name.equals(""))||
+        (pass == null) || (pass.equals("")))
+    {
+      printError("Item id, name and password are required - Cannot process the request<br>");
+      return ;
+    }
+    Integer itemId = new Integer(itemStr);
 
-    sp = new ServletPrinter(response, "BrowseCategories");
-    sp.printHTMLheader("RUBiS available categories");
-    sp.printHTML("<h2>Currently available categories</h2><br>");
+    Context initialContext = null;
     try
     {
       initialContext = new InitialContext();
     } 
     catch (Exception e) 
     {
-      printError("Cannot get initial context for JNDI: " +e+"<br>");
+      printError("Cannot get initial context for JNDI: " + e+"<br>");
       return ;
     }
-
-    region = request.getParameter("region");
-    username = request.getParameter("nickname");
-    password = request.getParameter("password");
 
     TopicConnectionFactory topicFactory = null;
     TopicConnection connection = null;
@@ -69,29 +84,27 @@ public class BrowseCategories extends HttpServlet
       // create a connection to the JMS provider
       connection = topicFactory.createTopicConnection();
       // lookup the destination
-      topic = (Topic) initialContext.lookup("topic/topicBrowseCategories");
+      topic = (Topic) initialContext.lookup("topic/topicPutBid");
       // create a session
       session  = connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot connect to message bean MDB_BrowseCategories : " +e+"<br>");
+      sp.printHTML("Cannot connect to message bean MDB_PutBid : " +e+"<br>");
       return ;
     }
     try 
     {
+      sp.printHTMLheader("RUBiS: Bidding service");
       // create a requestor to receive the reply
       TopicRequestor requestor = new TopicRequestor(session, topic);
       // create a message
       MapMessage message = session.createMapMessage();
       // set parameters
-      if (region != null)
-        message.setString("region", region);
-      if (username != null)
-        message.setString("nickname", username);
-       if (password != null)
-        message.setString("password", password);
-      message.setJMSCorrelationID("category");
+      message.setInt("itemId", itemId.intValue());
+      message.setString("username", name);
+      message.setString("password", pass);
+      message.setJMSCorrelationID("putBid");
       // send the message and receive the reply
       connection.start(); // allows message to be delivered (default is connection stopped)
       TextMessage reply = (TextMessage)requestor.request(message);
@@ -104,15 +117,17 @@ public class BrowseCategories extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot get the list of categories: " +e+"<br>");
+      sp.printHTML("Bidding process failed: " +e+"<br>");
       return ;
     }
-    sp.printHTML(html); 	
+    // Display the form for bidding
+    sp.printHTML(html);
     sp.printHTMLfooter();
+  
   }
 
   /**
-   * Same as <code>doGet</code>.
+   * Call the <code>doGet</code> method.
    *
    * @param request a <code>HttpServletRequest</code> value
    * @param response a <code>HttpServletResponse</code> value
@@ -123,5 +138,4 @@ public class BrowseCategories extends HttpServlet
   {
     doGet(request, response);
   }
-
 }

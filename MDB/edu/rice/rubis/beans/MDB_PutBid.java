@@ -9,21 +9,16 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.io.Serializable;
-import java.net.URLEncoder;
 
 /**
- * This is a message driven bean used to get the list of 
- * categories from database and return the information to the BrowseCategories servlet. 
+ * This is a stateless session bean used to build the html form to put a bid.
+ *  
  * @author <a href="mailto:cecchet@rice.edu">Emmanuel Cecchet</a> and <a href="mailto:julie.marguerite@inrialpes.fr">Julie Marguerite</a>
  * @version 1.1
  */
 
-public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
+public class MDB_PutBid implements MessageDrivenBean, MessageListener 
 {
   private DataSource dataSource;
   private MessageDrivenContext messageDrivenContext;
@@ -35,7 +30,7 @@ public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
   private Context initialContext = null;
 
 
-  public MDB_BrowseCategories()
+  public MDB_PutBid()
   {
 
   }
@@ -46,16 +41,15 @@ public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
     {
       MapMessage request = (MapMessage)message;
       String correlationID = request.getJMSCorrelationID();
-      String region = request.getString("region");
-      String nickname = request.getString("nickname");
-      String password = request.getString("password");
-
+      int itemId = request.getInt("itemId");
+      String username = request.getString("username");
+      String password = request.getString("password");  
 
         // Retrieve the connection factory
         connectionFactory = (TopicConnectionFactory) initialContext.lookup(BeanConfig.TopicConnectionFactoryName);
 
-      // get the list of categories
-      String html = getCategories(region, nickname, password);
+      // get the post comment form
+      String html = getBiddingForm(itemId, username, password);
 
       // send the reply
       TemporaryTopic temporaryTopic = (TemporaryTopic) request.getJMSReplyTo();
@@ -79,74 +73,22 @@ public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
     }
     catch (Exception e)
     {
-      throw new EJBException("Message traitment failed for MDB_BrowseCategories: " +e);
+      throw new EJBException("Message traitment failed for MDB_PutBid: " +e);
     }
   }
 
-
   /**
-   * Get all the categories from the database.
+   * Authenticate the user and get the information to build the html form.
    *
-   * @return a string that is the list of categories in html format
+   * @return a string in html format
    * @since 1.1
    */
-  /** List all the categories in the database */
-  public String getCategories(String regionName, String username, String password) throws RemoteException
+  public String getBiddingForm(int itemId, String username, String password) throws RemoteException 
   {
-    StringBuffer html = new StringBuffer();
-    Connection        conn = null;
-    PreparedStatement stmt = null;
-    ResultSet rs           = null;
-    String categoryName;
-    int categoryId;
-    int regionId = -1;
     int userId = -1;
+    String html = "";
 
-    if (regionName != null && !regionName.equals(""))
-    {
-      // get the region ID
-      try 
-      {
-        conn = dataSource.getConnection();
-        stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
-        stmt.setString(1, regionName);
-        rs = stmt.executeQuery();
-        stmt.close();
-      }
-      catch (SQLException e)
-      {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        throw new RemoteException("Failed to get region Id " +e);
-      }
-      try
-      {
-        if (rs.first())
-        {
-          regionId = rs.getInt("id");
-        }
-      }
-      catch (Exception e)
-      {
-        try
-        {
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        throw new EJBException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")");
-      }
-    }
-    else
-    {
-      // Authenticate the user who wants to sell items
+    // Authenticate the user who want to bid
       if ((username != null && !username.equals("")) || (password != null && !password.equals("")))
       {
         TopicConnection authConnection;
@@ -191,109 +133,54 @@ public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
         }
         if (userId == -1)
         {
-           html.append(" You don't have an account on RUBiS!<br>You have to register first.<br>");
-           return html.toString();
+           html = "You don't have an account on RUBiS!<br>You have to register first.<br>";
+           return html;
         }
       }
-    }
-    try 
-    {
-      if (conn == null)
-        conn = dataSource.getConnection();
-      stmt = conn.prepareStatement("SELECT name, id FROM categories");
-      rs = stmt.executeQuery();
-    }
-    catch (SQLException e)
-    {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
-      throw new EJBException("Failed to get categories list " +e);
-    }
-    try 
-    {
-      if (!rs.first())
-        html.append("<h2>Sorry, but there is no category available at this time. Database table is empty</h2><br>");
-      else
-      {
-        do
+
+        TopicConnection itemConnection;
+        TopicSession itemSession;
+        Topic itemTopic;
+        try 
         {
-          categoryName = rs.getString("name");
-          categoryId = rs.getInt("id");
-          if (regionId != -1)
-          {
-            html.append(printCategoryByRegion(categoryName, categoryId, regionId));
-          }
-          else
-          {
-            if (userId != -1)
-              html.append(printCategoryToSellItem(categoryName, categoryId, userId));
-            else
-              html.append(printCategory(categoryName, categoryId));
-          }
+          // create a connection
+          itemConnection = connectionFactory.createTopicConnection();
+          // lookup the destination
+          itemTopic = (Topic) initialContext.lookup("topic/topicViewItem");
+          // create a session
+          itemSession  = itemConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE); // no transaction and auto ack
+        } 
+        catch (Exception e)
+        {
+          throw new EJBException("Cannot connect to message bean MDB_ViewItem : " +e+"<br>");
         }
-        while (rs.next());
-      }
-      if (stmt != null) stmt.close();
-      if (conn != null) conn.close();
-    } 
-    catch (Exception e) 
-    {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
-      throw new EJBException("Exception getting category list: " + e);
-    }
-    return html.toString();
+        try 
+        {
+          // create a requestor to receive the reply
+          TopicRequestor requestor = new TopicRequestor(itemSession, itemTopic);
+          // create a message
+          MapMessage m = itemSession.createMapMessage();
+          // set parameters
+          m.setInt("itemId", itemId);
+          m.setInt("userId", userId);
+          m.setJMSCorrelationID("viewItem");
+          // send the message and receive the reply
+          itemConnection.start(); // allows message to be delivered (default is connection stopped)
+          TextMessage itemReply = (TextMessage)requestor.request(m);
+          itemConnection.stop();
+          // read the reply
+          html = itemReply.getText();
+          // close connection and session
+          requestor.close(); // also close the session
+          itemConnection.close();
+        } 
+        catch (Exception e)
+        {
+          throw new EJBException("Exception getting the item information: " +e+"<br>");
+        }
+        return html;
   }
-
-  /**
-   * Display category information for the BrowseCategories servlet
-   *
-   * @return a <code>String</code> containing HTML code
-   * @since 1.0
-   */
-  public String printCategory(String name, int id)
-  {
-    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByCategory?category="+id+
-                  "&categoryName="+URLEncoder.encode(name)+"\">"+name+"</a><br>\n";
-  }
-
-  /**
-   * Display category information for the BrowseCategories servlet
-   *
-   * @return a <code>String</code> containing HTML code
-   * @since 1.0
-   */
-  public String printCategoryByRegion(String name, int id, int regionId)
-  {
-    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SearchItemsByRegion?category="+id+
-      "&categoryName="+URLEncoder.encode(name)+"&region="+regionId+"\">"+name+"</a><br>\n";
-  }
-
-
-  /**
-   * Display category information for the BrowseCategories servlet
-   *
-   * @return a <code>String</code> containing HTML code
-   * @since 1.0
-   */
-  public String printCategoryToSellItem(String name, int id, int userId)
-  {
-    return "<a href=\""+BeanConfig.context+"/servlet/edu.rice.rubis.beans.servlets.SellItemForm?category="+id+"&user="+userId+"\">"+name+"</a><br>\n";
-  }
-
-
+                   
   // ======================== EJB related methods ============================
 
   /** 
@@ -344,7 +231,6 @@ public class MDB_BrowseCategories implements MessageDrivenBean, MessageListener
    * a system-level error.
    */
   public void ejbRemove() {}
- 
 
 
 
