@@ -42,7 +42,7 @@ public class SB_PutBidBean implements SessionBean
     String html = "";
 
     // Authenticate the user who want to comment
-      if ((username != null && username !="") || (password != null && password !=""))
+      if ((username != null && !username.equals("")) || (password != null && !password.equals("")))
       {
         SB_AuthHome authHome = null;
         SB_Auth auth = null;
