@@ -19,7 +19,7 @@ php_script_path = /PHP
 # Workload: precise which transition table to use
 workload_remote_client_nodes = 
 workload_remote_client_command = /usr/local/jdk1.3.1/bin/java -classpath RUBiS edu.rice.rubis.client.ClientEmulator
-workload_number_of_clients_per_node = 120
+workload_number_of_clients_per_node = 280
 
 workload_transition_table = /users/cecchet/RUBiS/workload/transitions.txt
 workload_number_of_columns = 27

@@ -27,9 +27,9 @@ workload_number_of_rows = 29
 workload_maximum_number_of_transitions = 1000
 workload_number_of_items_per_page = 20
 workload_use_tpcw_think_time = yes
-workload_up_ramp_time_in_ms = 60000
+workload_up_ramp_time_in_ms = 120000
 workload_up_ramp_slowdown_factor = 2
-workload_session_run_time_in_ms = 300000
+workload_session_run_time_in_ms = 900000
 workload_down_ramp_time_in_ms = 60000
 workload_down_ramp_slowdown_factor = 3
 
