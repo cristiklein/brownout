@@ -139,10 +139,11 @@ public class SB_ViewBidHistoryBean implements SessionBean
       }
       throw new RemoteException("Exception getting bids list: " +e+"<br>");
     }
+    PreparedStatement pstmt = null;
     try
     {	  
       html.append(printBidHistoryHeader());
-      stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      pstmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
       ResultSet urs = null;
       do 
       {
@@ -151,8 +152,8 @@ public class SB_ViewBidHistoryBean implements SessionBean
         bid = rs.getFloat("bid");
         userId = rs.getInt("user_id");
 
-        stmt.setInt(1, userId);
-        urs = stmt.executeQuery();
+        pstmt.setInt(1, userId);
+        urs = pstmt.executeQuery();
         if (urs.first())
           bidderName = urs.getString("nickname");
 
@@ -160,6 +161,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
       }
       while(rs.next());
       html.append(printBidHistoryFooter());
+      pstmt.close();
       stmt.close();
       conn.close();
     }
@@ -167,6 +169,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
     {
       try
       {
+        if (pstmt != null) pstmt.close();
         if (stmt != null) stmt.close();
         if (conn != null) conn.close();
       }
