@@ -1,4 +1,7 @@
 #!/bin/sh
 
-JonasAdmin -n jonas -s
-killall -9 rmiregistry
+# jonas<2.6
+#JonasAdmin -n jonas -s
+
+# since jonas 2.6
+jonas stop
