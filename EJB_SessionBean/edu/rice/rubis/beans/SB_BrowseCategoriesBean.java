@@ -60,6 +60,7 @@ public class SB_BrowseCategoriesBean implements SessionBean
         stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
         stmt.setString(1, regionName);
         rs = stmt.executeQuery();
+        stmt.close();
       }
       catch (SQLException e)
       {
@@ -84,7 +85,6 @@ public class SB_BrowseCategoriesBean implements SessionBean
       {
         try
         {
-          if (stmt != null) stmt.close();
           if (conn != null) conn.close();
         }
         catch (Exception ignore)
@@ -107,14 +107,6 @@ public class SB_BrowseCategoriesBean implements SessionBean
         } 
         catch (Exception e)
         {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
           throw new RemoteException("Cannot lookup SB_Auth: " +e);
         }
         try 
@@ -123,14 +115,6 @@ public class SB_BrowseCategoriesBean implements SessionBean
         } 
         catch (Exception e)
         {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
           throw new RemoteException("Authentication failed: " +e);
         }
         if (userId == -1)
@@ -142,7 +126,8 @@ public class SB_BrowseCategoriesBean implements SessionBean
     }
     try 
     {
-      conn = dataSource.getConnection();
+      if (conn == null)
+        conn = dataSource.getConnection();
       stmt = conn.prepareStatement("SELECT name, id FROM categories");
       rs = stmt.executeQuery();
     }

@@ -47,106 +47,99 @@ public class SB_PutCommentBean implements SessionBean
     Connection conn        = null;
 
     // Authenticate the user who want to comment
-      if ((username != null && username !="") || (password != null && password !=""))
+    if ((username != null && username !="") || (password != null && password !=""))
+    {
+      SB_AuthHome authHome = null;
+      SB_Auth auth = null;
+      try 
       {
-        SB_AuthHome authHome = null;
-        SB_Auth auth = null;
-        try 
-        {
-          authHome = (SB_AuthHome)PortableRemoteObject.narrow(initialContext.lookup("java:comp/env/ejb/SB_Auth"), SB_AuthHome.class);
-          auth = authHome.create();
-        } 
-        catch (Exception e)
-        {
-          throw new RemoteException("Cannot lookup SB_Auth: " +e);
-        }
-        try 
-        {
-          userId = auth.authenticate(username, password);
-        } 
-        catch (Exception e)
-        {
-          throw new RemoteException("Authentication failed: " +e);
-        }
-        if (userId == -1)
-        {
-           html.append(" You don't have an account on RUBiS!<br>You have to register first.<br>");
-           return html.toString();
-        }
-      }
-    // Try to find the user corresponding to the 'to' ID
-      String toName=null, itemName=null;
-      try
-      {
-        conn = dataSource.getConnection();
-        stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-        stmt.setInt(1, toId.intValue());
-        rs = stmt.executeQuery();
-        if (rs.first())
-          toName = rs.getString("nickname");
-      }
+        authHome = (SB_AuthHome)PortableRemoteObject.narrow(initialContext.lookup("java:comp/env/ejb/SB_Auth"), SB_AuthHome.class);
+        auth = authHome.create();
+      } 
       catch (Exception e)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        throw new RemoteException("Failed to execute Query for user name: " +e);
+        throw new RemoteException("Cannot lookup SB_Auth: " +e);
       }
+      try 
+      {
+        userId = auth.authenticate(username, password);
+      } 
+      catch (Exception e)
+      {
+        throw new RemoteException("Authentication failed: " +e);
+      }
+      if (userId == -1)
+      {
+        html.append(" You don't have an account on RUBiS!<br>You have to register first.<br>");
+        return html.toString();
+      }
+    }
+    // Try to find the user corresponding to the 'to' ID
+    String toName=null, itemName=null;
+    try
+    {
+      conn = dataSource.getConnection();
+      stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      stmt.setInt(1, toId.intValue());
+      rs = stmt.executeQuery();
+      if (rs.first())
+        toName = rs.getString("nickname");
+      stmt.close();
+    }
+    catch (Exception e)
+    {
       try
       {
-        stmt = conn.prepareStatement("SELECT name FROM items WHERE id=?");
-        stmt.setInt(1, itemId.intValue());
-        rs = stmt.executeQuery();
-        if (rs.first())
-          itemName = rs.getString("name");
         if (stmt != null) stmt.close();
         if (conn != null) conn.close();
       }
-      catch (Exception e)
+      catch (Exception ignore)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        throw new RemoteException("Failed to execute Query for item name: " +e);
       }
+      throw new RemoteException("Failed to execute Query for user name: " +e);
+    }
+
+    try
+    {
+      stmt = conn.prepareStatement("SELECT name FROM items WHERE id=?");
+      stmt.setInt(1, itemId.intValue());
+      rs = stmt.executeQuery();
+      if (rs.first())
+        itemName = rs.getString("name");
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
+    }
+    catch (Exception e)
+    {
       try
       {
-        html.append("<center><h2>Give feedback about your experience with "+toName+"</h2><br>\n");
-        html.append("<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n");
-        html.append("<input type=hidden name=to value="+toId.intValue()+">\n");
-        html.append("<input type=hidden name=from value="+userId+">\n");
-        html.append("<input type=hidden name=itemId value="+itemId.intValue()+">\n");
-        html.append("<center><table>\n");
-        html.append("<tr><td><b>From</b><td>"+username+"\n");
-        html.append("<tr><td><b>To</b><td>"+toName+"\n");
-        html.append("<tr><td><b>About item</b><td>"+itemName+"\n");
+        if (stmt != null) stmt.close();
+        if (conn != null) conn.close();
       }
-      catch (Exception e)
+      catch (Exception ignore)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        throw new RemoteException("Cannot build comment form: " +e);
       }
- 
+      throw new RemoteException("Failed to execute Query for item name: " +e);
+    }
 
-      return html.toString();
-      
+    try
+    {
+      html.append("<center><h2>Give feedback about your experience with "+toName+"</h2><br>\n");
+      html.append("<form action=\"/servlet/edu.rice.rubis.beans.servlets.StoreComment\" method=POST>\n");
+      html.append("<input type=hidden name=to value="+toId.intValue()+">\n");
+      html.append("<input type=hidden name=from value="+userId+">\n");
+      html.append("<input type=hidden name=itemId value="+itemId.intValue()+">\n");
+      html.append("<center><table>\n");
+      html.append("<tr><td><b>From</b><td>"+username+"\n");
+      html.append("<tr><td><b>To</b><td>"+toName+"\n");
+      html.append("<tr><td><b>About item</b><td>"+itemName+"\n");
+    }
+    catch (Exception e)
+    {
+      throw new RemoteException("Cannot build comment form: " +e);
+    }
+ 
+    return html.toString();
   }
                    
 

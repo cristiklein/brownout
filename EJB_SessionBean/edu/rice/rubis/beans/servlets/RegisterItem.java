@@ -151,7 +151,7 @@ public class RegisterItem extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_RegisterItem: " +e+"<br>");
+      printError("Cannot lookup SB_RegisterItem: " +e+"<br>");
       return ;
     }
 

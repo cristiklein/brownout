@@ -62,28 +62,24 @@ public class SB_StoreBidBean implements SessionBean
 				   "\", \""+itemId+"\", \""+qty+"\", \""+
 				   bid+"\", \""+maxBid+"\", \""+now+"\")");
         stmt.executeUpdate();
+        stmt.close();
       }
       catch (SQLException e)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Error while storing the bid (got exception: " +e+")<br>");
       }
       // update the number of bids and the max bid for the item
+      PreparedStatement update = null;
       try
       {
         stmt = conn.prepareStatement("SELECT nb_of_bids, max_bid FROM items WHERE id=?");
         stmt.setInt(1, itemId);
         rs = stmt.executeQuery();
+        stmt.close();
         if (rs.first())
         {
-          PreparedStatement update = null;
           int nbOfBids = rs.getInt("nb_of_bids");
           nbOfBids++;
           float oldMaxBid = rs.getFloat("max_bid");
@@ -103,34 +99,22 @@ public class SB_StoreBidBean implements SessionBean
             update.setInt(2, itemId);
             update.executeUpdate();
           }
+          update.close();
         }
       }
       catch (Exception ex) 
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
+        try { update.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Failed to update nb of bids and max bid: " + ex);
       }
-      if (stmt != null) stmt.close();
       if (conn != null) conn.close();
       utx.commit();
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { conn.close(); } catch (Exception ignore) {}
       try
       {
         utx.rollback();

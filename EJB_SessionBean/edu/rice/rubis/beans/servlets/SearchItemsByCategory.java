@@ -29,6 +29,7 @@ public class SearchItemsByCategory extends HttpServlet
 
   private void printError(String errorMsg)
   {
+    sp.printHTMLheader("RUBiS ERROR: Search Items By Category");
     sp.printHTML("<h2>We cannot process your request due to the following error :</h2><br>");
     sp.printHTML(errorMsg);
   }
@@ -47,7 +48,7 @@ public class SearchItemsByCategory extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_SearchItemsByCategory: " +e+"<br>");
+      printError("Cannot lookup SB_SearchItemsByCategory: " +e+"<br>");
       return ;
     }
 
@@ -57,7 +58,7 @@ public class SearchItemsByCategory extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot get the list of items: " +e+"<br>");
+      printError("Cannot get the list of items: " +e+"<br>");
       return ;
     }
     try

@@ -80,7 +80,7 @@ public class PutBid extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_PutBidNow: " +e+"<br>");
+      printError("Cannot lookup SB_PutBidNow: " +e+"<br>");
       return ;
     }
    try

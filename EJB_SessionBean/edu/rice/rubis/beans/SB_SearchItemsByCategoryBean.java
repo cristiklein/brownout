@@ -61,8 +61,8 @@ public class SB_SearchItemsByCategoryBean implements SessionBean
       stmt.setInt(3, nbOfItems);
       rs = stmt.executeQuery();
 
-      if (stmt != null) stmt.close();
-      if (conn != null) conn.close();
+      stmt.close();
+      conn.close();
     }
     catch (SQLException e)
     {

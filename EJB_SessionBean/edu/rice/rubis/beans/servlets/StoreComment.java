@@ -136,7 +136,7 @@ public class StoreComment extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_StoreComment: " +e+"<br>");
+      printError("Cannot lookup SB_StoreComment: " +e+"<br>");
       return ;
     }
     try

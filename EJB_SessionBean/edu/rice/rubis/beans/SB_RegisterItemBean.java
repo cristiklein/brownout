@@ -57,86 +57,68 @@ public class SB_RegisterItemBean implements SessionBean
     PreparedStatement stmt = null;
 
     utx = sessionContext.getUserTransaction();
-      // Try to create a new item
+    // Try to create a new item
+    try 
+    {
+      utx.begin();
       try 
       {
-        utx.begin();
-        try 
-        {
-          conn = dataSource.getConnection();
-          stmt = conn.prepareStatement("INSERT INTO items VALUES (NULL, \""+name+
-                                       "\", \""+description+"\", \""+initialPrice+"\", \""+
-                                       quantity+"\", \""+reservePrice+"\", \""+buyNow+
-                                       "\", 0, 0, \""+startDate+"\", \""+endDate+"\", \""+userId+
-                                       "\", "+ categoryId+")");
-          stmt.executeUpdate();
-        
-        }
-        catch (Exception e)
-        {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-          throw new RemoteException("Failed to create the item: " +e);
-        }
-        // To test if the item was correctly added in the database
-        try
-        {
-          stmt = conn.prepareStatement("SELECT id FROM items WHERE name=?");
-          stmt.setString(1, name);
-          ResultSet irs = stmt.executeQuery();
-          if (!irs.first())
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-            throw new RemoteException("This item does not exist in the database.");
-          }
-          itemId = irs.getInt("id");
-        
-          html = "<TR><TD>Item id<TD>"+itemId+"\n";
-        }
-        catch (Exception e)
-        {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-          throw new RemoteException("Failed to retrieve the item id: " +e);
-        }
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-        utx.commit();
+        conn = dataSource.getConnection();
+        stmt = conn.prepareStatement("INSERT INTO items VALUES (NULL, \""+name+
+                                     "\", \""+description+"\", \""+initialPrice+"\", \""+
+                                     quantity+"\", \""+reservePrice+"\", \""+buyNow+
+                                     "\", 0, 0, \""+startDate+"\", \""+endDate+"\", \""+userId+
+                                     "\", "+ categoryId+")");
+        stmt.executeUpdate();
+        stmt.close();
       }
       catch (Exception e)
       {
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        throw new RemoteException("Failed to create the item: " +e);
+      }
+      // To test if the item was correctly added in the database
       try
       {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
+        stmt = conn.prepareStatement("SELECT id FROM items WHERE name=?");
+        stmt.setString(1, name);
+        ResultSet irs = stmt.executeQuery();
+        if (!irs.first())
+        {
+          try { stmt.close(); } catch (Exception ignore) {}
+          try { conn.close(); } catch (Exception ignore) {}
+          throw new RemoteException("This item does not exist in the database.");
+        }
+        itemId = irs.getInt("id");
+        
+        html = "<TR><TD>Item id<TD>"+itemId+"\n";
       }
-      catch (Exception ignore)
+      catch (Exception e)
       {
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        throw new RemoteException("Failed to retrieve the item id: " +e);
       }
-        try
-        {
-          utx.rollback();
-          throw new RemoteException("Item registration failed (got exception: " +e+")<br>");
-        }
-        catch (Exception se) 
-        {
-          throw new RemoteException("Transaction rollback failed: " + e +"<br>");
-        }
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
+      utx.commit();
+    }
+    catch (Exception e)
+    {
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
+      try
+      {
+        utx.rollback();
+        throw new RemoteException("Item registration failed (got exception: " +e+")<br>");
       }
-      return html;
+      catch (Exception se) 
+      {
+        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
+      }
+    }
+    return html;
   }
   
 

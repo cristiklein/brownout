@@ -86,17 +86,13 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
       stmt.setInt(1, userId.intValue());
       rs = stmt.executeQuery();
+      stmt.close();
+      conn.close();
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Failed to execute Query for user: " +e);
     }
     try 
@@ -118,39 +114,27 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("This user does not exist (got exception: " +e+")<br>");
     }
-    utx = sessionContext.getUserTransaction();
+
     try 
     {
+      utx = sessionContext.getUserTransaction();
       utx.begin();
+      conn = dataSource.getConnection();
       html.append(listItem(userId, conn));
       html.append(listBoughtItems(userId, conn));
       html.append(listWonItems(userId, conn));
       html.append(listBids(userId, username, password, conn));
       html.append(listComments(userId, conn));
-      if (stmt != null) stmt.close();
-      if (conn != null) conn.close();
+      conn.close();
       utx.commit();
     } 
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { conn.close(); } catch (Exception ignore) {}
+      try { utx.rollback(); } catch (Exception ignore) {}
       throw new RemoteException("Cannot get information about items and bids: " +e+"<br>");
     }
     return html.toString();
@@ -177,14 +161,8 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting current sellings list: " +e+"<br>");
     }
     try 
@@ -195,14 +173,8 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting past sellings list: " +e+"<br>");
     }
     try
@@ -232,14 +204,8 @@ public class SB_AboutMeBean implements SessionBean
           }
           catch (Exception e) 
           {
-            try
-            {
-              if (stmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
             throw new RemoteException("Exception getting item: " + e +"<br>");
           }
           // display information about the item
@@ -256,14 +222,8 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e) 
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting current items in sell: " + e +"<br>");
     }
     try
@@ -293,38 +253,28 @@ public class SB_AboutMeBean implements SessionBean
           }
           catch (Exception e) 
           {
-            try
-            {
-              if (stmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
             throw new RemoteException("Exception getting sold item: " + e +"<br>");
           }
           // display information about the item
           sell.append(printSell(itemId, itemName,  initialPrice, currentPrice,  quantity, reservePrice, buyNow, startDate, endDate));
         }
-        while(pastSellings.next());
+        while (pastSellings.next());
         sell.append(printItemFooter());
       }
       else
       {
         sell.append(printHTMLHighlighted("<br><h3>You didn't sell any item in the past 30 days.</h3>"));
+        if (stmt != null) stmt.close();
         return sell.toString();
       }
+      stmt.close();
     }
     catch (Exception e) 
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting sold items: " + e +"<br>");
     }
     return sell.toString();
@@ -346,6 +296,7 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM buy_now WHERE buy_now.buyer_id=? AND TO_DAYS(NOW()) - TO_DAYS(buy_now.date)<=30");
       stmt.setInt(1, userId.intValue());
       buy = stmt.executeQuery();
+      stmt.close();
       if (!buy.first())
       {
         return printHTMLHighlighted("<br><h3>You didn't buy any item in the last 30 days.</h3><br>");
@@ -353,92 +304,51 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting bought items list: " +e+"<br>");
     }
     html.append(printUserBoughtItemHeader());
+    PreparedStatement itemStmt = null;
+    PreparedStatement sellerStmt = null;
     try
     {
+      itemStmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
+      sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      ResultSet itemRS = null;
+      ResultSet sellerResult = null;
       do
       {
 	itemId = buy.getInt("item_id");
 	quantity = buy.getInt("qty");
         // Get the name of the items
-        try
+        
+        itemStmt.setInt(1, itemId);
+        itemRS = itemStmt.executeQuery();
+        if (itemRS.first())
         {
-	  try
-	  {
-            ResultSet itemRS = null;
-            PreparedStatement itemStmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
-            itemStmt.setInt(1, itemId);
-            itemRS = itemStmt.executeQuery();
-            if (itemRS.first())
-            {
-              itemName = itemRS.getString("name");
-              sellerId = itemRS.getInt("seller");
-              buyNow = itemRS.getFloat("buy_now");
-            }
-	  }
-	  catch (SQLException e)
-          {
-            try
-            {
-              if (stmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
-            throw new RemoteException("Failed to execute Query for item (buy now): " +e);
-          }
-	  try 
-          {
-            PreparedStatement sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-            sellerStmt.setInt(1, sellerId);
-            ResultSet sellerResult = sellerStmt.executeQuery();
-            // Get the seller's name		 
-            if (sellerResult.first()) 
-              sellerName = sellerResult.getString("nickname");
-          }
-	  catch (SQLException e)
-          {
-            try
-            {
-              if (stmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
-            throw new RemoteException("Failed to execute Query for seller (buy now): " +e);
-          }
+          itemName = itemRS.getString("name");
+          sellerId = itemRS.getInt("seller");
+          buyNow = itemRS.getFloat("buy_now");
         }
-        catch (Exception e) 
-        {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-          throw new RemoteException("Exception getting buyNow: " + e +"<br>");
-        }
+
+        sellerStmt.setInt(1, sellerId);
+        sellerResult = sellerStmt.executeQuery();
+        // Get the seller's name		 
+        if (sellerResult.first()) 
+          sellerName = sellerResult.getString("nickname");
+
         // display information about the item
         html.append(printUserBoughtItem(itemId, itemName, quantity, buyNow, sellerId, sellerName));
       }
-      while(buy.next());
+      while (buy.next());
+      itemStmt.close();
+      sellerStmt.close();
     }
     catch (Exception e)
     {
+      try { itemStmt.close(); } catch (Exception ignore) {}
+      try { sellerStmt.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting bought items: " +e+"<br>");
     }
     html.append(printItemFooter());
@@ -462,6 +372,7 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT item_id FROM bids, old_items WHERE bids.user_id=? AND bids.item_id=old_items.id AND TO_DAYS(NOW()) - TO_DAYS(old_items.end_date) < 30 GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       won = stmt.executeQuery();
+      stmt.close();
       if (!won.first())
       {
         return printHTMLHighlighted("<br><h3>You didn't win any item in the last 30 days.</h3><br>");
@@ -469,103 +380,56 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting won items list: " +e+"<br>");
     }
     html = new StringBuffer(printUserWonItemHeader());
+
+    PreparedStatement itemStmt = null;
+    PreparedStatement sellerStmt = null;
     try
     {
+      itemStmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
+      sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      ResultSet itemRS = null;
+      ResultSet sellerResult = null;
       do 
       {
 	itemId = won.getInt("item_id");
         // Get the name of the items
-        try
+        itemStmt.setInt(1, itemId);
+        itemRS = itemStmt.executeQuery();
+        if (itemRS.first())
         {
-          PreparedStatement itemStmt = null;
-	  try
-	  {
-            ResultSet itemRS = null;
-            itemStmt = conn.prepareStatement("SELECT * FROM old_items WHERE id=?");
-            itemStmt.setInt(1, itemId);
-            itemRS = itemStmt.executeQuery();
-            if (itemRS.first())
-            {
-              itemName = itemRS.getString("name");
-              sellerId = itemRS.getInt("seller");
-              initialPrice = itemRS.getFloat("initial_price");
+          itemName = itemRS.getString("name");
+          sellerId = itemRS.getInt("seller");
+          initialPrice = itemRS.getFloat("initial_price");
 
-              currentPrice = itemRS.getFloat("max_bid");
-              if (currentPrice <initialPrice)
-                currentPrice = initialPrice;
-            }
-	  }
-	  catch (SQLException e)
-          {
-            try
-            {
-              if (itemStmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
-            throw new RemoteException("Failed to execute Query for item (won items): " +e);
-          }
-	  PreparedStatement sellerStmt =null;
-	  try 
-          {
-            sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-            sellerStmt.setInt(1, sellerId);
-            ResultSet sellerResult = sellerStmt.executeQuery();
-            // Get the seller's name		 
-            if (sellerResult.first()) 
-              sellerName = sellerResult.getString("nickname");
-          }
-	  catch (SQLException e)
-          {
-            try
-            {
-              if (sellerStmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
-            throw new RemoteException("Failed to execute Query for seller (won items): " +e);
-          }
+          currentPrice = itemRS.getFloat("max_bid");
+          if (currentPrice <initialPrice)
+            currentPrice = initialPrice;
         }
-        catch (Exception e) 
-        {
-          try
-          {
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-          throw new RemoteException("Exception getting item: " + e +"<br>");
-        }
+
+        sellerStmt.setInt(1, sellerId);
+        sellerResult = sellerStmt.executeQuery();
+        // Get the seller's name		 
+        if (sellerResult.first()) 
+          sellerName = sellerResult.getString("nickname"); 
+
         // display information about the item
         html.append(printUserWonItem(itemId, itemName, currentPrice, sellerId, sellerName));
       }
-      while(won.next());
+      while (won.next());
+
+      if (itemStmt != null) itemStmt.close();
+      if (sellerStmt != null) sellerStmt.close();
     }
     catch (Exception e)
     {
-      try
-      {
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { itemStmt.close(); } catch (Exception ignore) {}
+      try { sellerStmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting won items: " +e+"<br>");
     }
     html.append(printItemFooter());
@@ -590,6 +454,7 @@ public class SB_AboutMeBean implements SessionBean
       rs = stmt.executeQuery();
       if (!rs.first()) 
       {
+        stmt.close();
         return printHTMLHighlighted(("<br><h3>There is no comment yet for this user.</h3><br>"));
       }
       else
@@ -597,12 +462,16 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Failed to execute Query for list of comments: " +e);
     }
     html.append(printCommentHeader());
     try
     {
     // Display each comment and the name of its author
+      stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      ResultSet authorRS = null;
       do 
       {
         comment = rs.getString("comment");
@@ -610,10 +479,8 @@ public class SB_AboutMeBean implements SessionBean
         authorId = rs.getInt("from_user_id");
 
         String authorName = "none";
-        ResultSet authorRS = null;
         try
         {
-          stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
           stmt.setInt(1, authorId);
           authorRS = stmt.executeQuery();
           if (authorRS.first())
@@ -626,9 +493,12 @@ public class SB_AboutMeBean implements SessionBean
         html.append(printComment(authorName, date, comment, authorId));
       }
       while (rs.next());
+      stmt.close();
     }
     catch (Exception e)
     {
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Failed to get comments list: " +e);
     }
     html.append(printCommentFooter());
@@ -651,6 +521,7 @@ public class SB_AboutMeBean implements SessionBean
       stmt = conn.prepareStatement("SELECT item_id, bids.max_bid FROM bids, items WHERE bids.user_id=? AND bids.item_id=items.id AND items.end_date>=NOW() GROUP BY item_id");
       stmt.setInt(1, userId.intValue());
       bid = stmt.executeQuery();
+      stmt.close();
       if (!bid.first())
       {
         return printHTMLHighlighted("<h3>You didn't put any bid.</h3>");
@@ -658,86 +529,61 @@ public class SB_AboutMeBean implements SessionBean
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting bids list: " +e+"<br>");
     }
     html = new StringBuffer(printUserBidsHeader());
-    ResultSet rs = null;
+
     PreparedStatement itemStmt = null;
+    PreparedStatement sellerStmt = null;
     try
     {
+      itemStmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
+      sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      ResultSet rs = null;
+      ResultSet sellerResult = null;
       do 
       {
 	itemId = bid.getInt("item_id");
 	maxBid = bid.getFloat("max_bid");
-	try
-	{   
-          itemStmt = conn.prepareStatement("SELECT * FROM items WHERE id=?");
-          itemStmt.setInt(1, itemId);
-          rs = itemStmt.executeQuery();
-	}
-	catch (Exception e)
-	{
-          throw new RemoteException("Failed to execute Query for item the user has bid on: " +e);
-	}
+
+        itemStmt.setInt(1, itemId);
+        rs = itemStmt.executeQuery();
+
         // Get the name of the items
-        try
+        if (rs.first()) 
         {
-	  if (rs.first()) 
-	  {
-            itemName = rs.getString("name");
-            initialPrice = rs.getFloat("initial_price");
-            quantity = rs.getInt("quantity");
-            startDate = rs.getString("start_date");
-            endDate = rs.getString("end_date");  
-            sellerId = rs.getInt("seller");
+          itemName = rs.getString("name");
+          initialPrice = rs.getFloat("initial_price");
+          quantity = rs.getInt("quantity");
+          startDate = rs.getString("start_date");
+          endDate = rs.getString("end_date");  
+          sellerId = rs.getInt("seller");
 
-            currentPrice = rs.getFloat("max_bid");
-            if (currentPrice <initialPrice)
-              currentPrice = initialPrice;
-	  }
+          currentPrice = rs.getFloat("max_bid");
+          if (currentPrice <initialPrice)
+            currentPrice = initialPrice;
+        }
 
-	  PreparedStatement sellerStmt = null;
-	  try 
-          {
-            sellerStmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-            sellerStmt.setInt(1, sellerId);
-            ResultSet sellerResult = sellerStmt.executeQuery();
-            // Get the seller's name		 
-            if (sellerResult.first()) 
-              sellerName = sellerResult.getString("nickname");
-          }
-	  catch (Exception e)
-          {
-            try
-            {
-              if (sellerStmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
-            throw new RemoteException("Failed to execute Query for seller (bids): " +e);
-          }
-        }
-        catch (Exception e) 
-        {
-          throw new RemoteException("Exception getting item: " + e +"<br>");
-        }
+        sellerStmt.setInt(1, sellerId);
+        sellerResult = sellerStmt.executeQuery();
+        // Get the seller's name		 
+        if (sellerResult.first()) 
+          sellerName = sellerResult.getString("nickname");
+
         //  display information about user's bids
         html.append(printItemUserHasBidOn(itemId, itemName, initialPrice,maxBid, currentPrice, quantity, startDate, endDate, sellerId, sellerName, username, password));
       }
       while(bid.next());
+      if (itemStmt != null) itemStmt.close();
+      if (sellerStmt != null) sellerStmt.close();
     }
     catch (Exception e) 
     {
+      try { itemStmt.close(); } catch (Exception ignore) {}
+      try { sellerStmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       throw new RemoteException("Exception getting items the user has bid on: " + e +"<br>");
     }
     html.append(printItemFooter());

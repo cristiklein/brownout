@@ -60,17 +60,12 @@ public class SB_StoreBuyNowBean implements SessionBean
         stmt = conn.prepareStatement("SELECT quantity, end_date FROM items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         rs = stmt.executeQuery();
+        stmt.close();
       }
       catch (SQLException e)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Failed to execute Query for the item: " +e+"<br>");
       }
       try
@@ -94,18 +89,13 @@ public class SB_StoreBuyNowBean implements SessionBean
             stmt.setInt(2, itemId.intValue());
             stmt.executeUpdate();
           }
+          stmt.close();
         }
       }
       catch (Exception e)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Failed to update item's quantity: " +e+"<br>");
       }
       try 
@@ -116,14 +106,8 @@ public class SB_StoreBuyNowBean implements SessionBean
       }
       catch (Exception e)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Failed to create buy_now item: " +e+"<br>");
       }
       if (stmt != null) stmt.close();
@@ -133,14 +117,8 @@ public class SB_StoreBuyNowBean implements SessionBean
     } 
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       try
       {
         utx.rollback();

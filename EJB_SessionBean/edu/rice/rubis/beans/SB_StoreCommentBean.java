@@ -64,17 +64,12 @@ public class SB_StoreCommentBean implements SessionBean
                                      "\", \""+ rating+"\", \""+now+"\",\""+comment+"\")");
 
         stmt.executeUpdate();
+        stmt.close();
       }
       catch (SQLException e)
       {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
        throw new RemoteException("Error while storing the comment (got exception: " +e+")<br>");
       }
       // Try to find the user corresponding to the 'to' ID
@@ -83,6 +78,7 @@ public class SB_StoreCommentBean implements SessionBean
         stmt = conn.prepareStatement("SELECT rating FROM users WHERE id=?");
         stmt.setInt(1, toId.intValue());
         rs = stmt.executeQuery();
+        stmt.close();
         if (rs.first())
         {
           int userRating = rs.getInt("rating");
@@ -92,34 +88,21 @@ public class SB_StoreCommentBean implements SessionBean
           stmt.setInt(1, userRating);
           stmt.setInt(2, toId.intValue());
           stmt.executeUpdate();
+          stmt.close();
         }
       }
       catch (SQLException e)
       {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
         throw new RemoteException("Error while updating user's rating (got exception: " +e+")<br>");
       }
-      if (stmt != null) stmt.close();
       if (conn != null) conn.close();
       utx.commit();
     }
     catch (Exception e)
     {
-      try
-      {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-      }
-      catch (Exception ignore)
-      {
-      }
+      try { conn.close(); } catch (Exception ignore) {}
       try
       {
         utx.rollback();

@@ -25,7 +25,7 @@ public class AboutMe extends HttpServlet
 
   private void printError(String errorMsg)
   {
-    //sp.printHTMLheader("RUBiS ERROR: About me");
+    sp.printHTMLheader("RUBiS ERROR: About me");
     sp.printHTML("<h3>Your request has not been processed due to the following error :</h3><br>");
     sp.printHTML(errorMsg);
     sp.printHTMLfooter();
@@ -82,7 +82,7 @@ public class AboutMe extends HttpServlet
      }
     else
     {
-      printError(" You must provide valid username and password.");
+      printError("You must provide valid username and password.");
       return ;
     }
     sp.printHTMLheader("RUBiS: About Me");
@@ -96,7 +96,7 @@ public class AboutMe extends HttpServlet
     } 
     catch (Exception e)
     {
-      sp.printHTML("Cannot lookup SB_AboutMe: " +e+"<br>");
+      printError("Cannot lookup SB_AboutMe: " +e+"<br>");
       return ;
     }
     String html;
@@ -107,7 +107,7 @@ public class AboutMe extends HttpServlet
      } 
      catch (Exception e)
      {
-       sp.printHTML("Cannot retrieve information about you: " +e+"<br>");
+       printError("Cannot retrieve information about you: " +e+"<br>");
        return ;
      }
     sp.printHTMLfooter();

@@ -55,6 +55,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
       stmt = conn.prepareStatement("SELECT name FROM items WHERE id=?");
       stmt.setInt(1, itemId.intValue());
       rs = stmt.executeQuery();
+      stmt.close();
     }
     catch (Exception e)
     {
@@ -75,6 +76,7 @@ public class SB_ViewBidHistoryBean implements SessionBean
         stmt = conn.prepareStatement("SELECT name FROM old_items WHERE id=?");
         stmt.setInt(1, itemId.intValue());
         rs = stmt.executeQuery();
+        stmt.close();
       }
     }
     catch (Exception e)
@@ -101,7 +103,6 @@ public class SB_ViewBidHistoryBean implements SessionBean
     {
       try
       {
-        if (stmt != null) stmt.close();
         if (conn != null) conn.close();
       }
       catch (Exception ignore)
@@ -115,10 +116,10 @@ public class SB_ViewBidHistoryBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM bids WHERE item_id=? ORDER BY date DESC");
       stmt.setInt(1, itemId.intValue());
       rs = stmt.executeQuery();
+      stmt.close();
       if (!rs.first())
       {
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
+        conn.close();
         return html.append("<h3>There is no bid corresponding to this item.</h3><br>").toString();
       }
     }
@@ -137,6 +138,8 @@ public class SB_ViewBidHistoryBean implements SessionBean
     try
     {	  
       html.append(printBidHistoryHeader());
+      stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+      ResultSet urs = null;
       do 
       {
         // Get the bids
@@ -144,35 +147,17 @@ public class SB_ViewBidHistoryBean implements SessionBean
         bid = rs.getFloat("bid");
         userId = rs.getInt("user_id");
 
-        ResultSet urs = null;
-        try 
-        {
-          stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
-          stmt.setInt(1, userId);
-          urs = stmt.executeQuery();
-          if (urs.first())
-          {
-            bidderName = urs.getString("nickname");
-          }
-        }
-        catch (SQLException e)
-        {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-          throw new RemoteException("Couldn't get bidder name: " +e+"<br>");
-        }
+        stmt.setInt(1, userId);
+        urs = stmt.executeQuery();
+        if (urs.first())
+          bidderName = urs.getString("nickname");
+
         html.append(printBidHistory(userId, bidderName, bid, date));
       }
       while(rs.next());
       html.append(printBidHistoryFooter());
-      if (stmt != null) stmt.close();
-      if (conn != null) conn.close();
+      stmt.close();
+      conn.close();
     }
     catch (SQLException e)
     {

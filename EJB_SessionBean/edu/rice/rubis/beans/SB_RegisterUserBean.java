@@ -57,132 +57,107 @@ public class SB_RegisterUserBean implements SessionBean
     float balance          = 0;
     String creationDate    = null;
 
+    try
+    {
+      conn = dataSource.getConnection();
+      stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
+      stmt.setString(1, regionName);
+      rs = stmt.executeQuery();
+      stmt.close();
+      if (rs.first())
+      {
+        regionId = rs.getInt("id");
+      }
+    }
+    catch (Exception e)
+    {
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
+      throw new RemoteException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")<br>\n");
+    }
+    utx = sessionContext.getUserTransaction();
+    // Try to create a new user
+    try
+    {
+      stmt = conn.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
+      stmt.setString(1, nickname);
+      rs = stmt.executeQuery();
+      stmt.close();
+      conn.close();
+      if (rs.first())
+      {
+        html.append("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
+        return html.toString();
+      }
+    }
+    catch (Exception fe)
+    {
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
+      throw new RemoteException("Failed to execute Query to check the nickname: " +fe);
+    }
+    try
+    {
+      utx.begin();
       try
       {
+        creationDate = TimeManagement.currentDateToString();
         conn = dataSource.getConnection();
-        stmt = conn.prepareStatement("SELECT id FROM regions WHERE name=?");
-        stmt.setString(1, regionName);
-        rs = stmt.executeQuery();
-        if (rs.first())
-        {
-          regionId = rs.getInt("id");
-        }
+        stmt = conn.prepareStatement("INSERT INTO users VALUES (NULL, \""+firstname+
+                                     "\", \""+lastname+"\", \""+nickname+"\", \""+
+                                     password+"\", \""+email+"\", 0, 0,\""+creationDate+"\", "+ 
+                                     regionId+")");
+        stmt.executeUpdate();
+        stmt.close();
       }
-      catch (Exception e)
+      catch (SQLException e)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        throw new RemoteException(" Region "+regionName+" does not exist in the database!<br>(got exception: " +e+")<br>\n");
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        throw new RemoteException("RUBiS internal error: User registration failed (got exception: " +e+")<br>");
       }
-      utx = sessionContext.getUserTransaction();
-      // Try to create a new user
       try
       {
-        stmt = conn.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
+        stmt = conn.prepareStatement("SELECT id, rating, balance FROM users WHERE nickname=?");
         stmt.setString(1, nickname);
-        rs = stmt.executeQuery();
-        if (rs.first())
+        ResultSet urs = stmt.executeQuery();
+        stmt.close();
+        if (urs.first())
         {
-          html.append("The nickname you have choosen is already taken by someone else. Please choose a new nickname.<br>");
-          return html.toString();
+          userId = urs.getInt("id");
+          rating = urs.getInt("rating");
+          balance = urs.getFloat("balance");
         }
       }
-      catch (Exception fe)
+      catch (SQLException e)
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        throw new RemoteException("Failed to execute Query to check the nickname: " +fe);
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        throw new RemoteException("Failed to execute Query for user: " +e);
       }
+      if (conn != null) conn.close();
+      utx.commit();
+
+      html.append("User id       :"+userId+"<br>\n");
+      html.append("Creation date :"+creationDate+"<br>\n");
+      html.append("Rating        :"+rating+"<br>\n");
+      html.append("Balance       :"+balance+"<br>\n");
+    }
+    catch (Exception e)
+    {
+      try { stmt.close(); } catch (Exception ignore) {}
+      try { conn.close(); } catch (Exception ignore) {}
       try
       {
-        utx.begin();
-        try
-        {
-          creationDate = TimeManagement.currentDateToString();
-          stmt = conn.prepareStatement("INSERT INTO users VALUES (NULL, \""+firstname+
-                                       "\", \""+lastname+"\", \""+nickname+"\", \""+
-                                       password+"\", \""+email+"\", 0, 0,\""+creationDate+"\", "+ 
-                                       regionId+")");
-          stmt.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-          throw new RemoteException("RUBiS internal error: User registration failed (got exception: " +e+")<br>");
-        }
-        try
-        {
-          stmt = conn.prepareStatement("SELECT id, rating, balance FROM users WHERE nickname=?");
-          stmt.setString(1, nickname);
-          ResultSet urs = stmt.executeQuery();
-          if (urs.first())
-          {
-            userId = urs.getInt("id");
-            rating = urs.getInt("rating");
-            balance = urs.getFloat("balance");
-          }
-        }
-        catch (SQLException e)
-        {
-          try
-          {
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-          throw new RemoteException("Failed to execute Query for user: " +e);
-        }
-        if (stmt != null) stmt.close();
-        if (conn != null) conn.close();
-        utx.commit();
-
-        html.append("User id       :"+userId+"<br>\n");
-        html.append("Creation date :"+creationDate+"<br>\n");
-        html.append("Rating        :"+rating+"<br>\n");
-        html.append("Balance       :"+balance+"<br>\n");
+        utx.rollback();
+        throw new RemoteException("User registration failed (got exception: " +e+")<br>");
       }
-      catch (Exception e)
+      catch (Exception se) 
       {
-        try
-        {
-          if (stmt != null) stmt.close();
-          if (conn != null) conn.close();
-        }
-        catch (Exception ignore)
-        {
-        }
-        try
-        {
-          utx.rollback();
-          throw new RemoteException("User registration failed (got exception: " +e+")<br>");
-        }
-        catch (Exception se) 
-        {
-          throw new RemoteException("Transaction rollback failed: " + e +"<br>");
-        }
+        throw new RemoteException("Transaction rollback failed: " + e +"<br>");
       }
-      return html.toString();
+    }
+    return html.toString();
   }
 
 

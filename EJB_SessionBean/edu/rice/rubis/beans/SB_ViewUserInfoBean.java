@@ -55,6 +55,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM comments WHERE to_user_id=?");
       stmt.setInt(1, userId.intValue());
       rs = stmt.executeQuery();
+      stmt.close();
     }
     catch (SQLException e)
     {
@@ -78,37 +79,39 @@ public class SB_ViewUserInfoBean implements SessionBean
 
         html.append(printCommentHeader());
         // Display each comment and the name of its author
-        do
+        
+        try
         {
-          comment = rs.getString("comment");
-          date = rs.getString("date");
-          authorId = rs.getInt("from_user_id");
-
-          String authorName = "none";
-          ResultSet authorRS = null;
-          try
+          stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+          do
           {
-            stmt = conn.prepareStatement("SELECT nickname FROM users WHERE id=?");
+            comment = rs.getString("comment");
+            date = rs.getString("date");
+            authorId = rs.getInt("from_user_id");
+
+            String authorName = "none";
+            ResultSet authorRS = null;
             stmt.setInt(1, authorId);
             authorRS = stmt.executeQuery();
             if (authorRS.first())
               authorName = authorRS.getString("nickname");
+            html.append(printComment(authorName, date, comment, authorId));
           }
-          catch (Exception e)
-          {
-            try
-            {
-              if (stmt != null) stmt.close();
-              if (conn != null) conn.close();
-            }
-            catch (Exception ignore)
-            {
-            }
-            throw new RemoteException("This author does not exist (got exception: " +e+")<br>");
-          }
-          html.append(printComment(authorName, date, comment, authorId));
+          while (rs.next());
         }
-        while (rs.next());
+        catch (Exception e)
+        {
+          try
+          {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+          }
+          catch (Exception ignore)
+          {
+          }
+          throw new RemoteException("This author does not exist (got exception: " +e+")<br>");
+        }
+        
         html.append(printCommentFooter());
       }
       if (stmt != null) stmt.close();
@@ -151,6 +154,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       stmt = conn.prepareStatement("SELECT * FROM users WHERE id=?");
       stmt.setInt(1, userId.intValue());
       rs = stmt.executeQuery();
+      stmt.close();
     }
     catch (SQLException e)
     {
@@ -181,8 +185,7 @@ public class SB_ViewUserInfoBean implements SessionBean
       }
       else
         html.append("This user does not exist!<br>");
-      if (stmt != null) stmt.close();
-      if (conn != null) conn.close();
+      conn.close();
     }
     catch (Exception e)
     {
@@ -208,14 +211,11 @@ public class SB_ViewUserInfoBean implements SessionBean
    */
   public String getHTMLGeneralUserInformation(String firstname, String lastname, String nickname, String email, String creationDate, int rating) throws RemoteException
   {
-    String result = new String();
-
-    result = result+"<h2>Information about "+nickname+"<br></h2>";
-    result = result+"Real life name : "+firstname+" "+lastname+"<br>";
-    result = result+"Email address  : "+email+"<br>";
-    result = result+"User since     : "+creationDate+"<br>";
-    result = result+"Current rating : <b>"+rating+"</b><br>";
-    return result;
+    return "<h2>Information about "+nickname+"<br></h2>"+
+      "Real life name : "+firstname+" "+lastname+"<br>"
+      +"Email address  : "+email+"<br>"
+      +"User since     : "+creationDate+"<br>"
+      +"Current rating : <b>"+rating+"</b><br>";
   }
 
   /** 

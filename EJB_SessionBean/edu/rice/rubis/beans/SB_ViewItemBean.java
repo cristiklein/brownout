@@ -105,10 +105,10 @@ public class SB_ViewItemBean implements SessionBean
         reservePrice = rs.getFloat("reserve_price");
         qty = rs.getInt("quantity");
         sellerId = rs.getInt("seller");
-
+        
         maxBid = rs.getFloat("max_bid");
         nbOfBids = rs.getInt("nb_of_bids");
-
+        
         PreparedStatement sellerStmt = null;
         ResultSet sellerResult = null;
         try 
@@ -119,11 +119,13 @@ public class SB_ViewItemBean implements SessionBean
           // Get the seller's name		 
           if (sellerResult.first()) 
             sellerName = sellerResult.getString("nickname");
+          sellerStmt.close();	// close statement
         }
         catch (SQLException e)
         {
           try
           {
+            if (sellerStmt != null) sellerStmt.close();	// close statement
             if (conn != null) conn.close();
           }
           catch (Exception ignore)
@@ -131,17 +133,8 @@ public class SB_ViewItemBean implements SessionBean
           }
           throw new RemoteException("Failed to execute Query for seller: " +e);
         }
-        finally
-        {
-          try 
-          {
-            if (sellerStmt != null) stmt.close();	// close statement
-          } 
-          catch (Exception ignore) 
-          {
-          }
-        }
       }
+
       if (maxBid == 0)
       {
         firstBid = "none";
@@ -163,28 +156,20 @@ public class SB_ViewItemBean implements SessionBean
             bidStmt.setInt(1, itemId.intValue());
             bidStmt.setInt(2, qty);
             bidResult = bidStmt.executeQuery();
+            bidStmt.close();	// close statement
           }
           catch (SQLException e)
           {
-          try
-          {
-            if (conn != null) conn.close();
-          }
-          catch (Exception ignore)
-          {
-          }
-            throw new RemoteException("Failed to execute Query for bids: " +e);
-          }
-          finally
-          {
-            try 
+            try
             {
-              if (bidStmt != null) stmt.close();	// close statement
-            } 
-            catch (Exception ignore) 
+              if (bidStmt != null) bidStmt.close();	// close statement
+              if (conn != null) conn.close();
+            }
+            catch (Exception ignore)
             {
             }
           }
+
           try
           {
             float bidValue;
@@ -199,8 +184,6 @@ public class SB_ViewItemBean implements SessionBean
                 break;
               }
             }
-            if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
           } 
           catch (Exception e)
           {
@@ -218,6 +201,8 @@ public class SB_ViewItemBean implements SessionBean
           firstBid = foo.toString();
         }
       }
+      if (stmt != null) stmt.close();
+      if (conn != null) conn.close();
      
       if (userId>0)
       {
