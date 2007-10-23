@@ -1,0 +1,1529 @@
+<?xml version="1.0"?>
+
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+    http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+    version="2.1">
+
+    <enterprise-beans> 
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_ AboutMeBean</description>
+            <display-name>RUBiS SB_ AboutMeBean</display-name>
+            <ejb-name>SB_AboutMe</ejb-name>
+            <home>edu.rice.rubis.beans.SB_AboutMeHome</home>
+            <remote>edu.rice.rubis.beans.SB_AboutMe</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_AboutMeBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the SB_Auth  bean</description>
+                <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
+				<ejb-ref-type>Session</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.SB_AuthLocalHome</local-home>
+				<local>edu.rice.rubis.beans.SB_AuthLocal</local>
+				<ejb-link>SB_Auth</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_ViewBidHistory Bean</description>
+            <display-name>RUBiS SB_ViewBidHistory Bean</display-name>
+            <ejb-name>SB_ViewBidHistory</ejb-name>
+            <home>edu.rice.rubis.beans.SB_ViewBidHistoryHome</home>
+            <remote>edu.rice.rubis.beans.SB_ViewBidHistory</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_ViewBidHistoryBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>		
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_StoreBid Bean</description>
+            <display-name>RUBiS SB_StoreBid Bean</display-name>
+            <ejb-name>SB_StoreBid</ejb-name>
+            <home>edu.rice.rubis.beans.SB_StoreBidHome</home>
+            <remote>edu.rice.rubis.beans.SB_StoreBid</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_StoreBidBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the User bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Bid bean</description>
+                <ejb-ref-name>ejb/Bid</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.BidLocalHome</local-home>
+				<local>edu.rice.rubis.beans.BidLocal</local>
+				<ejb-link>Bid</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+      <session>
+    	    <description>Deployment descriptor for Rubis SB_PutBid Bean</description>
+            <display-name>RUBiS SB_PutBid Bean</display-name>
+            <ejb-name>SB_PutBid</ejb-name>
+            <home>edu.rice.rubis.beans.SB_PutBidHome</home>
+            <remote>edu.rice.rubis.beans.SB_PutBid</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_PutBidBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-ref>
+                <description>This is the reference to the SB_ViewItem  bean</description>
+                <ejb-ref-name>ejb/SB_ViewItem</ejb-ref-name>
+				<ejb-ref-type>Session</ejb-ref-type>				
+				<home>edu.rice.rubis.beans.SB_ViewItemHome</home>
+				<remote>edu.rice.rubis.beans.SB_ViewItem</remote>
+				<ejb-link>SB_ViewItem</ejb-link>
+            </ejb-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the SB_Auth  bean</description>
+                <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
+				<ejb-ref-type>Session</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.SB_AuthLocalHome</local-home>
+				<local>edu.rice.rubis.beans.SB_AuthLocal</local>
+				<ejb-link>SB_Auth</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_StoreBuyNow Bean</description>
+            <display-name>RUBiS SB_StoreBuyNow Bean</display-name>
+            <ejb-name>SB_StoreBuyNow</ejb-name>
+            <home>edu.rice.rubis.beans.SB_StoreBuyNowHome</home>
+            <remote>edu.rice.rubis.beans.SB_StoreBuyNow</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_StoreBuyNowBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	   	 	<ejb-local-ref>
+                <description>This is the reference to the Item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+	   	 	<ejb-local-ref>
+                <description>This is the reference to the User bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the BuyNow bean</description>
+                <ejb-ref-name>ejb/BuyNow</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.BuyNowLocalHome</local-home>
+				<local>edu.rice.rubis.beans.BuyNowLocal</local>
+				<ejb-link>BuyNow</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_BuyNow Bean</description>
+            <display-name>RUBiS SB_BuyNow Bean</display-name>
+            <ejb-name>SB_BuyNow</ejb-name>
+            <home>edu.rice.rubis.beans.SB_BuyNowHome</home>
+            <remote>edu.rice.rubis.beans.SB_BuyNow</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_BuyNowBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	   	 	<ejb-local-ref>
+                <description>This is the reference to the Item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the SB_Auth  bean</description>
+                <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
+				<ejb-ref-type>Session</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.SB_AuthLocalHome</local-home>
+				<local>edu.rice.rubis.beans.SB_AuthLocal</local>
+				<ejb-link>SB_Auth</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_RegisterUser Bean</description>
+            <display-name>RUBiS SB_RegisterUser Bean</display-name>
+            <ejb-name>SB_RegisterUser</ejb-name>
+            <home>edu.rice.rubis.beans.SB_RegisterUserHome</home>
+            <remote>edu.rice.rubis.beans.SB_RegisterUser</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_RegisterUserBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Region bean</description>
+                <ejb-ref-name>ejb/Region</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.RegionLocalHome</local-home>
+				<local>edu.rice.rubis.beans.RegionLocal</local>
+				<ejb-link>Region</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the User bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_RegisterItem Bean</description>
+            <display-name>RUBiS SB_RegisterItem Bean</display-name>
+            <ejb-name>SB_RegisterItem</ejb-name>
+            <home>edu.rice.rubis.beans.SB_RegisterItemHome</home>
+            <remote>edu.rice.rubis.beans.SB_RegisterItem</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_RegisterItemBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the User bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Category bean</description>
+                <ejb-ref-name>ejb/Category</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.CategoryLocalHome</local-home>
+				<local>edu.rice.rubis.beans.CategoryLocal</local>
+				<ejb-link>Category</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_StoreComment Bean</description>
+            <display-name>RUBiS SB_StoreComment Bean</display-name>
+            <ejb-name>SB_StoreComment</ejb-name>
+            <home>edu.rice.rubis.beans.SB_StoreCommentHome</home>
+            <remote>edu.rice.rubis.beans.SB_StoreComment</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_StoreCommentBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the User bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Comment bean</description>
+                <ejb-ref-name>ejb/Comment</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.CommentLocalHome</local-home>
+				<local>edu.rice.rubis.beans.CommentLocal</local>
+				<ejb-link>Comment</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_PutComment Bean</description>
+            <display-name>RUBiS SB_PutComment Bean</display-name>
+            <ejb-name>SB_PutComment</ejb-name>
+            <home>edu.rice.rubis.beans.SB_PutCommentHome</home>
+            <remote>edu.rice.rubis.beans.SB_PutComment</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_PutCommentBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the user bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the SB_Auth  bean</description>
+                <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
+				<ejb-ref-type>Session</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.SB_AuthLocalHome</local-home>
+				<local>edu.rice.rubis.beans.SB_AuthLocal</local>
+				<ejb-link>SB_Auth</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_ViewUserInfo Bean</description>
+            <display-name>RUBiS SB_ViewUserInfo Bean</display-name>
+            <ejb-name>SB_ViewUserInfo</ejb-name>
+            <home>edu.rice.rubis.beans.SB_ViewUserInfoHome</home>
+            <remote>edu.rice.rubis.beans.SB_ViewUserInfo</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_ViewUserInfoBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	   		<ejb-local-ref>
+                <description>This is the reference to the User bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>		
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_ViewItem Bean</description>
+            <display-name>RUBiS SB_ViewItem Bean</display-name>
+            <ejb-name>SB_ViewItem</ejb-name>
+            <home>edu.rice.rubis.beans.SB_ViewItemHome</home>
+            <remote>edu.rice.rubis.beans.SB_ViewItem</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_ViewItemBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the item bean</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_SearchItemsByRegion Bean</description>
+            <display-name>RUBiS SB_SearchItemsByRegion Bean</display-name>
+            <ejb-name>SB_SearchItemsByRegion</ejb-name>
+            <home>edu.rice.rubis.beans.SB_SearchItemsByRegionHome</home>
+            <remote>edu.rice.rubis.beans.SB_SearchItemsByRegion</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_SearchItemsByRegionBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            <ejb-local-ref>
+                <description>This is the reference to the Category bean</description>
+                <ejb-ref-name>ejb/Category</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>
+				<local-home>edu.rice.rubis.beans.CategoryLocalHome</local-home>
+				<local>edu.rice.rubis.beans.CategoryLocal</local>
+				<ejb-link>Category</ejb-link>
+            </ejb-local-ref>
+            <ejb-local-ref>
+                <description>This is the reference to the Region bean</description>
+                <ejb-ref-name>ejb/Region</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>
+				<local-home>edu.rice.rubis.beans.RegionLocalHome</local-home>
+				<local>edu.rice.rubis.beans.RegionLocal</local>
+				<ejb-link>Region</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_SearchItemsByCategory Bean</description>
+            <display-name>RUBiS SB_SearchItemsByCategory Bean</display-name>
+            <ejb-name>SB_SearchItemsByCategory</ejb-name>
+            <home>edu.rice.rubis.beans.SB_SearchItemsByCategoryHome</home>
+            <remote>edu.rice.rubis.beans.SB_SearchItemsByCategory</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_SearchItemsByCategoryBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the Category bean</description>
+                <ejb-ref-name>ejb/Category</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.CategoryLocalHome</local-home>
+				<local>edu.rice.rubis.beans.CategoryLocal</local>
+				<ejb-link>Category</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_BrowseRegions Bean</description>
+            <display-name>RUBiS SB_BrowseRegions Bean</display-name>
+            <ejb-name>SB_BrowseRegions</ejb-name>
+            <home>edu.rice.rubis.beans.SB_BrowseRegionsHome</home>
+            <remote>edu.rice.rubis.beans.SB_BrowseRegions</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_BrowseRegionsBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	        <ejb-local-ref>
+               <description>This is the reference to the region bean</description>
+               <ejb-ref-name>ejb/Region</ejb-ref-name>
+		       <ejb-ref-type>Entity</ejb-ref-type>
+		       <local-home>edu.rice.rubis.beans.RegionLocalHome</local-home>
+		       <local>edu.rice.rubis.beans.RegionLocal</local>
+		       <ejb-link>Region</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+       <session>
+    	    <description>Deployment descriptor for Rubis SB_BrowseCategories Bean</description>
+            <display-name>RUBiS SB_BrowseCategories Bean</display-name>
+            <ejb-name>SB_BrowseCategories</ejb-name>
+            <home>edu.rice.rubis.beans.SB_BrowseCategoriesHome</home>
+            <remote>edu.rice.rubis.beans.SB_BrowseCategories</remote>
+            <ejb-class>edu.rice.rubis.beans.SB_BrowseCategoriesBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	        <ejb-local-ref>
+                <description>This is the reference to the region bean</description>
+                <ejb-ref-name>ejb/Region</ejb-ref-name>
+		        <ejb-ref-type>Entity</ejb-ref-type>			    
+		        <local-home>edu.rice.rubis.beans.RegionLocalHome</local-home>
+		        <local>edu.rice.rubis.beans.RegionLocal</local>
+		        <ejb-link>Region</ejb-link>
+            </ejb-local-ref>
+	        <ejb-local-ref>
+                <description>This is the reference to the category  bean</description>
+                <ejb-ref-name>ejb/Category</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.CategoryLocalHome</local-home>
+				<local>edu.rice.rubis.beans.CategoryLocal</local>
+				<ejb-link>Category</ejb-link>
+            </ejb-local-ref>
+	       <ejb-local-ref>
+                <description>This is the reference to the SB_Auth  bean</description>
+                <ejb-ref-name>ejb/SB_Auth</ejb-ref-name>
+				<ejb-ref-type>Session</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.SB_AuthLocalHome</local-home>
+				<local>edu.rice.rubis.beans.SB_AuthLocal</local>
+				<ejb-link>SB_Auth</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+        <session>
+    	    <description>Deployment descriptor for Rubis SB_Auth Bean</description>
+            <display-name>RUBiS SB_Auth Bean</display-name>
+            <ejb-name>SB_Auth</ejb-name>
+            <local-home>edu.rice.rubis.beans.SB_AuthLocalHome</local-home>
+            <local>edu.rice.rubis.beans.SB_AuthLocal</local>
+            <ejb-class>edu.rice.rubis.beans.SB_AuthBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the User bean</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>		
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+         </session>
+
+<!--
+         <session>
+    	    <description>Deployment descriptor for Rubis SB_IDManager Bean</description>
+            <display-name>RUBiS SB_IDManager Bean</display-name>
+            <ejb-name>SB_IDManager</ejb-name>
+            <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+            <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+            <ejb-class>edu.rice.rubis.beans.SB_IDManagerBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+	    	<ejb-local-ref>
+                <description>This is the reference to the IDs bean</description>
+                <ejb-ref-name>ejb/IDs</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>		
+				<local-home>edu.rice.rubis.beans.IDsLocalHome</local-home>
+				<local>edu.rice.rubis.beans.IDsLocal</local>
+				<ejb-link>IDs</ejb-link>
+            </ejb-local-ref>
+         </session>
+-->
+
+        <entity>
+            <description>Category Bean deployment descriptor</description>
+            <display-name>Category</display-name>
+            <ejb-name>Category</ejb-name>
+            <local-home>edu.rice.rubis.beans.CategoryLocalHome</local-home>
+            <local>edu.rice.rubis.beans.CategoryLocal</local>
+            <ejb-class>edu.rice.rubis.beans.CategoryBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <!--<prim-key-class>edu.rice.rubis.beans.CategoryPK</prim-key-class>-->
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>CategoryBean</abstract-schema-name>	        
+            <cmp-field>
+                <field-name>name</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>id</field-name>                
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+            <!--<ejb-local-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/SB_IDManager</ejb-ref-name>
+                                <ejb-ref-type>Session</ejb-ref-type>                                
+                                <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+                                <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+                                <ejb-link>SB_IDManager</ejb-link>
+            </ejb-local-ref>-->
+            <query>
+                <query-method>
+                    <method-name>findByName</method-name>
+                    <method-params>
+                       <method-param>java.lang.String</method-param>
+                    </method-params>
+               </query-method>               
+                <ejb-ql><![CDATA[
+                    SELECT DISTINCT OBJECT(c)
+                    FROM CategoryBean c
+                    WHERE c.name = ?1
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>findAllCategories</method-name>
+                    <method-params/>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(c)
+                    FROM CategoryBean c
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectCurrentItemsInCategory</method-name>
+                    <method-params>
+                       <method-param>java.lang.Integer</method-param>
+                       <method-param>java.util.Date</method-param>
+                       <method-param>int</method-param>
+                       <method-param>int</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(i)
+                    FROM CategoryBean c, IN (c.items) i
+                    WHERE c.id = ?1 AND i.endDate >= ?2
+                    ORDER BY i.endDate ASC
+                    LIMIT ?3, ?4
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectCurrentItemsInCategoryAndRegion</method-name>
+                    <method-params>
+                       <method-param>java.lang.Integer</method-param>
+                       <method-param>java.lang.Integer</method-param>
+                       <method-param>java.util.Date</method-param>
+                       <method-param>int</method-param>
+                       <method-param>int</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(i)
+                    FROM CategoryBean c, IN (c.items) i
+                    WHERE c.id = ?1 AND i.seller.region.id = ?2 AND i.endDate >= ?3
+                    ORDER BY i.endDate ASC
+                    LIMIT ?4, ?5
+               ]]></ejb-ql>
+            </query>
+
+        </entity>
+
+        <entity>
+            <description>Region Bean deployment descriptor</description>
+            <display-name>Region</display-name>
+            <ejb-name>Region</ejb-name>
+            <local-home>edu.rice.rubis.beans.RegionLocalHome</local-home>
+            <local>edu.rice.rubis.beans.RegionLocal</local>
+            <ejb-class>edu.rice.rubis.beans.RegionBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <!--<prim-key-class>edu.rice.rubis.beans.RegionPK</prim-key-class>-->
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>RegionBean</abstract-schema-name>
+            <cmp-field>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>name</field-name>
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+            <!--<ejb-local-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/SB_IDManager</ejb-ref-name>
+                                <ejb-ref-type>Session</ejb-ref-type>                                
+                                <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+                                <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+                                <ejb-link>SB_IDManager</ejb-link>
+            </ejb-local-ref>-->
+            <query>
+                <query-method>
+                    <method-name>findByName</method-name>
+                    <method-params>
+                       <method-param>java.lang.String</method-param>
+                    </method-params>
+               </query-method>
+               <!-- DISTINCT not implemented in medor -->
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(r)
+                    FROM RegionBean r
+                    WHERE r.name = ?1
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>findAllRegions</method-name>
+                    <method-params/>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(r)
+                    FROM RegionBean r
+               ]]></ejb-ql>
+            </query>
+
+        </entity>
+
+
+        <entity>
+            <description>User Bean deployment descriptor</description>
+            <display-name>User</display-name>
+            <ejb-name>User</ejb-name>
+            <local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+            <local>edu.rice.rubis.beans.UserLocal</local>
+            <ejb-class>edu.rice.rubis.beans.UserBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <!--<prim-key-class>edu.rice.rubis.beans.UserPK</prim-key-class>-->
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>UserBean</abstract-schema-name>
+            <cmp-field>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>firstName</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>lastName</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>nickName</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>password</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>email</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>rating</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>balance</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>creationDate</field-name>
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+            <!--<ejb-local-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/SB_IDManager</ejb-ref-name>
+                                <ejb-ref-type>Session</ejb-ref-type>                                
+                                <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+                                <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+                                <ejb-link>SB_IDManager</ejb-link>
+            </ejb-local-ref>-->
+            <query>
+                <query-method>
+                    <method-name>findByNickName</method-name>
+                    <method-params>
+                       <method-param>java.lang.String</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT DISTINCT OBJECT(u)
+                    FROM UserBean u
+                    WHERE u.nickName = ?1
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>findAllUsers</method-name>
+                    <method-params/>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(u)
+                    FROM UserBean u
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectUserWonItems</method-name>
+                    <method-params>
+                        <method-param>java.lang.Integer</method-param>
+                        <method-param>java.util.Date</method-param>
+                        <method-param>java.util.Date</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT b.item
+                    FROM UserBean u, IN (u.bids) b
+                    WHERE u.id = ?1 AND b.item.endDate < ?2 AND b.item.endDate > ?3 AND b.bid = b.item.maxBid
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectUserBidItems</method-name>
+                    <method-params>
+                        <method-param>java.lang.Integer</method-param>
+                        <method-param>java.util.Date</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT DISTINCT b.item
+                    FROM UserBean u, IN (u.bids) b
+                    WHERE u.id = ?1 AND b.item.endDate > ?2
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectUserMaxBid</method-name>
+                    <method-params>
+                        <method-param>java.lang.Integer</method-param>
+                        <method-param>java.lang.Integer</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT MAX(b.maxBid)
+                    FROM UserBean u, IN (u.bids) b
+                    WHERE u.id = ?1 AND b.item.id = ?2
+               ]]></ejb-ql>
+               <!--<ejb-ql><![CDATA[
+                    SELECT MAX(b.maxBid)
+                    FROM BidBean b
+                    WHERE b.user.id = ?1 AND b.item.id = ?2
+               ]]></ejb-ql>-->
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectUserCurrentSellings</method-name>
+                    <method-params>
+                        <method-param>java.lang.Integer</method-param>
+                        <method-param>java.util.Date</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(i)
+                    FROM UserBean u, IN (u.items) i
+                    WHERE u.id = ?1 AND i.endDate > ?2
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectUserPastSellings</method-name>
+                    <method-params>
+                        <method-param>java.lang.Integer</method-param>
+                        <method-param>java.util.Date</method-param>
+                        <method-param>java.util.Date</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(i)
+                    FROM UserBean u, IN (u.items) i
+                    WHERE u.id = ?1 AND i.endDate < ?2 AND i.endDate > ?3
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectUserBuyNow</method-name>
+                    <method-params>
+                        <method-param>java.lang.Integer</method-param>
+                        <method-param>java.util.Date</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(b)
+                    FROM UserBean u, IN (u.buyNows) b
+                    WHERE u.id = ?1 AND b.date > ?2
+               ]]></ejb-ql>
+            </query>
+
+        </entity>
+
+        <entity>
+            <description>Item Bean deployment descriptor</description>
+            <display-name>Item</display-name>
+            <ejb-name>Item</ejb-name>
+            <local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+            <local>edu.rice.rubis.beans.ItemLocal</local>
+            <ejb-class>edu.rice.rubis.beans.ItemBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <!--<prim-key-class>edu.rice.rubis.beans.ItemPK</prim-key-class>-->
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>ItemBean</abstract-schema-name>
+            <cmp-field>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>name</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>description</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>initialPrice</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>quantity</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>reservePrice</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>buyNow</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>nbOfBids</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>maxBid</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>startDate</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>endDate</field-name>
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+            <!--<ejb-local-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/SB_IDManager</ejb-ref-name>
+                                <ejb-ref-type>Session</ejb-ref-type>                                
+                                <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+                                <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+                                <ejb-link>SB_IDManager</ejb-link>
+            </ejb-local-ref>-->
+            <query>
+                <query-method>
+                    <method-name>findAllItems</method-name>
+                    <method-params/>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(i)
+                    FROM ItemBean i
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectItemBidHistory</method-name>
+                    <method-params>
+                       <method-param>java.lang.Integer</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(b)
+                    FROM ItemBean i, IN (i.bids) b
+                    WHERE i.id = ?1
+                    ORDER BY b.date DESC
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>ejbSelectItemQtyMaxBid</method-name>
+                    <method-params>
+                       <method-param>java.lang.Integer</method-param>
+                       <method-param>int</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(b)
+                    FROM ItemBean i, IN (i.bids) b
+                    WHERE i.id = ?1
+                    ORDER BY b.bid DESC
+                    LIMIT ?2
+               ]]></ejb-ql>
+            </query>
+        </entity>
+
+        <entity>
+            <description>Bid Bean deployment descriptor</description>
+            <display-name>Bid</display-name>
+            <ejb-name>Bid</ejb-name>
+            <local-home>edu.rice.rubis.beans.BidLocalHome</local-home>
+            <local>edu.rice.rubis.beans.BidLocal</local>
+            <ejb-class>edu.rice.rubis.beans.BidBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <!--<prim-key-class>edu.rice.rubis.beans.BidPK</prim-key-class>-->
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>BidBean</abstract-schema-name>
+            <cmp-field>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>quantity</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>bid</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>maxBid</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>date</field-name>
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+            <!--<ejb-local-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/SB_IDManager</ejb-ref-name>
+                                <ejb-ref-type>Session</ejb-ref-type>                                
+                                <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+                                <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+                                <ejb-link>SB_IDManager</ejb-link>
+            </ejb-local-ref>-->
+	   		 <ejb-local-ref>
+                <description>This is the reference to the user</description>
+                <ejb-ref-name>ejb/User</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.UserLocalHome</local-home>
+				<local>edu.rice.rubis.beans.UserLocal</local>
+				<ejb-link>User</ejb-link>
+            </ejb-local-ref>
+	    	<ejb-local-ref>
+                <description>This is the reference to the item</description>
+                <ejb-ref-name>ejb/Item</ejb-ref-name>
+				<ejb-ref-type>Entity</ejb-ref-type>				
+				<local-home>edu.rice.rubis.beans.ItemLocalHome</local-home>
+				<local>edu.rice.rubis.beans.ItemLocal</local>
+				<ejb-link>Item</ejb-link>
+            </ejb-local-ref>
+            <query>
+                <query-method>
+                    <method-name>findAllBids</method-name>
+                    <method-params/>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(b)
+                    FROM BidBean b
+               ]]></ejb-ql>
+            </query>
+        </entity>
+
+        <entity>
+            <description>Comment Bean deployment descriptor</description>
+            <display-name>Comment</display-name>
+            <ejb-name>Comment</ejb-name>
+            <local-home>edu.rice.rubis.beans.CommentLocalHome</local-home>
+            <local>edu.rice.rubis.beans.CommentLocal</local>
+            <ejb-class>edu.rice.rubis.beans.CommentBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <!--<prim-key-class>edu.rice.rubis.beans.CommentPK</prim-key-class>-->
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>CommentBean</abstract-schema-name>
+            <cmp-field>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>rating</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>date</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>comment</field-name>
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+            <!--<ejb-local-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/SB_IDManager</ejb-ref-name>
+                                <ejb-ref-type>Session</ejb-ref-type>                                
+                                <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+                                <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+                                <ejb-link>SB_IDManager</ejb-link>
+            </ejb-local-ref>-->
+            <query>
+                <query-method>
+                    <method-name>findAllComments</method-name>
+                    <method-params/>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(c)
+                    FROM CommentBean c
+               ]]></ejb-ql>
+            </query>
+        </entity>
+
+        <entity>
+            <description>BuyNow Bean deployment descriptor</description>
+            <display-name>BuyNow</display-name>
+            <ejb-name>BuyNow</ejb-name>
+            <local-home>edu.rice.rubis.beans.BuyNowLocalHome</local-home>
+            <local>edu.rice.rubis.beans.BuyNowLocal</local>
+            <ejb-class>edu.rice.rubis.beans.BuyNowBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <!--<prim-key-class>edu.rice.rubis.beans.BuyNowPK</prim-key-class>-->
+            <prim-key-class>java.lang.Integer</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>BuyNowBean</abstract-schema-name>
+            <cmp-field>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>quantity</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>date</field-name>
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+            <!--<ejb-local-ref>
+                <description>This is the reference to the id manager</description>
+                <ejb-ref-name>ejb/SB_IDManager</ejb-ref-name>
+                                <ejb-ref-type>Session</ejb-ref-type>                                
+                                <local-home>edu.rice.rubis.beans.SB_IDManagerLocalHome</local-home>
+                                <local>edu.rice.rubis.beans.SB_IDManagerLocal</local>
+                                <ejb-link>SB_IDManager</ejb-link>
+            </ejb-local-ref>-->
+            <query>
+                <query-method>
+                    <method-name>findAllBuyNows</method-name>
+                    <method-params/>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(b)
+                    FROM BuyNowBean b
+               ]]></ejb-ql>
+            </query>
+            <query>
+                <query-method>
+                    <method-name>findUserBuyNow</method-name>
+                    <method-params>
+                        <method-param>edu.rice.rubis.beans.UserLocal</method-param>
+                        <method-param>java.util.Date</method-param>
+                    </method-params>
+               </query-method>
+                <ejb-ql><![CDATA[
+                    SELECT OBJECT(b)
+                    FROM BuyNowBean b
+                    WHERE b.buyer = ?1 AND b.date > ?2
+               ]]></ejb-ql>
+            </query>
+               
+        </entity>
+
+<!--
+        <entity>
+            <description>IDs Bean deployment descriptor</description>
+            <display-name>IDs</display-name>
+            <ejb-name>IDs</ejb-name>
+            <local-home>edu.rice.rubis.beans.IDsLocalHome</local-home>
+            <local>edu.rice.rubis.beans.IDsLocal</local>
+            <ejb-class>edu.rice.rubis.beans.IDsBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <prim-key-class>edu.rice.rubis.beans.IDsPK</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <abstract-schema-name>IDsBean</abstract-schema-name>
+            <cmp-field>
+                <field-name>id</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>categoryCount</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>regionCount</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>userCount</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>itemCount</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>commentCount</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>bidCount</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>buyNowCount</field-name>
+            </cmp-field>
+            <primkey-field>id</primkey-field>
+        </entity>
+-->
+
+    </enterprise-beans>
+
+    <relationships>
+
+        <ejb-relation>
+
+            <ejb-relation-name>Item-Category</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>Item-has-a-Category</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>Item</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>category</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>Category-has-many-Items</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>Category</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>items</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>Item-User</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>Item-has-a-User</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>Item</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>seller</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>User-has-many-Items</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>User</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>items</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>User-Region</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>User-has-a-Region</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>User</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>region</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>Region-has-many-Users</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>Region</ejb-name>
+              </relationship-role-source>
+              <!--<cmr-field>
+                  <cmr-field-name>users</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>-->
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>Bid-User</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>Bid-has-a-User</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>Bid</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>user</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>User-has-many-Bids</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>User</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>bids</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>Bid-Item</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>Bid-has-a-Item</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>Bid</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>item</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>Item-has-many-Bids</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>Item</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>bids</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>BuyNow-User</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>BuyNow-has-a-User</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>BuyNow</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>buyer</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>User-has-many-BuyNows</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>User</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>buyNows</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>BuyNow-Item</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>BuyNow-has-a-Item</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>BuyNow</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>item</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>Item-has-many-BuyNows</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>Item</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>buyNows</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>Comment-FromUser</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>Comment-has-a-FromUser</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>Comment</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>fromUser</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>User-has-many-FromComments</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>User</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>fromComments</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>Comment-ToUser</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>Comment-has-a-ToUser</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>Comment</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>toUser</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>User-has-many-ToComments</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>User</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>toComments</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+        <ejb-relation>
+
+            <ejb-relation-name>Comment-Item</ejb-relation-name>
+
+            <ejb-relationship-role>
+                <ejb-relationship-role-name>Comment-has-a-Item</ejb-relationship-role-name>
+                <multiplicity>Many</multiplicity>
+                <relationship-role-source>
+                    <ejb-name>Comment</ejb-name>
+                </relationship-role-source>
+                <cmr-field>
+                    <cmr-field-name>item</cmr-field-name>
+                </cmr-field>
+            </ejb-relationship-role>
+
+            <ejb-relationship-role>
+              <ejb-relationship-role-name>Item-has-many-Comments</ejb-relationship-role-name>
+              <multiplicity>One</multiplicity>
+              <relationship-role-source>
+                  <ejb-name>Item</ejb-name>
+              </relationship-role-source>
+              <cmr-field>
+                  <cmr-field-name>comments</cmr-field-name>
+                  <cmr-field-type>java.util.Collection</cmr-field-type>
+              </cmr-field>
+            </ejb-relationship-role>
+
+        </ejb-relation>
+
+    </relationships>
+
+    <assembly-descriptor>
+
+        <container-transaction>
+            <method>
+                <ejb-name>SB_AboutMe</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_ViewBidHistory</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_PutBid</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_BuyNow</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_PutComment</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_ViewUserInfo</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_ViewItem</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_SearchItemsByRegion</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_SearchItemsByCategory</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_BrowseRegions</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_BrowseCategories</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_Auth</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Supports</trans-attribute>
+        </container-transaction>
+
+        <container-transaction>
+            <method>
+                <ejb-name>SB_StoreBuyNow</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_StoreBid</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_StoreComment</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_RegisterItem</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>SB_RegisterUser</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+
+<!--
+        <container-transaction>
+            <method>
+                <ejb-name>IDManager</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>RequiresNew</trans-attribute>
+        </container-transaction>
+-->
+
+        <container-transaction>
+            <method>
+                <ejb-name>Category</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>Region</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>User</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>Item</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>Bid</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>Comment</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <method>
+                <ejb-name>BuyNow</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <!--
+            <method>
+                <ejb-name>IDs</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            -->
+            <trans-attribute>Supports</trans-attribute>
+        </container-transaction>
+
+    </assembly-descriptor>
+
+</ejb-jar>
