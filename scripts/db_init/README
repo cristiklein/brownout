@@ -1,0 +1,37 @@
+
+# Copyright Jan 15, 2007: Steven.Dropsho@EPFL.ch
+
+Purpose: Fast generation of a RUBiS database
+
+The RUBiS benchmark provides the ability to generate a database using
+the benchmark itself. This tool generates a RUBiS compatible database
+without the use of the RUBiS benchmark.
+
+Steps: 
+
+-Start postgresql.
+	
+	The script gopostgresql.bash is an example start script. Note, 
+	reporting is piped to /dev/null for speed.
+
+-In create_empty_rubis_db.sh, set RUBIS_DIR to point to where the top 
+ directory of the RUBiS install.
+
+	This path is needed in the properties file (that will be generated).
+
+-Type './create_empty_rubis_db.sh <integer>'.
+
+	An integer of 10 generates a 256MB database. Scale the integer as 
+	you like.
+
+-Stop postgresql.
+
+Result:
+	-A database is created under postgresql.
+	-A properties file is under a directory with the name of the integer 
+	 used above, e.g., '10'
+	
+Experiment with generating small databases (integers of 1, 5, etc) to
+get estimates of time to generate and size of databases relative to
+the input parameter. Inputting '2' generates about 500MB database and
+takes about 5 minutes on an older Linux server machine.
