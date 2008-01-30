@@ -1,0 +1,14 @@
+<?xml version="1.0"?> <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping package="edu.rice.rubis.hibernate">
+    <class name="Region" table="regions" lazy="true">
+        <id name="id" column="id" type="integer" length="10">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" type="string" length="25"/>
+        <set name="users" lazy="true">
+            <key column="region"/>
+            <one-to-many class="User"/>
+        </set>
+    </class>
+</hibernate-mapping>

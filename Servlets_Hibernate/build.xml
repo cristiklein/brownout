@@ -1,0 +1,63 @@
+<project name="servlets" default="compile">
+
+<!-- ====================================================================== -->
+<!-- Directory definition                                                   -->
+<!-- ====================================================================== -->
+
+  <property name="src.dir" value="${basedir}/src"/>
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="dist.dir" value="${basedir}/dist"/>
+  <property name="lib.dir" value="${basedir}/lib"/>
+  <property name="doc.dir" value="${basedir}/doc"/>
+
+<!-- ====================================================================== -->
+<!-- Compile                                                                -->
+<!-- ====================================================================== -->
+
+  <path id="classpath">
+    <fileset dir="${lib.dir}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <pathelement location="${build.dir}"/>
+  </path>
+
+  <target name="compile">
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${build.dir}">
+      <classpath refid="classpath"/>
+      <include name="edu/rice/rubis/**/*.java"/>
+    </javac>
+    <copy todir="${build.dir}">
+      <fileset dir="${src.dir}">
+        <include name="edu/rice/rubis/hibernate/*.hbm.xml"/>
+      </fileset>
+    </copy>
+  </target>
+
+<!-- ====================================================================== -->
+<!-- Jar                                                                    -->
+<!-- ====================================================================== -->
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${dist.dir}"/>
+    <jar destfile="${dist.dir}/rubis_servlets.jar">
+      <fileset dir="${build.dir}">
+        <include name="edu/rice/rubis/**/*.class"/>
+      </fileset>
+      <fileset dir="${build.dir}">
+        <include name="edu/rice/rubis/**/*.hbm.xml"/>
+      </fileset>
+    </jar>
+  </target>
+
+<!-- ====================================================================== -->
+<!-- Clean -->
+<!-- ====================================================================== -->
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+
+</project>
+

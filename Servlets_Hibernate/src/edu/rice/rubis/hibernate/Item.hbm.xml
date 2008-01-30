@@ -1,0 +1,33 @@
+<?xml version="1.0"?> <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping package="edu.rice.rubis.hibernate">
+    <class name="Item" table="items" lazy="true">
+        <id name="id" column="id" type="integer" length="10">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" type="string" length="100"/>
+        <property name="description" column="description" type="text"/>
+        <property name="initialPrice" column="initial_price" type="float" not-null="true"/>
+        <property name="quantity" column="quantity" type="integer" length="10" not-null="true"/>
+        <property name="reservePrice" column="reserve_price" type="float"/>
+        <property name="buyNow" column="buy_now" type="float"/>
+        <property name="nbOfBids" column="nb_of_bids" type="integer" length="10"/>
+        <property name="maxBid" column="max_bid" type="float"/>
+        <property name="startDate" column="start_date" type="timestamp"/>
+        <property name="endDate" column="end_date" type="timestamp"/>
+        <many-to-one name="seller" column="seller" class="User" not-null="true"/>
+        <many-to-one name="category" column="category" class="Category" not-null="true"/>
+        <set name="bids" lazy="true">
+            <key column="item_id"/>
+            <one-to-many class="Bid"/>
+        </set>
+        <set name="buys" lazy="true">
+            <key column="item_id"/>
+            <one-to-many class="Buy"/>
+        </set>
+        <set name="comments" lazy="true">
+            <key column="item_id"/>
+            <one-to-many class="Comment"/>
+        </set>
+    </class>
+</hibernate-mapping>

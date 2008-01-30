@@ -1,0 +1,15 @@
+<?xml version="1.0"?> <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping package="edu.rice.rubis.hibernate">
+    <class name="Comment" table="comments" lazy="true">
+        <id name="id" column="id" type="integer" length="10">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="fromUser" column="from_user_id" class="User" not-null="true"/>
+        <many-to-one name="toUser" column="to_user_id" class="User" not-null="true"/>
+        <many-to-one name="item" column="item_id" class="Item" not-null="true"/>
+        <property name="rating" column="rating" type="integer" length="11"/>
+        <property name="date" column="date" type="timestamp"/>
+        <property name="comment" column="comment" type="text" not-null="true"/>
+    </class>
+</hibernate-mapping>

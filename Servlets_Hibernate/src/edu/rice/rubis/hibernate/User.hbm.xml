@@ -1,0 +1,38 @@
+<?xml version="1.0"?> <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping package="edu.rice.rubis.hibernate">
+    <class name="User" table="users" lazy="true">
+        <id name="id" column="id" type="integer" length="10">
+            <generator class="native"/>
+        </id>
+        <property name="firstname" column="firstname" type="string" length="20"/>
+        <property name="lastname" column="lastname" type="string" length="20"/>
+        <property name="nickname" column="nickname" type="string" length="20" not-null="true" unique="true"/>
+        <property name="password" column="password" type="string" length="20" not-null="true"/>
+        <property name="email" column="email" type="string" length="50" not-null="true"/>
+        <property name="rating" column="rating" type="integer" length="11"/>
+        <property name="balance" column="balance" type="float"/>
+        <property name="creationDate" column="creation_date" type="timestamp"/>
+        <many-to-one name="region" column="region" class="Region" not-null="true"/>
+        <set name="items" lazy="true">
+            <key column="seller"/>
+            <one-to-many class="Item"/>
+        </set>
+        <set name="bids" lazy="true">
+            <key column="user_id"/>
+            <one-to-many class="Bid"/>
+        </set>
+        <set name="buys" lazy="true">
+            <key column="buyer_id"/>
+            <one-to-many class="Buy"/>
+        </set>
+        <set name="commentsFrom" lazy="true">
+            <key column="from_user_id"/>
+            <one-to-many class="Comment"/>
+        </set>
+        <set name="commentsTo" lazy="true">
+            <key column="to_user_id"/>
+            <one-to-many class="Comment"/>
+        </set>
+    </class>
+</hibernate-mapping>

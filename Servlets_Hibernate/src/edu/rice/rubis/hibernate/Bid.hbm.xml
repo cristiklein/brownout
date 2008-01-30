@@ -1,0 +1,15 @@
+<?xml version="1.0"?> <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping package="edu.rice.rubis.hibernate">
+    <class name="Bid" table="bids" lazy="true">
+        <id name="id" column="id" type="integer" length="10">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="user" column="user_id" class="User" not-null="true"/>
+        <many-to-one name="item" column="item_id" class="Item" not-null="true"/>
+        <property name="qty" column="qty" type="integer" length="10" not-null="true"/>
+        <property name="bid" column="bid" type="float" not-null="true"/>
+        <property name="maxBid" column="max_bid" type="float" not-null="true"/>
+        <property name="date" column="date" type="timestamp"/>
+    </class>
+</hibernate-mapping>
