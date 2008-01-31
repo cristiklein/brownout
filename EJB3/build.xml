@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project xmlns:easybeans="http://easybeans.objectweb.org"
+         name="RUBiS EJB3 version"
+         default="ear">
+
+  <property file="build.properties"/>
+
+  <property environment="myenv"/>
+  <property name="jonas.root" value="${myenv.JONAS_ROOT}"/>
+  <condition property="jonas.base" value="${myenv.JONAS_BASE}">
+    <available file="${myenv.JONAS_BASE}"/>
+  </condition>
+  <condition property="jonas.base" value="${jonas.root}">
+    <available file="${jonas.root}"/>
+  </condition>
+
+  <property name="lib.dir" value="${jonas.root}/lib"/>
+  <property name="rar.dir" value="rar"/>
+  <property name="src.dir" value="src"/>
+  <property name="web.dir" value="web"/>
+  <property name="etc.dir" value="etc"/>
+  <property name="build.dir" value="build"/>
+  <property name="dist.dir" value="dist"/>
+
+  <path id="base.classpath">
+    <pathelement location="${jonas.base}/conf"/>
+    <fileset dir="${lib.dir}/commons">
+      <include name="**/*.jar"/>
+    </fileset>
+    <pathelement location="${build.dir}"/>
+    <fileset dir="${rar.dir}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete dir="${dist.dir}"/>
+  </target>
+
+  <available file="${rar.dir}" property="rar.present"/>
+  <target name="unpack" unless="rar.present">
+    <mkdir dir="${rar.dir}"/>
+    <unjar dest="${rar.dir}">
+      <fileset dir="${jonas.base}/rars">
+        <include name="ow_easybeans_for_jonas.rar" />
+        <include name="autoload/ow_easybeans_for_jonas.rar" />
+      </fileset>
+    </unjar>
+  </target>
+
+  <target name="init">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <antcall target="unpack"/>
+    <typedef resource="org/objectweb/easybeans/ant/antlib.xml"
+             uri="http://easybeans.objectweb.org">
+      <classpath refid="base.classpath"/>
+    </typedef>
+  </target>
+
+  <target name="compile" depends="init">
+    <javac srcdir="${src.dir}"
+           destdir="${build.dir}"
+           debug="${javac.debug}"
+           deprecation="${javac.deprecation}"
+           optimize="${javac.optimize}"
+           verbose="${javac.verbose}"
+           compiler="${javac.compiler}"
+           nowarn="${javac.nowarn}">
+      <classpath refid="base.classpath"/>
+    </javac>
+  </target>
+
+  <target name="ejb" depends="compile">
+    <easybeans:ejb exploded="false"
+                   dest="${dist.dir}/rubis.jar"
+                   persistencedd="${etc.dir}/persistence.xml">
+      <fileset dir="${build.dir}">
+        <include name="edu/rice/rubis/beans/*.class"/>
+        <include name="edu/rice/rubis/*.class"/>
+      </fileset>
+    </easybeans:ejb>
+  </target>
+
+  <target name="war" depends="compile">
+    <easybeans:war exploded="true"
+                   dest="${dist.dir}/rubis"
+                   dd="${etc.dir}/web.xml">
+      <classes dir="${build.dir}">
+        <include name="edu/rice/rubis/servlets/*.class"/>
+        <include name="edu/rice/rubis/*.class"/>
+      </classes>
+      <fileset dir="${web.dir}"/>
+    </easybeans:war>
+  </target>
+
+  <target name="ear" depends="compile">
+    <easybeans:ear exploded="false"
+                   dest="${dist.dir}/rubis.ear">
+      <ejb dest="rubis.jar" persistencedd="${etc.dir}/persistence.xml">
+        <fileset dir="${build.dir}">
+          <include name="edu/rice/rubis/beans/*.class"/>
+          <include name="edu/rice/rubis/*.class"/>
+        </fileset>
+      </ejb>
+      <war dest="rubis.war" dd="${etc.dir}/web.xml">
+        <classes dir="${build.dir}">
+          <include name="edu/rice/rubis/servlets/*.class"/>
+          <include name="edu/rice/rubis/*.class"/>
+        </classes>
+        <fileset dir="${web.dir}"/>
+      </war>
+    </easybeans:ear>
+  </target>
+
+</project>

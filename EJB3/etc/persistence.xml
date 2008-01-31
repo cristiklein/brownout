@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
+  <persistence-unit name="entity" transaction-type="JTA">
+     <provider>org.hibernate.ejb.HibernatePersistence</provider>
+     <jta-data-source>rubisDB</jta-data-source>
+     <properties>
+       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+       <!--<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
+       <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+       <property name="toplink.target-database" value="HSQL"/>
+       <property name="toplink.ddl-generation" value="drop-and-create-tables"/>
+       <property name="toplink.ddl-generation.output-mode" value="database"/>
+       <property name="openjpa.jdbc.DBDictionary" value="hsql"/>
+       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>-->
+     </properties>
+  </persistence-unit>
+</persistence>
+

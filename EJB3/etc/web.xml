@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app
+  xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+  version="2.4">
+    
+    <servlet>
+        <servlet-name>BrowseCategories</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.BrowseCategories</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>BrowseRegions</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.BrowseRegions</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>SearchItemsByCategory</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.SearchItemsByCategory</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>SearchItemsByRegion</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.SearchItemsByRegion</servlet-class>
+    </servlet>  
+    
+     <servlet>
+        <servlet-name>ViewItem</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.ViewItem</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>ViewUserInfo</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.ViewUserInfo</servlet-class>
+    </servlet>
+    
+     <servlet>
+        <servlet-name>ViewBidHistory</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.ViewBidHistory</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>AboutMe</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.AboutMe</servlet-class>
+    </servlet>
+    
+     <servlet>
+        <servlet-name>BuyNow</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.BuyNow</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>BuyNowAuth</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.BuyNowAuth</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>StoreBuyNow</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.StoreBuyNow</servlet-class>
+    </servlet> 
+    
+     <servlet>
+        <servlet-name>PutBid</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.PutBid</servlet-class>
+    </servlet>  
+    
+     <servlet>
+        <servlet-name>PutBidAuth</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.PutBidAuth</servlet-class>
+    </servlet> 
+    
+    <servlet>
+        <servlet-name>StoreBid</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.StoreBid</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>PutComment</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.PutComment</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>PutCommentAuth</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.PutCommentAuth</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>StoreComment</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.StoreComment</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>RegisterUser</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.RegisterUser</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>SellItemForm</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.SellItemForm</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>RegisterItem</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.RegisterItem</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>Auth</servlet-name>
+        <servlet-class>edu.rice.rubis.servlets.Auth</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>BrowseCategories</servlet-name>
+        <url-pattern>/servlet/BrowseCategories</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>BrowseRegions</servlet-name>
+        <url-pattern>/servlet/BrowseRegions</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>SearchItemsByCategory</servlet-name>
+        <url-pattern>/servlet/SearchItemsByCategory</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>SearchItemsByRegion</servlet-name>
+        <url-pattern>/servlet/SearchItemsByRegion</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ViewItem</servlet-name>
+        <url-pattern>/servlet/ViewItem</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ViewUserInfo</servlet-name>
+        <url-pattern>/servlet/ViewUserInfo</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ViewBidHistory</servlet-name>
+        <url-pattern>/servlet/ViewBidHistory</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AboutMe</servlet-name>
+        <url-pattern>/servlet/AboutMe</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>BuyNow</servlet-name>
+        <url-pattern>/servlet/BuyNow</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>BuyNowAuth</servlet-name>
+        <url-pattern>/servlet/BuyNowAuth</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>StoreBuyNow</servlet-name>
+        <url-pattern>/servlet/StoreBuyNow</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PutBid</servlet-name>
+        <url-pattern>/servlet/PutBid</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PutBidAuth</servlet-name>
+        <url-pattern>/servlet/PutBidAuth</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>StoreBid</servlet-name>
+        <url-pattern>/servlet/StoreBid</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PutComment</servlet-name>
+        <url-pattern>/servlet/PutComment</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>PutCommentAuth</servlet-name>
+        <url-pattern>/servlet/PutCommentAuth</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>StoreComment</servlet-name>
+        <url-pattern>/servlet/StoreComment</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RegisterUser</servlet-name>
+        <url-pattern>/servlet/RegisterUser</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>SellItemForm</servlet-name>
+        <url-pattern>/servlet/SellItemForm</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>RegisterItem</servlet-name>
+        <url-pattern>/servlet/RegisterItem</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>Auth</servlet-name>
+        <url-pattern>/servlet/Auth</url-pattern>
+    </servlet-mapping>
+    
+</web-app>
