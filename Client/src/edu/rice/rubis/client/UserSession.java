@@ -21,6 +21,7 @@
  * Initial developer(s): Emmanuel Cecchet, Julie Marguerite
  * Contributor(s): Jeremy Philippe
  */
+
 package edu.rice.rubis.client;
 
 import java.io.BufferedInputStream;
@@ -127,7 +128,7 @@ public class UserSession extends Thread
         {
           urlStream = url.openStream();
           in = new BufferedInputStream(urlStream, 4096);
-          //System.out.println("Thread "+this.getName()+": "+url);
+          // System.out.println("Thread "+this.getName()+": "+url);
         }
         catch (IOException ioe)
         {
@@ -499,19 +500,19 @@ public class UserSession extends Thread
         return urlGen.register();
       case 2 :
         // Register the user in the database
-        { // Choose a random nb over already known attributed ids
-          int i = rubis.getNbOfUsers() + rand.nextInt(1000000) + 1;
-          String firstname = "Great" + i;
-          String lastname = "User" + i;
-          String nickname = "user" + i;
-          String email = firstname + "." + lastname + "@rubis.com";
-          String password = "password" + i;
-          String regionName = (String) rubis.getRegions().elementAt(
-              i % rubis.getNbOfRegions());
+      { // Choose a random nb over already known attributed ids
+        int i = rubis.getNbOfUsers() + rand.nextInt(1000000) + 1;
+        String firstname = "Great" + i;
+        String lastname = "User" + i;
+        String nickname = "user" + i;
+        String email = firstname + "." + lastname + "@rubis.com";
+        String password = "password" + i;
+        String regionName = (String) rubis.getRegions().elementAt(
+            i % rubis.getNbOfRegions());
 
-          return urlGen.registerUser(firstname, lastname, nickname, email,
-              password, regionName);
-        }
+        return urlGen.registerUser(firstname, lastname, nickname, email,
+            password, regionName);
+      }
       case 3 :
         // Browse Page
         return urlGen.browse();
@@ -520,14 +521,14 @@ public class UserSession extends Thread
         return urlGen.browseCategories();
       case 5 :
         // Browse items in a category
-        { // We randomly pickup a category from the generated data instead of
-          // from the HTML page (faster)
-          int categoryId = rand.nextInt(rubis.getNbOfCategories());
-          String categoryName = (String) rubis.getCategories().elementAt(
-              categoryId);
-          return urlGen.browseItemsInCategory(categoryId, categoryName,
-              extractPageFromHTML(), rubis.getNbOfItemsPerPage());
-        }
+      { // We randomly pickup a category from the generated data instead of
+        // from the HTML page (faster)
+        int categoryId = rand.nextInt(rubis.getNbOfCategories());
+        String categoryName = (String) rubis.getCategories().elementAt(
+            categoryId);
+        return urlGen.browseItemsInCategory(categoryId, categoryName,
+            extractPageFromHTML(), rubis.getNbOfItemsPerPage());
+      }
       case 6 :
         // Browse Regions
         return urlGen.browseRegions();
@@ -538,37 +539,37 @@ public class UserSession extends Thread
         return urlGen.browseCategoriesInRegion(regionName);
       case 8 :
         // Browse items in a region for a given category
-        { // We randomly pickup a category and a region from the generated data
-          // instead of from the HTML page (faster)
-          int categoryId = rand.nextInt(rubis.getNbOfCategories());
-          String categoryName = (String) rubis.getCategories().elementAt(
-              categoryId);
-          int regionId = rand.nextInt(rubis.getNbOfRegions());
-          return urlGen.browseItemsInRegion(categoryId, categoryName, regionId,
-              extractPageFromHTML(), rubis.getNbOfItemsPerPage());
-        }
+      { // We randomly pickup a category and a region from the generated data
+        // instead of from the HTML page (faster)
+        int categoryId = rand.nextInt(rubis.getNbOfCategories());
+        String categoryName = (String) rubis.getCategories().elementAt(
+            categoryId);
+        int regionId = rand.nextInt(rubis.getNbOfRegions());
+        return urlGen.browseItemsInRegion(categoryId, categoryName, regionId,
+            extractPageFromHTML(), rubis.getNbOfItemsPerPage());
+      }
       case 9 :
         // View an item
-        {
-          int itemId = extractItemIdFromHTML();
-          if (itemId == -1)
-            return computeURLFromState(transition.backToPreviousState()); // Nothing
-          // then go
-          // back
-          else
-            return urlGen.viewItem(itemId);
-        }
+      {
+        int itemId = extractItemIdFromHTML();
+        if (itemId == -1)
+          return computeURLFromState(transition.backToPreviousState()); // Nothing
+        // then go
+        // back
+        else
+          return urlGen.viewItem(itemId);
+      }
       case 10 :
         // View user information
-        {
-	  int userId = extractIntFromHTML("userId=");
-          if (userId == -1)
-            return computeURLFromState(transition.backToPreviousState()); // Nothing
-          // then go
-          // back
-          else
-            return urlGen.viewUserInformation(userId);
-        }
+      {
+        int userId = extractIntFromHTML("userId=");
+        if (userId == -1)
+          return computeURLFromState(transition.backToPreviousState()); // Nothing
+        // then go
+        // back
+        else
+          return urlGen.viewUserInformation(userId);
+      }
       case 11 :
         // View item bid history
         return urlGen.viewBidHistory(extractItemIdFromHTML());
@@ -580,45 +581,44 @@ public class UserSession extends Thread
         return urlGen.buyNow(extractItemIdFromHTML(), username, password);
       case 14 :
         // Store Buy Now in the database
-        {
-          int maxQty = extractIntFromHTML("name=maxQty value=");
-          if (maxQty < 1)
-            maxQty = 1;
-          int qty = rand.nextInt(maxQty) + 1;
-          return urlGen.storeBuyNow(extractItemIdFromHTML(), userId, qty,
-              maxQty);
-        }
+      {
+        int maxQty = extractIntFromHTML("name=maxQty value=");
+        if (maxQty < 1)
+          maxQty = 1;
+        int qty = rand.nextInt(maxQty) + 1;
+        return urlGen.storeBuyNow(extractItemIdFromHTML(), userId, qty, maxQty);
+      }
       case 15 :
         // Bid Authentication
         return urlGen.putBidAuth(extractItemIdFromHTML());
       case 16 :
         // Bid confirmation page
-        {
-          int itemId = extractItemIdFromHTML();
-          if (itemId == -1)
-	      return computeURLFromState(transition.backToPreviousState()); // Nothing
-          // then go
-          // back
-          else
-            return urlGen.putBid(itemId, username, password);
-        }
+      {
+        int itemId = extractItemIdFromHTML();
+        if (itemId == -1)
+          return computeURLFromState(transition.backToPreviousState()); // Nothing
+        // then go
+        // back
+        else
+          return urlGen.putBid(itemId, username, password);
+      }
       case 17 :
         // Store Bid in the database
-        { /*
-           * Generate randomly the bid, maxBid and quantity values, all other
-           * values are retrieved from the last HTML reply
-           */
-          int maxQty = extractIntFromHTML("name=maxQty value=");
-          if (maxQty < 1)
-            maxQty = 1;
-          int qty = rand.nextInt(maxQty) + 1;
-          float minBid = extractFloatFromHTML("name=minBid value=");
-          float addBid = rand.nextInt(10) + 1;
-          float bid = minBid + addBid;
-          float maxBid = minBid + addBid * 2;
-          return urlGen.storeBid(extractItemIdFromHTML(), userId, minBid, bid,
-              maxBid, qty, maxQty);
-        }
+      { /*
+         * Generate randomly the bid, maxBid and quantity values, all other
+         * values are retrieved from the last HTML reply
+         */
+        int maxQty = extractIntFromHTML("name=maxQty value=");
+        if (maxQty < 1)
+          maxQty = 1;
+        int qty = rand.nextInt(maxQty) + 1;
+        float minBid = extractFloatFromHTML("name=minBid value=");
+        float addBid = rand.nextInt(10) + 1;
+        float bid = minBid + addBid;
+        float maxBid = minBid + addBid * 2;
+        return urlGen.storeBid(extractItemIdFromHTML(), userId, minBid, bid,
+            maxBid, qty, maxQty);
+      }
       case 18 :
         // Comment Authentication page
         return urlGen.putCommentAuth(extractItemIdFromHTML(),
@@ -629,34 +629,34 @@ public class UserSession extends Thread
             extractIntFromHTML("to="), username, password);
       case 20 :
         // Store Comment in the database
-        { // Generate a random comment and rating
-          String[] staticComment = {
-              "This is a very bad comment. Stay away from this seller !!<br>",
-              "This is a comment below average. I don't recommend this user !!<br>",
-              "This is a neutral comment. It is neither a good or a bad seller !!<br>",
-              "This is a comment above average. You can trust this seller even if it is not the best deal !!<br>",
-              "This is an excellent comment. You can make really great deals with this seller !!<br>"};
-          int[] staticCommentLength = {staticComment[0].length(),
-              staticComment[1].length(), staticComment[2].length(),
-              staticComment[3].length(), staticComment[4].length()};
-          int[] ratingValue = {-5, -3, 0, 3, 5};
-          int rating;
-          String comment;
+      { // Generate a random comment and rating
+        String[] staticComment = {
+            "This is a very bad comment. Stay away from this seller !!<br>",
+            "This is a comment below average. I don't recommend this user !!<br>",
+            "This is a neutral comment. It is neither a good or a bad seller !!<br>",
+            "This is a comment above average. You can trust this seller even if it is not the best deal !!<br>",
+            "This is an excellent comment. You can make really great deals with this seller !!<br>"};
+        int[] staticCommentLength = {staticComment[0].length(),
+            staticComment[1].length(), staticComment[2].length(),
+            staticComment[3].length(), staticComment[4].length()};
+        int[] ratingValue = {-5, -3, 0, 3, 5};
+        int rating;
+        String comment;
 
-          rating = rand.nextInt(5);
-          int commentLength = rand.nextInt(rubis.getCommentMaxLength()) + 1;
-          comment = "";
-          while (staticCommentLength[rating] < commentLength)
-          {
-            comment = comment + staticComment[rating];
-            commentLength -= staticCommentLength[rating];
-          }
-          comment = staticComment[rating].substring(0, commentLength);
-
-          return urlGen.storeComment(extractItemIdFromHTML(),
-              extractIntFromHTML("name=to value="), userId,
-              ratingValue[rating], comment);
+        rating = rand.nextInt(5);
+        int commentLength = rand.nextInt(rubis.getCommentMaxLength()) + 1;
+        comment = "";
+        while (staticCommentLength[rating] < commentLength)
+        {
+          comment = comment + staticComment[rating];
+          commentLength -= staticCommentLength[rating];
         }
+        comment = staticComment[rating].substring(0, commentLength);
+
+        return urlGen.storeComment(extractItemIdFromHTML(),
+            extractIntFromHTML("name=to value="), userId, ratingValue[rating],
+            comment);
+      }
       case 21 :
         // Sell page
         return urlGen.sell();
@@ -664,69 +664,67 @@ public class UserSession extends Thread
         // Select a category to sell item
         return urlGen.selectCategoryToSellItem(username, password);
       case 23 :
-        {
-          int categoryId = rand.nextInt(rubis.getNbOfCategories());
-          return urlGen.sellItemForm(categoryId, userId);
-        }
+      {
+        int categoryId = rand.nextInt(rubis.getNbOfCategories());
+        return urlGen.sellItemForm(categoryId, userId);
+      }
       case 24 :
         // Store item in the database
-        {
-          String name;
-          String description;
-          float initialPrice;
-          float reservePrice;
-          float buyNow;
-          int duration;
-          int quantity;
-          int categoryId;
-          String staticDescription = "This incredible item is exactly what you need !<br>It has a lot of very nice features including "
-              + "a coffee option.<br>It comes with a free license for the free RUBiS software, that's really cool. But RUBiS even if it "
-              + "is free, is <B>(C) Rice University/INRIA 2001</B>. It is really hard to write an interesting generic description for "
-              + "automatically generated items, but who will really read this <br>You can also check some cool software available on "
-              + "http://sci-serv.inrialpes.fr. There is a very cool DSM system called SciFS for SCI clusters, but you will need some "
-              + "SCI adapters to be able to run it ! Else you can still try CART, the amazing 'Cluster Administration and Reservation "
-              + "Tool'. All those software are open source, so don't hesitate ! If you have a SCI Cluster you can also try the Whoops! "
-              + "clustered web server. Actually Whoops! stands for something ! Yes, it is a Web cache with tcp Handoff, On the fly "
-              + "cOmpression, parallel Pull-based lru for Sci clusters !! Ok, that was a lot of fun but now it is starting to be quite late "
-              + "and I'll have to go to bed very soon, so I think if you need more information, just go on <h1>http://sci-serv.inrialpes.fr</h1> "
-              + "or you can even try http://www.cs.rice.edu and try to find where Emmanuel Cecchet or Julie Marguerite are and you will "
-              + "maybe get fresh news about all that !!<br>";
-          int staticDescriptionLength = staticDescription.length();
-          int totalItems = rubis.getTotalActiveItems()
-              + rubis.getNbOfOldItems();
-          int i = totalItems + rand.nextInt(1000000) + 1;
+      {
+        String name;
+        String description;
+        float initialPrice;
+        float reservePrice;
+        float buyNow;
+        int duration;
+        int quantity;
+        int categoryId;
+        String staticDescription = "This incredible item is exactly what you need !<br>It has a lot of very nice features including "
+            + "a coffee option.<br>It comes with a free license for the free RUBiS software, that's really cool. But RUBiS even if it "
+            + "is free, is <B>(C) Rice University/INRIA 2001</B>. It is really hard to write an interesting generic description for "
+            + "automatically generated items, but who will really read this <br>You can also check some cool software available on "
+            + "http://sci-serv.inrialpes.fr. There is a very cool DSM system called SciFS for SCI clusters, but you will need some "
+            + "SCI adapters to be able to run it ! Else you can still try CART, the amazing 'Cluster Administration and Reservation "
+            + "Tool'. All those software are open source, so don't hesitate ! If you have a SCI Cluster you can also try the Whoops! "
+            + "clustered web server. Actually Whoops! stands for something ! Yes, it is a Web cache with tcp Handoff, On the fly "
+            + "cOmpression, parallel Pull-based lru for Sci clusters !! Ok, that was a lot of fun but now it is starting to be quite late "
+            + "and I'll have to go to bed very soon, so I think if you need more information, just go on <h1>http://sci-serv.inrialpes.fr</h1> "
+            + "or you can even try http://www.cs.rice.edu and try to find where Emmanuel Cecchet or Julie Marguerite are and you will "
+            + "maybe get fresh news about all that !!<br>";
+        int staticDescriptionLength = staticDescription.length();
+        int totalItems = rubis.getTotalActiveItems() + rubis.getNbOfOldItems();
+        int i = totalItems + rand.nextInt(1000000) + 1;
 
-          name = "RUBiS automatically generated item #" + i;
-          int descriptionLength = rand
-              .nextInt(rubis.getItemDescriptionLength()) + 1;
-          description = "";
-          while (staticDescriptionLength < descriptionLength)
-          {
-            description = description + staticDescription;
-            descriptionLength -= staticDescriptionLength;
-          }
-          description = staticDescription.substring(0, descriptionLength);
-          initialPrice = rand.nextInt(5000) + 1;
-          if (rand.nextInt(totalItems) < rubis.getPercentReservePrice()
-              * totalItems / 100)
-            reservePrice = rand.nextInt(1000) + initialPrice;
-          else
-            reservePrice = 0;
-          if (rand.nextInt(totalItems) < rubis.getPercentBuyNow() * totalItems
-              / 100)
-            buyNow = rand.nextInt(1000) + initialPrice + reservePrice;
-          else
-            buyNow = 0;
-          duration = rand.nextInt(7) + 1;
-          if (rand.nextInt(totalItems) < rubis.getPercentUniqueItems()
-              * totalItems / 100)
-            quantity = 1;
-          else
-            quantity = rand.nextInt(rubis.getMaxItemQty()) + 1;
-          categoryId = rand.nextInt(rubis.getNbOfCategories());
-          return urlGen.registerItem(name, description, initialPrice,
-              reservePrice, buyNow, duration, quantity, userId, categoryId);
+        name = "RUBiS automatically generated item #" + i;
+        int descriptionLength = rand.nextInt(rubis.getItemDescriptionLength()) + 1;
+        description = "";
+        while (staticDescriptionLength < descriptionLength)
+        {
+          description = description + staticDescription;
+          descriptionLength -= staticDescriptionLength;
         }
+        description = staticDescription.substring(0, descriptionLength);
+        initialPrice = rand.nextInt(5000) + 1;
+        if (rand.nextInt(totalItems) < rubis.getPercentReservePrice()
+            * totalItems / 100)
+          reservePrice = rand.nextInt(1000) + initialPrice;
+        else
+          reservePrice = 0;
+        if (rand.nextInt(totalItems) < rubis.getPercentBuyNow() * totalItems
+            / 100)
+          buyNow = rand.nextInt(1000) + initialPrice + reservePrice;
+        else
+          buyNow = 0;
+        duration = rand.nextInt(7) + 1;
+        if (rand.nextInt(totalItems) < rubis.getPercentUniqueItems()
+            * totalItems / 100)
+          quantity = 1;
+        else
+          quantity = rand.nextInt(rubis.getMaxItemQty()) + 1;
+        categoryId = rand.nextInt(rubis.getNbOfCategories());
+        return urlGen.registerItem(name, description, initialPrice,
+            reservePrice, buyNow, duration, quantity, userId, categoryId);
+      }
       case 25 :
         // About Me authentification
         return urlGen.aboutMe();
@@ -778,7 +776,8 @@ public class UserSession extends Thread
         if (lastHTMLReply == null)
         {
           if (debugLevel > 0)
-            System.out.println("Thread "+this.getName()+": Cannot connect to HTTP server.");
+            System.out.println("Thread " + this.getName()
+                + ": Cannot connect to HTTP server.");
           transition.resetToInitialState();
           next = transition.getCurrentState();
         }
