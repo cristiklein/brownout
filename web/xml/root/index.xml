@@ -25,16 +25,7 @@
         <p>A howto for installing RUBiS with <a href="http://jonas.objectweb.org/">JOnAS</a>
          is now <a href="doc/howto-jonas.html">available</a>  
          thanks to Jacques Cayuela from the JOnAS project.</p>
-      
-     
-    <subtitle>February 4th 2004: Online Demo Available</subtitle>
-
-    <p>An online demo of RUBiS is now <a
-    href="http://demos.objectweb.org/rubis/">available</a>. This demo
-    is powered by <a href="http://jonas.objectweb.org/">JOnAS</a>
-    3.3.1 and uses the EJB CMP 2.0 version of the RUBiS benchmark
-    (latest CVS version).</p>
-
+          
     <subtitle>December 3rd 2003: new contributions to RUBiS.</subtitle>
        <p>Mark Brody and George Candea from <a href="http://www.stanford.edu/">
        Stanford University</a> wrote a 
