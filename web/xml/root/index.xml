@@ -19,7 +19,7 @@
         availability of the RUBiS Virtual Appliance v1.0, a Xen virtual machine that contains
         all the components of the RUBiS benchmark with auto-deployment scripts. The release
         also contains a new documentation and tutorial videos. Download it from the 
-        <a href="http://forge.objectweb.org/project/showfiles.php?group_id=44&release_id=2821">OW2 Forge</a></p>
+        <a href="http://forge.objectweb.org/project/showfiles.php?group_id=44&amp;release_id=2821">OW2 Forge</a></p>
     
     <subtitle>March 24th 2004: Howto install RUBiS with JOnAS</subtitle>
         <p>A howto for installing RUBiS with <a href="http://jonas.objectweb.org/">JOnAS</a>
