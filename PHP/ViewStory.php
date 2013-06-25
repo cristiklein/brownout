@@ -54,6 +54,56 @@ function display_follow_up($cid, $level, $display, $filter, $link, $comment_tabl
     print($row["body"]."<br>\n");
       print("<p><center><a href=\"/PHP/PostComment.php?comment_table=$comment_table&storyId=$storyId&parent=0\">Post a comment on this story</a></center><p>");
 
+    // Retrieve service level
+    $serviceLevel = doubleval(file_get_contents("/tmp/serviceLevel"));
+
+    // Optional code 1: comments
+    $r = rand(0, 9999) / 10000;
+    if ($r < $serviceLevel)
+    {
+      echo chr(128); // Special marker for httpmon
+
+      // Optional code 2: recommender system
+      $r = rand(0, 9999) / 10000;
+      if ($r < $serviceLevel) {
+        echo chr(129); // Special marker for httpmon
+
+        // Due to bad optimizing in MySQL, we need to do this in two steps
+        // Step 1: retrieve story IDs, ordered by popularity, top 5
+        $recommenderIdsQuery =
+          "SELECT ".
+            "c2.story_id as id,".
+            "count(c2.story_id) as popularity,".
+            "c2.date as date ".
+          "FROM ".
+            "comments AS c ".
+            "LEFT JOIN comments AS c2 ON (c.writer=c2.writer) ".
+          "WHERE c.story_id=".$storyId. " AND c2.story_id!=".$storyId." ".
+          "GROUP BY id ".
+          "ORDER BY popularity DESC, date DESC LIMIT 5;" ;
+        //echo $recommenderIdsQuery; // For debugging
+        $recommenderIdsResult = mysql_query($recommenderIdsQuery, $link);
+        $ids = array();
+        while ($row = mysql_fetch_array($recommenderIdsResult))
+          array_push($ids, $row["id"]);
+        mysql_free_result($recommenderIdsResult);
+
+        // Step 2: get all information about the stories and display them
+        $recommenderQuery = "SELECT * FROM stories WHERE id IN (" . join(",", $ids) . ")";
+        //echo $recommenderQuery; // For debugging
+        $recommenderResult = mysql_query($recommenderQuery, $link);
+
+        // Display stories
+        print("Similar stories: <br>");
+        while ($row = mysql_fetch_array($recommenderResult))
+        {
+          print("<a href=\"/PHP/ViewStory.php?storyId=".$row['id']."\">".$row['title']."</a> | ");
+        }
+        mysql_free_result($recommenderResult);
+      }
+
+	// NOTE: this code section has not been reindented, to minimize "diff" output.
+
     // Display filter chooser header
     print("<br><hr><br>");
     print("<center><form action=\"/PHP/ViewComment.php\" method=POST>\n".
@@ -110,6 +160,12 @@ function display_follow_up($cid, $level, $display, $filter, $link, $comment_tabl
             "&nbsp|&nbsp<a href=\"/PHP/ModerateComment.php?comment_table=$comment_table&commentId=".$comment_row["id"]."\">Moderate</a> ]</TABLE>\n");
       if ($comment_row["childs"] > 0)
         display_follow_up($comment_row[id], 1, $display, $filter, $link, $comment_table);
+    }
+
+    } /* end Optional code 1: comments */
+    else
+    {
+      echo "Comments are temporarily disabled";
     }
 
     mysql_free_result($result);
