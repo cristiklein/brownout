@@ -21,18 +21,14 @@ function display_follow_up($cid, $level, $display, $filter, $link, $comment_tabl
     include("PHPprinter.php");
     $startTime = getMicroTime();
 
-    // Check parameters
-    $storyId = $_POST['storyId'];
+    if (!isset($storyId)) /* Allow ViewStory.php to be included from RandomStory.php */
+      $storyId = $_REQUEST['storyId'];
     if ($storyId == null)
     {
-      $storyId = $_GET['storyId'];
-      if ($storyId == null)
-      {
-         printError($scriptName, $startTime, "Viewing story", "You must provide a story identifier!<br>");
-         exit();
-      }
+      printError($scriptName, $startTime, "Viewing story", "You must provide a story identifier!<br>");
+      exit();
     }
-      
+
     getDatabaseLink($link);
     $result = mysql_query("SELECT * FROM stories WHERE id=$storyId") or die("ERROR: Query failed");
     if (mysql_num_rows($result) == 0)
