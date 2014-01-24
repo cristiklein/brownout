@@ -51,7 +51,7 @@ function display_follow_up($cid, $level, $display, $filter, $link, $comment_tabl
       print("<p><center><a href=\"/PHP/PostComment.php?comment_table=$comment_table&storyId=$storyId&parent=0\">Post a comment on this story</a></center><p>");
 
     // Retrieve service level
-    $serviceLevel = doubleval(file_get_contents("/tmp/serviceLevel"));
+    $serviceLevel = doubleval(@file_get_contents("/tmp/serviceLevel"));
 
     // Optional code 1: comments
     $r = rand(0, 9999) / 10000;
