@@ -103,7 +103,7 @@
     print("<br><p>\n");
 
     // Optional code: recommender system
-    $serviceLevel = doubleval(file_get_contents("/tmp/serviceLevel"));
+    $serviceLevel = doubleval(@file_get_contents("/tmp/serviceLevel"));
     $r = rand(0, 9999) / 10000;
     if ($r < $serviceLevel)
     {
